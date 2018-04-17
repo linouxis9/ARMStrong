@@ -1,5 +1,9 @@
 package simulateurARM;
 
+//TODO write javadoc comment
+/**
+ * 
+ */
 public enum Flag {
 	I,
 	P,

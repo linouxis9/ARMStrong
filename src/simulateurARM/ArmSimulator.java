@@ -1,11 +1,21 @@
 package simulateurARM;
 
 public class ArmSimulator {
+	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	private final Program program;
 	private final Interpretor interpretor;
 	private final IHMEditor editor;
 	private final IHMSimulator simulator;
 	private final Cpu cpu;
+	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public ArmSimulator() {
 		this.program = new Program(new String());
 		this.cpu = new Cpu();

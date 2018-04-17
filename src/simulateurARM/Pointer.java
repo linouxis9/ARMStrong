@@ -1,14 +1,27 @@
 package simulateurARM;
 
 public class Pointer implements Operand2 {
+	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	private Memory mem;
 	private Address address;
 	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public Pointer(Memory mem, Address address) {
 		this.mem = mem;
 		this.address = address;
 	}
 	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public int getValue() {
 		int value;
 		try {
@@ -20,6 +33,10 @@ public class Pointer implements Operand2 {
 		return value;
 	}
 	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public byte getByte() {
 		byte value;
 		try {
@@ -31,6 +48,10 @@ public class Pointer implements Operand2 {
 		return value;
 	}
 	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public short getWord() {
 		short value;
 		try {
