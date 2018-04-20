@@ -59,7 +59,7 @@ public class Cpsr {
 	/**
 	 * 
 	 */
-	public boolean getConditonCodeStatus(ConditionCode cc) {
+	public boolean getConditionCodeStatus(ConditionCode cc) {
 		switch (cc) {
 			case EQ: return eq();
 			case NE: return ne();
