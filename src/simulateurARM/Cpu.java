@@ -224,7 +224,7 @@ public class Cpu {
 		/**
 		 * CMP - Compare
 		 * 
-		 * The CMP instruction subtract the value of Operand2 to the value in Rn and update the flags.
+		 * The CMP instruction subtracts the value of Operand2 to the value in Rn and update the flags.
 		 * - DISCARD <- r1 - op
 		 * - Update the flags in CPSR
 		 * 
@@ -259,11 +259,10 @@ public class Cpu {
 		/**
 		 * LDR - Load
 		 * 
-		 * The LDR instruction load the value stored in the memory at the address op.
+		 * The LDR instruction loads the value stored in the memory at the address op.
 		 * r1 <- mem[op]
 		 * 
 		 * @param r1 Destination Register
-		 * @param r2 Source Register
 		 * @param op Operand2
 		 */
 		public void ldr(Register r1, Operand2 op, Set<Flag> flags) {
@@ -273,7 +272,7 @@ public class Cpu {
 		/**
 		 * MLA - Multiply Accumulate
 		 * 
-		 * The MLA instructions performs a multiplication between r2 and r3 and adds the value from r4.
+		 * The MLA instruction performs a multiplication between r2 and r3 and adds the value from r4.
 		 * r1 <- r2 * r3 + r4
 		 * 
 		 * @param r1 Destination Register
@@ -298,9 +297,15 @@ public class Cpu {
 			r1.setValue(op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * MUL - Multiply
 		 * 
+		 * The MUL instruction performs a multiplication between r2 and r3.
+		 * r1 <- r2 * r3
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param r3 Source Register
 		 */
 		public void mul(Register r1, Register r2, Register r3) {
 			r1.setValue(r2.getValue() * r3.getValue());
@@ -319,81 +324,126 @@ public class Cpu {
 			r1.setValue(~op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * ORR - OR
 		 * 
+		 * The OR instruction performs a logical OR operation.
+		 * r1 <- r2 OR op2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void orr(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
 			r1.setValue(r2.getValue() | op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * SDIV - Signed division
 		 * 
+		 * The SDIV instruction performs a signed division between r2 and r3.
+		 * r1 <- r2 / r3
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param r3 Source Register
 		 */
 		public void sdiv(Register r1, Register r2, Register r3) {
 
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * STR - Store
 		 * 
+		 * The STR instruction stores r1 in the memory at the address op.
+		 * mem[op] <- r1
+		 * 
+		 * @param r1 Source Register
+		 * @param op Operand2
 		 */
 		public void str(Register r1, Operand2 op, Set<Flag> flags) {
 
 		}
 
-		// TODO write javadoc comment
 		/**
+		 * SWI - Software Interrupt
 		 * 
+		 * The SWI instruction causes a SWI exception. TThe processor branches to the SWI vector.
+		 * pc <- ...
+		 * 
+		 * @param r1 Source Register
+		 * @param op Operand2
 		 */
 		public void swi(ImmediateValue value) {
 
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * SUB - Substract
 		 * 
+		 * The SUB instruction subtracts the value of Operand2 to the value in R2.
+		 * r1 <- r2 - op2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void sub(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
 			r1.setValue(r2.getValue() - op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * SWP - Swap
 		 * 
+		 * The SWP instruction swaps data between registers and memory.
+		 * - r1 <- mem[pointer]
+		 * - mem[pointer] <- r2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Regoster
+		 * @param pointer Pointer in memory
 		 */
-		public void svc(ImmediateValue value) {
+		public void swp(Register r1, Register r2, Pointer pointer, Set<Flag> flags) {
 
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * TEQ - Test equivalence
 		 * 
-		 */
-		public void swp(Register r1, Register r2, Set<Flag> flags) {
-
-		}
-		
-		// TODO write javadoc comment
-		/**
+		 * The TEQ instruction performs a bitwise Exclusive OR on the value of Operand2 and the value in r1 and update the flags.
+		 * - DISCARD <- r1 XOR op
+		 * - Update the flags in CPSR
 		 * 
+		 * @param r1 Destination Register
+		 * @param op Operand2
 		 */
 		public void teq(Register r1, Operand2 op) {
 			
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * TST - Test bits
 		 * 
+		 * The TST instruction performs a bitwise Exclusive AND on the value of Operand2 and the value in r1 and update the flags.
+		 * - DISCARD <- r1 AND op
+		 * - Update the flags in CPSR
+		 * 
+		 * @param r1 Destination Register
+		 * @param op Operand2
 		 */
 		public void tst(Register r1, Operand2 op) {
 
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * UDIV - Signed division
 		 * 
+		 * The UDIV instruction performs an unsigned division between r2 and r3.
+		 * r1 <- r2 / r3
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param r3 Source Register
 		 */
 		public void udiv(Register r1, Register r2, Register r3) {
 
