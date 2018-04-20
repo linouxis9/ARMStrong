@@ -117,66 +117,98 @@ public class Cpu {
 	 */
 	private class ALU {
 		
-		// TODO write javadoc comment
 		/**
+		 * ADC - Add with Carry
 		 * 
+		 * The ADC instruction adds the values in R2 and Operand2, together with the carry flag. 		
+		 * r1 <- r2 + op2 + carry
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void adc(Register r1, Register r2, Operand2 op) {
 			r1.setValue(r2.getValue() + op.getValue() + Cpu.this.cpsr.booleanToInt(Cpu.this.cpsr.isC()));
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * ADD - Add
 		 * 
+		 * The ADD instruction adds the value of Operand2 to the value in R2.
+		 * r1 <- r2 + op2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void add(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
 			r1.setValue(r2.getValue() + op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * AND - And
 		 * 
+		 * The AND instruction performs bitwise AND operations on the values in R2 and Operand2.
+		 * r1 <- r2 AND op2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void and(Register r1, Register r2, Operand2 op) {
 			r1.setValue(r2.getValue() & op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * B - Branch
 		 * 
+		 * The B instruction causes a branch to op.
+		 * pc <- op2
+		 * 
+		 * @param op Operand2
 		 */
 		public void b(Operand2 op) {
 			Cpu.this.pc.setValue(op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * AND - And
 		 * 
+		 * The BIC instruction performs an R2 AND NOT OP operation.
+		 * r1 <- r2 AND NOT op2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void bic(Register r1, Register r2, Operand2 op) {
 			r1.setValue(r2.getValue() & ~op.getValue());
 
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * B - Branch with link
 		 * 
+		 * The BL instruction copies the address of the next instruction into r14 (lr, the link register), and causes a branch to op.
+		 * pc <- op2
+		 * 
+		 * @param op Operand2
 		 */
 		public void bl(Operand2 op) {
-
+			Cpu.this.lr.setValue(Cpu.this.pc.getValue());
+			this.b(op);
+			
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * CMN - Compare Negative
 		 * 
-		 */
-		public void bx(Register r1) {
-
-		}
-		
-		// TODO write javadoc comment
-		/**
+		 * The CMN instruction adds the value of Operand2 to the value in Rn and update the flags.
+		 * - DISCARD <- r1 - (-op)
+		 * - Update the flags in CPSR
 		 * 
+		 * @param r1 Destination Register
+		 * @param op Operand2
 		 */
 		public void cmn(Register r1, Operand2 op) {
 			int value = r1.getValue() - op.getValue();
@@ -189,9 +221,15 @@ public class Cpu {
 			}
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * CMP - Compare
 		 * 
+		 * The CMP instruction subtract the value of Operand2 to the value in Rn and update the flags.
+		 * - DISCARD <- r1 - op
+		 * - Update the flags in CPSR
+		 * 
+		 * @param r1 Destination Register
+		 * @param op Operand2
 		 */
 		public void cmp(Register r1, Operand2 op) {
 			int value = r1.getValue() - op.getValue();
@@ -204,30 +242,58 @@ public class Cpu {
 			}
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * EOR - Exclusive OR
 		 * 
+		 * The EOR instruction performs a logical Exclusive OR operation.
+		 * r1 <- r2 XOR op2
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void eor(Register r1, Register r2, Operand2 op) {
-			r1.setValue((int)Math.pow(r2.getValue(),op.getValue()));
+			r1.setValue(r2.getValue() ^ op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * LDR - Load
 		 * 
+		 * The LDR instruction load the value stored in the memory at the address op.
+		 * r1 <- mem[op]
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param op Operand2
 		 */
 		public void ldr(Register r1, Operand2 op, Set<Flag> flags) {
 			r1.setValue(op.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * MLA - Multiply Accumulate
 		 * 
+		 * The MLA instructions performs a multiplication between r2 and r3 and adds the value from r4.
+		 * r1 <- r2 * r3 + r4
+		 * 
+		 * @param r1 Destination Register
+		 * @param r2 Source Register
+		 * @param r3 Source Register
+		 * @param r4 Source Register
 		 */
 		public void mla(Register r1, Register r2, Register r3, Register r4, Set<Flag> flags) {
-			r1.setValue((r2.getValue() * r3.getValue()) + r3.getValue());
+			r1.setValue((r2.getValue() * r3.getValue()) + r4.getValue());
 		}	
 		
+		/**
+		 * MOV - Move
+		 * 
+		 * The MOV instruction copies the value of Operand2 into r1.
+		 * r1 <- op
+		 * 
+		 * @param r1 Destination Register
+		 * @param op Operand2
+		 */
 		public void mov(Register r1, Operand2 op, Set<Flag> flags) {
 			r1.setValue(op.getValue());
 		}
@@ -240,9 +306,14 @@ public class Cpu {
 			r1.setValue(r2.getValue() * r3.getValue());
 		}
 		
-		// TODO write javadoc comment
 		/**
+		 * MVN - Move NOT
 		 * 
+		 * The MVN instruction copies the complement of Operand2 into r1.
+		 * r1 <- NOT op
+		 * 
+		 * @param r1 Destination Register
+		 * @param op Operand2
 		 */
 		public void mvn(Register r1, Operand2 op, Set<Flag> flags) {
 			r1.setValue(~op.getValue());
