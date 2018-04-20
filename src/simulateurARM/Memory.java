@@ -16,7 +16,7 @@ public interface Memory {
 	/**
 	 * 
 	 */
-	public int set(Address address, int value) throws InvalidMemoryAddressException;
+	public void set(Address address, int value) throws InvalidMemoryAddressException;
 	
 	// TODO write javadoc comment
 	/**
@@ -40,5 +40,5 @@ public interface Memory {
 	/**
 	 * 
 	 */
-	public short setWord(Address address, short value) throws InvalidMemoryAddressException;
+	public void setWord(Address address, short value) throws InvalidMemoryAddressException;
 }

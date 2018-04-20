@@ -29,7 +29,7 @@ public class Ram implements Memory {
 	
 	/**
 	 * @param myAddress The address where we get the byte
-	 * @return A byte corresponds to the address specified
+	 * @return The byte corresponds to the address specified
 	 */
 	public byte getByte(Address myAddress) throws InvalidMemoryAddressException{
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
@@ -52,27 +52,31 @@ public class Ram implements Memory {
 	}
 	
 	/**
-	 * @param myAddress
-	 * @return a Word 
+	 * @param myAddress The address where we get the word
+	 * @return The Word corresponds to the address specified
 	 */
 	public short getWord(Address myAddress) throws InvalidMemoryAddressException{
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		//int myWord = this.memory[myAddress.getAddress()+3] << 24+this.memory[myAddress.getAddress()+2] << 16+this.memory[myAddress.getAddress()+1] << 8+this.memory[myAddress.getAddress()];
-		return 0;
+		short myWord=(short)((this.memory[myAddress.getAddress()+1]&0xFF) | (this.memory[myAddress.getAddress()]&0xFF)<<8 );
+		return myWord;
 	}
 	
 	/**
-	 * @param myAddress
-	 * @param myWord
-	 * @return a Word 
+	 * @param myAddress The address where we set the word
+	 * @param myWord The word set in the memory
 	 */
-	public short setWord(Address myAddress, short myWord) throws InvalidMemoryAddressException {
+	public void setWord(Address myAddress, short myWord) throws InvalidMemoryAddressException {
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		return 0;
+		byte[] bytes = new byte[2];
+		bytes[0] = (byte)(myWord & 0xff);
+		bytes[1] = (byte)((myWord >> 8) & 0xff);
+		
+		this.memory[myAddress.getAddress()] = bytes[1];
+		this.memory[myAddress.getAddress()+1] = bytes[0];
 		
 	}
 	
@@ -83,17 +87,17 @@ public class Ram implements Memory {
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		return 0;
+		int myValue = this.memory[myAddress.getAddress()+3] << 24+this.memory[myAddress.getAddress()+2] << 16+this.memory[myAddress.getAddress()+1] << 8+this.memory[myAddress.getAddress()];
+		return myValue;
 	}
 	
 	/**
 	 * @param
 	 */
-	public int set(Address myAddress, int value) throws InvalidMemoryAddressException{
+	public void set(Address myAddress, int myValue) throws InvalidMemoryAddressException{
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		return 0;
 	}
 	
 	/**
