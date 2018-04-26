@@ -7,7 +7,7 @@ public class Ram implements Memory {
 	 * The default size of the memory
 	 */
 	public static final int DEFAULT_SIZE = 10000;
-
+	
 	/**
 	 * A table of byte that represent the memory
 	 */
@@ -15,103 +15,129 @@ public class Ram implements Memory {
 
 	/**
 	 * A constructor of a RAM with a specified size
-	 * 
-	 * @param size
-	 *            The size of the RAM
+	 * @param size The size of the RAM
 	 */
 	public Ram(int size) {
 		this.memory = new byte[size];
 	}
-
+	
 	/**
 	 * A constructor of a RAM with the default size
-	 * 
-	 * @param size
-	 *            The size of the RAM
+	 * @param size The size of the RAM
 	 */
 	public Ram() {
 		this.memory = new byte[DEFAULT_SIZE];
 	}
-
+	
 	/**
-	 * @param myAddress
-	 *            The address where we get the byte
+	 * We get a byte in the memory
+	 * @param myAddress The address where we get the byte
 	 * @return The byte corresponds to the address specified
 	 */
-	public byte getByte(Address myAddress) throws InvalidMemoryAddressException {
-		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
+	public byte getByte(Address myAddress) throws InvalidMemoryAddressException{
+		
+		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
+		
 		return this.memory[myAddress.getAddress()];
 	}
-
+	
 	/**
-	 * @param myAddress
-	 *            The address where we set the byte
-	 * @param myByte
-	 * @return The byte set in the memory
+	 * We set a byte in the memory
+	 * @param myAddress The address where we set the byte
+	 * @param myByte 
 	 */
 	public void setByte(Address myAddress, byte myByte) throws InvalidMemoryAddressException {
+
 		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
+		
 		this.memory[myAddress.getAddress()] = myByte;
 	}
-
+	
 	/**
-	 * @param myAddress
-	 *            The address where we get the word
-	 * @return The Word corresponds to the address specified
+	 * We convert the 2 bytes of the specified address to short
+	 * We make a shift of 8 bits (1 byte) for the second byte
+	 * @param myAddress The address where we get the half word
+	 * @return The half Word corresponds to the address specified
 	 */
-	public short getHWord(Address myAddress) throws InvalidMemoryAddressException {
-		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
+	public short getHWord(Address myAddress) throws InvalidMemoryAddressException{
+		
+		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		short myWord = (short) ((this.memory[myAddress.getAddress() + 1] & 0xFF)
-				| (this.memory[myAddress.getAddress()] & 0xFF) << 8);
+		
+		short myWord=(short)((this.memory[myAddress.getAddress()+1]&0xFF) | (this.memory[myAddress.getAddress()]&0xFF)<<8 );
 		return myWord;
 	}
-
+	
 	/**
-	 * @param myAddress
-	 *            The address where we set the word
-	 * @param myWord
-	 *            The word set in the memory
+	 * We convert a short to a byte array
+	 * We put each byte in the memory by invert the byte order (Little endian)
+	 * @param myAddress The address where we set the half word
+	 * @param myWord The half word set in the memory
 	 */
-	public void setHWord(Address myAddress, short myWord) throws InvalidMemoryAddressException {
-		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
+	public void setHWord(Address myAddress, short myHWord) throws InvalidMemoryAddressException {
+		
+		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
+		
 		byte[] bytes = new byte[2];
-		bytes[0] = (byte) (myWord & 0xff);
-		bytes[1] = (byte) ((myWord >> 8) & 0xff);
-
+		
+		bytes[0] = (byte)(myHWord & 0xff);
+		bytes[1] = (byte)((myHWord >> 8) & 0xff);
+		
 		this.memory[myAddress.getAddress()] = bytes[1];
-		this.memory[myAddress.getAddress() + 1] = bytes[0];
-
+		this.memory[myAddress.getAddress()+1] = bytes[0];
+		
 	}
-
+	
 	/**
-	 * @param
+	 * We convert the 4 bytes of the specified address to int
+	 * We make a shift of 8 bits (1 byte) to each byte (8,16,24)
+	 * @param The address where we get the word
+	 * @return The Word corresponds to the address specified
 	 */
-	public int get(Address myAddress) throws InvalidMemoryAddressException {
-		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
+	public int getValue(Address myAddress) throws InvalidMemoryAddressException{
+		
+		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		int myValue = this.memory[myAddress.getAddress() + 3] << 24 + this.memory[myAddress.getAddress() + 2] << 16
-				+ this.memory[myAddress.getAddress() + 1] << 8 + this.memory[myAddress.getAddress()];
-		return myValue;
+		
+		int myWord=(int)((this.memory[myAddress.getAddress()+3] & 0xFF) | (this.memory[myAddress.getAddress()+2] & 0xFF)<<8 | (this.memory[myAddress.getAddress()+1] & 0xFF)<<16 | (this.memory[myAddress.getAddress()] & 0xFF)<<24);
+		return myWord;
+		
 	}
-
+	
 	/**
-	 * @param
+	 * We convert an int to a byte array
+	 * We put each byte in the memory by invert the byte order (Little endian)
+	 * @param myAddress The address where we set the word
+	 * @param myValue The word set in the memory
 	 */
-	public void set(Address myAddress, int myValue) throws InvalidMemoryAddressException {
-		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
+	public void setValue(Address myAddress, int myWord) throws InvalidMemoryAddressException{
+		
+		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
+		
+		byte[] bytes = new byte[4];
+		
+		bytes[0] = (byte)(myWord);
+		bytes[1] = (byte)(myWord >> 8);
+		bytes[2] = (byte)(myWord >> 16);
+		bytes[3] = (byte)(myWord >> 24);
+		
+		this.memory[myAddress.getAddress()] = bytes[3];
+		this.memory[myAddress.getAddress()+1] = bytes[2];
+		this.memory[myAddress.getAddress()+2] = bytes[1];
+		this.memory[myAddress.getAddress()+3] = bytes[0];
+		
 	}
-
+	
 	/**
 	 * Set all the bytes of the memory to 0.
 	 */
@@ -119,4 +145,4 @@ public class Ram implements Memory {
 		Arrays.fill(this.memory, (byte)0);
 	}
 
-}
+} 

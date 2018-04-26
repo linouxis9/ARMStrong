@@ -34,11 +34,11 @@ public interface Memory {
 	/**
 	 * 
 	 */
-	public int get(Address address) throws InvalidMemoryAddressException;
+	public int getValue(Address address) throws InvalidMemoryAddressException;
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	public void set(Address address, int value) throws InvalidMemoryAddressException;
+	public void setValue(Address address, int value) throws InvalidMemoryAddressException;
 }
