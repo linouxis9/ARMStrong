@@ -1,7 +1,7 @@
-package simulateurARM;
+package simulator;
 
 public class Register implements Operand2 {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 

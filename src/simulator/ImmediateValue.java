@@ -1,13 +1,13 @@
-package simulateurARM;
+package simulator;
 
 public class ImmediateValue implements Operand2 {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private final int value;
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 

@@ -1,8 +1,9 @@
-package simulateurARM;
+package simulator;
+
 import java.util.Iterator;
 
 public class Interpretor implements Iterator<Instruction> {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -18,7 +19,7 @@ public class Interpretor implements Iterator<Instruction> {
 		this.program = program;
 		this.cpu = cpu;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -26,7 +27,7 @@ public class Interpretor implements Iterator<Instruction> {
 	public boolean hasNext() {
 		return true;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -34,20 +35,21 @@ public class Interpretor implements Iterator<Instruction> {
 	public Instruction next() {
 		return null;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	public void remove () {
-		
+	public void remove() {
+
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	public static void checkSyntax(String line) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
-		
+	public static void checkSyntax(String line)
+			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
+
 	}
 }

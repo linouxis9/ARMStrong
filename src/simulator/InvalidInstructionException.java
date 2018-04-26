@@ -1,4 +1,4 @@
-package simulateurARM;
+package simulator;
 
 public class InvalidInstructionException extends Exception {
 

@@ -1,8 +1,9 @@
-package simulateurARM;
+package simulator;
+
 import java.util.Set;
 
 public class Instruction {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -14,12 +15,13 @@ public class Instruction {
 	private final Operand2 ope2;
 	private final ConditionCode cc;
 	private final Set<Flag> flags;
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	public Instruction(Operation op, Register r1, Register r2, Register r3, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
+	public Instruction(Operation op, Register r1, Register r2, Register r3, Operand2 ope2, Set<Flag> flags,
+			ConditionCode cc) {
 		this.op = op;
 		this.r1 = r1;
 		this.r2 = r2;
@@ -28,29 +30,29 @@ public class Instruction {
 		this.cc = cc;
 		this.flags = flags;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public Instruction(Operation op, Register r1, Register r2, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
-		this(op,r1,r2,null,ope2,flags,cc);
+		this(op, r1, r2, null, ope2, flags, cc);
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public Instruction(Operation op, Register r1, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
-		this(op,r1,null,null,ope2,flags,cc);
+		this(op, r1, null, null, ope2, flags, cc);
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public Instruction(Operation op, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
-		this(op,null,null,null,ope2,flags,cc);
+		this(op, null, null, null, ope2, flags, cc);
 	}
 
 	// TODO write javadoc comment
@@ -58,9 +60,9 @@ public class Instruction {
 	 * 
 	 */
 	public Instruction(Operation op, Register r1, Set<Flag> flags, ConditionCode cc) {
-		this(op,r1,null,null,null,flags,cc);
+		this(op, r1, null, null, null, flags, cc);
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 

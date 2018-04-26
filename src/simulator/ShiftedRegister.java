@@ -1,7 +1,7 @@
-package simulateurARM;
+package simulator;
 
 public class ShiftedRegister implements Operand2 {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -9,7 +9,7 @@ public class ShiftedRegister implements Operand2 {
 	private Register register;
 	private Operand2 controlRegister;
 	private Shift shift;
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -27,5 +27,5 @@ public class ShiftedRegister implements Operand2 {
 		this.shift = shift;
 		this.controlRegister = controlRegister;
 	}
-	
+
 }

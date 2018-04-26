@@ -1,5 +1,4 @@
-package simulateurARM;
-
+package simulator;
 
 public class Cpsr {
 
@@ -14,7 +13,7 @@ public class Cpsr {
 	private boolean q;
 	private boolean e;
 	private boolean endianness;
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -23,17 +22,19 @@ public class Cpsr {
 		this.reset();
 		this.endianness = false;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public int getCpsr() {
-		int cpsr = booleanToInt(n)*(2 << 30) + booleanToInt(z)*(2 << 29) + booleanToInt(c)*(2 << 28) + booleanToInt(v)*(2 << 27) + booleanToInt(q)*(2 << 26) + booleanToInt(e)*(2 << 25) + booleanToInt(endianness)*(2 << 8);
+		int cpsr = booleanToInt(n) * (2 << 30) + booleanToInt(z) * (2 << 29) + booleanToInt(c) * (2 << 28)
+				+ booleanToInt(v) * (2 << 27) + booleanToInt(q) * (2 << 26) + booleanToInt(e) * (2 << 25)
+				+ booleanToInt(endianness) * (2 << 8);
 		return cpsr;
-		
+
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -54,144 +55,159 @@ public class Cpsr {
 		this.q = false;
 		this.e = false;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public boolean getConditionCodeStatus(ConditionCode cc) {
 		switch (cc) {
-			case EQ: return eq();
-			case NE: return ne();
-			case CS: return cs();
-			case CC: return cc();
-			case MI: return mi();
-			case PL: return pl();
-			case VS: return vs();
-			case VC: return vc();
-			case HI: return hi();
-			case LS: return ls();
-			case GE: return ge();
-			case GT: return gt();
-			case LT: return lt();
-			case LE: return le();
-			default: return al();
+		case EQ:
+			return eq();
+		case NE:
+			return ne();
+		case CS:
+			return cs();
+		case CC:
+			return cc();
+		case MI:
+			return mi();
+		case PL:
+			return pl();
+		case VS:
+			return vs();
+		case VC:
+			return vc();
+		case HI:
+			return hi();
+		case LS:
+			return ls();
+		case GE:
+			return ge();
+		case GT:
+			return gt();
+		case LT:
+			return lt();
+		case LE:
+			return le();
+		default:
+			return al();
 		}
-		
+
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean eq() {
-		return z==true;
+		return z == true;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean ne() {
-		return z==false;
+		return z == false;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean cs() {
-		return c==true;
+		return c == true;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean cc() {
-		return c==false;
-	}	
-	
+		return c == false;
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean mi() {
-		return n==true;
-	}	
-	
+		return n == true;
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean pl() {
-		return z==false;
-	}	
-	
+		return z == false;
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean vs() {
-		return v==true;
-	}	
-	
+		return v == true;
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean vc() {
-		return v==false;
-	}	
-	
+		return v == false;
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean hi() {
-		return (c==true) && (z==false);
-	}	
-	
+		return (c == true) && (z == false);
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean ls() {
-		return (c==false) || (z==true);
+		return (c == false) || (z == true);
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean ge() {
-		return v==n;
-	}	
-	
+		return v == n;
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean lt() {
-		return v!=n;
+		return v != n;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean gt() {
-		return (z==false) && (n==v);
-	}	
-	
+		return (z == false) && (n == v);
+	}
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private boolean le() {
-		return (z==true) || (n!=v);
+		return (z == true) || (n != v);
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -199,7 +215,7 @@ public class Cpsr {
 	private boolean al() {
 		return true;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 

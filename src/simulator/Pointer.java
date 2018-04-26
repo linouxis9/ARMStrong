@@ -1,14 +1,14 @@
-package simulateurARM;
+package simulator;
 
 public class Pointer implements Operand2 {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private Memory mem;
 	private Address address;
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class Pointer implements Operand2 {
 		this.mem = mem;
 		this.address = address;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -26,13 +26,12 @@ public class Pointer implements Operand2 {
 		int value;
 		try {
 			value = this.mem.get(address);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			value = 0;
 		}
 		return value;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -41,13 +40,12 @@ public class Pointer implements Operand2 {
 		byte value;
 		try {
 			value = this.mem.getByte(address);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			value = 0;
 		}
 		return value;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -55,9 +53,8 @@ public class Pointer implements Operand2 {
 	public short getWord() {
 		short value;
 		try {
-			value = this.mem.getWord(address);
-		}
-		catch (Exception e) {
+			value = this.mem.getHWord(address);
+		} catch (Exception e) {
 			value = 0;
 		}
 		return value;

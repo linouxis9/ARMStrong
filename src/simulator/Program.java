@@ -1,8 +1,9 @@
-package simulateurARM;
+package simulator;
+
 import java.util.Iterator;
 
 public class Program implements Iterator<String> {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -16,7 +17,7 @@ public class Program implements Iterator<String> {
 	public Program(String assembly) {
 		this.assembly = assembly;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -24,7 +25,7 @@ public class Program implements Iterator<String> {
 	public boolean hasNext() {
 		return true;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -32,12 +33,12 @@ public class Program implements Iterator<String> {
 	public String next() {
 		return null;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public void remove() {
-		
+
 	}
 }

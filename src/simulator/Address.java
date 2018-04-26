@@ -1,7 +1,7 @@
-package simulateurARM;
+package simulator;
 
 public class Address {
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -9,13 +9,13 @@ public class Address {
 	public Address(int address) {
 		this.address = address;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	private final int address;
-	
+
 	// TODO write javadoc comment
 	/**
 	 * 

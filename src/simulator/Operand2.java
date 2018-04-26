@@ -1,4 +1,4 @@
-package simulateurARM;
+package simulator;
 
 //TODO write javadoc comment
 /**
