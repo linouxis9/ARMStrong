@@ -14,7 +14,7 @@ public class HelloWorld {
 
 > <img src="logo.png" style="width: 20%;"/>
 
-> ![classes](src/simulateurARM/Classes.png)
+> ![classes](src/simulator/Classes.png)
 
 ## Petite explication
 

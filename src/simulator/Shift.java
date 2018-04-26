@@ -5,5 +5,5 @@ package simulator;
  * 
  */
 public enum Shift {
-	ASR, LSL, LSR, ROR, RRX;
+	LSL, LSR;
 }

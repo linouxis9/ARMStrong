@@ -1,5 +1,7 @@
 package simulator;
 
+import java.util.Arrays;
+
 public class Ram implements Memory {
 	/**
 	 * The default size of the memory
@@ -49,12 +51,11 @@ public class Ram implements Memory {
 	 * @param myByte
 	 * @return The byte set in the memory
 	 */
-	public byte setByte(Address myAddress, byte myByte) throws InvalidMemoryAddressException {
+	public void setByte(Address myAddress, byte myByte) throws InvalidMemoryAddressException {
 		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
 		this.memory[myAddress.getAddress()] = myByte;
-		return this.memory[myAddress.getAddress()];
 	}
 
 	/**
@@ -112,12 +113,10 @@ public class Ram implements Memory {
 	}
 
 	/**
-	 * Put all the byte of the memory to 0.
+	 * Set all the bytes of the memory to 0.
 	 */
 	public void cleanMemory() {
-		for (int i = 0; i < memory.length; i++) {
-			this.memory[i] = 0;
-		}
+		Arrays.fill(this.memory, (byte)0);
 	}
 
 }

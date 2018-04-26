@@ -16,7 +16,7 @@ public interface Memory {
 	/**
 	 * 
 	 */
-	public byte setByte(Address address, byte value) throws InvalidMemoryAddressException;
+	public void setByte(Address address, byte value) throws InvalidMemoryAddressException;
 
 	// TODO write javadoc comment
 	/**

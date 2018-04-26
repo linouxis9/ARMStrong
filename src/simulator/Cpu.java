@@ -33,13 +33,13 @@ public class Cpu {
 	private final List<Instruction> instructions;
 
 	/**
-	 * Stores #@rmsim's provided-methods that can be called from the assembly that
+	 * Stores #@rmsim's provided-routines that can be called from the assembly that
 	 * are *NOT* implemented in assembly.
 	 * 
 	 * This is to be used cojointly with the SWI or SVC ARM instruction.
 	 * 
 	 * #@rmsim provides several calls for the assembly to interact with the
-	 * simulator. On a baremetal computer, these calls are usually provided by the
+	 * simulator. On a bare metal computer, these calls are usually provided by the
 	 * OS kernel. Please read the User Manual for more informations about the
 	 * available calls.
 	 * 
@@ -566,7 +566,7 @@ public class Cpu {
 		 * vector.
 		 * 
 		 * #@rmsim provides several calls for the assembly to interact with the
-		 * simulator. On a baremetal computer, these calls are usually provided by the
+		 * simulator. On a bare metal computer, these calls are usually provided by the
 		 * OS kernel. Please read the User Manual for more informations about the
 		 * available calls.
 		 * 

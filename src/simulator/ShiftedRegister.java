@@ -15,7 +15,16 @@ public class ShiftedRegister implements Operand2 {
 	 * 
 	 */
 	public int getValue() {
-		return register.getValue(); /* TODO SHIFTING */
+		int value = this.register.getValue();
+		switch(this.shift) {
+			case LSL:
+				value = value << this.controlRegister.getValue();
+				break;
+			case LSR:
+				value = value >> this.controlRegister.getValue();
+				break;
+		}
+		return value;
 	}
 
 	// TODO write javadoc comment

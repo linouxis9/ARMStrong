@@ -50,7 +50,7 @@ public class Pointer implements Operand2 {
 	/**
 	 * 
 	 */
-	public short getWord() {
+	public short getHWord() {
 		short value;
 		try {
 			value = this.mem.getHWord(address);
