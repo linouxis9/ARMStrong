@@ -11,7 +11,6 @@ public enum Operation {
 	B,
 	BIC,
 	BL,
-	BX,
 	CMN,
 	CMP,
 	EOR,
@@ -19,6 +18,7 @@ public enum Operation {
 	MLA,
 	MOV,
 	MUL,
+	ORR,
 	SDIV,
 	STR,
 	SWI,
@@ -27,5 +27,5 @@ public enum Operation {
 	SWP,
 	TEQ,
 	TST,
-	UDIV
+	UDIV;
 }

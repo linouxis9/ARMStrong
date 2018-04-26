@@ -1,7 +1,9 @@
 package simulateurARM;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Cpu {
@@ -17,7 +19,19 @@ public class Cpu {
 	private final Register lr;
 	private final Register sp;
 	private final ALU alu;
+	private boolean interrupt;
 	private final List<Instruction> instructions;
+	
+	/**
+	 * Stores #@rmsim's provided-methods that can be called from the assembly that are *NOT* implemented in assembly.
+	 * 
+	 * This is to be used cojointly with the SWI or SVC ARM instruction.
+	 * 
+	 * #@rmsim provides several calls for the assembly to interact with the simulator. On a baremetal computer, these calls are usually provided by the OS kernel.
+	 * Please read the User Manual for more informations about the available calls.
+	 * 
+	 */
+	private final Map<Integer,Callable> interruptsVector;
 	
 	// TODO write javadoc comment
 	/**
@@ -45,6 +59,9 @@ public class Cpu {
 		this.pc = this.registers[15];		
 		this.alu = new ALU();
 		this.instructions = instructions;
+		this.interruptsVector = new HashMap<Integer,Callable>();
+		this.fillInterruptsVector();
+		this.interrupt = false;
 	}
 	
 	// TODO write javadoc comment
@@ -52,15 +69,114 @@ public class Cpu {
 	 * 
 	 */
 	public void execute() {
-		this.alu.adc(null, null, null);
+		while (!this.interrupt) {
+			this.executeStep();
+		}
+		this.interrupt = false;
 	}
 	
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
+	public void fillInterruptsVector() {
+		this.interruptsVector.put(80, () -> {
+			this.interrupt = true;
+			System.out.println("Stopping the execution of the program");
+		});
+
+		this.interruptsVector.put(0, () -> {
+			// TODO Print Strings
+			System.out.println((char)(this.registers[0].getValue()));
+		});
+
+		this.interruptsVector.put(1, () -> {
+			System.out.println((char)(this.registers[0].getValue()));
+		});
+	}
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public void executeStep() {
-		this.pc.setValue(this.pc.getValue()+1);
+		this.runInstruction(this.instructions,this.getPc().getValue()%4);
+	}
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
+	public void runInstruction(List<Instruction> instructions, int offset) {
+		Instruction i = instructions.get(offset);
+		switch(i.getOp()) {
+			case ADC:
+				this.alu.adc(i.getR1(), i.getR2(), i.getOpe2());
+				break;
+			case ADD:
+				this.alu.add(i.getR1(), i.getR2(), i.getOpe2(), i.getFlags());
+				break;
+			case AND:
+				this.alu.and(i.getR1(), i.getR2(), i.getOpe2());
+				break;
+			case B:
+				this.alu.b(i.getOpe2());
+				break;
+			case BIC:
+				this.alu.bic(i.getR1(), i.getR2(), i.getOpe2());
+				break;
+			case BL:
+				this.alu.bl(i.getOpe2());
+				break;
+			case CMN:
+				this.alu.cmn(i.getR1(), i.getOpe2());
+				break;
+			case CMP:
+				this.alu.cmp(i.getR1(), i.getOpe2());
+				break;
+			case EOR:
+				this.alu.eor(i.getR1(), i.getR2(), i.getOpe2());
+				break;
+			case LDR:
+				this.alu.ldr(i.getR1(), i.getOpe2(), i.getFlags());
+				break;
+			case MLA:
+				this.alu.mla(i.getR1(), i.getR2(), i.getR3(), (Register)i.getOpe2(), i.getFlags());
+				break;
+			case MOV:
+				this.alu.mov(i.getR1(), i.getOpe2(), i.getFlags());
+				break;
+			case MUL:
+				this.alu.mul(i.getR1(), i.getR2(), i.getR3());
+				break;
+			case ORR:
+				this.alu.orr(i.getR1(),i.getR2(),i.getOpe2(),i.getFlags());
+				break;
+			case SDIV:
+				this.alu.sdiv(i.getR1(), i.getR2(), i.getR3());
+				break;
+			case STR:
+				this.alu.str(i.getR1(), i.getOpe2(), i.getFlags());
+				break;
+			case SVC:
+			case SWI:
+				this.alu.swi((ImmediateValue)i.getOpe2());
+				break;
+			case SUB:
+				this.alu.sub(i.getR1(), i.getR2(), i.getOpe2(), i.getFlags());
+				break;
+			case SWP:
+				this.alu.swp(i.getR1(), i.getR1(), (Pointer)i.getOpe2(), i.getFlags());
+				break;
+			case TEQ:
+				this.alu.teq(i.getR1(), i.getOpe2());
+				break;
+			case TST:
+				this.alu.tst(i.getR1(), i.getOpe2());
+				break;
+			case UDIV:
+				this.alu.udiv(i.getR1(), i.getR2(), i.getR3());
+				break;
+		}
+		this.pc.setValue(this.pc.getValue()+4);
 	}
 
 	// TODO write javadoc comment
@@ -368,14 +484,21 @@ public class Cpu {
 		/**
 		 * SWI - Software Interrupt
 		 * 
-		 * The SWI instruction causes a SWI exception. TThe processor branches to the SWI vector.
-		 * pc <- ...
+		 * The SWI instruction causes a SWI exception. The processor branches to the SWI vector.
+		 * 
+		 * #@rmsim provides several calls for the assembly to interact with the simulator. On a baremetal computer, these calls are usually provided by the OS kernel.
+		 * Please read the User Manual for more informations about the available calls.
 		 * 
 		 * @param r1 Source Register
 		 * @param op Operand2
 		 */
 		public void swi(ImmediateValue value) {
-
+			try {
+				Cpu.this.interruptsVector.get(value.getValue()).run();
+			}
+			catch (Exception e) {
+				
+			}
 		}
 		
 		/**
