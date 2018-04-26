@@ -25,7 +25,7 @@ public class Pointer implements Operand2 {
 	public int getValue() {
 		int value;
 		try {
-			value = this.mem.get(address);
+			value = this.mem.getValue(address);
 		} catch (Exception e) {
 			value = 0;
 		}
