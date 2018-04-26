@@ -22,7 +22,6 @@ public class ArmSimulator {
 		this.interpretor = new Interpretor(this.cpu, this.program);
 		this.editor = new IHMEditor();
 		this.simulator = new IHMSimulator();
-		this.cpu.test();
 	}
 
 }

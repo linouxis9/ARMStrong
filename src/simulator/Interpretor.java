@@ -1,6 +1,7 @@
 package simulator;
 
 import java.util.Iterator;
+import java.util.List;
 
 public class Interpretor implements Iterator<Instruction> {
 
@@ -10,6 +11,7 @@ public class Interpretor implements Iterator<Instruction> {
 	 */
 	private final Program program;
 	private final Cpu cpu;
+	private int line;
 
 	// TODO write javadoc comment
 	/**
@@ -18,6 +20,7 @@ public class Interpretor implements Iterator<Instruction> {
 	public Interpretor(Cpu cpu, Program program) {
 		this.program = program;
 		this.cpu = cpu;
+		this.line = 0;
 	}
 
 	// TODO write javadoc comment
@@ -25,7 +28,7 @@ public class Interpretor implements Iterator<Instruction> {
 	 * 
 	 */
 	public boolean hasNext() {
-		return true;
+		return this.program.hasNext();
 	}
 
 	// TODO write javadoc comment
@@ -33,23 +36,26 @@ public class Interpretor implements Iterator<Instruction> {
 	 * 
 	 */
 	public Instruction next() {
-		return null;
+		if (!this.hasNext()) {
+			return null;
+		}
+		this.line++;
+		try {
+			List<Token> tokens = this.program.next();
+			SyntaxChecker.checkSyntax(tokens);
+			return this.parse(tokens);
+		} catch (Exception e) {
+			return null;
+		}
 	}
+
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	public void remove() {
-
-	}
-
-	// TODO write javadoc comment
-	/**
-	 * 
-	 */
-	public static void checkSyntax(String line)
+	public Instruction parse(List<Token> tokens)
 			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
-
+		return null;
 	}
 }
