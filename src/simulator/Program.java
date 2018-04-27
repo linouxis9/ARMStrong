@@ -51,7 +51,6 @@ public class Program implements Iterator<List<Token>> {
 		for (TokenType tokenType : TokenType.values()) {
 			myFuturePattern = myFuturePattern + "(?<" + tokenType.name() + ">" + tokenType.regexp + ")|";
 		}
-
 		Pattern patterns = Pattern.compile(myFuturePattern);
 
 		Matcher matcher = patterns.matcher(line);

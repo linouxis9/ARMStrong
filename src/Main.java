@@ -12,7 +12,7 @@ public class Main {
 		List<Token> tokens = Program.lexer(args[0]);
 		System.out.println(tokens);
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			SyntaxChecker.checkSyntax(tokens,1);
 		} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

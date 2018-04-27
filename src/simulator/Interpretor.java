@@ -42,7 +42,7 @@ public class Interpretor implements Iterator<Instruction> {
 		this.line++;
 		try {
 			List<Token> tokens = this.program.next();
-			SyntaxChecker.checkSyntax(tokens);
+			SyntaxChecker.checkSyntax(tokens,line);
 			return this.parse(tokens);
 		} catch (Exception e) {
 			return null;
