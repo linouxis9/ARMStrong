@@ -43,7 +43,7 @@ public class SyntaxChecker {
 			if (tokens.get(i).getToken() == TokenType.FLAG) {
 				i++;
 			}
-			if (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
+			while (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
 				i++;
 			}
 			

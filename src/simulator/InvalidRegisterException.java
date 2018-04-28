@@ -1,6 +1,8 @@
 package simulator;
 
 public class InvalidRegisterException extends AssemblyException {
+
+	private static final long serialVersionUID = -1990042547606009095L;
 	private final int register;
 	
 	public InvalidRegisterException(int line, int register) {

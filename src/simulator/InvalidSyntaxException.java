@@ -2,6 +2,8 @@ package simulator;
 
 public class InvalidSyntaxException extends AssemblyException {
 
+	private static final long serialVersionUID = -3576420336871736366L;
+
 	public InvalidSyntaxException(int line) {
 		super(line);
 	}

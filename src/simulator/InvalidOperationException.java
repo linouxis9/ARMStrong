@@ -1,6 +1,8 @@
 package simulator;
 
 public class InvalidOperationException extends AssemblyException {
+
+	private static final long serialVersionUID = 8364730117849795976L;
 	private final String op;
 	
 	public InvalidOperationException(int line, String op) {

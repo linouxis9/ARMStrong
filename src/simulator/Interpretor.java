@@ -1,7 +1,6 @@
 package simulator;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class Interpretor {
@@ -58,7 +57,7 @@ public class Interpretor {
 		HashSet<Flag> flags = new HashSet<Flag>();
 		int i = 1;
 
-		if (tokens.get(i).getToken() == TokenType.FLAG) {
+		while (tokens.get(i).getToken() == TokenType.FLAG) {
 			switch(tokens.get(i).toInner()) {
 			case "b": flags.add(Flag.B); break;
 			case "h": flags.add(Flag.H); break;

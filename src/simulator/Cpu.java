@@ -337,7 +337,7 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void b(Operand2 op) {
-			Cpu.this.pc.setValue(op.getValue());
+			Cpu.this.pc.setValue(Cpu.this.pc.getValue() - 4 +op.getValue());
 		}
 
 		/**
