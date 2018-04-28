@@ -23,4 +23,9 @@ public class Register implements Operand2 {
 	public void setValue(int register) {
 		this.register = register;
 	}
+
+	@Override
+	public String toString() {
+		return "Register [register=" + register + "]";
+	}
 }

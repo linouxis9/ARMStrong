@@ -146,3 +146,8 @@ public class Ram implements Memory {
 	}
 
 } 
+	@Override
+	public String toString() {
+		return "Ram [memory=" + Arrays.toString(memory) + "]";
+	}
+}

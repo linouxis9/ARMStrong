@@ -1,23 +1,29 @@
 import java.util.List;
+import java.util.Scanner;
 
 import simulator.*;
 
 public class Main {
 	public static void main(String[] args) {
 		ArmSimulator jpp = new ArmSimulator();
-		if (args.length == 0) {
-			System.out.println("You need to pass ARM assembly to java, ex: java Main \"mov r2,r3\" for syntax checking.");
-			return;
-		}
-		List<Token> tokens = Program.lexer(args[0]);
-		System.out.println(tokens);
-		try {
-			SyntaxChecker.checkSyntax(tokens,1);
-		} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
-		System.out.println("ALLOWED SYNTAX");
+
+			Cpu cpuTest = new Cpu();
+			Scanner in = new Scanner(System.in);
+			String test = "";
+			while (in.hasNext()) {
+				test = test + in.nextLine() + System.lineSeparator();
+			}
+			System.out.println(test);
+			Interpretor interpretorTest = new Interpretor(cpuTest,new Program(test));
+			while (interpretorTest.hasNext()) {
+				try {
+					cpuTest.addInstruction(interpretorTest.next());
+				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
+						| InvalidInstructionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			cpuTest.execute();
 	}
 }

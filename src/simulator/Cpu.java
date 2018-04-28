@@ -82,8 +82,12 @@ public class Cpu {
 	 * 
 	 */
 	public void execute() {
+		try {
 		while (!this.interrupt) {
 			this.executeStep();
+		}
+		} catch (IndexOutOfBoundsException e) {
+			
 		}
 		this.interrupt = false;
 	}
@@ -97,16 +101,18 @@ public class Cpu {
 			this.interrupt = true;
 			System.out.println("Stopping the execution of the program");
 		});
-
+		this.interruptsVector.put(81, () -> {
+			System.out.println(About.info());
+		});
 		this.interruptsVector.put(0, () -> {
 			char c = '\0';
 			int i = 0;
 			try {
-				c = (char) (this.ram.getHWord(new Address(this.registers[0].getValue())));
+				c = (char) (this.ram.getByte(new Address(this.registers[0].getValue())));
 				while (c != '\0') {
 					System.out.print(c);
 					i++;
-					c = (char) (this.ram.getHWord(new Address(this.registers[0].getValue() + 2 * i)));
+					c = (char) (this.ram.getByte(new Address(this.registers[0].getValue() + i)));
 				}
 			} catch (InvalidMemoryAddressException e1) {
 
@@ -116,20 +122,10 @@ public class Cpu {
 		this.interruptsVector.put(1, () -> {
 			System.out.println((char) (this.registers[0].getValue()));
 		});
-	}
-
-	// TODO Just for some random tests, TO BE REMOVED! Use JUnit
-	public void test() {
-		try {
-			this.ram.setHWord(new Address(30), (short) 't');
-			this.ram.setHWord(new Address(32), (short) 'e');
-			this.ram.setHWord(new Address(34), (short) 's');
-			this.ram.setHWord(new Address(36), (short) 't');
-		} catch (InvalidMemoryAddressException e) {
-
-		}
-		this.registers[0].setValue(30);
-		this.alu.swi(new ImmediateValue(0));
+		
+		this.interruptsVector.put(2, () -> {
+			System.out.println((int) (this.registers[1].getValue()));
+		});
 	}
 
 	// TODO write javadoc comment
@@ -138,17 +134,21 @@ public class Cpu {
 	 */
 	public void executeStep() {
 		int offset = this.getPc().getValue();
-		offset = (int) Math.ceil((double) this.getPc().getValue() / 4) + 4 - this.getPc().getValue() % 4;
-		this.runInstruction(this.instructions, offset);
+		offset = ((int) Math.ceil((double) this.getPc().getValue() / 4));
+		Instruction i = instructions.get(offset);
+		this.pc.setValue(this.pc.getValue() + 4);
+		
+		if (this.cpsr.getConditionCodeStatus(i.getCc())) {
+			System.out.println(i);
+			this.runInstruction(i);
+		}
 	}
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	public void runInstruction(List<Instruction> instructions, int offset) {
-		Instruction i = instructions.get(offset);
-		this.pc.setValue(this.pc.getValue() + 4);
+	public void runInstruction(Instruction i) {
 		switch (i.getOp()) {
 		case ADC:
 			this.alu.adc(i.getR1(), i.getR2(), i.getOpe2());
@@ -209,7 +209,7 @@ public class Cpu {
 			this.alu.sub(i.getR1(), i.getR2(), i.getOpe2(), i.getFlags());
 			break;
 		case SWP:
-			this.alu.swp(i.getR1(), i.getR1(), (Pointer) i.getOpe2(), i.getFlags());
+			this.alu.swp(i.getR1(), i.getR1(), i.getOpe2(), i.getFlags());
 			break;
 		case TEQ:
 			this.alu.teq(i.getR1(), i.getOpe2());
@@ -445,7 +445,18 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void ldr(Register r1, Operand2 op, Set<Flag> flags) {
-			r1.setValue(op.getValue());
+			try {
+				if (flags.contains(Flag.B)) { 
+					r1.setValue(Cpu.this.ram.getByte(new Address(op.getValue())));
+				} else if (flags.contains(Flag.H)) { 
+					r1.setValue(Cpu.this.ram.getHWord(new Address(op.getValue())));
+				} else {
+					r1.setValue(Cpu.this.ram.getValue(new Address(op.getValue())));
+				}
+			} catch (InvalidMemoryAddressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		/**
@@ -556,7 +567,18 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void str(Register r1, Operand2 op, Set<Flag> flags) {
-
+			try {
+				if (flags.contains(Flag.B)) {
+					Cpu.this.ram.setByte(new Address(op.getValue()),(byte)(r1.getValue()));
+				} else if (flags.contains(Flag.H)){
+					Cpu.this.ram.setHWord(new Address(op.getValue()),(short)(r1.getValue()));
+				} else {
+					Cpu.this.ram.setValue(new Address(op.getValue()),(r1.getValue()));
+				}
+			} catch (InvalidMemoryAddressException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		/**
@@ -609,11 +631,11 @@ public class Cpu {
 		 * @param r1
 		 *            Destination Register
 		 * @param r2
-		 *            Source Regoster
-		 * @param pointer
-		 *            Pointer in memory
+		 *            Source Register
+		 * @param op
+		 *            Address in memory
 		 */
-		public void swp(Register r1, Register r2, Pointer pointer, Set<Flag> flags) {
+		public void swp(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
 
 		}
 
@@ -666,4 +688,7 @@ public class Cpu {
 
 		}
 	}
+	
+	
+	
 }

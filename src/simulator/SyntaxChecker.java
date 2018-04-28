@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class SyntaxChecker {
 
-	public static List<String> listOp;
+	private static List<String> listOp;
 
 	private static final Set<String> RROP2 = new HashSet<String>(
 			Arrays.asList(new String[] { "ADC", "ADD", "AND", "BIC", "EOR", "SUB", "MUL", "ORR", "SDIV", "UDIV" }));
@@ -40,10 +40,13 @@ public class SyntaxChecker {
 				throw new InvalidOperationException(line, op);
 			}
 			int i = 1;
-			if (tokens.get(1).getToken() == TokenType.CONDITIONCODE) {
+			if (tokens.get(i).getToken() == TokenType.FLAG) {
 				i++;
 			}
-
+			if (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
+				i++;
+			}
+			
 			for (Token token : tokens) {
 				if (token.getToken() == TokenType.REGISTER) {
 					int register = Integer.parseInt(token.toInner());

@@ -23,4 +23,11 @@ public class Address {
 	public int getAddress() {
 		return address;
 	}
+
+	@Override
+	public String toString() {
+		return "Address [address=" + address + "]";
+	}
+	
+	
 }

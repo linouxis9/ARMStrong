@@ -5,5 +5,5 @@ package simulator;
  * 
  */
 public enum Flag {
-	I, P, U, B, W, S, L;
+	B, H, S;
 }
