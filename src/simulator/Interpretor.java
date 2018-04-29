@@ -199,6 +199,8 @@ public class Interpretor {
 		return null;
 	}
 
+	
+	
 	private Register toRegister(Token register) {
 		return this.cpu.getRegisters()[Integer.parseInt(register.getValue())];
 	}
