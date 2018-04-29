@@ -18,7 +18,7 @@ public class SyntaxChecker {
 	 * Small Set containing the instructions that takes as input only one Operand2.
 	 */
 	private static final Set<String> OOP2 = new HashSet<String>(
-			Arrays.asList(new String[] { "b", "bl", "swi", "svc" }));
+			Arrays.asList(new String[] { "swi", "svc" }));
 	/**
 	 * Small Set containing the instructions that takes as input one Register and
 	 * one Operand2.
@@ -30,8 +30,15 @@ public class SyntaxChecker {
 	 * Small Set containing the special instructions that takes as input one
 	 * Operand2.
 	 */
-	private static final Set<String> SPOP2 = new HashSet<String>(Arrays.asList(new String[] { "ldr", "str" }));
+	private static final Set<String> LSOP2 = new HashSet<String>(Arrays.asList(new String[] { "ldr", "str" }));
 
+	/**
+	 * Small Set containing the branching instructions that takes as input one
+	 * Operand2.
+	 */
+	private static final Set<String> BOP2 = new HashSet<String>(Arrays.asList(new String[] { "b", "bl" }));
+
+	
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -64,10 +71,10 @@ public class SyntaxChecker {
 				i++;
 			}
 			
-			String op = tokens.get(i).getValue().toUpperCase();
+			String op = tokens.get(i).getValue();
 			if (tokens.get(i).getToken() != TokenType.OPERATION
 					&& !(SyntaxChecker.RROP2.contains(op) || SyntaxChecker.OOP2.contains(op)
-							|| SyntaxChecker.ROP2.contains(op) || SyntaxChecker.SPOP2.contains(op))) {
+							|| SyntaxChecker.ROP2.contains(op) || SyntaxChecker.LSOP2.contains(op))) {
 				throw new InvalidOperationException(line, op);
 			}
 
@@ -90,15 +97,18 @@ public class SyntaxChecker {
 			}
 			
 			boolean error = false;
-
+			i++;
+			System.out.println(tokens);
 			if (SyntaxChecker.RROP2.contains(op)) {
 				error = SyntaxChecker.checkRROP2(tokens, i);
 			} else if (SyntaxChecker.OOP2.contains(op)) {
 				error = SyntaxChecker.checkOOP2(tokens, i);
 			} else if (SyntaxChecker.ROP2.contains(op)) {
 				error = SyntaxChecker.checkROP2(tokens, i);
-			} else if (SyntaxChecker.SPOP2.contains(op)) {
-				error = SyntaxChecker.checkSPO2(tokens, i);
+			} else if (SyntaxChecker.LSOP2.contains(op)) {
+				error = SyntaxChecker.checkLSOP2(tokens, i);
+			} else if (SyntaxChecker.BOP2.contains(op)) {
+				error = SyntaxChecker.checkBOP2(tokens, i);
 			}
 
 			if (error) {
@@ -181,7 +191,7 @@ public class SyntaxChecker {
 	}
 
 	/**
-	 * Ensure the syntax correctness of a SPOP2 (Special Instruction with One
+	 * Ensure the syntax correctness of a LSOP2 (Special Instruction with One
 	 * Operand2) instruction.
 	 * 
 	 * @param tokens
@@ -190,7 +200,7 @@ public class SyntaxChecker {
 	 *            The index of the first element of the right-hand expression
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
-	private static boolean checkSPO2(List<Token> tokens, int i) {
+	private static boolean checkLSOP2(List<Token> tokens, int i) {
 		if (tokens.get(i).getToken() == TokenType.REGISTER && tokens.get(i + 1).getToken() == TokenType.COMMA) {
 			Token token = tokens.get(i + 2);
 			switch (token.getToken()) {
@@ -205,6 +215,23 @@ public class SyntaxChecker {
 			case REGISTER:
 			}
 		} else {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Ensure the syntax correctness of a BOP2 (Branching Instruction with One
+	 * Operand2) instruction.
+	 * 
+	 * @param tokens
+	 *            The instruction's parsable tokens
+	 * @param i
+	 *            The index of the first element of the right-hand expression
+	 * @return True if the instruction is invalid, else otherwise.
+	 */
+	private static boolean checkBOP2(List<Token> tokens, int i) {
+		if (tokens.get(i).getToken() == TokenType.LABEL) {
 			return true;
 		}
 		return false;
