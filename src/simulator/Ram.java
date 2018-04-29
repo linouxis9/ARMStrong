@@ -6,8 +6,8 @@ public class Ram implements Memory {
 	/**
 	 * The default size of the memory
 	 */
-	public static final int DEFAULT_SIZE = 10000;
-	
+	public static final int DEFAULT_SIZE = 1000000;
+
 	/**
 	 * A table of byte that represent the memory
 	 */

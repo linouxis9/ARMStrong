@@ -19,14 +19,12 @@ public class Main {
 			System.out.println(test);
 			
 			Interpretor interpretorTest = new Interpretor(cpuTest,new Program(test));
-			while (interpretorTest.hasNext()) {
-				try {
-					cpuTest.addInstruction(interpretorTest.next());
-				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
-						| InvalidInstructionException e) {
-					e.printStackTrace();
-				}
+			try {
+				interpretorTest.parseProgram();
+				cpuTest.execute();
+			} catch (AssemblyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			cpuTest.execute();
 	}
 }

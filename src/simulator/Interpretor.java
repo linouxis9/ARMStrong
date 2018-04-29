@@ -27,36 +27,54 @@ public class Interpretor {
 	/**
 	 * 
 	 */
-	public boolean hasNext() {
+	private boolean hasNext() {
 		return this.program.hasNext();
 	}
 
 	// TODO write javadoc comment
 	/**
+	 * @throws UnknownLabelException
 	 * 
 	 */
-	public Instruction next() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException,
-			InvalidInstructionException {
-		if (!this.hasNext()) {
-			return null;
+	public void parseProgram() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException,
+			InvalidLabelException, UnknownLabelException {
+		while (this.hasNext()) {
+			this.line++;
+			List<Token> tokens = this.program.next();
+			this.cpu.addInstruction(this.parse(tokens));
 		}
-		this.line++;
-		List<Token> tokens = this.program.next();
-		return this.parse(tokens);
 	}
 
 	// TODO write javadoc comment
 	/**
+	 * @throws InvalidLabelException
+	 * @throws UnknownLabelException
 	 * 
 	 */
 	public Instruction parse(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException,
-			InvalidRegisterException, InvalidInstructionException {
+			InvalidRegisterException, InvalidLabelException, UnknownLabelException {
 
 		SyntaxChecker.checkSyntax(tokens, line);
 		ConditionCode cc = ConditionCode.AL;
 		HashSet<Flag> flags = new HashSet<Flag>();
-		int i = 1;
+		int i = 0;
+		int b = 0;
+		if (tokens.get(b).getToken() == TokenType.LABEL) {
+			String label = tokens.get(b).getValue();
+			if (this.cpu.getLabelMap().containsKey(label)) {
+				throw new InvalidLabelException(line, label);
+			}
+			this.cpu.getLabelMap().put(label, this.cpu.instructionsLen() * 4);
+			b++;
+		}
 
+		if (tokens.get(tokens.size() - 1).getToken() == TokenType.IDENTIFIER) {
+			String label = tokens.get(tokens.size() - 1).getValue();
+			if (!this.cpu.getLabelMap().containsKey(label)) {
+				throw new UnknownLabelException(line, label);
+			}
+		}
+		i = b + 1;
 		while (tokens.get(i).getToken() == TokenType.FLAG) {
 			switch (tokens.get(i).getValue()) {
 			case "b":
@@ -124,7 +142,7 @@ public class Interpretor {
 			i++;
 		}
 
-		switch (tokens.get(0).getValue()) {
+		switch (tokens.get(b).getValue()) {
 		case "adc":
 			return new Instruction(Operation.ADC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
@@ -206,6 +224,8 @@ public class Interpretor {
 			int address = Integer.parseInt(inner);
 			address = address + Integer.parseInt(inner.substring(inner.indexOf(",")));
 			return null;
+		case IDENTIFIER:
+			return new ImmediateValue(this.cpu.getLabelMap().get(inner) - this.cpu.instructionsLen() * 4);
 		default:
 			return null;
 		}

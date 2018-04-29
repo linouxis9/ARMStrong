@@ -58,14 +58,19 @@ public class SyntaxChecker {
 			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
 
 		try {
-			String op = tokens.get(0).getValue().toUpperCase();
-			System.out.println(tokens);
-			if (tokens.get(0).getToken() != TokenType.OPERATION
+			int i = 0;
+			
+			if (tokens.get(i).getToken() == TokenType.LABEL) {
+				i++;
+			}
+			
+			String op = tokens.get(i).getValue().toUpperCase();
+			if (tokens.get(i).getToken() != TokenType.OPERATION
 					&& !(SyntaxChecker.RROP2.contains(op) || SyntaxChecker.OOP2.contains(op)
 							|| SyntaxChecker.ROP2.contains(op) || SyntaxChecker.SPOP2.contains(op))) {
 				throw new InvalidOperationException(line, op);
 			}
-			int i = 1;
+
 			while (tokens.get(i).getToken() == TokenType.FLAG) {
 				i++;
 			}

@@ -46,7 +46,7 @@ public class Cpu {
 	 */
 	private final Map<Integer, Callable> interruptsVector;
 
-	private Map<String, Integer> labelMap;
+	private final Map<String, Integer> labelMap;
 
 	// TODO write javadoc comment
 	/**
@@ -86,9 +86,9 @@ public class Cpu {
 	 */
 	public void execute() {
 		try {
-		while (!this.interrupt) {
-			this.executeStep();
-		}
+			while (!this.interrupt) {
+				this.executeStep();
+			}
 		} catch (IndexOutOfBoundsException e) {
 			
 		}
@@ -272,6 +272,23 @@ public class Cpu {
 	 */
 	public Register getSp() {
 		return sp;
+	}
+
+	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */	
+	public Map<String, Integer> getLabelMap() {
+		return labelMap;
+	}
+
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */	
+	public int instructionsLen() {
+		return instructions.size();
 	}
 
 	// TODO write javadoc comment

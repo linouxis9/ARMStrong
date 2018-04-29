@@ -26,6 +26,8 @@ public class Token {
 				return this.value.substring(1);
 			case REGISTER:
 				return this.value.substring(1);
+			case LABEL:
+				return this.value.substring(0, this.value.length()-1);
 			default:
 				return this.value;
 		}

@@ -3,7 +3,7 @@ package simulator;
 public enum TokenType {
 	COMMENT("@.*"),
 	LABEL("[a-z]+:"),
-	FLAG("(?<!^)(b|h|s)"),
+	FLAG("(?<!^)(?<!:)(b|h|s)"),
 	DIRECTIVE("\\.[a-z]+ [a-z]+"),
 	CONDITIONCODE("(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)"),
 	PLUS("\\+"),
