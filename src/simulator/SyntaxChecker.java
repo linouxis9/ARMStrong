@@ -122,12 +122,12 @@ public class SyntaxChecker {
 	/**
 	 * Ensure that a register is comprised between [0;15]
 	 * 
-	 * @param register
+	 * @param registerId
 	 *            The Register id to test
 	 * @return True if the register is invalid, else otherwise.
 	 */
-	private static boolean checkRegister(int register) {
-		if (register > 15 || register < 0) {
+	private static boolean checkRegister(int registerId) {
+		if (registerId > 15 || registerId < 0) {
 			return true;
 		}
 		return false;

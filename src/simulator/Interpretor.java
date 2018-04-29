@@ -25,20 +25,12 @@ public class Interpretor {
 
 	// TODO write javadoc comment
 	/**
-	 * 
-	 */
-	private boolean hasNext() {
-		return this.program.hasNext();
-	}
-
-	// TODO write javadoc comment
-	/**
 	 * @throws UnknownLabelException
 	 * 
 	 */
 	public void parseProgram() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException,
 			InvalidLabelException, UnknownLabelException {
-		while (this.hasNext()) {
+		while (this.program.hasNext()) {
 			this.line++;
 			List<Token> tokens = this.program.next();
 			this.cpu.addInstruction(this.parse(tokens));
