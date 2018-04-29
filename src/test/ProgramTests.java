@@ -71,6 +71,17 @@ public class ProgramTests {
 		    add(new Token(TokenType.OFFSET,"[r0]"));
 		}};
 		
+		tokens = Program.lexer("coucou:ldrheq r4,[r0]");
+		expected = new HashSet<Token>() {{
+			add(new Token(TokenType.LABEL,"coucou:"));
+		    add(new Token(TokenType.OPERATION,"ldr"));
+		    add(new Token(TokenType.FLAG,"g"));
+		    add(new Token(TokenType.CONDITIONCODE,"eq"));
+		    add(new Token(TokenType.REGISTER,"r4"));
+		    add(new Token(TokenType.COMMA,","));
+		    add(new Token(TokenType.OFFSET,"[r0]"));
+		}};
+		
 		tokens = Program.lexer("@coucou:ldr r4,[r0]");
 		expected = new HashSet<Token>() {{
 			add(new Token(TokenType.COMMENT,"@coucou:ldr r4,[r0]"));

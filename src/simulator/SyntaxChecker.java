@@ -77,7 +77,7 @@ public class SyntaxChecker {
 							|| SyntaxChecker.ROP2.contains(op) || SyntaxChecker.LSOP2.contains(op))) {
 				throw new InvalidOperationException(line, op);
 			}
-
+			i++;
 			while (tokens.get(i).getToken() == TokenType.FLAG) {
 				i++;
 			}
@@ -97,8 +97,7 @@ public class SyntaxChecker {
 			}
 			
 			boolean error = false;
-			i++;
-			System.out.println(tokens);
+
 			if (SyntaxChecker.RROP2.contains(op)) {
 				error = SyntaxChecker.checkRROP2(tokens, i);
 			} else if (SyntaxChecker.OOP2.contains(op)) {

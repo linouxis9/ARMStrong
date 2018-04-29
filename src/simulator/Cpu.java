@@ -142,7 +142,7 @@ public class Cpu {
 		this.pc.setValue(this.pc.getValue() + 4);
 		
 		if (this.cpsr.getConditionCodeStatus(i.getCc())) {
-			System.out.println(i);
+			System.out.println("Executing: " +i);
 			this.runInstruction(i);
 		}
 	}
