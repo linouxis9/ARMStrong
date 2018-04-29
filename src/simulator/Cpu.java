@@ -46,6 +46,8 @@ public class Cpu {
 	 */
 	private final Map<Integer, Callable> interruptsVector;
 
+	private Map<String, Integer> labelMap;
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -75,6 +77,7 @@ public class Cpu {
 		this.interruptsVector = new HashMap<Integer, Callable>();
 		this.fillInterruptsVector();
 		this.interrupt = false;
+		this.labelMap = new HashMap<String, Integer>();
 	}
 
 	// TODO write javadoc comment
@@ -114,7 +117,7 @@ public class Cpu {
 					i++;
 					c = (char) (this.ram.getByte(new Address(this.registers[0].getValue() + i)));
 				}
-			} catch (InvalidMemoryAddressException e1) {
+			} catch (InvalidMemoryAddressException e) {
 
 			}
 		});
@@ -281,7 +284,8 @@ public class Cpu {
 		 * ADC - Add with Carry
 		 * 
 		 * The ADC instruction adds the values in R2 and Operand2, together with the
-		 * carry flag. r1 <- r2 + op2 + carry
+		 * carry flag.
+		 * r1 <- r2 + op2 + carry
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -297,8 +301,8 @@ public class Cpu {
 		/**
 		 * ADD - Add
 		 * 
-		 * The ADD instruction adds the value of Operand2 to the value in R2. r1 <- r2 +
-		 * op2
+		 * The ADD instruction adds the value of Operand2 to the value in R2.
+		 * r1 <- r2 + op2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -315,7 +319,8 @@ public class Cpu {
 		 * AND - And
 		 * 
 		 * The AND instruction performs bitwise AND operations on the values in R2 and
-		 * Operand2. r1 <- r2 AND op2
+		 * Operand2.
+		 * r1 <- r2 AND op2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -331,7 +336,8 @@ public class Cpu {
 		/**
 		 * B - Branch
 		 * 
-		 * The B instruction causes a branch to op. pc <- op2
+		 * The B instruction causes a branch to op.
+		 * pc <- op2
 		 * 
 		 * @param op
 		 *            Operand2
@@ -343,7 +349,8 @@ public class Cpu {
 		/**
 		 * AND - And
 		 * 
-		 * The BIC instruction performs an R2 AND NOT OP operation. r1 <- r2 AND NOT op2
+		 * The BIC instruction performs an R2 AND NOT OP operation.
+		 * r1 <- r2 AND NOT op2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -361,7 +368,8 @@ public class Cpu {
 		 * B - Branch with link
 		 * 
 		 * The BL instruction copies the address of the next instruction into r14 (lr,
-		 * the link register), and causes a branch to op. pc <- op2
+		 * the link register), and causes a branch to op.
+		 * pc <- op2
 		 * 
 		 * @param op
 		 *            Operand2
@@ -376,7 +384,9 @@ public class Cpu {
 		 * CMN - Compare Negative
 		 * 
 		 * The CMN instruction adds the value of Operand2 to the value in Rn and update
-		 * the flags. - DISCARD <- r1 - (-op) - Update the flags in CPSR
+		 * the flags.
+		 * - DISCARD <- r1 - (-op)
+		 * - Update the flags in CPSR
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -384,7 +394,7 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmn(Register r1, Operand2 op) {
-			int value = r1.getValue() - op.getValue();
+			int value = r1.getValue() + op.getValue();
 			Cpu.this.cpsr.reset();
 			if (value < 0) {
 				Cpu.this.cpsr.setN(true);
@@ -398,7 +408,9 @@ public class Cpu {
 		 * CMP - Compare
 		 * 
 		 * The CMP instruction subtracts the value of Operand2 to the value in Rn and
-		 * update the flags. - DISCARD <- r1 - op - Update the flags in CPSR
+		 * update the flags.
+		 * - DISCARD <- r1 - op
+		 * - Update the flags in CPSR
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -419,8 +431,8 @@ public class Cpu {
 		/**
 		 * EOR - Exclusive OR
 		 * 
-		 * The EOR instruction performs a logical Exclusive OR operation. r1 <- r2 XOR
-		 * op2
+		 * The EOR instruction performs a logical Exclusive OR operation.
+		 * r1 <- r2 XOR op2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -463,7 +475,8 @@ public class Cpu {
 		 * MLA - Multiply Accumulate
 		 * 
 		 * The MLA instruction performs a multiplication between r2 and r3 and adds the
-		 * value from r4. r1 <- r2 * r3 + r4
+		 * value from r4.
+		 * r1 <- r2 * r3 + r4
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -481,7 +494,8 @@ public class Cpu {
 		/**
 		 * MOV - Move
 		 * 
-		 * The MOV instruction copies the value of Operand2 into r1. r1 <- op
+		 * The MOV instruction copies the value of Operand2 into r1.
+		 * r1 <- op
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -495,8 +509,8 @@ public class Cpu {
 		/**
 		 * MUL - Multiply
 		 * 
-		 * The MUL instruction performs a multiplication between r2 and r3. r1 <- r2 *
-		 * r3
+		 * The MUL instruction performs a multiplication between r2 and r3.
+		 * r1 <- r2 * r3
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -512,7 +526,8 @@ public class Cpu {
 		/**
 		 * MVN - Move NOT
 		 * 
-		 * The MVN instruction copies the complement of Operand2 into r1. r1 <- NOT op
+		 * The MVN instruction copies the complement of Operand2 into r1.
+		 * r1 <- NOT op
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -526,7 +541,8 @@ public class Cpu {
 		/**
 		 * ORR - OR
 		 * 
-		 * The OR instruction performs a logical OR operation. r1 <- r2 OR op2
+		 * The OR instruction performs a logical OR operation.
+		 * r1 <- r2 OR op2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -542,8 +558,8 @@ public class Cpu {
 		/**
 		 * SDIV - Signed division
 		 * 
-		 * The SDIV instruction performs a signed division between r2 and r3. r1 <- r2 /
-		 * r3
+		 * The SDIV instruction performs a signed division between r2 and r3.
+		 * r1 <- r2 / r3
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -559,7 +575,8 @@ public class Cpu {
 		/**
 		 * STR - Store
 		 * 
-		 * The STR instruction stores r1 in the memory at the address op. mem[op] <- r1
+		 * The STR instruction stores r1 in the memory at the address op.
+		 * mem[op] <- r1
 		 * 
 		 * @param r1
 		 *            Source Register
@@ -608,8 +625,8 @@ public class Cpu {
 		/**
 		 * SUB - Substract
 		 * 
-		 * The SUB instruction subtracts the value of Operand2 to the value in R2. r1 <-
-		 * r2 - op2
+		 * The SUB instruction subtracts the value of Operand2 to the value in R2.
+		 * r1 <- r2 - op2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -625,8 +642,9 @@ public class Cpu {
 		/**
 		 * SWP - Swap
 		 * 
-		 * The SWP instruction swaps data between registers and memory. - r1 <-
-		 * mem[pointer] - mem[pointer] <- r2
+		 * The SWP instruction swaps data between registers and memory.
+		 * - r1 <- mem[pointer]
+		 * - mem[pointer] <- r2
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -643,8 +661,9 @@ public class Cpu {
 		 * TEQ - Test equivalence
 		 * 
 		 * The TEQ instruction performs a bitwise Exclusive OR on the value of Operand2
-		 * and the value in r1 and update the flags. - DISCARD <- r1 XOR op - Update the
-		 * flags in CPSR
+		 * and the value in r1 and update the flags.
+		 * - DISCARD <- r1 XOR op 
+		 * - Update the flags in CPSR
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -659,8 +678,9 @@ public class Cpu {
 		 * TST - Test bits
 		 * 
 		 * The TST instruction performs a bitwise Exclusive AND on the value of Operand2
-		 * and the value in r1 and update the flags. - DISCARD <- r1 AND op - Update the
-		 * flags in CPSR
+		 * and the value in r1 and update the flags.
+		 * - DISCARD <- r1 AND op
+		 * - Update the flags in CPSR
 		 * 
 		 * @param r1
 		 *            Destination Register
@@ -674,8 +694,8 @@ public class Cpu {
 		/**
 		 * UDIV - Signed division
 		 * 
-		 * The UDIV instruction performs an unsigned division between r2 and r3. r1 <-
-		 * r2 / r3
+		 * The UDIV instruction performs an unsigned division between r2 and r3.
+		 * r1 <- r2 / r3
 		 * 
 		 * @param r1
 		 *            Destination Register

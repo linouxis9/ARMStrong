@@ -8,7 +8,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Program implements Iterator<List<Token>> {
-
+	
+	/**
+	 * The compiled representation of the regular expressions used to match the ARM instructions.
+	 */
+	private static Pattern pattern;
+	
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -23,17 +28,20 @@ public class Program implements Iterator<List<Token>> {
 		this.scanner = new Scanner(assembly);
 	}
 
-	// TODO write javadoc comment
 	/**
+	 * Returns if we still have assembly Strings to lex.
 	 * 
+	 * @return If we still have assembly Strings to lex
 	 */
 	public boolean hasNext() {
 		return scanner.hasNextLine();
 	}
 
-	// TODO write javadoc comment
 	/**
+	 * Turns the next ARM Instruction in assembly into an easily parsable List of
+	 * Token.
 	 * 
+	 * @return
 	 */
 	public List<Token> next() {
 		if (!this.hasNext()) {
@@ -43,17 +51,19 @@ public class Program implements Iterator<List<Token>> {
 		return Program.lexer(line);
 	}
 
+	/**
+	 * This is our awesome small but efficient Lexical Analyzer. It turns a String
+	 * containing an ARM Instruction in assembly into an easily parsable List of
+	 * Token.
+	 * 
+	 * @param line
+	 *            A String containing an ARM Instruction in assembly
+	 * @return an easily parsable List of Token.
+	 */
 	public static List<Token> lexer(String line) {
 		ArrayList<Token> list = new ArrayList<Token>();
 
-		String myFuturePattern = "";
-
-		for (TokenType tokenType : TokenType.values()) {
-			myFuturePattern = myFuturePattern + "(?<" + tokenType.name() + ">" + tokenType.regexp + ")|";
-		}
-		Pattern patterns = Pattern.compile(myFuturePattern);
-
-		Matcher matcher = patterns.matcher(line);
+		Matcher matcher = Program.getPattern().matcher(line);
 
 		while (matcher.find()) {
 			for (TokenType tokenType : TokenType.values()) {
@@ -67,5 +77,25 @@ public class Program implements Iterator<List<Token>> {
 
 		}
 		return list;
+	}
+
+	/**
+	 * Instead of having to make a Pattern each time the Program.lexer(String line)
+	 * method is called, We use lazy initialization to initialize our Pattern object
+	 * once and then make it available to every instance of Program. It is important
+	 * to note that a Pattern is computationally expensive to compile.
+	 * 
+	 * @return A Pattern able to match ARM instructions
+	 */
+	private static Pattern getPattern() {
+		if (pattern == null) {
+			String myFuturePattern = "";
+
+			for (TokenType tokenType : TokenType.values()) {
+				myFuturePattern = myFuturePattern + "(?<" + tokenType.name() + ">" + tokenType.regexp + ")|";
+			}
+			pattern = Pattern.compile(myFuturePattern);
+		}
+		return pattern;
 	}
 }

@@ -58,15 +58,20 @@ public class Interpretor {
 		int i = 1;
 
 		while (tokens.get(i).getToken() == TokenType.FLAG) {
-			switch(tokens.get(i).toInner()) {
-			case "b": flags.add(Flag.B); break;
-			case "h": flags.add(Flag.H); break;
-			case "s": flags.add(Flag.S); break;
+			switch (tokens.get(i).getValue()) {
+			case "b":
+				flags.add(Flag.B);
+				break;
+			case "h":
+				flags.add(Flag.H);
+				break;
+			case "s":
+				flags.add(Flag.S);
+				break;
 			default:
 			}
 			i++;
 		}
-
 		if (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
 			switch (tokens.get(1).getValue()) {
 			case "eq":
@@ -118,26 +123,31 @@ public class Interpretor {
 			}
 			i++;
 		}
-		
+
 		switch (tokens.get(0).getValue()) {
 		case "adc":
-			return new Instruction(Operation.ADC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.ADC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "add":
-			return new Instruction(Operation.ADD, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.ADD, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "and":
-			return new Instruction(Operation.AND, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.AND, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "b":
-			return new Instruction(Operation.B,handleOpe2(tokens.get(i)),flags,cc);
+			return new Instruction(Operation.B, handleOpe2(tokens.get(i)), flags, cc);
 		case "bic":
-			return new Instruction(Operation.BIC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.BIC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "bl":
-			return new Instruction(Operation.BL,handleOpe2(tokens.get(i)),flags,cc);
+			return new Instruction(Operation.BL, handleOpe2(tokens.get(i)), flags, cc);
 		case "cmn":
 			return new Instruction(Operation.CMN, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "cmp":
 			return new Instruction(Operation.CMP, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "eor":
-			return new Instruction(Operation.EOR, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.EOR, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "ldr":
 			return new Instruction(Operation.LDR, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "mla":
@@ -145,28 +155,34 @@ public class Interpretor {
 		case "mov":
 			return new Instruction(Operation.MOV, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "mul":
-			return new Instruction(Operation.MUL, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), toRegister(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.MUL, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					toRegister(tokens.get(i + 4)), flags, cc);
 		case "mvn":
 			return new Instruction(Operation.MVN, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "orr":
-			return new Instruction(Operation.ORR, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.ORR, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "sdiv":
-			return new Instruction(Operation.SDIV, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), toRegister(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.SDIV, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					toRegister(tokens.get(i + 4)), flags, cc);
 		case "str":
 			return new Instruction(Operation.STR, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "svc":
 		case "swi":
 			return new Instruction(Operation.SWI, handleOpe2(tokens.get(i)), flags, cc);
 		case "sub":
-			return new Instruction(Operation.SUB, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.SUB, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "swp":
-			return new Instruction(Operation.SWP, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), handleOpe2(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.SWP, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "teq":
 			return new Instruction(Operation.TEQ, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "tst":
 			return new Instruction(Operation.TST, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "udiv":
-			return new Instruction(Operation.SDIV, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), toRegister(tokens.get(i + 4)), flags, cc);
+			return new Instruction(Operation.SDIV, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+					toRegister(tokens.get(i + 4)), flags, cc);
 
 		}
 
@@ -174,11 +190,11 @@ public class Interpretor {
 	}
 
 	private Register toRegister(Token register) {
-		return this.cpu.getRegisters()[Integer.parseInt(register.toInner())];
+		return this.cpu.getRegisters()[Integer.parseInt(register.getValue())];
 	}
 
 	private Operand2 handleOpe2(Token ope2) {
-		String inner = ope2.toInner();
+		String inner = ope2.getValue();
 		switch (ope2.getToken()) {
 		case REGISTER:
 			return toRegister(ope2);

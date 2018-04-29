@@ -12,16 +12,12 @@ public class Token {
 	public TokenType getToken() {
 		return token;
 	}
-	public String getValue() {
-		return value;
-	}
 	
 	public String toString() {
 		return "[" + token.name() + ":" + this.value + "]";
 	}
 	
-	// TODO Technical debt, isn't it?
-	public String toInner() {
+	public String getValue() {
 		switch(this.token) {
 			case INDEXEDOFFSET:
 			case OFFSET:
@@ -30,8 +26,6 @@ public class Token {
 				return this.value.substring(1);
 			case REGISTER:
 				return this.value.substring(1);
-			case FLAG:
-				return this.value.substring(0, this.value.length()-1);
 			default:
 				return this.value;
 		}
