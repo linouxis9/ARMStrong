@@ -11,6 +11,6 @@ strb r1,[r0]
 sub r4,r4,#1
 add r0,r0,#1
 cmp r4,#0
-bne loop
+bcc loop
 mov r0,#0
 svc #0

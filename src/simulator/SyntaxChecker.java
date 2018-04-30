@@ -66,7 +66,7 @@ public class SyntaxChecker {
 
 		try {
 			int i = 0;
-			
+			System.out.println(tokens);
 			if (tokens.get(i).getToken() == TokenType.LABEL) {
 				i++;
 			}

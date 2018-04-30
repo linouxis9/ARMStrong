@@ -3,9 +3,9 @@ package simulator;
 public enum TokenType {
 	COMMENT("@.*"),
 	LABEL("[a-z]+:"),
+	CONDITIONCODE("(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)"),
 	FLAG("(?<!^)(?<!:)(b|h|s)"),
 	DIRECTIVE("\\.[a-z]+ ([a-z]|[0-9])+"),
-	CONDITIONCODE("(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)"),
 	OFFSET("\\[r[0-9]+\\]"), 
 	INDEXEDOFFSET("\\[r[0-9]{1,2}\\,(\\+|-)?[1-9]+\\]"), 
 	COMMA("\\,"),

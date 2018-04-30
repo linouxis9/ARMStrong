@@ -27,6 +27,9 @@ public class ShiftedRegister implements Operand2 {
 		return value;
 	}
 
+	public boolean getCarry() {
+		return true;
+	}
 	// TODO write javadoc comment
 	/**
 	 * 

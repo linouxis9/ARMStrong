@@ -1,5 +1,6 @@
 package simulator;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -411,13 +412,18 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmn(Register r1, Operand2 op) {
-			int value = r1.getValue() + op.getValue();
+			long value = r1.getValue() + op.getValue();
 			Cpu.this.cpsr.reset();
 			if (value < 0) {
 				Cpu.this.cpsr.setN(true);
 			} else if (value == 0) {
 				Cpu.this.cpsr.setZ(true);
-			} else if (value > 0) {
+			}
+			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
+				Cpu.this.cpsr.setV(true);
+			}
+			if (r1.getValue() > Math.abs((long)op.getValue())) {
+				Cpu.this.cpsr.setC(true);
 			}
 		}
 
@@ -435,13 +441,18 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmp(Register r1, Operand2 op) {
-			int value = r1.getValue() - op.getValue();
+			long value = r1.getValue() - op.getValue();
 			Cpu.this.cpsr.reset();
 			if (value < 0) {
 				Cpu.this.cpsr.setN(true);
 			} else if (value == 0) {
 				Cpu.this.cpsr.setZ(true);
-			} else if (value > 0) {
+			}
+			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
+				Cpu.this.cpsr.setV(true);
+			}
+			if (r1.getValue() <= Math.abs((long)op.getValue())) {
+				Cpu.this.cpsr.setC(true);
 			}
 		}
 
@@ -688,13 +699,23 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void teq(Register r1, Operand2 op) {
-
+			long value = r1.getValue() ^ op.getValue();
+			Cpu.this.cpsr.reset();
+			if (value < 0) {
+				Cpu.this.cpsr.setN(true);
+			} else if (value == 0) {
+				Cpu.this.cpsr.setZ(true);
+			}
+			if (op instanceof ShiftedRegister) {
+				ShiftedRegister shiftedRegister = (ShiftedRegister)op;
+				Cpu.this.cpsr.setC(shiftedRegister.getCarry());
+			}
 		}
 
 		/**
 		 * TST - Test bits
 		 * 
-		 * The TST instruction performs a bitwise Exclusive AND on the value of Operand2
+		 * The TST instruction performs a bitwise AND on the value of Operand2
 		 * and the value in r1 and update the flags.
 		 * - DISCARD <- r1 AND op
 		 * - Update the flags in CPSR
@@ -705,7 +726,17 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void tst(Register r1, Operand2 op) {
-
+			long value = r1.getValue() & op.getValue();
+			Cpu.this.cpsr.reset();
+			if (value < 0) {
+				Cpu.this.cpsr.setN(true);
+			} else if (value == 0) {
+				Cpu.this.cpsr.setZ(true);
+			}
+			if (op instanceof ShiftedRegister) {
+				ShiftedRegister shiftedRegister = (ShiftedRegister)op;
+				Cpu.this.cpsr.setC(shiftedRegister.getCarry());
+			}
 		}
 
 		/**
