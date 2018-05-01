@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Test;
 
 import simulator.Program;
-import simulator.SyntaxChecker;
+import simulator.Preprocessor;
 import simulator.Token;
 
 public class SyntaxCheckerTests {
@@ -15,14 +15,14 @@ public class SyntaxCheckerTests {
 	public void testLexer() {
 		List<Token> tokens = Program.lexer("mov r4,r4");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 		}
 		catch (Exception e) {
 			fail();
 		}
 		tokens = Program.lexer("mov r4,r40");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 			fail();
 		}
 		catch (Exception e) {
@@ -30,7 +30,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("strb r4,[r10]");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -38,7 +38,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("ldrh r4,[r10]");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -46,7 +46,7 @@ public class SyntaxCheckerTests {
 
 		tokens = Program.lexer("ldrh r4");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 			fail();
 		}
 		catch (Exception e) {
@@ -54,7 +54,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("add r4,r4,#-25");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -62,7 +62,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("b label");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -70,7 +70,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("ldrheq r4,[r10]");
 		try {
-			SyntaxChecker.checkSyntax(tokens);
+			Preprocessor.checkSyntax(tokens);
 		}
 		catch (Exception e) {
 			fail();

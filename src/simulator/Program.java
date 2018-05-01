@@ -24,10 +24,24 @@ public class Program implements Iterator<List<Token>> {
 	/**
 	 * 
 	 */
+	public Program() {
+		this.setNewProgram("");
+	}
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
 	public Program(String assembly) {
+		this.setNewProgram(assembly);
+	}
+	
+	// TODO write javadoc comment
+	/**
+	 * 
+	 */
+	public void setNewProgram(String assembly) {
 		this.scanner = new Scanner(assembly);
 	}
-
 	/**
 	 * Returns if we still have assembly Strings to lex.
 	 * 

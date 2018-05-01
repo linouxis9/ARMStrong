@@ -28,6 +28,8 @@ public class Token {
 				return this.value.substring(1);
 			case LABEL:
 				return this.value.substring(0, this.value.length()-1);
+			case HASHEDASCII:
+				return Integer.toString(this.value.substring(2, this.value.length()-1).getBytes()[0]);
 			default:
 				return this.value;
 		}

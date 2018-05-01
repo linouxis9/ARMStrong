@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -64,7 +65,6 @@ import javafx.geometry.Rectangle2D;
 
 
 public class GUI extends Application {
-	PrintStream out;
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -99,13 +99,7 @@ public class GUI extends Application {
 	        	});
 	        }
 	    };
-	    this.out = new PrintStream(consoleOut, true);
-	    System.setOut(out);
-	    System.out.println("coucou");
+	    System.setOut(new PrintStream(consoleOut, true));
 	    stage.show();
 	}
-
-	/*public void displayErrors(Exception[] exceptions) {
-		
-	}*/
 }

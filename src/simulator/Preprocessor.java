@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
 
-public class SyntaxChecker {
+public class Preprocessor {
 
 	/**
 	 * Small Set containing the instructions that takes as input two Registers and
@@ -17,8 +17,7 @@ public class SyntaxChecker {
 	/**
 	 * Small Set containing the instructions that takes as input only one Operand2.
 	 */
-	private static final Set<String> OOP2 = new HashSet<String>(
-			Arrays.asList(new String[] { "swi", "svc" }));
+	private static final Set<String> OOP2 = new HashSet<String>(Arrays.asList(new String[] { "swi", "svc" }));
 	/**
 	 * Small Set containing the instructions that takes as input one Register and
 	 * one Operand2.
@@ -38,7 +37,6 @@ public class SyntaxChecker {
 	 */
 	private static final Set<String> BOP2 = new HashSet<String>(Arrays.asList(new String[] { "b", "bl" }));
 
-	
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -49,7 +47,7 @@ public class SyntaxChecker {
 	 */
 	public static void checkSyntax(List<Token> tokens)
 			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
-		SyntaxChecker.checkSyntax(tokens, 0);
+		Preprocessor.preprocess(tokens, 0);
 	}
 
 	// TODO write javadoc comment
@@ -61,7 +59,7 @@ public class SyntaxChecker {
 	 * @throws InvalidOperationException
 	 * @throws InvalidRegisterException
 	 */
-	public static void checkSyntax(List<Token> tokens, int line)
+	public static void preprocess(List<Token> tokens, int line)
 			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
 
 		try {
@@ -69,11 +67,11 @@ public class SyntaxChecker {
 			if (tokens.get(i).getToken() == TokenType.LABEL) {
 				i++;
 			}
-			
+
 			String op = tokens.get(i).getValue();
-			if (tokens.get(i).getToken() != TokenType.OPERATION
-					&& !(SyntaxChecker.RROP2.contains(op) || SyntaxChecker.OOP2.contains(op)
-							|| SyntaxChecker.ROP2.contains(op) || SyntaxChecker.LSOP2.contains(op))) {
+			if (tokens.get(i).getToken() != TokenType.OPERATION || !(Preprocessor.RROP2.contains(op)
+					|| Preprocessor.OOP2.contains(op) || Preprocessor.ROP2.contains(op)
+					|| Preprocessor.LSOP2.contains(op) || Preprocessor.BOP2.contains(op))) {
 				throw new InvalidOperationException(line, op);
 			}
 			i++;
@@ -84,29 +82,32 @@ public class SyntaxChecker {
 			if (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
 				i++;
 			}
-
 			for (Token token : tokens) {
 				if (token.getToken() == TokenType.REGISTER) {
 					int register = Integer.parseInt(token.getValue());
-					if (SyntaxChecker.checkRegister(register)) {
+					if (Preprocessor.checkRegister(register)) {
 						throw new InvalidRegisterException(line, register);
 					}
 
 				}
+				
+				if (token.getToken() == TokenType.HASHEDASCII) {
+					tokens.set(tokens.indexOf(token),new Token(TokenType.HASH,"#"+token.getValue()));
+				}
 			}
-			
+
 			boolean error = false;
 
-			if (SyntaxChecker.RROP2.contains(op)) {
-				error = SyntaxChecker.checkRROP2(tokens, i);
-			} else if (SyntaxChecker.OOP2.contains(op)) {
-				error = SyntaxChecker.checkOOP2(tokens, i);
-			} else if (SyntaxChecker.ROP2.contains(op)) {
-				error = SyntaxChecker.checkROP2(tokens, i);
-			} else if (SyntaxChecker.LSOP2.contains(op)) {
-				error = SyntaxChecker.checkLSOP2(tokens, i);
-			} else if (SyntaxChecker.BOP2.contains(op)) {
-				error = SyntaxChecker.checkBOP2(tokens, i);
+			if (Preprocessor.RROP2.contains(op)) {
+				error = Preprocessor.checkRROP2(tokens, i);
+			} else if (Preprocessor.OOP2.contains(op)) {
+				error = Preprocessor.checkOOP2(tokens, i);
+			} else if (Preprocessor.ROP2.contains(op)) {
+				error = Preprocessor.checkROP2(tokens, i);
+			} else if (Preprocessor.LSOP2.contains(op)) {
+				error = Preprocessor.checkLSOP2(tokens, i);
+			} else if (Preprocessor.BOP2.contains(op)) {
+				error = Preprocessor.checkBOP2(tokens, i);
 			}
 
 			if (error) {
@@ -203,10 +204,10 @@ public class SyntaxChecker {
 			Token token = tokens.get(i + 2);
 			switch (token.getToken()) {
 			case OFFSET:
-				return SyntaxChecker.checkRegister(Integer.parseInt(token.getValue()));
+				return Preprocessor.checkRegister(Integer.parseInt(token.getValue()));
 			case INDEXEDOFFSET:
 				String offset = token.getValue();
-				return SyntaxChecker.checkRegister(Integer.parseInt(offset.substring(0, offset.indexOf(","))));
+				return Preprocessor.checkRegister(Integer.parseInt(offset.substring(0, offset.indexOf(","))));
 			default:
 				return true;
 			case HASH:
@@ -217,7 +218,7 @@ public class SyntaxChecker {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Ensure the syntax correctness of a BOP2 (Branching Instruction with One
 	 * Operand2) instruction.

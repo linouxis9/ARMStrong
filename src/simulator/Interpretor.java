@@ -22,7 +22,7 @@ public class Interpretor {
 		this.cpu = cpu;
 		this.line = 0;
 	}
-
+	
 	// TODO write javadoc comment
 	/**
 	 * @throws UnknownLabelException
@@ -46,7 +46,7 @@ public class Interpretor {
 	public Instruction parse(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException,
 			InvalidRegisterException, InvalidLabelException, UnknownLabelException {
 
-		SyntaxChecker.checkSyntax(tokens, line);
+		Preprocessor.preprocess(tokens, line);
 		ConditionCode cc = ConditionCode.AL;
 		HashSet<Flag> flags = new HashSet<Flag>();
 		int i = 0;

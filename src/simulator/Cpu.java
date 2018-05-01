@@ -77,6 +77,7 @@ public class Cpu {
 		this.instructions = instructions;
 		this.interruptsVector = new HashMap<Integer, Callable>();
 		this.fillInterruptsVector();
+		this.interruptsVector.get(81).run();
 		this.interrupt = false;
 		this.labelMap = new HashMap<String, Integer>();
 	}
