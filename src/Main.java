@@ -4,7 +4,7 @@ import simulator.*;
 
 public class Main {
 	public static void main(String[] args) {
-			ArmSimulator jpp = new ArmSimulator();
+			//ArmSimulator jpp = new ArmSimulator();
 
 			Cpu cpuTest = new Cpu();
 			Scanner in = new Scanner(System.in);
@@ -18,6 +18,10 @@ public class Main {
 			
 			System.out.println(test);
 			
+			GUI myIHM = new GUI();
+			myIHM.startIHM();
+			
+				
 			Interpretor interpretorTest = new Interpretor(cpuTest,new Program(test));
 			try {
 				interpretorTest.parseProgram();
@@ -26,5 +30,6 @@ public class Main {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 	}
 }

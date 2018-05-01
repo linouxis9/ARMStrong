@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane prefHeight="805.0" prefWidth="1092.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="479.0" minWidth="10.0" percentWidth="20.0" prefWidth="147.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="797.0" minWidth="10.0" percentWidth="60.0" prefWidth="759.0" />
@@ -18,24 +18,35 @@
     <RowConstraints minHeight="150.0" percentHeight="20.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
+      <Accordion GridPane.rowIndex="1">
+        <panes>
+          <TitledPane animated="false" text="Hexadecimal" />
+          <TitledPane animated="false" text="Signed Decimal">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Unsigned Decimal">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
       <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
          <tabs>
-            <Tab text="Console" />
+            <Tab text="Console">
+               <content>
+                  <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                     <content>
+                        <TextFlow fx:id="consoleTextFlow" />
+                     </content>
+                  </ScrollPane>
+               </content></Tab>
             <Tab text="Output" />
          </tabs>
       </TabPane>
       <TextArea prefHeight="365.0" prefWidth="401.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <TabPane prefHeight="384.0" prefWidth="147.0" tabClosingPolicy="UNAVAILABLE" GridPane.rowIndex="1">
-         <tabs>
-            <Tab text="Hexadecimal         ">
-               <content>
-                  <ScrollPane prefHeight="200.0" prefWidth="200.0" />
-               </content>
-            </Tab>
-            <Tab text="Signed Decimal     " />
-            <Tab text="Unsigned Decimal" />
-         </tabs>
-      </TabPane>
       <MenuBar prefHeight="29.0" prefWidth="1026.0" GridPane.columnSpan="2147483647">
          <menus>
             <Menu mnemonicParsing="false" text="File">
@@ -65,5 +76,10 @@
             </Menu>
          </menus>
       </MenuBar>
+      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+         <children>
+        <AnchorPane layoutX="-41.0" layoutY="42.0" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+         </children>
+      </Pane>
    </children>
 </GridPane>

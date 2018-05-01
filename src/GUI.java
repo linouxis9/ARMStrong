@@ -1,4 +1,6 @@
  
+import java.io.Console;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -31,6 +34,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -50,30 +54,51 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.geometry.Rectangle2D;
 
-public class IHMEditor extends Application{
+
+public class GUI extends Application{
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-
-	public static void main(String[] args) {
-        launch(args);
-    }
+	public void startIHM() {
+		launch(null);
+	}
 	
 	@Override
 	public void start(Stage stage) throws Exception {
        Parent root = FXMLLoader.load(getClass().getResource("ihm_#@rm.fxml"));
-    
-        Scene scene = new Scene(root, 300, 275);
-    
-        stage.setTitle("FXML Welcome");
+        Scene scene = new Scene(root, 700, 275);
+        
+        stage.setMaximized(true);
+        
+        stage.setMinHeight(800);
+        stage.setMinWidth(800);
+
+        
+        stage.setTitle("#@RM");
         stage.setScene(scene);
         stage.show();
+        
+        TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
+        
+        //Console console = new Console(new TextArea());
+
+        
+        
+        
+        Text t1 = new Text("My name is Josh!");
+        consoleTextFlow.getChildren().add(t1);
+
+        stage.show();
+        
+        
+        
 	}
 
-	public void displayErrors(Exception[] exceptions) {
-
-	}
+	/*public void displayErrors(Exception[] exceptions) {
+		
+	}*/
 }
