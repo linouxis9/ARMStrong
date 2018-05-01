@@ -1,5 +1,8 @@
  
 import java.io.Console;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -84,14 +87,14 @@ public class GUI extends Application{
         
         TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
         
-        //Console console = new Console(new TextArea());
-
-        
-        
-        
-        Text t1 = new Text("My name is Josh!");
-        consoleTextFlow.getChildren().add(t1);
-
+	    OutputStream consoleOut = new OutputStream() {
+	        @Override
+	        public void write(int b) throws IOException {
+	        	consoleTextFlow.getChildren().add(new Text((String.valueOf((char) b))));
+	        }
+	    };
+	    System.setOut(new PrintStream(consoleOut, true));
+	    
         stage.show();
         
         

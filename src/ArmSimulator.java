@@ -9,8 +9,7 @@ public class ArmSimulator {
 	 */
 	private final Program program;
 	private final Interpretor interpretor;
-	private final IHMEditor editor;
-	private final IHMSimulator simulator;
+	private final GUI gui;
 	private final Cpu cpu;
 
 	// TODO write javadoc comment
@@ -21,8 +20,7 @@ public class ArmSimulator {
 		this.program = new Program(new String());
 		this.cpu = new Cpu();
 		this.interpretor = new Interpretor(this.cpu, this.program);
-		this.editor = new IHMEditor();
-		this.simulator = new IHMSimulator();
+		this.gui = new GUI();
 	}
 
 }

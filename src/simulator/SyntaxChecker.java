@@ -230,7 +230,7 @@ public class SyntaxChecker {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkBOP2(List<Token> tokens, int i) {
-		if (tokens.get(i).getToken() == TokenType.LABEL) {
+		if (tokens.get(i).getToken() != TokenType.IDENTIFIER) {
 			return true;
 		}
 		return false;

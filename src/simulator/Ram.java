@@ -2,6 +2,9 @@ package simulator;
 
 import java.util.Arrays;
 
+/**
+ * The class that represents the RAM used by the CPU
+ */
 public class Ram implements Memory {
 	/**
 	 * The default size of the memory
@@ -9,13 +12,14 @@ public class Ram implements Memory {
 	public static final int DEFAULT_SIZE = 1000000;
 
 	/**
-	 * A table of byte that represent the memory
+	 * A table of bytes that represents the memory
 	 */
 	private byte[] memory;
 
 	/**
-	 * A constructor of a RAM with a specified size
-	 * @param size The size of the RAM
+	 * A constructor of a RAM instance with a specified size
+	 * 
+	 * @param size
 	 */
 	public Ram(int size) {
 		this.memory = new byte[size];
@@ -30,9 +34,11 @@ public class Ram implements Memory {
 	}
 	
 	/**
-	 * We get a byte in the memory
-	 * @param myAddress The address where we get the byte
-	 * @return The byte corresponds to the address specified
+	 * Get a byte from the memory
+	 * 
+	 * @param myAddress
+	 *            The address where we retrieve the byte
+	 * @return The byte corresponding to the address specified
 	 */
 	public byte getByte(Address myAddress) throws InvalidMemoryAddressException{
 		
@@ -44,9 +50,12 @@ public class Ram implements Memory {
 	}
 	
 	/**
-	 * We set a byte in the memory
-	 * @param myAddress The address where we set the byte
-	 * @param myByte 
+	 * Set a byte in the memory
+	 * 
+	 * @param myAddress
+	 *            The address where we set the byte
+	 * @param myByte
+	 *            The byte to set at the address specified
 	 */
 	public void setByte(Address myAddress, byte myByte) throws InvalidMemoryAddressException {
 
@@ -145,7 +154,6 @@ public class Ram implements Memory {
 		Arrays.fill(this.memory, (byte)0);
 	}
 
-} 
 	@Override
 	public String toString() {
 		return "Ram [memory=" + Arrays.toString(memory) + "]";
