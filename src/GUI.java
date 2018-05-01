@@ -3,8 +3,10 @@ import java.io.Console;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -41,6 +43,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -60,8 +63,8 @@ import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
 
 
-public class GUI extends Application{
-
+public class GUI extends Application {
+	PrintStream out;
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -83,22 +86,23 @@ public class GUI extends Application{
         
         stage.setTitle("#@RM");
         stage.setScene(scene);
-        stage.show();
         
         TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
         
 	    OutputStream consoleOut = new OutputStream() {
+	    	PrintStream out = System.out;
 	        @Override
 	        public void write(int b) throws IOException {
-	        	consoleTextFlow.getChildren().add(new Text((String.valueOf((char) b))));
+	        	Platform.runLater(() ->{
+	        	        TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
+	        	        consoleTextFlow.getChildren().add(new Text((String.valueOf((char) b))));
+	        	});
 	        }
 	    };
-	    System.setOut(new PrintStream(consoleOut, true));
-	    
-        stage.show();
-        
-        
-        
+	    this.out = new PrintStream(consoleOut, true);
+	    System.setOut(out);
+	    System.out.println("coucou");
+	    stage.show();
 	}
 
 	/*public void displayErrors(Exception[] exceptions) {

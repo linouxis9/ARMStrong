@@ -1,3 +1,4 @@
+import java.io.PrintStream;
 import java.util.Scanner;
 
 import simulator.*;
@@ -15,13 +16,22 @@ public class Main {
 			}
 			
 			in.close();
-			
-			System.out.println(test);
-			
+
 			GUI myIHM = new GUI();
-			myIHM.startIHM();
 			
-				
+			new Thread() {
+				public void run() {
+					myIHM.startIHM();
+				}
+			}.start();
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
 			Interpretor interpretorTest = new Interpretor(cpuTest,new Program(test));
 			try {
 				interpretorTest.parseProgram();
