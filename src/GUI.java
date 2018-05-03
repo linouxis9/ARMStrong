@@ -86,11 +86,8 @@ public class GUI extends Application {
         
         stage.setTitle("#@RM");
         stage.setScene(scene);
-        
-        TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
-        
+
 	    OutputStream consoleOut = new OutputStream() {
-	    	PrintStream out = System.out;
 	        @Override
 	        public void write(int b) throws IOException {
 	        	Platform.runLater(() ->{

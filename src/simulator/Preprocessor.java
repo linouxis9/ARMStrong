@@ -37,21 +37,16 @@ public class Preprocessor {
 	 */
 	private static final Set<String> BOP2 = new HashSet<String>(Arrays.asList(new String[] { "b", "bl" }));
 
-	// TODO write javadoc comment
-	/**
-	 * 
-	 * @param tokens
-	 * @throws InvalidSyntaxException
-	 * @throws InvalidOperationException
-	 * @throws InvalidRegisterException
-	 */
-	public static void checkSyntax(List<Token> tokens)
-			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
+	public static void preprocess(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
 		Preprocessor.preprocess(tokens, 0);
 	}
-
-	// TODO write javadoc comment
+	
 	/**
+	 * This static method converts Syntactic Sugar into their correct counterpart.
+	 * It then calls Preprocessor.checkInstruction(tokens line);
+	 * Why is that a static method? The simulator package intends to be a library providing an ARM
+	 * simulator but also some encapsulatable ARM tools easy to integrate in others java programs
+	 * like for instance here, for manipulating a List of lexed Tokens.
 	 * 
 	 * @param tokens
 	 * @param line
@@ -60,6 +55,31 @@ public class Preprocessor {
 	 * @throws InvalidRegisterException
 	 */
 	public static void preprocess(List<Token> tokens, int line)
+			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
+
+		for (Token token : tokens) {
+			if (token.getToken() == TokenType.HASHEDASCII) {
+				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getValue()));
+			}
+		}
+
+		Preprocessor.checkInstruction(tokens, line);
+	}
+
+	// TODO write javadoc comment
+	/**
+	 * This static method checks the Instruction's Tokenized representation. 
+	 * Why is that a static method? The simulator package intends to be a library providing an ARM
+	 * simulator but also some ARM tools easy to integrate in others java programs
+	 * like for instance here, for checking the syntax of a List of lexed Tokens.
+	 * 
+	 * @param tokens
+	 * @param line
+	 * @throws InvalidSyntaxException
+	 * @throws InvalidOperationException
+	 * @throws InvalidRegisterException
+	 */
+	public static void checkInstruction(List<Token> tokens, int line)
 			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
 
 		try {
@@ -89,10 +109,6 @@ public class Preprocessor {
 						throw new InvalidRegisterException(line, register);
 					}
 
-				}
-				
-				if (token.getToken() == TokenType.HASHEDASCII) {
-					tokens.set(tokens.indexOf(token),new Token(TokenType.HASH,"#"+token.getValue()));
 				}
 			}
 

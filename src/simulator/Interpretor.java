@@ -22,7 +22,7 @@ public class Interpretor {
 		this.cpu = cpu;
 		this.line = 0;
 	}
-	
+
 	// TODO write javadoc comment
 	/**
 	 * @throws UnknownLabelException
@@ -39,13 +39,16 @@ public class Interpretor {
 
 	// TODO write javadoc comment
 	/**
-	 * @throws InvalidLabelException
-	 * @throws UnknownLabelException
-	 * 
+	 * This static method parses an Instruction's Tokenized representation into a
+	 * full-fledged Instruction instance.
+	 * Why is this not a static method? The simulator package intends
+	 * to be a library providing an ARM simulator but also
+	 * some encapsulatable ARM tools easy to integrate in others java programs.
+	 * However, creating an Instruction instance is a very context-dependent
+	 * process, therefore, we cannot provide it as a static method.
 	 */
 	public Instruction parse(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException,
 			InvalidRegisterException, InvalidLabelException, UnknownLabelException {
-
 		Preprocessor.preprocess(tokens, line);
 		ConditionCode cc = ConditionCode.AL;
 		HashSet<Flag> flags = new HashSet<Flag>();
@@ -199,8 +202,6 @@ public class Interpretor {
 		return null;
 	}
 
-	
-	
 	private Register toRegister(Token register) {
 		return this.cpu.getRegisters()[Integer.parseInt(register.getValue())];
 	}

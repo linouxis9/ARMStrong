@@ -10,19 +10,19 @@ import simulator.Program;
 import simulator.Preprocessor;
 import simulator.Token;
 
-public class SyntaxCheckerTests {
+public class PreprocessorTests {
     @Test
 	public void testLexer() {
 		List<Token> tokens = Program.lexer("mov r4,r4");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
 			fail();
 		}
 		tokens = Program.lexer("mov r4,r40");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 			fail();
 		}
 		catch (Exception e) {
@@ -30,7 +30,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("strb r4,[r10]");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -38,7 +38,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("ldrh r4,[r10]");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -46,7 +46,7 @@ public class SyntaxCheckerTests {
 
 		tokens = Program.lexer("ldrh r4");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 			fail();
 		}
 		catch (Exception e) {
@@ -54,7 +54,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("add r4,r4,#-25");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -62,7 +62,7 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("b label");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
 			fail();
@@ -70,7 +70,15 @@ public class SyntaxCheckerTests {
 		
 		tokens = Program.lexer("ldrheq r4,[r10]");
 		try {
-			Preprocessor.checkSyntax(tokens);
+			Preprocessor.preprocess(tokens);
+		}
+		catch (Exception e) {
+			fail();
+		}
+		
+		tokens = Program.lexer("movcc r4,#'z'");
+		try {
+			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
 			fail();

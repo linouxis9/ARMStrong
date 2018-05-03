@@ -1,6 +1,5 @@
 
 import java.util.Scanner;
-import java.util.concurrent.CountDownLatch;
 
 import simulator.*;
 

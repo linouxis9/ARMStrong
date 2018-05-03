@@ -1,6 +1,5 @@
 package simulator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +13,7 @@ public class Cpu {
 	 * 
 	 * Hold a reference to the different CPU registers.
 	 * 
-	 * Interior mutability FTW, the variable can be final
+	 * Interior mutability FTW, the variable can be final.
 	 */
 	private final Register[] registers;
 
@@ -101,7 +100,7 @@ public class Cpu {
 	/**
 	 * 
 	 */
-	public void fillInterruptsVector() {
+	private void fillInterruptsVector() {
 		this.interruptsVector.put(80, () -> {
 			this.interrupt = true;
 			System.out.println("Stopping the execution of the program");
@@ -114,7 +113,7 @@ public class Cpu {
 			int i = 0;
 			try {
 				c = (char) (this.ram.getByte(new Address(this.registers[0].getValue())));
-				while (c != '\0') {
+				while (c != '\0') { // Route diagram n°1 ( ͡° ͜ʖ ͡°)
 					System.out.print(c);
 					i++;
 					c = (char) (this.ram.getByte(new Address(this.registers[0].getValue() + i)));
@@ -155,7 +154,7 @@ public class Cpu {
 	/**
 	 * 
 	 */
-	public void runInstruction(Instruction i) {
+	private void runInstruction(Instruction i) {
 		switch (i.getOp()) {
 		case ADC:
 			this.alu.adc(i.getR1(), i.getR2(), i.getOpe2());
@@ -210,7 +209,7 @@ public class Cpu {
 			break;
 		case SVC: // SVC is the new name for SWI in the latest ARM chips
 		case SWI:
-			this.alu.swi((ImmediateValue) i.getOpe2());
+			this.alu.swi(i.getOpe2());
 			break;
 		case SUB:
 			this.alu.sub(i.getR1(), i.getR2(), i.getOpe2(), i.getFlags());
@@ -227,6 +226,8 @@ public class Cpu {
 		case UDIV:
 			this.alu.udiv(i.getR1(), i.getR2(), i.getR3());
 			break;
+		default:
+			System.out.println("OOPSIE WOOPSIE!! A PROBLEM OCCURED" + System.lineSeparator() + "Please report the problem @ " + About.email + System.lineSeparator() + "The code monkeys at our headquarters will work VEWY HAWD to fix this!");
 		}
 	}
 
@@ -645,7 +646,7 @@ public class Cpu {
 		 * @param op
 		 *            Operand2
 		 */
-		public void swi(ImmediateValue value) {
+		public void swi(Operand2 value) {
 			try {
 				Cpu.this.interruptsVector.get(value.getValue()).run();
 			} catch (Exception e) {

@@ -69,6 +69,9 @@ public class Program implements Iterator<List<Token>> {
 	 * This is our awesome small but efficient Lexical Analyzer. It turns a String
 	 * containing an ARM Instruction in assembly into an easily parsable List of
 	 * Token.
+	 * Why is that a static method? The simulator package intends to be a library providing an ARM
+	 * simulator but also some encapsulatable ARM tools easy to integrate in others java programs
+	 * like for instance here, for lexing a line of ARM Assembly.
 	 * 
 	 * @param line
 	 *            A String containing an ARM Instruction in assembly
@@ -81,9 +84,6 @@ public class Program implements Iterator<List<Token>> {
 
 		while (matcher.find()) {
 			for (TokenType tokenType : TokenType.values()) {
-				if (matcher.group(TokenType.WHITESPACE.name()) != null) {
-					continue;
-				}
 				if (matcher.group(tokenType.name()) != null) {
 					list.add(new Token(tokenType, matcher.group(tokenType.name())));
 				}

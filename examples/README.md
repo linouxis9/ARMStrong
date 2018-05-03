@@ -3,5 +3,5 @@
 To try one of the examples from this folder:
 ```bash
 cd ../bin
-java Main < loopedCoucou.S
+java Main < ../examples/loopedCoucou.S
 ```
