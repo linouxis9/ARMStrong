@@ -1,51 +1,63 @@
 package simulator;
 
+/**
+ * Current Program Status Register (CPSR)
+ */
 public class Cpsr {
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Negative condition code flag
 	 */
 	private boolean n;
-	private boolean z;
-	private boolean c;
-	private boolean v;
-	private boolean q;
-	private boolean e;
-	private boolean endianness;
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Zero condition code flag
+	 */
+	private boolean z;
+
+	/**
+	 * Carry condition code flag
+	 */
+	private boolean c;
+
+	/**
+	 * Overflow condition code flag
+	 */
+	private boolean v;
+
+	/**
+	 * Cumulative saturation bit
+	 */
+	private boolean q;
+
+	/**
+	 * Returns a Cpsr intialized and zeroed.
 	 */
 	public Cpsr() {
 		this.reset();
-		this.endianness = false;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Converts a Cpsr instance into its proper Integer representation.
 	 */
 	public int getCpsr() {
-		int cpsr = booleanToInt(n) * (2 << 30) + booleanToInt(z) * (2 << 29) + booleanToInt(c) * (2 << 28)
-				+ booleanToInt(v) * (2 << 27) + booleanToInt(q) * (2 << 26) + booleanToInt(e) * (2 << 25)
-				+ booleanToInt(endianness) * (2 << 8);
-		return cpsr;
+		return booleanToInt(n) * (2 << 30) + booleanToInt(z) * (2 << 29) + booleanToInt(c) * (2 << 28)
+				+ booleanToInt(v) * (2 << 27) + booleanToInt(q) * (2 << 26);
 
 	}
 
-	// TODO write javadoc comment
+	// TODO To move
 	/**
+	 * Converts a bool into an int.
 	 * 
+	 * @param bool The boolean to convert.
 	 */
-	public int booleanToInt(boolean bool) {
+	int booleanToInt(boolean bool) {
 		return (bool) ? 1 : 0;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Zeroes the Cpsr.
 	 */
 	public void reset() {
 		this.n = false;
@@ -53,12 +65,13 @@ public class Cpsr {
 		this.c = false;
 		this.v = false;
 		this.q = false;
-		this.e = false;
 	}
 
-	// TODO write javadoc comment
 	/**
+	 * Returns if according to the current Cpsr's statut the cc ConditionCode
+	 * evaluates to true or not.
 	 * 
+	 * @param cc The ConditionCode to evaluate.
 	 */
 	public boolean getConditionCodeStatus(ConditionCode cc) {
 		switch (cc) {
@@ -101,7 +114,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean eq() {
-		return z == true;
+		return z;
 	}
 
 	// TODO write javadoc comment
@@ -109,7 +122,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean ne() {
-		return z == false;
+		return !z;
 	}
 
 	// TODO write javadoc comment
@@ -117,7 +130,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean cs() {
-		return c == true;
+		return c;
 	}
 
 	// TODO write javadoc comment
@@ -125,7 +138,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean cc() {
-		return c == false;
+		return !c;
 	}
 
 	// TODO write javadoc comment
@@ -133,7 +146,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean mi() {
-		return n == true;
+		return n;
 	}
 
 	// TODO write javadoc comment
@@ -141,7 +154,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean pl() {
-		return z == false;
+		return !n;
 	}
 
 	// TODO write javadoc comment
@@ -149,7 +162,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean vs() {
-		return v == true;
+		return v;
 	}
 
 	// TODO write javadoc comment
@@ -157,7 +170,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean vc() {
-		return v == false;
+		return !v;
 	}
 
 	// TODO write javadoc comment
@@ -173,7 +186,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean ls() {
-		return (c == false) || (z == true);
+		return (c == false) || z;
 	}
 
 	// TODO write javadoc comment
@@ -205,7 +218,7 @@ public class Cpsr {
 	 * 
 	 */
 	private boolean le() {
-		return (z == true) || (n != v);
+		return z || (n != v);
 	}
 
 	// TODO write javadoc comment
@@ -214,22 +227,6 @@ public class Cpsr {
 	 */
 	private boolean al() {
 		return true;
-	}
-
-	// TODO write javadoc comment
-	/**
-	 * 
-	 */
-	public boolean getEndianness() {
-		return endianness;
-	}
-
-	// TODO write javadoc comment
-	/**
-	 * 
-	 */
-	public void setEndianness(boolean endianness) {
-		this.endianness = endianness;
 	}
 
 	// TODO write javadoc comment
@@ -310,21 +307,5 @@ public class Cpsr {
 	 */
 	public void setQ(boolean q) {
 		this.q = q;
-	}
-
-	// TODO write javadoc comment
-	/**
-	 * 
-	 */
-	public boolean isE() {
-		return e;
-	}
-
-	// TODO write javadoc comment
-	/**
-	 * 
-	 */
-	public void setE(boolean e) {
-		this.e = e;
 	}
 }

@@ -11,32 +11,45 @@ public class Preprocessor {
 	 * Small Set containing the instructions that takes as input two Registers and
 	 * an Operand2.
 	 */
-	private static final Set<String> RROP2 = new HashSet<String>(
-			Arrays.asList(new String[] { "adc", "add", "and", "bic", "eor", "sub", "mul", "orr", "sdiv", "udiv" }));
+	private static final Set<String> RROP2 = new HashSet<>(
+			Arrays.asList("adc", "add", "and", "bic", "eor", "sub", "mul", "orr", "sdiv", "udiv" ));
 
 	/**
 	 * Small Set containing the instructions that takes as input only one Operand2.
 	 */
-	private static final Set<String> OOP2 = new HashSet<String>(Arrays.asList(new String[] { "swi", "svc" }));
+	private static final Set<String> OOP2 = new HashSet<>(Arrays.asList("swi", "svc"));
 	/**
 	 * Small Set containing the instructions that takes as input one Register and
 	 * one Operand2.
 	 */
-	private static final Set<String> ROP2 = new HashSet<String>(
-			Arrays.asList(new String[] { "cmp", "cmn", "tst", "teq", "mov", "mvn" }));
+	private static final Set<String> ROP2 = new HashSet<>(
+			Arrays.asList("cmp", "cmn", "tst", "teq", "mov", "mvn"));
 
 	/**
 	 * Small Set containing the special instructions that takes as input one
 	 * Operand2.
 	 */
-	private static final Set<String> LSOP2 = new HashSet<String>(Arrays.asList(new String[] { "ldr", "str" }));
+	private static final Set<String> LSOP2 = new HashSet<>(Arrays.asList("ldr", "str"));
 
 	/**
 	 * Small Set containing the branching instructions that takes as input one
 	 * Operand2.
 	 */
-	private static final Set<String> BOP2 = new HashSet<String>(Arrays.asList(new String[] { "b", "bl" }));
+	private static final Set<String> BOP2 = new HashSet<>(Arrays.asList("b", "bl"));
 
+	/**
+	 * This static method converts Syntactic Sugar into their correct counterpart.
+	 * It then calls Preprocessor.checkInstruction(tokens,0);
+	 * Why is that a static method? The simulator package intends to be a library providing an ARM
+	 * simulator but also some encapsulatable ARM tools easy to integrate in others java programs
+	 * like for instance here, for manipulating a List of lexed Tokens.
+	 * The preprocessing is explicitly done before checking the syntax so we can also check the syntax of the expanded form of the Syntactic Sugar.
+	 *
+	 * @param tokens The Tokenized's representation of an instruction to handle.
+	 * @throws InvalidSyntaxException
+	 * @throws InvalidOperationException
+	 * @throws InvalidRegisterException
+	 */
 	public static void preprocess(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
 		Preprocessor.preprocess(tokens, 0);
 	}
@@ -47,9 +60,10 @@ public class Preprocessor {
 	 * Why is that a static method? The simulator package intends to be a library providing an ARM
 	 * simulator but also some encapsulatable ARM tools easy to integrate in others java programs
 	 * like for instance here, for manipulating a List of lexed Tokens.
-	 * 
-	 * @param tokens
-	 * @param line
+	 * The preprocessing is explicitly done before checking the syntax so we can also check the syntax of the expanded form of the Syntactic Sugar.
+	 *
+	 * @param tokens The Tokenized's representation of an instruction to handle.
+	 * @param line The line to show in the thrown errors.
 	 * @throws InvalidSyntaxException
 	 * @throws InvalidOperationException
 	 * @throws InvalidRegisterException
@@ -66,15 +80,15 @@ public class Preprocessor {
 		Preprocessor.checkInstruction(tokens, line);
 	}
 
-	// TODO write javadoc comment
+
 	/**
 	 * This static method checks the Instruction's Tokenized representation. 
 	 * Why is that a static method? The simulator package intends to be a library providing an ARM
 	 * simulator but also some ARM tools easy to integrate in others java programs
 	 * like for instance here, for checking the syntax of a List of lexed Tokens.
 	 * 
-	 * @param tokens
-	 * @param line
+	 * @param tokens The Tokenized's representation of an instruction to handle.
+	 * @param line The line to show in the thrown errors.
 	 * @throws InvalidSyntaxException
 	 * @throws InvalidOperationException
 	 * @throws InvalidRegisterException

@@ -1,5 +1,9 @@
 package simulator;
-
+/**
+ * This enum contains the different types of statements that can be found
+ * in an ARM Assembly program alongside a regular expression allowing
+ * to match and differentiate the statements from the others.
+ */
 public enum TokenType {
 	COMMENT("@.*"),
 	LABEL("[a-z]+:"),

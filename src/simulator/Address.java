@@ -1,5 +1,8 @@
 package simulator;
 
+/**
+ * An Address class used to interact with the Memory classes.
+ */
 public class Address {
 
 	// TODO write javadoc comment
@@ -7,26 +10,26 @@ public class Address {
 	 * 
 	 */
 	public Address(int address) {
-		this.address = address;
+		this.addr = address;
 	}
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
-	private final int address;
+	private final int addr;
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public int getAddress() {
-		return address;
+		return addr;
 	}
 
 	@Override
 	public String toString() {
-		return "Address [address=" + address + "]";
+		return "Address [address=" + addr + "]";
 	}
 	
 	

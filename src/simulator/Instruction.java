@@ -2,6 +2,10 @@ package simulator;
 
 import java.util.Set;
 
+/**
+ * A fully-fledged representation of an ARM Instruction. Ready to be decoded and
+ * executed by the Cpu!
+ */
 public class Instruction {
 
 	// TODO write javadoc comment
@@ -124,6 +128,5 @@ public class Instruction {
 		return "Instruction [op=" + op + ", r1=" + r1 + ", r2=" + r2 + ", r3=" + r3 + ", ope2=" + ope2 + ", cc=" + cc
 				+ ", flags=" + flags + "]";
 	}
-	
-	
+
 }

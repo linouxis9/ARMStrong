@@ -3,6 +3,9 @@ import java.util.Scanner;
 
 import simulator.*;
 
+/**
+ * ArmSimulator is class responsible for handling the creation of the main ARM Simulator classes.
+ */
 public class ArmSimulator {
 
 	// TODO write javadoc comment
@@ -26,6 +29,7 @@ public class ArmSimulator {
 	
 	public void start() {
 		new Thread() {
+			@Override
 			public void run() {
 				ArmSimulator.this.gui.startIHM();
 			}

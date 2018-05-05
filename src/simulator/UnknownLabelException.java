@@ -12,7 +12,8 @@ public class UnknownLabelException extends AssemblyException {
 		super(line);
 		this.label = label;
 	}
-
+	
+	@Override
 	public String toString() {
 		return "UNKNOWN LABEL: " + label + " @ line " + line + " is unknown.";
 	}

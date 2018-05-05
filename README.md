@@ -2,6 +2,8 @@
 
 ## A fast and simple ARM Simulator made for education
 
+[Javadoc](http://projectarm.devling.net/api/)
+
 ```java
 public class HelloWorld {
 

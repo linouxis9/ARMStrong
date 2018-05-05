@@ -2,20 +2,39 @@ package simulator;
 
 import java.util.HashSet;
 import java.util.List;
-
+/**
+ * 
+ * @author linouxis9
+ *
+ */
 public class Interpretor {
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Stores a reference to the object responsible of transforming an assembly
+	 * program composed of String into a Tokenized's representation.
 	 */
 	private final Program program;
+
+	/**
+	 * Stores a reference to the Cpu. It is required for context-dependent
+	 * Instruction.
+	 */
 	private final Cpu cpu;
+
+	/**
+	 * Stores the current line in the assembly code.
+	 */
 	private int line;
 
-	// TODO write javadoc comment
 	/**
+	 * Returns a fully initialized Interpretor able to convert a Tokenized's
+	 * representation of a program into instructions.
 	 * 
+	 * @param cpu
+	 *            A reference for the Cpu where the instructions are going to be
+	 *            added.
+	 * @param program
+	 *            The program to transform into a full set of instructions.
 	 */
 	public Interpretor(Cpu cpu, Program program) {
 		this.program = program;
@@ -23,8 +42,14 @@ public class Interpretor {
 		this.line = 0;
 	}
 
-	// TODO write javadoc comment
 	/**
+	 * Converts each line of assembly into instructions and add them into the CPU
+	 * directly.
+	 * 
+	 * @throws InvalidSyntaxException
+	 * @throws InvalidOperationException
+	 * @throws InvalidRegisterException
+	 * @throws InvalidLabelException
 	 * @throws UnknownLabelException
 	 * 
 	 */
@@ -40,14 +65,23 @@ public class Interpretor {
 	// TODO write javadoc comment
 	/**
 	 * This static method parses an Instruction's Tokenized representation into a
-	 * full-fledged Instruction instance.
-	 * Why is this not a static method? The simulator package intends
-	 * to be a library providing an ARM simulator but also
+	 * full-fledged Instruction instance. Why is this not a static method? The
+	 * simulator package intends to be a library providing an ARM simulator but also
 	 * some encapsulatable ARM tools easy to integrate in others java programs.
 	 * However, creating an Instruction instance is a very context-dependent
 	 * process, therefore, we cannot provide it as a static method.
+	 * 
+	 * @param tokens
+	 *            The Tokenized's representation of an instruction.
+	 * @return An instance of the Instruction class representing the line of
+	 *         assembly.
+	 * @throws InvalidSyntaxException
+	 * @throws InvalidOperationException
+	 * @throws InvalidRegisterException
+	 * @throws InvalidLabelException
+	 * @throws UnknownLabelException
 	 */
-	public Instruction parse(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException,
+	private Instruction parse(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException,
 			InvalidRegisterException, InvalidLabelException, UnknownLabelException {
 		Preprocessor.preprocess(tokens, line);
 		ConditionCode cc = ConditionCode.AL;
@@ -201,11 +235,22 @@ public class Interpretor {
 
 		return null;
 	}
-
+	/**
+	 * Converts a Token representing a Register into a reference pointing to this very same register.
+	 * 
+	 * @param register The Token to convert.
+	 * @return A reference pointing to the register.
+	 */
 	private Register toRegister(Token register) {
-		return this.cpu.getRegisters()[Integer.parseInt(register.getValue())];
+		return this.cpu.getRegisters(Integer.parseInt(register.getValue()));
 	}
 
+	/**
+	 * Converts a Token into its Operand2 counterpart.
+	 * 
+	 * @param ope2 The token to convert.
+	 * @return An instance of an Operand2 subclasses representing the token.
+	 */
 	private Operand2 handleOpe2(Token ope2) {
 		String inner = ope2.getValue();
 		switch (ope2.getToken()) {

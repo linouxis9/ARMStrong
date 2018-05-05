@@ -3,31 +3,31 @@ package simulator;
 import java.util.Arrays;
 
 /**
- * The class that represents the RAM used by the CPU
+ * A class that represents a sort of memory used by the Cpu class
  */
 public class Ram implements Memory {
 	/**
-	 * The default size of the memory
+	 * The default size of the memory (1 MB)
 	 */
 	public static final int DEFAULT_SIZE = 1000000;
 
 	/**
-	 * A table of bytes that represents the memory
+	 * An array of bytes that represents the memory
 	 */
 	private byte[] memory;
 
 	/**
-	 * A constructor of a RAM instance with a specified size
+	 * Make a Ram instance that can hold the specified size
 	 * 
 	 * @param size
+	 *            The size of the Ram
 	 */
 	public Ram(int size) {
 		this.memory = new byte[size];
 	}
 	
 	/**
-	 * A constructor of a RAM with the default size
-	 * @param size The size of the RAM
+	 * Make a Ram instance that can hold the default size
 	 */
 	public Ram() {
 		this.memory = new byte[DEFAULT_SIZE];
@@ -38,7 +38,7 @@ public class Ram implements Memory {
 	 * 
 	 * @param myAddress
 	 *            The address where we retrieve the byte
-	 * @return The byte corresponding to the address specified
+	 * @return The byte corresponding stored at the specified address
 	 */
 	public byte getByte(Address myAddress) throws InvalidMemoryAddressException{
 		
@@ -55,7 +55,7 @@ public class Ram implements Memory {
 	 * @param myAddress
 	 *            The address where we set the byte
 	 * @param myByte
-	 *            The byte to set at the address specified
+	 *            The byte to set at the specified address
 	 */
 	public void setByte(Address myAddress, byte myByte) throws InvalidMemoryAddressException {
 
@@ -67,26 +67,29 @@ public class Ram implements Memory {
 	}
 	
 	/**
-	 * We convert the 2 bytes of the specified address to short
-	 * We make a shift of 8 bits (1 byte) for the second byte
-	 * @param myAddress The address where we get the half word
-	 * @return The half Word corresponds to the address specified
+	 * Get a 16 bits half-word (Little Endian) from the memory
+	 * 
+	 * @param myAddress
+	 *            The address where to get the half-word
+	 * @return The half-word stored at the specified address
 	 */
 	public short getHWord(Address myAddress) throws InvalidMemoryAddressException{
 		
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		
-		short myWord=(short)((this.memory[myAddress.getAddress()+1]&0xFF) | (this.memory[myAddress.getAddress()]&0xFF)<<8 );
-		return myWord;
+
+		return (short) ((this.memory[myAddress.getAddress() + 1] & 0xFF)
+				| (this.memory[myAddress.getAddress()] & 0xFF) << 8);
 	}
 	
 	/**
-	 * We convert a short to a byte array
-	 * We put each byte in the memory by invert the byte order (Little endian)
-	 * @param myAddress The address where we set the half word
-	 * @param myWord The half word set in the memory
+	 * Set a 16 bits half-word (Little Endian) in the memory
+	 * 
+	 * @param myAddress
+	 *            The address where to set the half-word
+	 * @param myHWord
+	 *            The half-word to set in the memory
 	 */
 	public void setHWord(Address myAddress, short myHWord) throws InvalidMemoryAddressException {
 		
@@ -105,27 +108,31 @@ public class Ram implements Memory {
 	}
 	
 	/**
-	 * We convert the 4 bytes of the specified address to int
-	 * We make a shift of 8 bits (1 byte) to each byte (8,16,24)
-	 * @param The address where we get the word
-	 * @return The Word corresponds to the address specified
+	 * Get a 32 bits word from the memory
+	 * 
+	 * @param myAddress
+	 *		The address where to get the word
+	 * @return The word stored at the specified address
 	 */
 	public int getValue(Address myAddress) throws InvalidMemoryAddressException{
 		
 		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
 			throw new InvalidMemoryAddressException();
 		}
-		
-		int myWord=(int)((this.memory[myAddress.getAddress()+3] & 0xFF) | (this.memory[myAddress.getAddress()+2] & 0xFF)<<8 | (this.memory[myAddress.getAddress()+1] & 0xFF)<<16 | (this.memory[myAddress.getAddress()] & 0xFF)<<24);
-		return myWord;
-		
+
+		return (int) ((this.memory[myAddress.getAddress() + 3] & 0xFF)
+				| (this.memory[myAddress.getAddress() + 2] & 0xFF) << 8
+				| (this.memory[myAddress.getAddress() + 1] & 0xFF) << 16
+				| (this.memory[myAddress.getAddress()] & 0xFF) << 24);
 	}
 	
 	/**
-	 * We convert an int to a byte array
-	 * We put each byte in the memory by invert the byte order (Little endian)
-	 * @param myAddress The address where we set the word
-	 * @param myValue The word set in the memory
+	 * Set a 32 bits half-word (Little Endian) in the memory
+	 * 
+	 * @param myAddress
+	 *            The address where to set the word
+	 * @param myWord
+	 *            The word to set in the memory
 	 */
 	public void setValue(Address myAddress, int myWord) throws InvalidMemoryAddressException{
 		

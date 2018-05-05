@@ -63,7 +63,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
 
-
+/**
+ * GUI is the class responsible of handling the JaveFX Graphical User Interface.
+ */
 public class GUI extends Application {
 	// TODO write javadoc comment
 	/**
