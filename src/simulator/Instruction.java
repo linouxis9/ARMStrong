@@ -10,22 +10,52 @@ public class Instruction {
 
 	// TODO write javadoc comment
 	/**
-	 * 
+	 * The operation 
 	 */
 	private final Operation op;
+	/*
+	 * The fist register parameter
+	 */
 	private final Register r1;
+	/*
+	 * The second register parameter
+	 */
 	private final Register r2;
+	/*
+	 * The third register parameter
+	 */
 	private final Register r3;
+	/*
+	 * The operand2 parameter
+	 */
 	private final Operand2 ope2;
+	/*
+	 * The condition code
+	 */
 	private final ConditionCode cc;
+	/*
+	 * The flags (see flag class)
+	 */
 	private final Set<Flag> flags;
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Build a usable instruction of type: opreationConditionCode register, register, register, operand2
+	 * @param op
+	 * 		The operation (ex: ADD)
+	 * @param r1
+	 * 		A reference on the the fist register of the instruction
+	 * @param r2
+	 * 		A reference on the the second register of the instruction
+	 * @param r3
+	 * 		A reference on the the third register of the instruction
+	 * @param ope2
+	 * 		An operand 2 value for the instruction
+	 * @param flags
+	 * 		The flags (see flag class)
+	 * @param cc
+	 * 		The condition for the execution of the instruction
 	 */
-	public Instruction(Operation op, Register r1, Register r2, Register r3, Operand2 ope2, Set<Flag> flags,
-			ConditionCode cc) {
+	public Instruction(Operation op, Register r1, Register r2, Register r3, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
 		this.op = op;
 		this.r1 = r1;
 		this.r2 = r2;
@@ -35,89 +65,117 @@ public class Instruction {
 		this.flags = flags;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Build a usable instruction of type: opreationConditionCode register, register, operand2
+	 * @param op
+	 * 		The operation (ex: ADD)
+	 * @param r1
+	 * 		A reference on the the fist register of the instruction
+	 * @param r2
+	 * 		A reference on the the second register of the instruction
+	 * @param ope2
+	 * 		An operand 2 value for the instruction
+	 * @param flags
+	 * 		The flags (see flag class) 
+	 * @param cc
+	 * 		The condition for the execution of the instruction
 	 */
 	public Instruction(Operation op, Register r1, Register r2, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
 		this(op, r1, r2, null, ope2, flags, cc);
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Build a usable instruction of type: opreationConditionCode register, operand2
+	 * @param op
+	 * 		The operation (ex: ADD)
+	 * @param r1
+	 * 		A reference on the the register of the instruction
+	 * @param ope2
+	 * 		An operand 2 value for the instruction
+	 * @param flags
+	 * 		The flags (see flag class) 
+	 * @param cc
+	 * 		The condition for the execution of the instruction
 	 */
 	public Instruction(Operation op, Register r1, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
 		this(op, r1, null, null, ope2, flags, cc);
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Build a usable instruction of type: opreationConditionCode operand2
+	 * @param op
+	 * 		The operation (ex: ADD)
+	 * @param ope2
+	 * 		An operand 2 value for the instruction
+	 * @param flags
+	 * 		The flags (see flag class)
+	 * @param cc
+	 * 		The condition for the execution of the instruction
 	 */
 	public Instruction(Operation op, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
 		this(op, null, null, null, ope2, flags, cc);
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Build a usable instruction of type: opreationConditionCode register, operand2
+	 * @param op
+	 * 		The operation (ex: ADD)
+	 * @param r1
+	 * 		A reference on the the register of the instruction
+	 * @param flags
+	 * 		The flags (see flag class)
+	 * @param cc
+	 * 		The condition for the execution of the instruction
 	 */
 	public Instruction(Operation op, Register r1, Set<Flag> flags, ConditionCode cc) {
 		this(op, r1, null, null, null, flags, cc);
 	}
 
-	// TODO write javadoc comment
+	
 	/**
-	 * 
+	 * 	Returns the type of the operation
 	 */
 	public Operation getOp() {
 		return op;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the first register
 	 */
 	public Register getR1() {
 		return r1;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the second register
 	 */
 	public Register getR2() {
 		return r2;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the third register
 	 */
 	public Register getR3() {
 		return r3;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the operation2 parameter
 	 */
 	public Operand2 getOpe2() {
 		return ope2;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the condition code
 	 */
 	public ConditionCode getCc() {
 		return cc;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the set of flags of the operation
 	 */
 	public Set<Flag> getFlags() {
 		return flags;
