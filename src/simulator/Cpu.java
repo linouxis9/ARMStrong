@@ -358,6 +358,18 @@ public class Cpu {
 	private class ALU {
 
 		/**
+		 * TODO write javadoc comment
+		 */
+		public void updateFlags(long value) {
+			Cpu.this.cpsr.reset();
+			if (value < 0) {
+			    Cpu.this.cpsr.setN(true);
+			} else if (value == 0) {
+			    Cpu.this.cpsr.setZ(true);
+			}
+		 }
+
+		/**
 		 * ADC - Add with Carry
 		 * 
 		 * The ADC instruction adds the values in R2 and Operand2, together with the
@@ -464,13 +476,9 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmn(Register r1, Operand2 op) {
-			long value = (long) (r1.getValue()) + op.getValue();
-			Cpu.this.cpsr.reset();
-			if (value < 0) {
-				Cpu.this.cpsr.setN(true);
-			} else if (value == 0) {
-				Cpu.this.cpsr.setZ(true);
-			}
+			long value = (long) r1.getValue() + op.getValue();
+			updateFlags(value);
+			
 			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
 				Cpu.this.cpsr.setV(true);
 			}
@@ -491,13 +499,9 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmp(Register r1, Operand2 op) {
-			long value = (long) (r1.getValue()) - op.getValue();
-			Cpu.this.cpsr.reset();
-			if (value < 0) {
-				Cpu.this.cpsr.setN(true);
-			} else if (value == 0) {
-				Cpu.this.cpsr.setZ(true);
-			}
+			long value = (long) r1.getValue() - op.getValue();
+			updateFlags(value);
+			
 			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
 				Cpu.this.cpsr.setV(true);
 			}
@@ -638,7 +642,9 @@ public class Cpu {
 		 *            Source Register
 		 */
 		public void sdiv(Register r1, Register r2, Register r3) {
-
+			if(r3.getValue() != 0) {
+				r1.setValue(r2.getValue()/r3.getValue());	
+			}
 		}
 
 		/**
@@ -700,6 +706,7 @@ public class Cpu {
 			r1.setValue(r2.getValue() - op.getValue());
 		}
 
+		//TODO (NOT DONE!)
 		/**
 		 * SWP - Swap
 		 * 
@@ -714,7 +721,13 @@ public class Cpu {
 		 *            Address in memory
 		 */
 		public void swp(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
-
+			try {
+				r1.setValue(Cpu.this.ram.getValue(new Address(op.getValue())));
+				Cpu.this.ram.setValue(new Address(op.getValue()),(r2.getValue()));
+			}
+			catch (InvalidMemoryAddressException e) {
+				e.printStackTrace();
+			}
 		}
 
 		/**
@@ -731,12 +744,7 @@ public class Cpu {
 		 */
 		public void teq(Register r1, Operand2 op) {
 			long value = r1.getValue() ^ op.getValue();
-			Cpu.this.cpsr.reset();
-			if (value < 0) {
-				Cpu.this.cpsr.setN(true);
-			} else if (value == 0) {
-				Cpu.this.cpsr.setZ(true);
-			}
+			updateFlags(value);
 			if (op instanceof ShiftedRegister) {
 				ShiftedRegister shiftedRegister = (ShiftedRegister) op;
 				Cpu.this.cpsr.setC(shiftedRegister.getCarry());
@@ -757,12 +765,7 @@ public class Cpu {
 		 */
 		public void tst(Register r1, Operand2 op) {
 			long value = r1.getValue() & op.getValue();
-			Cpu.this.cpsr.reset();
-			if (value < 0) {
-				Cpu.this.cpsr.setN(true);
-			} else if (value == 0) {
-				Cpu.this.cpsr.setZ(true);
-			}
+			updateFlags(value);
 			if (op instanceof ShiftedRegister) {
 				ShiftedRegister shiftedRegister = (ShiftedRegister) op;
 				Cpu.this.cpsr.setC(shiftedRegister.getCarry());
@@ -770,7 +773,7 @@ public class Cpu {
 		}
 
 		/**
-		 * UDIV - Signed division
+		 * UDIV - Unsigned division
 		 * 
 		 * The UDIV instruction performs an unsigned division between r2 and r3. r1 <-
 		 * r2 / r3
@@ -783,8 +786,12 @@ public class Cpu {
 		 *            Source Register
 		 */
 		public void udiv(Register r1, Register r2, Register r3) {
-
+			if(r3.getValue() != 0) {
+				r1.setValue(Integer.divideUnsigned(r2.getValue(), r3.getValue()));	
+			}	
 		}
 	}
-
+	
+	
+	
 }
