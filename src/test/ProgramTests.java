@@ -23,7 +23,8 @@ public class ProgramTests {
 		    add(new Token(TokenType.REGISTER,"r4"));
 		}};
 		assertTrue(expected.containsAll(tokens));
-		
+		assertTrue(tokens.containsAll(expected));
+
 		tokens = Program.lexer("mov r4,#4");
 		expected = new HashSet<Token>() {{
 		    add(new Token(TokenType.OPERATION,"mov"));
@@ -31,6 +32,8 @@ public class ProgramTests {
 		    add(new Token(TokenType.COMMA,","));
 		    add(new Token(TokenType.HASH,"#4"));
 		}};
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
 		
 		tokens = Program.lexer("mov r4,#+4");
 		expected = new HashSet<Token>() {{
@@ -39,7 +42,9 @@ public class ProgramTests {
 		    add(new Token(TokenType.COMMA,","));
 		    add(new Token(TokenType.HASH,"#+4"));
 		}};
-		
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
+				
 		tokens = Program.lexer("mov r4,#-4");
 		expected = new HashSet<Token>() {{
 		    add(new Token(TokenType.OPERATION,"mov"));
@@ -47,12 +52,16 @@ public class ProgramTests {
 		    add(new Token(TokenType.COMMA,","));
 		    add(new Token(TokenType.HASH,"#-4"));
 		}};
-			
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
+		
 		tokens = Program.lexer("b coucou");
 		expected = new HashSet<Token>() {{
 		    add(new Token(TokenType.OPERATION,"b"));
 		    add(new Token(TokenType.IDENTIFIER,"coucou"));
 		}};
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
 		
 		tokens = Program.lexer("coucou:b coucou");
 		expected = new HashSet<Token>() {{
@@ -61,6 +70,7 @@ public class ProgramTests {
 		    add(new Token(TokenType.IDENTIFIER,"coucou"));
 		}};
 		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
 		
 		tokens = Program.lexer("coucou:ldr r4,[r0]");
 		expected = new HashSet<Token>() {{
@@ -70,22 +80,28 @@ public class ProgramTests {
 		    add(new Token(TokenType.COMMA,","));
 		    add(new Token(TokenType.OFFSET,"[r0]"));
 		}};
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
 		
 		tokens = Program.lexer("coucou:ldrheq r4,[r0]");
 		expected = new HashSet<Token>() {{
 			add(new Token(TokenType.LABEL,"coucou:"));
 		    add(new Token(TokenType.OPERATION,"ldr"));
-		    add(new Token(TokenType.FLAG,"g"));
+		    add(new Token(TokenType.FLAG,"h"));
 		    add(new Token(TokenType.CONDITIONCODE,"eq"));
 		    add(new Token(TokenType.REGISTER,"r4"));
 		    add(new Token(TokenType.COMMA,","));
 		    add(new Token(TokenType.OFFSET,"[r0]"));
 		}};
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
 		
 		tokens = Program.lexer("@coucou:ldr r4,[r0]");
 		expected = new HashSet<Token>() {{
 			add(new Token(TokenType.COMMENT,"@coucou:ldr r4,[r0]"));
 		}};
+		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
 		
 		tokens = Program.lexer(".align 4");
 		expected = new HashSet<Token>() {{
@@ -93,5 +109,7 @@ public class ProgramTests {
 			add(new Token(TokenType.NUMBER,"4"));
 		}};
 		assertTrue(expected.containsAll(tokens));
+		assertTrue(tokens.containsAll(expected));
+		
 	}
 }

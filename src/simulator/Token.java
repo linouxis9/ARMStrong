@@ -5,24 +5,24 @@ package simulator;
  * parsable and understandable by a parser.
  */
 public class Token {
-	private final TokenType token;
+	private final TokenType type;
 	private final String value;
 
 	public Token(TokenType token, String value) {
-		this.token = token;
+		this.type = token;
 		this.value = value;
 	}
 
 	public TokenType getToken() {
-		return token;
+		return type;
 	}
 
 	public String toString() {
-		return "[" + token.name() + ":" + this.value + "]";
+		return "[" + type.name() + ":" + this.value + "]";
 	}
 
 	public String getValue() {
-		switch (this.token) {
+		switch (this.type) {
 		case INDEXEDOFFSET:
 		case OFFSET:
 			return this.value.substring(2, this.value.length() - 1);
@@ -42,7 +42,7 @@ public class Token {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((token == null) ? 0 : token.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result + ((value == null) ? 0 : value.hashCode());
 		return result;
 	}
@@ -55,7 +55,7 @@ public class Token {
 		if (getClass() != obj.getClass())
 			return false;
 		Token other = (Token) obj;
-		if (token != other.token)
+		if (type != other.type)
 			return false;
 		if (value == null) {
 			if (other.value != null)

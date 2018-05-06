@@ -421,7 +421,7 @@ public class Cpu {
 		}
 
 		/**
-		 * AND - And
+		 * BIC - And not
 		 * 
 		 * The BIC instruction performs an R2 AND NOT OP operation. r1 <- r2 AND NOT op2
 		 * 

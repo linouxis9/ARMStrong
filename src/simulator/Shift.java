@@ -1,9 +1,16 @@
 package simulator;
 
-//TODO write javadoc comment
 /**
- * 
+ * The different supported Shift by the ShiftedRegister Operand2.
  */
 public enum Shift {
-	LSL, LSR;
+	/**
+	 * Logical Shift Left
+	 */
+	LSL,
+	
+	/**
+	 * Logical Shift Right
+	 */
+	LSR;
 }

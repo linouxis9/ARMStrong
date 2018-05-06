@@ -2,11 +2,7 @@ package simulator;
 
 import java.util.HashSet;
 import java.util.List;
-/**
- * 
- * @author linouxis9
- *
- */
+
 public class Interpretor {
 
 	/**
@@ -62,7 +58,6 @@ public class Interpretor {
 		}
 	}
 
-	// TODO write javadoc comment
 	/**
 	 * This static method parses an Instruction's Tokenized representation into a
 	 * full-fledged Instruction instance. Why is this not a static method? The
@@ -262,7 +257,7 @@ public class Interpretor {
 			return toRegister(ope2);
 		case INDEXEDOFFSET:
 			int address = Integer.parseInt(inner);
-			address = address + Integer.parseInt(inner.substring(inner.indexOf(",")));
+			address = address + Integer.parseInt(inner.substring(inner.indexOf(',')));
 			return null;
 		case IDENTIFIER:
 			return new ImmediateValue(this.cpu.getLabelMap().get(inner) - this.cpu.instructionsLen() * 4);

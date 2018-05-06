@@ -6,14 +6,14 @@ public class Register implements Operand2 {
 	/**
 	 * 
 	 */
-	private int register;
+	private int value;
 
 	// TODO write javadoc comment
 	/**
 	 * 
 	 */
 	public int getValue() {
-		return register;
+		return value;
 	}
 
 	// TODO write javadoc comment
@@ -21,11 +21,11 @@ public class Register implements Operand2 {
 	 * 
 	 */
 	public void setValue(int register) {
-		this.register = register;
+		this.value = register;
 	}
 
 	@Override
 	public String toString() {
-		return "Register [register=" + register + "]";
+		return "Register [register=" + value + "]";
 	}
 }
