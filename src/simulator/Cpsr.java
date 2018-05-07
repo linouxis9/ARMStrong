@@ -215,81 +215,81 @@ public class Cpsr {
 	}
 	
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Return the N flag from the CPSR
 	 */
 	public boolean isN() {
 		return n;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Set the N flag in the CPSR
+	 *
+	 * @param n The value (1 or 0)
 	 */
 	public void setN(boolean n) {
 		this.n = n;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Return the Z flag from the CPSR
 	 */
 	public boolean isZ() {
 		return z;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Set the Z flag in the CPSR
+	 *
+	 * @param z The value (1 or 0)
 	 */
 	public void setZ(boolean z) {
 		this.z = z;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Return the C flag from the CPSR
 	 */
 	public boolean isC() {
 		return c;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Set the C flag in the CPSR
+	 *
+	 * @param n The value (1 or 0)
 	 */
 	public void setC(boolean c) {
 		this.c = c;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Return the V flag from the CPSR
 	 */
 	public boolean isV() {
 		return v;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Set the V flag in the CPSR
+	 *
+	 * @param n The value (1 or 0)
 	 */
 	public void setV(boolean v) {
 		this.v = v;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Return the Q flag from the CPSR
 	 */
 	public boolean isQ() {
 		return q;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Set the Q flag in the CPSR
+	 *
+	 * @param n The value (1 or 0)
 	 */
 	public void setQ(boolean q) {
 		this.q = q;
