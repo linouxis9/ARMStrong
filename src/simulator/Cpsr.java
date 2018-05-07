@@ -109,125 +109,111 @@ public class Cpsr {
 
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Equal.
 	 */
 	private boolean eq() {
 		return z;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Not equal.
 	 */
 	private boolean ne() {
 		return !z;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Unsigned higher or same (or carry set).
 	 */
 	private boolean cs() {
 		return c;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Unsigned lower (or carry clear).
 	 */
 	private boolean cc() {
 		return !c;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Negative.
 	 */
 	private boolean mi() {
 		return n;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Positive or zero.
 	 */
 	private boolean pl() {
 		return !n;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Signed overflow.
 	 */
 	private boolean vs() {
 		return v;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * No signed overflow.
 	 */
 	private boolean vc() {
 		return !v;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Unsigned higher.
 	 */
 	private boolean hi() {
 		return (c == true) && (z == false);
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Unsigned lower or same.
 	 */
 	private boolean ls() {
 		return (c == false) || z;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Signed greater than or equal.
 	 */
 	private boolean ge() {
 		return v == n;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Signed less than.
 	 */
 	private boolean lt() {
 		return v != n;
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Signed greater than.
 	 */
 	private boolean gt() {
 		return (z == false) && (n == v);
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Signed less than or equal.
 	 */
 	private boolean le() {
 		return z || (n != v);
 	}
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Always executed.
 	 */
 	private boolean al() {
 		return true;
 	}
+	
 
 	// TODO write javadoc comment
 	/**
