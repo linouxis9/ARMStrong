@@ -28,6 +28,7 @@ public class ArmSimulator {
 	}
 	
 	public void start() {
+
 		new Thread() {
 			@Override
 			public void run() {
@@ -59,5 +60,16 @@ public class ArmSimulator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		int[] registersValues = new int[16];
+		for(int register=0; register<16; register++){
+			registersValues[register] = cpu.getRegisters(register).getValue();
+		}
+
+		System.out.println("cc");
+		gui.updateRegisters(registersValues);
+
+
+
 	}
 }

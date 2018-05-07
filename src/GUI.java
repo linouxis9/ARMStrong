@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import javafx.application.Application;
@@ -67,6 +70,26 @@ import javafx.geometry.Rectangle2D;
  * GUI is the class responsible of handling the JaveFX Graphical User Interface.
  */
 public class GUI extends Application {
+
+	Parent root;
+	Scene scene;
+
+	Stage stage;
+
+
+	List<Text> hexadecimalRegisterText;
+	List<Text> decimalRegisterText;
+	List<Text> signedDdecimalRegisterText;
+
+
+
+
+
+
+
+
+
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -77,15 +100,18 @@ public class GUI extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-       Parent root = FXMLLoader.load(getClass().getResource("ihm_#@rm.fxml"));
-        Scene scene = new Scene(root, 700, 275);
-        
+
+		this.stage = stage;
+
+       	root = FXMLLoader.load(getClass().getResource("ihm_#@rm.fxml"));
+        scene = new Scene(root, 700, 275);
+
         stage.setMaximized(true);
         
         stage.setMinHeight(800);
         stage.setMinWidth(800);
 
-        
+
         stage.setTitle("#@RM");
         stage.setScene(scene);
 
@@ -98,7 +124,45 @@ public class GUI extends Application {
 	        	});
 	        }
 	    };
+
 	    System.setOut(new PrintStream(consoleOut, true));
+
+
+
 	    stage.show();
+
+
+
+		hexadecimalRegisterText = new ArrayList<Text>();
+		decimalRegisterText = new ArrayList<Text>();
+		signedDdecimalRegisterText = new ArrayList<Text>();
+
+		for(int register=0; register<16; register++){
+			hexadecimalRegisterText.add((Text) scene.lookup("#register"+register+"Hex"));
+			decimalRegisterText.add((Text) scene.lookup("#register"+register+"Dec"));
+			signedDdecimalRegisterText.add((Text) scene.lookup("#register"+register+"SigDec"));
+		}
+
+		stage.show();
+
 	}
+
+	/**
+	 * Update the displayed registers
+	 * @pram registersValues
+	 * 		the int values of the registers
+	 */
+	public void updateRegisters(int[] registersValues){
+		for(int register=0; register<16; register++){
+			hexadecimalRegisterText.get(register).setText(Integer.toHexString(registersValues[register]));
+			decimalRegisterText.get(register).setText(""+Integer.toUnsignedLong(registersValues[register]));
+			signedDdecimalRegisterText.get(register).setText(""+registersValues[register]);
+		}
+		stage.show();
+	}
+
+
+
+
+
 }

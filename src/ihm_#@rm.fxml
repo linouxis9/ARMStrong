@@ -20,7 +20,41 @@
    <children>
       <Accordion GridPane.rowIndex="1">
         <panes>
-          <TitledPane animated="false" text="Hexadecimal" />
+          <TitledPane animated="false" text="Hexadecimal">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R0 :" />
+                        <Text layoutX="14.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R1 :" />
+                        <Text layoutX="14.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R2 :" />
+                        <Text layoutX="14.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R3 :" />
+                        <Text layoutX="14.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text layoutX="14.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register0Hex" layoutX="62.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register1Hex" layoutX="62.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register2Hex" layoutX="62.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register3Hex" layoutX="62.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register4Hex" layoutX="62.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register5Hex" layoutX="62.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register6Hex" layoutX="62.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register7Hex" layoutX="62.0" layoutY="233.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register8Hex" layoutX="62.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register9Hex" layoutX="62.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register10Hex" layoutX="62.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register11Hex" layoutX="62.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register12Hex" layoutX="62.0" layoutY="419.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register13Hex" layoutX="62.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register14Hex" layoutX="62.0" layoutY="491.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                        <Text fx:id="register15Hex" layoutX="62.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                     </children>
+                  </AnchorPane>
+               </content></TitledPane>
           <TitledPane animated="false" text="Signed Decimal">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
