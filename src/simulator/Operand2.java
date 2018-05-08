@@ -1,13 +1,11 @@
 package simulator;
 
-//TODO write javadoc comment
 /**
- * 
+ * An Operand2 can be a constant, a register or a register with shift
  */
 public interface Operand2 {
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the value of the Operand2
 	 */
 	public int getValue();
 }

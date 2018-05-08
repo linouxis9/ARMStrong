@@ -8,32 +8,37 @@ import java.util.Set;
  */
 public class Instruction {
 
-	// TODO write javadoc comment
 	/**
 	 * The operation 
 	 */
 	private final Operation op;
-	/*
+
+	/**
 	 * The fist register parameter
 	 */
 	private final Register r1;
-	/*
+
+	/**
 	 * The second register parameter
 	 */
 	private final Register r2;
-	/*
+
+	/**
 	 * The third register parameter
 	 */
 	private final Register r3;
-	/*
+
+	/**
 	 * The operand2 parameter
 	 */
 	private final Operand2 ope2;
-	/*
+
+	/**
 	 * The condition code
 	 */
 	private final ConditionCode cc;
-	/*
+
+	/**
 	 * The flags (see flag class)
 	 */
 	private final Set<Flag> flags;

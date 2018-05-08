@@ -1,7 +1,9 @@
 package simulator;
 
 /**
- * Current Program Status Register (CPSR)
+ * The Current Program Status Register is a 32-bit wide register used in the ARM architecture to record
+ * various pieces of information regarding the state of the program being executed by the processor and the
+ * state of the processor. This information is recorded by setting or clearing specific bits in the register.
  */
 public class Cpsr {
 
@@ -257,7 +259,7 @@ public class Cpsr {
 	/**
 	 * Set the C flag in the CPSR
 	 *
-	 * @param n The value (1 or 0)
+	 * @param c The value (1 or 0)
 	 */
 	public void setC(boolean c) {
 		this.c = c;
@@ -273,7 +275,7 @@ public class Cpsr {
 	/**
 	 * Set the V flag in the CPSR
 	 *
-	 * @param n The value (1 or 0)
+	 * @param v The value (1 or 0)
 	 */
 	public void setV(boolean v) {
 		this.v = v;
@@ -289,7 +291,7 @@ public class Cpsr {
 	/**
 	 * Set the Q flag in the CPSR
 	 *
-	 * @param n The value (1 or 0)
+	 * @param q The value (1 or 0)
 	 */
 	public void setQ(boolean q) {
 		this.q = q;

@@ -1,8 +1,8 @@
 package simulator;
 
-//TODO write javadoc comment
+//TODO JAVADOOC
 /**
- * 
+ *
  */
 public interface Memory {
 
@@ -14,7 +14,7 @@ public interface Memory {
 	public byte getByte(Address address) throws InvalidMemoryAddressException;
 
 	/**
-	 * set a byte at the given address in the memory
+	 * Set a byte at the given address in the memory
 	 * @param address
 	 * 		the address targeted
 	 * @param value
@@ -30,7 +30,7 @@ public interface Memory {
 	public short getHWord(Address address) throws InvalidMemoryAddressException;
 
 	/**
-	 * set a half word (16bit value) at the given address in the memory
+	 * Set a half word (16bit value) at the given address in the memory
 	 * @param address
 	 * 		the address targeted
 	 * @param value
@@ -46,7 +46,7 @@ public interface Memory {
 	public int getValue(Address address) throws InvalidMemoryAddressException;
 
 	/**
-	 * set a word (32bit value) at the given address in the memory
+	 * Set a word (32bit value) at the given address in the memory
 	 * @param address
 	 * 		the address targeted
 	 * @param value

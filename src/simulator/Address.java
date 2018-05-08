@@ -5,23 +5,25 @@ package simulator;
  */
 public class Address {
 
-	// TODO write javadoc comment
+
 	/**
-	 * 
+	 *	A valid address on 32bits
+	 */
+	private final int addr;
+
+
+	/**
+	 * Initializes the address
+	 * @param address
+	 * 		A valid address on 32bit
 	 */
 	public Address(int address) {
 		this.addr = address;
 	}
 
-	// TODO write javadoc comment
-	/**
-	 * 
-	 */
-	private final int addr;
 
-	// TODO write javadoc comment
 	/**
-	 * 
+	 * Returns the address
 	 */
 	public int getAddress() {
 		return addr;
