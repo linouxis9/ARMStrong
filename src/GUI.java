@@ -87,6 +87,9 @@ public class GUI extends Application {
 	List<Text> MemoryAddressViewList;
 	List<Text> MemoryContentList;
 
+	TextField goToAddressField;
+	Button goToAddressButton;
+
 	int memoryViewFirstAddress;
 	int memoryDisplayMode;
 
@@ -202,23 +205,25 @@ public class GUI extends Application {
 
 
 		//the register view
-        /*
+
         hexadecimalRegisterText = new ArrayList<Text>();
         decimalRegisterText = new ArrayList<Text>();
         signedDdecimalRegisterText = new ArrayList<Text>();
+
 
         for(int register=0; register<16; register++){
             hexadecimalRegisterText.add((Text) scene.lookup("#register"+register+"Hex"));
             decimalRegisterText.add((Text) scene.lookup("#register"+register+"Dec"));
             signedDdecimalRegisterText.add((Text) scene.lookup("#register"+register+"SigDec"));
-        }*/
+        }
 
 		//the memory view
 
-		myMemory = new Ram(1000);//testing!!
+		//testing code
+		myMemory = new Ram(1000);
 		Address anAddress = new Address(3);
 		myMemory.setByte(anAddress, (byte)14);
-
+		//-----------
 
 		MemoryAddressViewList = new ArrayList<Text>();
 		MemoryContentList = new ArrayList<Text>();
@@ -227,6 +232,38 @@ public class GUI extends Application {
 			MemoryAddressViewList.add((Text) scene.lookup("#addresslMemoryView"+address));
 			MemoryContentList.add((Text) scene.lookup("#contentMemoryView"+address));
 		}
+
+		goToAddressButton = (Button) scene.lookup("#goToAddressButton");
+		goToAddressField = (TextField) scene.lookup("#goToAddressField");
+
+		goToAddressButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				String addressTyped = goToAddressField.getText();
+				Text MemoryViewTitleText = (Text) scene.lookup("#goToAddressLabel");
+				MemoryViewTitleText.setText("Go to address: ");
+				MemoryViewTitleText.setUnderline(false);
+
+				try {
+					if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
+						memoryViewFirstAddress = Integer.parseInt(addressTyped.substring(2), 16); //parsing a int in base 16, the 2 first chars of the string are removed (0x)
+					} else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
+						memoryViewFirstAddress = Integer.parseInt(addressTyped.substring(2), 2); //parsing a int in base 2, the 2 first chars of the string are removed (0b)
+					} else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
+						memoryViewFirstAddress = Integer.parseInt(addressTyped.substring(2), 10); //parsing a int in base 10, the 2 first chars of the string are removed (0b)
+					} else {
+						memoryViewFirstAddress = Integer.parseInt(addressTyped);
+					}
+					updateMemoryView();
+				}
+				catch (java.lang.NumberFormatException exeption){
+					MemoryViewTitleText.setText("The address is invalid");
+					MemoryViewTitleText.setUnderline(true);
+				}
+
+			}
+		});
+
 
 		memoryViewFirstAddress = 0;
 		memoryDisplayMode = 8;
@@ -251,7 +288,9 @@ public class GUI extends Application {
 		stage.show();
 	}
 
-
+	/**
+	 * updates the memory view
+	 */
 	private void updateMemoryView(){
 		int displayableMemoryRows = 8; //temporaire!!!
 
@@ -262,21 +301,21 @@ public class GUI extends Application {
 		switch(this.memoryDisplayMode){
 			case 8:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
-					MemoryAddressViewList.get(labelNumber).setText(Integer.toHexString(displayedMemoryAddress));
+					MemoryAddressViewList.get(labelNumber).setText("0x" + Integer.toHexString(displayedMemoryAddress));
 					MemoryContentList.get(labelNumber).setText(""+myMemory.getByte(new Address(displayedMemoryAddress)));
 					displayedMemoryAddress++;
 				}
 				break;
 			case 16:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
-					MemoryAddressViewList.get(labelNumber).setText(Integer.toHexString(displayedMemoryAddress));
+					MemoryAddressViewList.get(labelNumber).setText("0x" +Integer.toHexString(displayedMemoryAddress));
 					MemoryContentList.get(labelNumber).setText(""+myMemory.getHWord(new Address(displayedMemoryAddress)));
 					displayedMemoryAddress+=2;
 				}
 				break;
 			case 32:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++) {
-					MemoryAddressViewList.get(labelNumber).setText(Integer.toHexString(displayedMemoryAddress));
+					MemoryAddressViewList.get(labelNumber).setText("0x"+Integer.toHexString(displayedMemoryAddress));
 					MemoryContentList.get(labelNumber).setText("" + myMemory.getValue(new Address(displayedMemoryAddress)));
 					displayedMemoryAddress += 4;
 				}
