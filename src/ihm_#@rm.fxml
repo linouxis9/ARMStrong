@@ -110,10 +110,30 @@
             </Menu>
          </menus>
       </MenuBar>
-      <Pane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <children>
-        <AnchorPane layoutX="-41.0" layoutY="42.0" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            <Button fx:id="button8Bit" layoutY="8.0" mnemonicParsing="false" text="8bit" />
+            <Button fx:id="button16Bit" layoutX="49.0" layoutY="8.0" mnemonicParsing="false" text="16bit" />
+            <Button fx:id="button32Bit" layoutX="108.0" layoutY="8.0" mnemonicParsing="false" text="32bit" />
+            <Button fx:id="memoryButtonUp" layoutX="14.0" layoutY="48.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="135.0" text="^" />
+            <Button fx:id="memoryButtonDown" layoutX="13.0" layoutY="601.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="135.0" text="v" />
+            <Text fx:id="addresslMemoryView1" layoutY="109.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView2" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView3" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView4" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView8" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView7" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView6" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="addresslMemoryView5" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView4" layoutX="93.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView3" layoutX="93.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView2" layoutX="93.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView1" layoutX="93.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView8" layoutX="93.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView7" layoutX="93.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView6" layoutX="93.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
+            <Text fx:id="contentMemoryView5" layoutX="93.0" layoutY="169.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
          </children>
-      </Pane>
+      </AnchorPane>
    </children>
 </GridPane>

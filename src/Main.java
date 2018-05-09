@@ -4,8 +4,11 @@
 public class Main {
 
 	public static void main(String[] args) {
-			ArmSimulator jpp = new ArmSimulator();
-			jpp.start();
+			/*ArmSimulator jpp = new ArmSimulator();
+			jpp.start();*/
+			GUItests lol = new GUItests();
+			lol.startIHM();
+
 	}
 	
 }
