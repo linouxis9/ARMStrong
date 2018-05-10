@@ -80,8 +80,8 @@
             <Tab text="Output" />
          </tabs>
       </TabPane>
-      <TextArea prefHeight="365.0" prefWidth="401.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <MenuBar prefHeight="29.0" prefWidth="1026.0" GridPane.columnSpan="2147483647">
+      <TextArea fx:id="codeTexArea" prefHeight="365.0" prefWidth="401.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <MenuBar fx:id="theMenuBar" prefHeight="29.0" prefWidth="1026.0" GridPane.columnSpan="2147483647">
          <menus>
             <Menu mnemonicParsing="false" text="File">
                <items>
@@ -133,9 +133,9 @@
             <Text fx:id="contentMemoryView7" layoutX="93.0" layoutY="258.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
             <Text fx:id="contentMemoryView6" layoutX="93.0" layoutY="243.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
             <Text fx:id="contentMemoryView5" layoutX="93.0" layoutY="228.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00000000" />
-            <TextField fx:id="goToAddressField" layoutX="8.0" layoutY="30.0" prefHeight="25.0" prefWidth="105.0" />
+            <TextField fx:id="goToAddressField" layoutX="8.0" layoutY="30.0" prefHeight="25.0" prefWidth="105.0" promptText="hex, dec or bin" />
             <Button fx:id="goToAddressButton" layoutX="118.0" layoutY="30.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="37.0" text="Go" />
-            <Text layoutX="8.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to Address" />
+            <Text fx:id="goToAddressLabel" layoutX="8.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to Address" />
          </children>
       </AnchorPane>
    </children>

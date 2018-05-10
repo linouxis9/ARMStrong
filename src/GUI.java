@@ -65,9 +65,7 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.geometry.Rectangle2D;
-import simulator.Address;
-import simulator.Memory;
-import simulator.Ram;
+import simulator.*;
 
 /**
  * GUI is the class responsible of handling the JaveFX Graphical User Interface.
@@ -90,9 +88,9 @@ public class GUI extends Application {
 	TextField goToAddressField;
 	Button goToAddressButton;
 
+
 	int memoryViewFirstAddress;
 	int memoryDisplayMode;
-
 
 	//testing
 	Memory myMemory;
@@ -119,7 +117,16 @@ public class GUI extends Application {
 
 		stage.show();
 
+		MenuBar theMenuBar = (MenuBar) scene.lookup("#theMenuBar");
+		Menu file = new Menu("File");
+		Menu run = new Menu("Run");
+		MenuItem runAllMenuItem = new MenuItem("Run All");
+		theMenuBar.getMenus().addAll(run, file);
+		run.getItems().add(runAllMenuItem);
+
 		//setting up "moving" elements
+
+		TextArea codeTexArea = (TextArea) scene.lookup("#codeTexArea");
 
 		//the buttons
 
@@ -186,6 +193,34 @@ public class GUI extends Application {
 						memoryViewFirstAddress+=4;
 						break;
 				}
+				updateMemoryView();
+			}
+		});
+
+		runAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				String programString = codeTexArea.getText();
+				Cpu cpu = new Cpu();
+				Program program = new Program();
+				Interpretor interpretor = new Interpretor(cpu, program);
+				program.setNewProgram(programString);
+
+				try {
+					interpretor.parseProgram();
+					cpu.execute();
+				} catch (AssemblyException exeption) {
+					exeption.printStackTrace();
+				}
+
+				int[] registerValues = new int[16];
+				for(int i=0; i<16; i++){
+					registerValues[i]=cpu.getRegisters(i).getValue();
+				}
+
+				updateRegisters(registerValues);
+
+				myMemory = cpu.ram;
 				updateMemoryView();
 			}
 		});
@@ -282,8 +317,8 @@ public class GUI extends Application {
 	public void updateRegisters(int[] registersValues){
 		for(int register=0; register<16; register++){
 			hexadecimalRegisterText.get(register).setText(Integer.toHexString(registersValues[register]));
-			decimalRegisterText.get(register).setText(""+Integer.toUnsignedLong(registersValues[register]));
-			signedDdecimalRegisterText.get(register).setText(""+registersValues[register]);
+			/*decimalRegisterText.get(register).setText(""+Integer.toUnsignedLong(registersValues[register]));
+			signedDdecimalRegisterText.get(register).setText(""+registersValues[register]);*/
 		}
 		stage.show();
 	}
