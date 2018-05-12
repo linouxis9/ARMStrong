@@ -12,7 +12,7 @@ public class ArmSimulator {
 	/**
 	 * 
 	 */
-	private final Program program;
+	private Program program;
 	private final Interpretor interpretor;
 	private final Cpu cpu;
 
@@ -25,6 +25,55 @@ public class ArmSimulator {
 		this.program = new Program();
 		this.interpretor = new Interpretor(this.cpu, this.program);
 	}
-	
 
+	public int getRegisterValue(int registerNumber) {
+		return 0;
+	}
+
+	public byte getRamByte(int Address) {
+		return 0;
+	}
+
+	public short getRamHWord(int Address) {
+		return 0;
+	}
+
+	public int getRamWord(int Address) {
+		return 0;
+	}
+
+	public void run() {
+	}
+
+	public void runStep(){
+
+	}
+
+	public void runToNextBreakPoint(){
+
+	}
+
+	public void resetRun(){
+
+	}
+
+	public int getCurrentLine(){
+
+	}
+
+	public void changeBreakPointStatus(int line){
+
+	}
+
+	public boolean getBreakPointStatus(int line){
+
+	}
+
+	public void userConsoleInput(String command){
+
+	}
+
+	public void setProgramString(String programAsString){
+		
+	}
 }
