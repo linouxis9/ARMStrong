@@ -1,109 +1,56 @@
- 
-import java.io.Console;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.stage.Stage;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.application.Application;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.geometry.Side;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.geometry.Rectangle2D;
-import simulator.*;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GUI is the class responsible of handling the JaveFX Graphical User Interface.
  */
 public class GUI extends Application {
 
-	Parent root;
+	ArmSimulator theArmSimulator;
+
 	Scene scene;
 
 	Stage stage;
 
-
 	List<Text> hexadecimalRegisterText;
 	List<Text> decimalRegisterText;
-	List<Text> signedDdecimalRegisterText;
+	List<Text> signedDecimalRegisterText;
 
 	List<Text> MemoryAddressViewList;
 	List<Text> MemoryContentList;
-
-	TextField goToAddressField;
-	Button goToAddressButton;
-
-
 	int memoryViewFirstAddress;
 	int memoryDisplayMode;
 
-	//testing
-	Memory myMemory;
-
-	public void startIHM() {
+	public void startGUI() {
 		launch(null);
 	}
 
 	@Override
 	public void start(Stage stage) throws Exception {
 
-		//setting "static" elements
+		theArmSimulator = new ArmSimulator();
+
+		//setting static elements
+
+		Parent root;
 
 		this.stage = stage;
 
@@ -116,34 +63,88 @@ public class GUI extends Application {
 		stage.setTitle("#@RM");
 		stage.setScene(scene);
 
-		stage.show();
-
-		MenuBar theMenuBar = (MenuBar) scene.lookup("#theMenuBar");
-		Menu file = new Menu("File");
-		Menu run = new Menu("Run");
-		MenuItem runAllMenuItem = new MenuItem("Run All");
-		theMenuBar.getMenus().addAll(run, file);
-		run.getItems().add(runAllMenuItem);
-		
 		//Add the CSS file
-    	String css = getClass().getResource("css.css").toExternalForm();
+		String css = getClass().getResource("css.css").toExternalForm();
 		scene.getStylesheets().addAll(css);
-	    
+
 		//Change the icon of the application
 		Image applicationIcon = new Image("file:logo.png");
 		stage.getIcons().add(applicationIcon);
 
-		
+		stage.show();
 
-		//setting up "moving" elements
+		//THE MENU BAR
+		MenuBar theMenuBar = (MenuBar) scene.lookup("#theMenuBar");
 
-		TextArea codeTexArea = (TextArea) scene.lookup("#codeTexArea");
+		Menu fileMenu = new Menu("File");
+		Menu editMenu = new Menu("Edit");
+		Menu runMenu = new Menu("Run");
+		Menu helpMenu = new Menu("Help");
+
+		MenuItem newMenuItem = new MenuItem("New");
+		MenuItem saveMenuItem = new MenuItem("Save");
+		MenuItem exitMenuItem = new MenuItem("Exit");
+		MenuItem runAllMenuItem = new MenuItem("Run All");
+		MenuItem runSingleMenuItem = new MenuItem("Run a single instruction");
+
+		theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
+
+		fileMenu.getItems().addAll(newMenuItem, saveMenuItem, exitMenuItem);
+		editMenu.getItems().addAll();
+		runMenu.getItems().addAll(runAllMenuItem, runSingleMenuItem);
+		helpMenu.getItems().addAll();
+
+		//FETCHING THE ELEMENTS
+
+		//the coding area
+
+		TextArea codingTextArea = (TextArea) scene.lookup("#codeTexArea");
+
+		//the fields
+
+		TextField goToAddressField = (TextField) scene.lookup("#goToAddressField");
+		//TextField consoleUserInput = (TextField) scene.lookup("#"); //TODO add an id
 
 		//the buttons
 
 		Button button8bitView = (Button) scene.lookup("#button8Bit");
 		Button button16bitView = (Button) scene.lookup("#button16Bit");
 		Button button32bitView = (Button) scene.lookup("#button32Bit");
+
+		Button memoryButtonUp  = (Button) scene.lookup("#memoryButtonUp");
+		Button memoryButtonDown  = (Button) scene.lookup("#memoryButtonDown");
+
+		Button goToAddressButton = (Button) scene.lookup("#goToAddressButton");
+
+		//Button runAllButton = (Button) scene.lookup("#"); //TODO add an id
+		//Button runStepByStepButton = (Button) scene.lookup("#"); //TODO add an id
+
+		//the text display
+
+			//the register view
+
+		this.hexadecimalRegisterText = new ArrayList<Text>();
+		this.decimalRegisterText = new ArrayList<Text>();
+		this.signedDecimalRegisterText = new ArrayList<Text>();
+
+		for(int register=0; register<16; register++){
+			this.hexadecimalRegisterText.add((Text) this.scene.lookup("#register"+register+"Hex"));
+			this.decimalRegisterText.add((Text) this.scene.lookup("#register"+register+"Dec"));
+			this.signedDecimalRegisterText.add((Text) this.scene.lookup("#register"+register+"SigDec"));
+		}
+
+			//the memory view
+
+		this.MemoryAddressViewList = new ArrayList<Text>();
+		this.MemoryContentList = new ArrayList<Text>();
+
+		for(int address=1; address<9; address++){
+			MemoryAddressViewList.add((Text) scene.lookup("#addresslMemoryView"+address));
+			MemoryContentList.add((Text) scene.lookup("#contentMemoryView"+address));
+		}
+
+
+		//THE ACTION EVENTS
 
 		button8bitView.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -166,9 +167,6 @@ public class GUI extends Application {
 				updateMemoryView();
 			}
 		});
-
-		Button memoryButtonUp  = (Button) scene.lookup("#memoryButtonUp");
-		Button memoryButtonDown  = (Button) scene.lookup("#memoryButtonDown");
 
 		memoryButtonUp.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -211,76 +209,12 @@ public class GUI extends Application {
 		runAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				String programString = codeTexArea.getText();
-				Cpu cpu = new Cpu();
-				Program program = new Program();
-				Interpretor interpretor = new Interpretor(cpu, program);
-				program.setNewProgram(programString);
-
-				try {
-					interpretor.parseProgram();
-					cpu.execute();
-				} catch (AssemblyException exeption) {
-					exeption.printStackTrace();
-				}
-
-				int[] registerValues = new int[16];
-				for(int i=0; i<16; i++){
-					registerValues[i]=cpu.getRegisters(i).getValue();
-				}
-
-				updateRegisters(registerValues);
-
-				myMemory = cpu.ram;
+				String programString = codingTextArea.getText();
+				theArmSimulator.run(programString);
+				updateRegisters();
 				updateMemoryView();
 			}
 		});
-
-		//the console output
-
-		OutputStream consoleOut = new OutputStream() {
-			@Override
-			public void write(int b) throws IOException {
-				Platform.runLater(() ->{
-					TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
-					consoleTextFlow.getChildren().add(new Text((String.valueOf((char) b))));
-				});
-			}
-		};
-		System.setOut(new PrintStream(consoleOut, true));
-
-
-		//the register view
-
-        hexadecimalRegisterText = new ArrayList<Text>();
-        decimalRegisterText = new ArrayList<Text>();
-        signedDdecimalRegisterText = new ArrayList<Text>();
-
-
-        for(int register=0; register<16; register++){
-            hexadecimalRegisterText.add((Text) scene.lookup("#register"+register+"Hex"));
-            decimalRegisterText.add((Text) scene.lookup("#register"+register+"Dec"));
-            signedDdecimalRegisterText.add((Text) scene.lookup("#register"+register+"SigDec"));
-        }
-
-		//the memory view
-
-		//testing code
-		myMemory = new Ram(1000);
-		Address anAddress = new Address(3);
-		myMemory.setByte(anAddress, (byte)14);
-		//-----------
-
-		MemoryAddressViewList = new ArrayList<Text>();
-		MemoryContentList = new ArrayList<Text>();
-
-		for(int address=1; address<9; address++){
-			MemoryAddressViewList.add((Text) scene.lookup("#addresslMemoryView"+address));
-			MemoryContentList.add((Text) scene.lookup("#contentMemoryView"+address));
-		}
-
-		goToAddressButton = (Button) scene.lookup("#goToAddressButton");
-		goToAddressField = (TextField) scene.lookup("#goToAddressField");
 
 		goToAddressButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -309,12 +243,57 @@ public class GUI extends Application {
 
 			}
 		});
+		goToAddressField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent ke)
+			{
+				if (ke.getCode().equals(KeyCode.ENTER))
+				{
+					String addressTyped = goToAddressField.getText();
+					Text MemoryViewTitleText = (Text) scene.lookup("#goToAddressLabel");
+					MemoryViewTitleText.setText("Go to address: ");
+					MemoryViewTitleText.setUnderline(false);
+
+					try {
+						if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
+							memoryViewFirstAddress = Integer.parseInt(addressTyped.substring(2), 16); //parsing a int in base 16, the 2 first chars of the string are removed (0x)
+						} else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
+							memoryViewFirstAddress = Integer.parseInt(addressTyped.substring(2), 2); //parsing a int in base 2, the 2 first chars of the string are removed (0b)
+						} else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
+							memoryViewFirstAddress = Integer.parseInt(addressTyped.substring(2), 10); //parsing a int in base 10, the 2 first chars of the string are removed (0b)
+						} else {
+							memoryViewFirstAddress = Integer.parseInt(addressTyped);
+						}
+						updateMemoryView();
+					}
+					catch (java.lang.NumberFormatException exeption){
+						MemoryViewTitleText.setText("The address is invalid");
+						MemoryViewTitleText.setUnderline(true);
+					}
+				}
+			}
+		});
+
+
+		//THE CONSOLE OUTPUT
+
+		OutputStream consoleOut = new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				Platform.runLater(() ->{
+					TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
+					consoleTextFlow.getChildren().add(new Text((String.valueOf((char) b))));
+				});
+			}
+		};
+		System.setOut(new PrintStream(consoleOut, true));
 
 
 		memoryViewFirstAddress = 0;
 		memoryDisplayMode = 8;
 
 		updateMemoryView();
+		updateRegisters();
 
 		stage.show();
 
@@ -322,14 +301,16 @@ public class GUI extends Application {
 
 	/**
 	 * Update the displayed registers
-	 * @param registersValues
-	 * 		the int values of the registers
 	 */
-	public void updateRegisters(int[] registersValues){
-		for(int register=0; register<16; register++){
-			hexadecimalRegisterText.get(register).setText(Integer.toHexString(registersValues[register]));
-			/*decimalRegisterText.get(register).setText(""+Integer.toUnsignedLong(registersValues[register]));
-			signedDdecimalRegisterText.get(register).setText(""+registersValues[register]);*/
+	public void updateRegisters(){
+
+		int currentRegisterValue;
+
+		for(int currentRegisterNumber=0; currentRegisterNumber<16; currentRegisterNumber++){
+			currentRegisterValue = ArmSimulator.getRegisterValue(currentRegisterNumber);
+			hexadecimalRegisterText.	get(currentRegisterNumber).setText(Integer.toHexString(currentRegisterValue));
+			//decimalRegisterText.		get(currentRegisterNumber).setText(""+Integer.toUnsignedLong(currentRegisterValue));
+			//signedDecimalRegisterText.	get(currentRegisterNumber).setText(""+currentRegisterValue);
 		}
 		stage.show();
 	}
@@ -347,22 +328,22 @@ public class GUI extends Application {
 		switch(this.memoryDisplayMode){
 			case 8:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
-					MemoryAddressViewList.get(labelNumber).setText("0x" + Integer.toHexString(displayedMemoryAddress));
-					MemoryContentList.get(labelNumber).setText(""+myMemory.getByte(new Address(displayedMemoryAddress)));
+					MemoryAddressViewList.get(labelNumber).	setText("0x" + Integer.toHexString(displayedMemoryAddress));
+					MemoryContentList.get(labelNumber).		setText(""+ArmSimulator.getRamByte(displayedMemoryAddress));
 					displayedMemoryAddress++;
 				}
 				break;
 			case 16:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
 					MemoryAddressViewList.get(labelNumber).setText("0x" +Integer.toHexString(displayedMemoryAddress));
-					MemoryContentList.get(labelNumber).setText(""+myMemory.getHWord(new Address(displayedMemoryAddress)));
+					MemoryContentList.get(labelNumber).setText(""+ArmSimulator.getRamHWord(displayedMemoryAddress));
 					displayedMemoryAddress+=2;
 				}
 				break;
 			case 32:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++) {
 					MemoryAddressViewList.get(labelNumber).setText("0x"+Integer.toHexString(displayedMemoryAddress));
-					MemoryContentList.get(labelNumber).setText("" + myMemory.getValue(new Address(displayedMemoryAddress)));
+					MemoryContentList.get(labelNumber).setText("" +ArmSimulator.getRamWord(displayedMemoryAddress));
 					displayedMemoryAddress += 4;
 				}
 				break;
