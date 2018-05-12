@@ -39,6 +39,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -123,6 +124,16 @@ public class GUI extends Application {
 		MenuItem runAllMenuItem = new MenuItem("Run All");
 		theMenuBar.getMenus().addAll(run, file);
 		run.getItems().add(runAllMenuItem);
+		
+		//Add the CSS file
+    	String css = getClass().getResource("css.css").toExternalForm();
+		scene.getStylesheets().addAll(css);
+	    
+		//Change the icon of the application
+		Image applicationIcon = new Image("file:logo.png");
+		stage.getIcons().add(applicationIcon);
+
+		
 
 		//setting up "moving" elements
 

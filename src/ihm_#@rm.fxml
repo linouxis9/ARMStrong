@@ -86,7 +86,7 @@
             <Menu mnemonicParsing="false" text="File">
                <items>
                   <MenuItem mnemonicParsing="false" text="New" />
-                  <MenuItem mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
                   <MenuItem mnemonicParsing="false" text="Save As" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Close" />
@@ -94,18 +94,18 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Delete" />
+                  <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Run">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Run" />
+                  <MenuItem fx:id="run" mnemonicParsing="false" text="Run" />
                   <MenuItem mnemonicParsing="false" text="Run step by step" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                <items>
-                  <MenuItem mnemonicParsing="false" text="About" />
+                  <MenuItem fx:id="icon" mnemonicParsing="false" text="About" />
                </items>
             </Menu>
          </menus>
