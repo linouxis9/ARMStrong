@@ -108,7 +108,7 @@ public class Cpu {
 		this.registers = new Register[16];
 
 		for (int i = 0; i < 16; i++) {
-			this.registers[i] = new Register();
+			this.registers[i] = new Register(i);
 		}
 
 		this.sp = this.registers[13]; // SP should reference to the same register as this.registers[13]
@@ -129,7 +129,7 @@ public class Cpu {
 		this.ram.cleanMemory();
 		this.cpsr.reset();
 		for (int i = 0; i < 16; i++) {
-			this.registers[i] = new Register();
+			this.registers[i] = new Register(i);
 		}
 		this.sp = this.registers[13]; // SP should reference to the same register as this.registers[13]
 		this.lr = this.registers[14]; // LR should reference to the same register as this.registers[14]
@@ -164,7 +164,7 @@ public class Cpu {
 	private void fillInterruptsVector() {
 		this.interruptsVector.put(80, () -> {
 			this.interrupt = true;
-			System.out.println("Stopping the execution of the program");
+			System.out.println("Stopping the execution of the program after " + this.instructions.get(Math.abs(this.pc.getValue()/4-2)));
 		});
 		this.interruptsVector.put(81, () -> {
 			System.out.println(About.info());
@@ -203,10 +203,10 @@ public class Cpu {
 		this.pc.setValue(this.pc.getValue() + 4);
 
 		if (this.cpsr.getConditionCodeStatus(i.getCc())) {
-			System.out.println("Executing: " + i);
+			System.out.println("Exec.: " + i);
 			this.runInstruction(i);
 		} else {
-			System.out.println("Skipping: " + i);
+			System.out.println("Skip.: " + i + " (Condition not meet)");
 		}
 	}
 
@@ -290,7 +290,7 @@ public class Cpu {
 		default:
 			System.out.println("OOPSIE WOOPSIE!! A PROBLEM OCCURED" + System.lineSeparator()
 					+ "Please report the problem @ " + About.EMAIL + System.lineSeparator()
-					+ "The code monkeys at our headquarters will work VEWY HAWD to fix this!");
+					+ "The code monkeys at our headquarters will work VEWY HAWD to fix this!");	
 		}
 	}
 

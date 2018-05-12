@@ -186,10 +186,38 @@ public class Instruction {
 		return flags;
 	}
 
+	// We can't do much better without using Reflection
 	@Override
 	public String toString() {
-		return "Instruction [op=" + op + ", r1=" + r1 + ", r2=" + r2 + ", r3=" + r3 + ", ope2=" + ope2 + ", cc=" + cc
-				+ ", flags=" + flags + "]";
+	/*	return "Instruction [op=" + op + ", r1=" + r1 + ", r2=" + r2 + ", r3=" + r3 + ", ope2=" + ope2 + ", cc=" + cc
+				+ ", flags=" + flags + "]";*/
+		StringBuilder string = new StringBuilder();
+		
+		string.append(this.op);
+		if (!this.flags.isEmpty()) {
+			string.append(this.flags);
+		}
+		if (this.cc != null && this.cc != ConditionCode.AL) {
+			string.append(this.cc);
+		}
+		string.append(" ");
+		if (this.r1 != null) {
+			string.append(this.r1);
+			string.append(", ");
+		}
+		if (this.r2 != null) {
+			string.append(this.r2);
+			string.append(", ");
+		}
+		if (this.r3 != null) {
+			string.append(this.r3);
+			string.append(", ");
+		}
+		if (this.ope2 != null) {
+			string.append(this.ope2);
+			string.append(", ");
+		}
+		return string.substring(0,string.length()-2);
 	}
 
 }

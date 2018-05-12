@@ -7,6 +7,14 @@ public class Register implements Operand2 {
 	 * 
 	 */
 	private int value;
+	private int id;
+	
+	
+	
+	public Register(int id) {
+		this.value = 0;
+		this.id = id;
+	}
 
 	// TODO write javadoc comment
 	/**
@@ -16,6 +24,10 @@ public class Register implements Operand2 {
 		return value;
 	}
 
+	public int getId() {
+		return id;
+	}
+	
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -26,6 +38,6 @@ public class Register implements Operand2 {
 
 	@Override
 	public String toString() {
-		return "Register [register=" + value + "]";
+		return "r" + id;
 	}
 }

@@ -28,7 +28,7 @@ public class ImmediateValue implements Operand2 {
 
 	@Override
 	public String toString() {
-		return "ImmediateValue [value=" + value + "]";
+		return "#" + value;
 	}
 
 }
