@@ -4,6 +4,14 @@
 
 [Javadoc](http://projectarm.devling.net/api/)
 
+> We now have split our project into 3 branches...
+>
+> * master is the branch containing the latest work around the simulator backend / library.
+> * theGUI is the branch containing the latest work regarding the Graphical User Interface in JavaFX.
+> * cli is the branch containing the latest work regarding the Command Line Interface.
+>
+> These last two branches pulls from master from time to time to keep their backend in sync.
+
 ```java
 public class HelloWorld {
 
