@@ -8,9 +8,14 @@ import simulator.ui.javafx.GUI;
 public class Main {
 
 	public static void main(String[] args) {
-			/*ArmSimulator jpp = new ArmSimulator();
-			jpp.start();*/
-			GUI lol = new GUI();
-			lol.startGUI();
+		if (args.length == 0) {
+			//new GUI().start();
+		}
+		switch("cli") {
+		case "gui":
+			// new GUI().start();
+		case "cli":
+	        new CLI().start();
+		}
 	}
 }
