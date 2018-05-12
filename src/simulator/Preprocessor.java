@@ -74,12 +74,21 @@ public class Preprocessor {
 			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
 
 		for (Token token : tokens) {
-			if (token.getToken() == TokenType.HASHEDASCII) {
-				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getValue()));
+			if (token.getTokenType() == TokenType.HASHEDASCII) {
+				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getRawAsciiValue()));
 			}
 		}
 
-		Preprocessor.checkInstruction(tokens, line);
+		if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
+			switch(tokens.get(0).getRawDirective()) {
+			case "breakpoint":
+				tokens.clear();
+				tokens.add(new Token(TokenType.OPERATION, "swi"));
+				tokens.add(new Token(TokenType.HASH, "#80"));
+			}
+		} else {
+			Preprocessor.checkInstruction(tokens, line);
+		}
 	}
 
 
@@ -100,29 +109,29 @@ public class Preprocessor {
 
 		try {
 			int i = 0;
-			if (tokens.get(i).getToken() == TokenType.LABEL) {
+			if (tokens.get(i).getTokenType() == TokenType.LABEL) {
 				i++;
 			}
-
-			String op = tokens.get(i).getValue();
-			if (tokens.get(i).getToken() != TokenType.OPERATION || !(Preprocessor.RROP2.contains(op)
+			String op = tokens.get(i).getRawOperation();
+			if (tokens.get(i).getTokenType() != TokenType.OPERATION || !(Preprocessor.RROP2.contains(op)
 					|| Preprocessor.OOP2.contains(op) || Preprocessor.ROP2.contains(op)
 					|| Preprocessor.LSOP2.contains(op) || Preprocessor.BOP2.contains(op))) {
 				throw new InvalidOperationException(line, op);
 			}
 			i++;
-			while (tokens.get(i).getToken() == TokenType.FLAG) {
+			while (tokens.get(i).getTokenType() == TokenType.FLAG) {
 				i++;
 			}
 
-			if (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
+			if (tokens.get(i).getTokenType() == TokenType.CONDITIONCODE) {
 				i++;
 			}
+			
 			for (Token token : tokens) {
-				if (token.getToken() == TokenType.REGISTER) {
-					int register = Integer.parseInt(token.getValue());
-					if (Preprocessor.checkRegister(register)) {
-						throw new InvalidRegisterException(line, register);
+				if (token.getTokenType() == TokenType.REGISTER) {
+					int registerId = token.getRawRegister();
+					if (Preprocessor.checkRegister(registerId)) {
+						throw new InvalidRegisterException(line, registerId);
 					}
 
 				}
@@ -159,10 +168,7 @@ public class Preprocessor {
 	 * @return True if the register is invalid, else otherwise.
 	 */
 	private static boolean checkRegister(int registerId) {
-		if (registerId > 15 || registerId < 0) {
-			return true;
-		}
-		return false;
+		return registerId > 15 || registerId < 0;
 	}
 
 	/**
@@ -176,14 +182,11 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkRROP2(List<Token> tokens, int i) {
-		if ((tokens.get(i).getToken() != TokenType.REGISTER) || (tokens.get(i + 1).getToken() != TokenType.COMMA)
-				|| (tokens.get(i + 2).getToken() != TokenType.REGISTER)
-				|| (tokens.get(i + 3).getToken() != TokenType.COMMA)
-				|| (tokens.get(i + 4).getToken() != TokenType.REGISTER
-						&& tokens.get(i + 4).getToken() != TokenType.HASH)) {
-			return true;
-		}
-		return false;
+		return (tokens.get(i).getTokenType() != TokenType.REGISTER) || (tokens.get(i + 1).getTokenType() != TokenType.COMMA)
+				|| (tokens.get(i + 2).getTokenType() != TokenType.REGISTER)
+				|| (tokens.get(i + 3).getTokenType() != TokenType.COMMA)
+				|| (tokens.get(i + 4).getTokenType() != TokenType.REGISTER
+						&& tokens.get(i + 4).getTokenType() != TokenType.HASH);
 	}
 
 	/**
@@ -196,10 +199,7 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkOOP2(List<Token> tokens, int i) {
-		if (tokens.get(i).getToken() != TokenType.REGISTER && tokens.get(i).getToken() != TokenType.HASH) {
-			return true;
-		}
-		return false;
+		return tokens.get(i).getTokenType() != TokenType.REGISTER && tokens.get(i).getTokenType() != TokenType.HASH;
 	}
 
 	/**
@@ -213,12 +213,9 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkROP2(List<Token> tokens, int i) {
-		if ((tokens.get(i).getToken() != TokenType.REGISTER) || (tokens.get(i + 1).getToken() != TokenType.COMMA)
-				|| (tokens.get(i + 2).getToken() != TokenType.REGISTER
-						&& tokens.get(i + 2).getToken() != TokenType.HASH)) {
-			return true;
-		}
-		return false;
+		return ((tokens.get(i).getTokenType() != TokenType.REGISTER) || (tokens.get(i + 1).getTokenType() != TokenType.COMMA)
+				|| (tokens.get(i + 2).getTokenType() != TokenType.REGISTER
+						&& tokens.get(i + 2).getTokenType() != TokenType.HASH));
 	}
 
 	/**
@@ -232,14 +229,11 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkLSOP2(List<Token> tokens, int i) {
-		if (tokens.get(i).getToken() == TokenType.REGISTER && tokens.get(i + 1).getToken() == TokenType.COMMA) {
+		if (tokens.get(i).getTokenType() == TokenType.REGISTER && tokens.get(i + 1).getTokenType() == TokenType.COMMA) {
 			Token token = tokens.get(i + 2);
-			switch (token.getToken()) {
+			switch (token.getTokenType()) {
 			case OFFSET:
-				return Preprocessor.checkRegister(Integer.parseInt(token.getValue()));
-			case INDEXEDOFFSET:
-				String offset = token.getValue();
-				return Preprocessor.checkRegister(Integer.parseInt(offset.substring(0, offset.indexOf(","))));
+				return Preprocessor.checkRegister(token.getRawOffset());
 			default:
 				return true;
 			case HASH:
@@ -262,9 +256,6 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkBOP2(List<Token> tokens, int i) {
-		if (tokens.get(i).getToken() != TokenType.IDENTIFIER) {
-			return true;
-		}
-		return false;
+		return (tokens.get(i).getTokenType() != TokenType.IDENTIFIER);
 	}
 }

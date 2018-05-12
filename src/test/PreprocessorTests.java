@@ -18,6 +18,7 @@ public class PreprocessorTests {
 			Preprocessor.preprocess(tokens);
 		}
 		catch (Exception e) {
+			System.out.println(e);
 			fail();
 		}
 		tokens = Program.lexer("mov r4,r40");

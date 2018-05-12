@@ -83,8 +83,9 @@ public class Interpretor {
 		HashSet<Flag> flags = new HashSet<Flag>();
 		int i = 0;
 		int b = 0;
-		if (tokens.get(b).getToken() == TokenType.LABEL) {
-			String label = tokens.get(b).getValue();
+		
+		if (tokens.get(b).getTokenType() == TokenType.LABEL) {
+			String label = tokens.get(b).getRawLabel();
 			if (this.cpu.getLabelMap().containsKey(label)) {
 				throw new InvalidLabelException(line, label);
 			}
@@ -92,30 +93,30 @@ public class Interpretor {
 			b++;
 		}
 
-		if (tokens.get(tokens.size() - 1).getToken() == TokenType.IDENTIFIER) {
-			String label = tokens.get(tokens.size() - 1).getValue();
+		if (tokens.get(tokens.size() - 1).getTokenType() == TokenType.IDENTIFIER) {
+			String label = tokens.get(tokens.size() - 1).getRawIdentifier();
 			if (!this.cpu.getLabelMap().containsKey(label)) {
 				throw new UnknownLabelException(line, label);
 			}
 		}
 		i = b + 1;
-		while (tokens.get(i).getToken() == TokenType.FLAG) {
-			switch (tokens.get(i).getValue()) {
-			case "b":
+		while (tokens.get(i).getTokenType() == TokenType.FLAG) {
+			switch (tokens.get(i).getRawFlag()) {
+			case 'b':
 				flags.add(Flag.B);
 				break;
-			case "h":
+			case 'h':
 				flags.add(Flag.H);
 				break;
-			case "s":
+			case 's':
 				flags.add(Flag.S);
 				break;
 			default:
 			}
 			i++;
 		}
-		if (tokens.get(i).getToken() == TokenType.CONDITIONCODE) {
-			switch (tokens.get(1).getValue()) {
+		if (tokens.get(i).getTokenType() == TokenType.CONDITIONCODE) {
+			switch (tokens.get(1).getRawConditionCode()) {
 			case "eq":
 				cc = ConditionCode.EQ;
 				break;
@@ -166,7 +167,7 @@ public class Interpretor {
 			i++;
 		}
 
-		switch (tokens.get(b).getValue()) {
+		switch (tokens.get(b).getRawOperation()) {
 		case "adc":
 			return new Instruction(Operation.ADC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
@@ -228,7 +229,7 @@ public class Interpretor {
 
 		}
 
-		return null;
+		throw new RuntimeException();
 	}
 	/**
 	 * Converts a Token representing a Register into a reference pointing to this very same register.
@@ -237,7 +238,18 @@ public class Interpretor {
 	 * @return A reference pointing to the register.
 	 */
 	private Register toRegister(Token register) {
-		return this.cpu.getRegisters(Integer.parseInt(register.getValue()));
+		int registerId = 0;
+		switch(register.getTokenType()) {
+		case REGISTER:
+			registerId = register.getRawRegister();
+			break;
+		case OFFSET:
+			registerId = register.getRawOffset();
+			break;
+		default:
+			throw new RuntimeException();
+		}
+		return this.cpu.getRegisters(registerId);
 	}
 
 	/**
@@ -247,22 +259,17 @@ public class Interpretor {
 	 * @return An instance of an Operand2 subclasses representing the token.
 	 */
 	private Operand2 handleOpe2(Token ope2) {
-		String inner = ope2.getValue();
-		switch (ope2.getToken()) {
+		switch (ope2.getTokenType()) {
 		case REGISTER:
 			return toRegister(ope2);
 		case HASH:
-			return new ImmediateValue(Integer.parseInt(inner));
+			return new ImmediateValue(ope2.getRawImmediateValue());
 		case OFFSET:
 			return toRegister(ope2);
-		case INDEXEDOFFSET:
-			int address = Integer.parseInt(inner);
-			address = address + Integer.parseInt(inner.substring(inner.indexOf(',')));
-			return null;
 		case IDENTIFIER:
-			return new ImmediateValue(this.cpu.getLabelMap().get(inner) - this.cpu.instructionsLen() * 4);
+			return new ImmediateValue(this.cpu.getLabelMap().get(ope2.getRawIdentifier()) - this.cpu.instructionsLen() * 4);
 		default:
-			return null;
+			throw new RuntimeException();
 		}
 	}
 }
