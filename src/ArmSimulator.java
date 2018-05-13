@@ -30,47 +30,103 @@ public class ArmSimulator {
 		this.breakpoints = new HashMap<>();
 	}
 
+	/**
+	 * 
+	 * @param registerNumber
+	 * @return
+	 */
 	public int getRegisterValue(int registerNumber) {
-
+		return this.cpu.getRegisters(registerNumber).getValue();
 	}
 
+	/**
+	 * 
+	 * @param address
+	 * @return
+	 */
 	public byte getRamByte(int address) {
-
+		return this.cpu.getRam().getByte(new Address(address));
 	}
 
+	/**
+	 * 
+	 * @param address
+	 * @return
+	 */
 	public short getRamHWord(int address) {
-
+		return this.cpu.getRam().getHWord(new Address(address));
 	}
 
+	/**
+	 * 
+	 * @param address
+	 * @return
+	 */
 	public int getRamWord(int address) {
-
+		return this.cpu.getRam().getValue(new Address(address));
 	}
 
+	/**
+	 * 
+	 */
 	public void run() {
-
+		this.cpu.execute();
 	}
 
+	/**
+	 * 
+	 */
 	public void runStep(){
-
+		this.cpu.executeStep();
 	}
 
+	/**
+	 * 
+	 */
 	public void resetRun(){
-
+		this.cpu.reset();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getCurrentLine(){
-
+		return this.cpu.getPc().getValue() / 4+1; // Beware that this method doesn't take in account assembly directives or if you jump space.
 	}
 
+	/**
+	 * 
+	 * @param line
+	 */
 	public void flipBreakPointStatus(int line){
-
+		this.breakpoints.put(line, !this.getBreakPointStatus(line));
 	}
 
+	/**
+	 * 
+	 * @param line
+	 * @return
+	 */
 	public boolean getBreakPointStatus(int line){
-
+		if(!this.breakpoints.containsKey(line)) {
+			return false;
+		}
+		return this.breakpoints.get(line);
 	}
 
+	/**
+	 * 
+	 * @param programAsString
+	 * @throws InvalidSyntaxException
+	 * @throws InvalidOperationException
+	 * @throws InvalidRegisterException
+	 * @throws InvalidLabelException
+	 * @throws UnknownLabelException
+	 */
 	public void setProgramString(String programAsString) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException, InvalidLabelException, UnknownLabelException{
-
+		this.resetRun();
+		this.program.setNewProgram(programAsString);
+		this.interpretor.parseProgram();
 	}
 }
