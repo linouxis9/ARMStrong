@@ -1,16 +1,8 @@
-# #@rmsim
+# #@rmsim ![#@armsim](small_logo.png)
 
 ## A fast and simple ARM Simulator made for education
 
-[Javadoc](http://projectarm.devling.net/api/)
-
-> We now have split our project into 3 branches...
->
-> * master is the branch containing the latest work around the simulator backend / library.
-> * theGUI is the branch containing the latest work regarding the Graphical User Interface in JavaFX.
-> * cli is the branch containing the latest work regarding the Command Line Interface.
->
-> These last two branches pulls from master from time to time to keep their backend in sync.
+[The Javadoc is available here](http://projectarm.devling.net/api/)
 
 ```java
 public class HelloWorld {
@@ -22,11 +14,28 @@ public class HelloWorld {
 }
 ```
 
-> <img src="logo.png" style="width: 20%;"/>
+> We now have split our project into 3 branches...
+>
+> * master is the branch containing the latest work around the simulator backend / library.
+> * theGUI is the branch containing the latest work regarding the Graphical User Interface in JavaFX.
+> * cli is the branch containing the latest work regarding the Command Line Interface.
+>
+> These last two branches pulls from master from time to time to keep their backend in sync.
+
+> Screenshots:
+
+> ![gui_s1](images/gui_s1.png)
+> ![gui_s2](images/gui_s2.png)
+> ![cli_s1](images/cli_s1.png)
+> ![cli_s2](images/cli_s2.png)
+
+
+***
+
+## Petite explication
 
 > ![classes](src/simulator/Classes.png)
 
-## Petite explication
 
 Le Main s'occupe de créer l'instance (singleton) d'ArmSimulator.
 
