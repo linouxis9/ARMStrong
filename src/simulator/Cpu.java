@@ -344,6 +344,14 @@ public class Cpu {
 		return labelMap;
 	}
 
+	
+	/**
+	 * Returns a reference to the Ram.
+	 */
+	public Ram getRam() {
+		return ram;
+	}
+
 	/**
 	 * Returns the number of instructions stored in the Cpu's executable memory.
 	 */
