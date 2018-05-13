@@ -1,16 +1,27 @@
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder;
 import com.googlecode.lanterna.screen.*;
 import com.googlecode.lanterna.terminal.*;
 
+import javafx.scene.shape.Path;
 import simulator.About;
+import simulator.InvalidLabelException;
+import simulator.InvalidOperationException;
+import simulator.InvalidRegisterException;
+import simulator.InvalidSyntaxException;
+import simulator.UnknownLabelException;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 public class CLI {
@@ -19,14 +30,16 @@ public class CLI {
 	private ArmSimulator simulator;
 	private MultiWindowTextGUI gui;
 	private Window window;
-	private Map<Label,Label> memory;
+	private LinkedHashMap<Label,Label> memory;
 	private TextBox textBox;
 	private TextBox console;
+	private int memoryIndex;
 	
     public CLI() {
     	this.registers = new Label[16];
     	this.simulator = new ArmSimulator();
-    	this.memory = new HashMap<>();
+    	this.memory = new LinkedHashMap<>();
+    	this.memoryIndex = 0;
     	
 		try {
 			Terminal terminal;
@@ -38,6 +51,7 @@ public class CLI {
 	        
 	        TerminalSize size = screen.getTerminalSize();
 	        
+	        gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
 	        
 	        Panel masterPanel = new Panel();
 	    	masterPanel.setLayoutManager(new LinearLayout(Direction.VERTICAL));
@@ -46,12 +60,59 @@ public class CLI {
 	    	menuPanel.setLayoutManager(new LinearLayout(Direction.HORIZONTAL));
 	    	masterPanel.addComponent(menuPanel);
 	    	
+	    	menuPanel.addComponent(new Button("Open", () -> {
+	    		try {
+	    			String path = new FileDialogBuilder()
+					.setTitle("Open File")
+					.setDescription("Choose a file")
+					.setActionLabel("Close")
+					.setActionLabel("Open")
+					.build()
+					.showDialog(gui).getAbsolutePath();
+	    			this.textBox.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}));
+	    	
+	    	menuPanel.addComponent(new Button("Save", () -> {
+	    		try {
+	    			String path = new FileDialogBuilder()
+					.setTitle("Save File")
+					.setDescription("Choose a file")
+					.setActionLabel("Close")
+					.setActionLabel("Save")
+					.build()
+					.showDialog(gui).getAbsolutePath();
+	    			try (PrintWriter out = new PrintWriter(path)) {
+	    			    out.println(this.textBox.getText());
+	    			}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}));
+	    	
+	        menuPanel.addComponent(new Label("|"));
+	    	
+	    	menuPanel.addComponent(new Button("L0ad", () -> {
+	    		try {
+					this.simulator.setProgramString(this.textBox.getText());
+				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
+						| InvalidLabelException | UnknownLabelException e) {
+					System.out.println(e);
+				}
+	    	}));
+	    	
 	    	menuPanel.addComponent(new Button("Run", () -> {
-	    		this.textBox.setText("COUCOU");
+	    		this.simulator.run();
+	    		this.updateGUI();
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Run Step", () -> {
-	    		this.textBox.setText("COUCOU");
+	    		this.simulator.runStep();
+	    		this.updateGUI();
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Exit", () -> {
@@ -85,26 +146,41 @@ public class CLI {
 	    	    rightPanel.addComponent(value);
 	    	    memory.put(key, value);
 	    	});
-	    	
+	    	this.updateMemory();
 	    	Panel bottomPanel = new Panel();
 	    	bodyPanel.addComponent(bottomPanel.withBorder(Borders.singleLine()));
 	    	bottomPanel.addComponent(new Button("⇡ Lo", () -> {
-	    		this.textBox.setText("COUCOU");
+	    		this.memoryIndex--;
+	    		if (this.memoryIndex < 0) {
+	    			this.memoryIndex = 0;
+	    		}
+    			this.updateMemory();
 	    	}));
 	    	bottomPanel.addComponent(new Button("⇣ Hi", () -> {
-	    		this.textBox.setText("COUCOU");
+	    		this.memoryIndex++;
+	    		this.updateMemory();
 	    	}));
 	    	this.console = new TextBox(new TerminalSize(size.getColumns()/2,4));
 	    	this.console.setReadOnly(true);
-	    	this.console.setText(About.info() + "\n\n\n\n\na");
+	    	this.console.setText(About.info());
+	    	this.console.addLine("");
+			console.setCaretWarp(true);
+
 	    	centerPanel.addComponent(this.console.withBorder(Borders.singleLine("Console")));
-	    	
+	    	OutputStream consoleOut = new OutputStream() {
+				public void write(int b) {
+					console.setText(console.getText() + Character.toString((char)b));
+					if (b == '\n') {
+						console.addLine("");
+					}
+				}
+			};
+			System.setOut(new PrintStream(consoleOut, true));
+
 	    	window = new BasicWindow();
-	        window.setComponent(masterPanel.withBorder(Borders.doubleLine("@rmSim")));
+	        window.setComponent(masterPanel.withBorder(Borders.doubleLine("#@rmSim")));
 	    	window.setHints(Arrays.asList(Window.Hint.CENTERED));	
-	        // Create gui and start gui
-	        gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
-	        gui.addWindowAndWait(window);
+	    	
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,6 +188,27 @@ public class CLI {
     
     public void start() {
         gui.addWindowAndWait(window);
-       }
+    }
+    
+    private void updateMemory() {
+    	int i = 0;
+    	for (Map.Entry<Label, Label> base : memory.entrySet()) {
+    		base.getKey().setText("0x"+Integer.toHexString(memoryIndex+i)); 
+    		base.getValue().setText(Integer.toString(this.simulator.getRamByte(memoryIndex+i)));
+    		i++;
+    	}
+    }
+    
+    private void updateRegisters() {
+    	for (int i = 0; i < registers.length; i++) {
+    		registers[i].setText(Integer.toString(this.simulator.getRegisterValue(i)));
+    	}
+    }
+    
+    private void updateGUI() {
+    	this.updateMemory();
+    	this.updateRegisters();
+    	this.console.addLine("---");
+    }
     
 }
