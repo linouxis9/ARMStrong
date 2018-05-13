@@ -1,4 +1,4 @@
-# #@rmsim ![#@armsim](small_logo.png)
+# ![#@armsim](small_logo.png)
 
 ## A fast and simple ARM Simulator made for education
 
