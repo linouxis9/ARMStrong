@@ -11,33 +11,45 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import simulator.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * GUI is the class responsible of handling the JaveFX Graphical User Interface.
  */
 public class GUI extends Application {
 
-	ArmSimulator theArmSimulator;
+	private ArmSimulator theArmSimulator;
 
-	Scene scene;
+	private Scene scene;
+	private Stage stage;
 
-	Stage stage;
+	//the registers
+	private List<Text> hexadecimalRegisterText;
+	private List<Text> decimalRegisterText;
+	private List<Text> signedDecimalRegisterText;
 
-	List<Text> hexadecimalRegisterText;
-	List<Text> decimalRegisterText;
-	List<Text> signedDecimalRegisterText;
+	//the memory
+	private List<Text> MemoryAddressViewList;
+	private List<Text> MemoryContentList;
+	private int memoryViewFirstAddress;
+	private int memoryDisplayMode;
 
-	List<Text> MemoryAddressViewList;
-	List<Text> MemoryContentList;
-	int memoryViewFirstAddress;
-	int memoryDisplayMode;
+	//the code editor
+	private TextArea codingTextArea;
+	private TextFlow executionModeTextFlow;
+	private boolean executionMode;
+	private File programFilePath;
+
+	private List<MenuItem> menusToDisableInExecMode;
 
 	public void startGUI() {
 		launch(null);
@@ -47,6 +59,9 @@ public class GUI extends Application {
 	public void start(Stage stage) throws Exception {
 
 		theArmSimulator = new ArmSimulator();
+		programFilePath = null;
+		this.executionMode = false;
+		menusToDisableInExecMode = new ArrayList<MenuItem>();
 
 		//setting static elements
 
@@ -76,29 +91,41 @@ public class GUI extends Application {
 		//THE MENU BAR
 		MenuBar theMenuBar = (MenuBar) scene.lookup("#theMenuBar");
 
-		Menu fileMenu = new Menu("File");
-		Menu editMenu = new Menu("Edit");
-		Menu runMenu = new Menu("Run");
-		Menu helpMenu = new Menu("Help");
+		Menu fileMenu 	= new Menu("File");
+		Menu editMenu 	= new Menu("Edit");
+		Menu runMenu 	= new Menu("Run");
+		Menu helpMenu 	= new Menu("Help");
 
-		MenuItem newMenuItem = new MenuItem("New");
-		MenuItem saveMenuItem = new MenuItem("Save");
-		MenuItem exitMenuItem = new MenuItem("Exit");
-		MenuItem runAllMenuItem = new MenuItem("Run All");
-		MenuItem runSingleMenuItem = new MenuItem("Run a single instruction");
+		MenuItem newMenuItem 	= new MenuItem("New");
+		MenuItem openMenuItem 	= new MenuItem("Open file");
+		MenuItem saveMenuItem 	= new MenuItem("Save");
+		MenuItem saveAsMenuItem = new MenuItem("Save as");
+		MenuItem exitMenuItem 	= new MenuItem("Exit");
+
+		MenuItem enterExecutionModeMenuItem = new MenuItem("Enter in execution mode");
+		MenuItem exitExecutionModeMenuItem 	= new MenuItem("Exit the execution mode");
+		MenuItem runMenuItem 				= new MenuItem("Run");
+		MenuItem runSingleMenuItem 			= new MenuItem("Run a single instruction");
 
 		theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
 
-		fileMenu.getItems().addAll(newMenuItem, saveMenuItem, exitMenuItem);
+		fileMenu.getItems().addAll(newMenuItem,openMenuItem,saveMenuItem, saveAsMenuItem, exitMenuItem);
 		editMenu.getItems().addAll();
-		runMenu.getItems().addAll(runAllMenuItem, runSingleMenuItem);
+		runMenu.getItems().addAll(enterExecutionModeMenuItem,exitExecutionModeMenuItem, runMenuItem, runSingleMenuItem);
 		helpMenu.getItems().addAll();
+
+		menusToDisableInExecMode.add(newMenuItem);
+		menusToDisableInExecMode.add(openMenuItem);
+		menusToDisableInExecMode.add(saveMenuItem);
+		menusToDisableInExecMode.add(saveAsMenuItem);
+		menusToDisableInExecMode.add(enterExecutionModeMenuItem);
 
 		//FETCHING THE ELEMENTS
 
 		//the coding area
 
-		TextArea codingTextArea = (TextArea) scene.lookup("#codeTexArea");
+		codingTextArea = (TextArea) scene.lookup("#codeTexArea");
+		executionModeTextFlow = (TextFlow) scene.lookup("#executionModeTextFlow");
 
 		//the fields
 
@@ -107,12 +134,12 @@ public class GUI extends Application {
 
 		//the buttons
 
-		Button button8bitView = (Button) scene.lookup("#button8Bit");
-		Button button16bitView = (Button) scene.lookup("#button16Bit");
-		Button button32bitView = (Button) scene.lookup("#button32Bit");
+		Button button8bitView 	= (Button) scene.lookup("#button8Bit");
+		Button button16bitView 	= (Button) scene.lookup("#button16Bit");
+		Button button32bitView 	= (Button) scene.lookup("#button32Bit");
 
-		Button memoryButtonUp  = (Button) scene.lookup("#memoryButtonUp");
-		Button memoryButtonDown  = (Button) scene.lookup("#memoryButtonDown");
+		Button memoryButtonUp  	= (Button) scene.lookup("#memoryButtonUp");
+		Button memoryButtonDown = (Button) scene.lookup("#memoryButtonDown");
 
 		Button goToAddressButton = (Button) scene.lookup("#goToAddressButton");
 
@@ -123,24 +150,24 @@ public class GUI extends Application {
 
 			//the register view
 
-		this.hexadecimalRegisterText = new ArrayList<Text>();
-		this.decimalRegisterText = new ArrayList<Text>();
-		this.signedDecimalRegisterText = new ArrayList<Text>();
+		this.hexadecimalRegisterText 	= new ArrayList<Text>();
+		this.decimalRegisterText 		= new ArrayList<Text>();
+		this.signedDecimalRegisterText 	= new ArrayList<Text>();
 
 		for(int register=0; register<16; register++){
-			this.hexadecimalRegisterText.add((Text) this.scene.lookup("#register"+register+"Hex"));
-			this.decimalRegisterText.add((Text) this.scene.lookup("#register"+register+"Dec"));
-			this.signedDecimalRegisterText.add((Text) this.scene.lookup("#register"+register+"SigDec"));
+			this.hexadecimalRegisterText.	add((Text) this.scene.lookup("#register"+register+"Hex"));
+			this.decimalRegisterText.		add((Text) this.scene.lookup("#register"+register+"Dec"));
+			this.signedDecimalRegisterText.	add((Text) this.scene.lookup("#register"+register+"SigDec"));
 		}
 
 			//the memory view
 
-		this.MemoryAddressViewList = new ArrayList<Text>();
-		this.MemoryContentList = new ArrayList<Text>();
+		this.MemoryAddressViewList 	= new ArrayList<Text>();
+		this.MemoryContentList 		= new ArrayList<Text>();
 
 		for(int address=1; address<9; address++){
-			MemoryAddressViewList.add((Text) scene.lookup("#addresslMemoryView"+address));
-			MemoryContentList.add((Text) scene.lookup("#contentMemoryView"+address));
+			MemoryAddressViewList	.add((Text) scene.lookup("#addresslMemoryView"+address));
+			MemoryContentList		.add((Text) scene.lookup("#contentMemoryView"+address));
 		}
 
 
@@ -202,17 +229,95 @@ public class GUI extends Application {
 						memoryViewFirstAddress+=4;
 						break;
 				}
+				//TODO add max address check
 				updateMemoryView();
 			}
 		});
 
-		runAllMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+		enterExecutionModeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				String programString = codingTextArea.getText();
+				try {
+					theArmSimulator.setProgramString(programString);
+					enterExecutionMode(programString);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		exitExecutionModeMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				exitExecutionMode();
+			}
+		});
+
+
+		runMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				String programString = codingTextArea.getText();
-				theArmSimulator.run(programString);
-				updateRegisters();
-				updateMemoryView();
+				if (executionMode){
+					theArmSimulator.run();
+					updateRegisters();
+					updateMemoryView();
+				}
+			}
+		});
+		runSingleMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				if (executionMode){
+					theArmSimulator.runStep();
+					updateRegisters();
+					updateMemoryView();
+				}
+			}
+		});
+
+
+
+		openMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Open a source File");
+				String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+				if(path != null) {
+					try {
+						codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
+						programFilePath = new File(path);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		saveAsMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Save assembly program");
+				File chosenFile = fileChooser.showSaveDialog(stage);
+				saveFile(codingTextArea.getText(), chosenFile);
+				
+			}
+		});
+		saveMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				if (programFilePath != null){
+					saveFile(codingTextArea.getText(), programFilePath);
+				}
+				else
+				{
+					FileChooser fileChooser = new FileChooser();
+					fileChooser.setTitle("Save assembly program");
+					File chosenFile = fileChooser.showSaveDialog(stage);
+					saveFile(codingTextArea.getText(), chosenFile);
+				}
+
+
 			}
 		});
 
@@ -299,15 +404,35 @@ public class GUI extends Application {
 
 	}
 
+	private void exitExecutionMode() {
+		this.executionMode = false;
+		codingTextArea.setEditable(true);
+		codingTextArea.setVisible(true);
+		for(int item = 0; item < menusToDisableInExecMode.size(); item++){
+			menusToDisableInExecMode.get(item).setDisable(false);
+		}
+	}
+
+	private void enterExecutionMode(String program) { //TODO parametre peut etre temoraire
+		this.executionMode = true;
+		codingTextArea.setEditable(false);
+		codingTextArea.setVisible(false);
+		executionModeTextFlow.getChildren().add(new Text(program));
+		for(int item = 0; item < menusToDisableInExecMode.size(); item++){
+			menusToDisableInExecMode.get(item).setDisable(true);
+		}
+
+	}
+
 	/**
 	 * Update the displayed registers
 	 */
-	public void updateRegisters(){
+	private void updateRegisters(){
 
 		int currentRegisterValue;
 
 		for(int currentRegisterNumber=0; currentRegisterNumber<16; currentRegisterNumber++){
-			currentRegisterValue = ArmSimulator.getRegisterValue(currentRegisterNumber);
+			currentRegisterValue = theArmSimulator.getRegisterValue(currentRegisterNumber);
 			hexadecimalRegisterText.	get(currentRegisterNumber).setText(Integer.toHexString(currentRegisterValue));
 			//decimalRegisterText.		get(currentRegisterNumber).setText(""+Integer.toUnsignedLong(currentRegisterValue));
 			//signedDecimalRegisterText.	get(currentRegisterNumber).setText(""+currentRegisterValue);
@@ -323,27 +448,25 @@ public class GUI extends Application {
 
 		int displayedMemoryAddress = memoryViewFirstAddress;
 
-
-
 		switch(this.memoryDisplayMode){
 			case 8:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
 					MemoryAddressViewList.get(labelNumber).	setText("0x" + Integer.toHexString(displayedMemoryAddress));
-					MemoryContentList.get(labelNumber).		setText(""+ArmSimulator.getRamByte(displayedMemoryAddress));
+					MemoryContentList.get(labelNumber).		setText(""+theArmSimulator.getRamByte(displayedMemoryAddress));
 					displayedMemoryAddress++;
 				}
 				break;
 			case 16:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
 					MemoryAddressViewList.get(labelNumber).setText("0x" +Integer.toHexString(displayedMemoryAddress));
-					MemoryContentList.get(labelNumber).setText(""+ArmSimulator.getRamHWord(displayedMemoryAddress));
+					MemoryContentList.get(labelNumber).setText(""+theArmSimulator.getRamHWord(displayedMemoryAddress));
 					displayedMemoryAddress+=2;
 				}
 				break;
 			case 32:
 				for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++) {
 					MemoryAddressViewList.get(labelNumber).setText("0x"+Integer.toHexString(displayedMemoryAddress));
-					MemoryContentList.get(labelNumber).setText("" +ArmSimulator.getRamWord(displayedMemoryAddress));
+					MemoryContentList.get(labelNumber).setText("" +theArmSimulator.getRamWord(displayedMemoryAddress));
 					displayedMemoryAddress += 4;
 				}
 				break;
@@ -353,4 +476,16 @@ public class GUI extends Application {
 
 	}
 
+	private void saveFile(String content, File theFile){
+		if (theFile != null) {
+			try {
+				FileWriter outputStream = new FileWriter(theFile);
+				outputStream.write(content);
+				outputStream.close();
+				this.programFilePath = theFile;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
