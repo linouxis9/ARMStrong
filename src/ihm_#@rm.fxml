@@ -67,6 +67,11 @@
           </TitledPane>
         </panes>
       </Accordion>
+      <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <content>
+            <TextFlow fx:id="executionModeTextFlow" />
+         </content>
+      </ScrollPane>
       <TabPane tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2147483647" GridPane.rowIndex="2">
          <tabs>
             <Tab text="Console">
@@ -80,7 +85,6 @@
             <Tab text="Output" />
          </tabs>
       </TabPane>
-      <TextArea fx:id="codeTexArea" prefHeight="365.0" prefWidth="401.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <MenuBar fx:id="theMenuBar" prefHeight="29.0" prefWidth="1026.0" GridPane.columnSpan="2147483647">
          <menus>
             <Menu mnemonicParsing="false" text="File">
@@ -138,5 +142,6 @@
             <Text fx:id="goToAddressLabel" layoutX="8.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to Address" />
          </children>
       </AnchorPane>
+      <TextArea fx:id="codeTexArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
    </children>
 </GridPane>
