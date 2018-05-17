@@ -3,6 +3,7 @@ package simulator;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 //TODO JAVADOOOC
@@ -44,39 +45,49 @@ public class Preprocessor {
 		this.cpu = cpu;
 	}
 
-	public void preProcessPass1(List<List<Token>> lines) throws InvalidLabelException {
+	/**
+	 * This method converts Syntactic Sugar into their correct counterpart.
+	 *
+	 * @param lines
+	 *            The Tokenized's representation of the full program.
+	 * @throws InvalidLabelException
+	 */
+	public void preProcessPass1(List<List<Token>> lines) throws InvalidLabelException, InvalidDirectiveException {
 		int line = 0;
-		int instructions = 0;
+		int instructions = 0;		
 			for (List<Token> tokens : lines) {
-				line++;
+				line++;				
 				instructions++;
-				if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
-					switch (tokens.get(0).getRawDirective()) {
-					case "breakpoint":
-						tokens.clear();
-						tokens.add(new Token(TokenType.OPERATION, "swi"));
-						tokens.add(new Token(TokenType.HASH, "#80"));
-					}
-					lines.remove(lines.indexOf(tokens));
+				
+				// We don't remove empty lines in Pass 1 or otherwise we can't accurately know the current line which is required to throw errors.
+				if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT) {
 					instructions--;
+					continue;
 				}
 				
+				// I'm not sure if I want to replace that by a switch or not, it's quite clean like that.
 				if (tokens.get(0).getTokenType() == TokenType.LABEL) {
 					String label = tokens.remove(0).getRawLabel();
 					if (this.cpu.getLabelMap().containsKey(label)) {
 						throw new InvalidLabelException(line, label);
 					}
 					this.cpu.getLabelMap().put(label, instructions * 4);
+					
+					if (tokens.isEmpty()) {
+						instructions--;
+						continue;
+					}
+				}
+				
+				if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
+					this.handleDirective(tokens,tokens.get(0),line);
+					instructions--;
 				}
 				
 				for (Token token : tokens) {
 					if (token.getTokenType() == TokenType.HASHEDASCII) {
 						tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getRawAsciiValue()));
 					}
-				}
-				if (tokens.get(0).getTokenType() == TokenType.COMMENT || tokens.isEmpty()) {
-					lines.remove(lines.indexOf(tokens));
-					instructions--;
 				}
 			}
 	}
@@ -97,6 +108,11 @@ public class Preprocessor {
 	public PreprocessorMessage preProcessPass2(List<Token> tokens, int line) throws InvalidSyntaxException,
 			InvalidOperationException, InvalidRegisterException, UnknownLabelException {
 		
+		// We don't remove empty lines in Pass 1 or otherwise we can't accurately know the current line which is required to throw errors.
+		if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT) {
+			return PreprocessorMessage.SKIP;
+		}
+		
 		for (Token token : tokens) {
 			if (token.getTokenType() == TokenType.IDENTIFIER) {
 				String label = token.getRawIdentifier();
@@ -104,6 +120,7 @@ public class Preprocessor {
 					throw new UnknownLabelException(line, label);
 				}
 				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + Integer.toString(this.cpu.getLabelMap().get(label) - this.cpu.instructionsLen() * 4-4)));
+				System.out.println(tokens);
 			}
 		}
 		
@@ -111,6 +128,18 @@ public class Preprocessor {
 		return PreprocessorMessage.VALIDINSTRUCTION;
 	}
 
+	public void handleDirective(List<Token> tokens, Token directive, int line) throws InvalidDirectiveException {
+		switch (directive.getRawDirective()) {
+		case "breakpoint":
+			tokens.clear();
+			tokens.add(new Token(TokenType.OPERATION, "swi"));
+			tokens.add(new Token(TokenType.HASH, "#81"));
+			break;
+		default:
+			throw new InvalidDirectiveException(line,directive.getRawDirective());
+		}
+	}
+	
 	/**
 	 * This static method checks the Instruction's Tokenized representation. Why is
 	 * that a static method? The simulator package intends to be a library providing

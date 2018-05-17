@@ -52,11 +52,12 @@ public class Interpretor {
 	 * @throws InvalidRegisterException
 	 * @throws InvalidLabelException
 	 * @throws UnknownLabelException
+	 * @throws InvalidDirectiveException 
 	 * 
 	 */
 	public void parseProgram() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException,
-			InvalidLabelException, UnknownLabelException {
-		List<List<Token>> lines = new ArrayList<List<Token>>();
+			InvalidLabelException, UnknownLabelException, InvalidDirectiveException {
+		List<List<Token>> lines = new ArrayList<>();
 		
 		while (this.program.hasNext()) {
 			lines.add(this.program.next());
@@ -65,6 +66,7 @@ public class Interpretor {
 		this.preprocessor.preProcessPass1(lines);
 		
 		for (List<Token> tokens : lines) {
+			line++;
 			PreprocessorMessage message = this.preprocessor.preProcessPass2(tokens, line);
 			if (message == PreprocessorMessage.VALIDINSTRUCTION) {
 				this.cpu.addInstruction(this.parse(tokens));

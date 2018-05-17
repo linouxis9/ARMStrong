@@ -7,15 +7,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *________/\\\\\\\\\__/\\\\\\\\\\\\\____/\\\________/\\\_        
- * _____/\\\////////__\/\\\/////////\\\_\/\\\_______\/\\\_       
- *  ___/\\\/___________\/\\\_______\/\\\_\/\\\_______\/\\\_      
- *   __/\\\_____________\/\\\\\\\\\\\\\/__\/\\\_______\/\\\_     
- *    _\/\\\_____________\/\\\/////////____\/\\\_______\/\\\_    
- *     _\//\\\____________\/\\\_____________\/\\\_______\/\\\_   
- *      __\///\\\__________\/\\\_____________\//\\\______/\\\__  
- *       ____\////\\\\\\\\\_\/\\\______________\///\\\\\\\\\/___ 
- *        _______\/////////__\///_________________\/////////_____
+ * ________/\\\\\\\\\__/\\\\\\\\\\\\\____/\\\________/\\\_
+ * _____/\\\////////__\/\\\/////////\\\_\/\\\_______\/\\\_
+ * ___/\\\/___________\/\\\_______\/\\\_\/\\\_______\/\\\_
+ * __/\\\_____________\/\\\\\\\\\\\\\/__\/\\\_______\/\\\_
+ * _\/\\\_____________\/\\\/////////____\/\\\_______\/\\\_
+ * _\//\\\____________\/\\\_____________\/\\\_______\/\\\_
+ * __\///\\\__________\/\\\_____________\//\\\______/\\\__
+ * ____\////\\\\\\\\\_\/\\\______________\///\\\\\\\\\/___
+ * _______\/////////__\///_________________\/////////_____
  */
 public class Cpu {
 
@@ -64,6 +64,13 @@ public class Cpu {
 	private boolean interrupt;
 
 	/**
+	 * Boolean indicating if the normal flow of execution of the CPU has been
+	 * stopped by a breakpoint. It can be controlled from assembly using Software
+	 * Interrupts (SWI) or Supervisor (SVC) calls.
+	 */
+	private boolean breakpoint;
+
+	/**
 	 * The Collection containing the instructions to execute by the processor.
 	 */
 	private final List<Instruction> instructions;
@@ -100,7 +107,9 @@ public class Cpu {
 	 * Returns a fully initialized Cpu with an already specified set of instructions
 	 * to execute.
 	 * 
-	 * @param instructions An initial list of Instructions to add to the Cpu's executable memory space.
+	 * @param instructions
+	 *            An initial list of Instructions to add to the Cpu's executable
+	 *            memory space.
 	 */
 	public Cpu(List<Instruction> instructions) {
 		this.ram = new Ram();
@@ -118,10 +127,12 @@ public class Cpu {
 		this.instructions = instructions;
 		this.interruptsVector = new HashMap<>();
 		this.fillInterruptsVector();
-		this.interruptsVector.get(81).run();
+		this.interruptsVector.get(100).run();
 		this.interrupt = false;
+		this.breakpoint = false;
 		this.labelMap = new HashMap<>();
 	}
+
 	/**
 	 * Reset the Cpu to a clean state.
 	 */
@@ -136,23 +147,25 @@ public class Cpu {
 		this.pc = this.registers[15]; // PC should reference to the same register as this.registers[15]
 		this.instructions.clear();
 		this.interrupt = false;
+		this.breakpoint = false;
 		this.labelMap.clear();
 	}
-	
+
 	/**
 	 * Execute every instruction available to the processor until a Software
 	 * Interrupt is made or that the CPU has tried to execute Instructions at
 	 * invalid addresses.
 	 */
 	public void execute() {
+		this.interrupt = false;
+		this.breakpoint = false;
 		try {
-			while (!this.interrupt) {
+			while (!this.interrupt && !this.breakpoint) {
 				this.executeStep();
 			}
 		} catch (Exception e) {
 
 		}
-		this.interrupt = false;
 	}
 
 	/**
@@ -164,9 +177,16 @@ public class Cpu {
 	private void fillInterruptsVector() {
 		this.interruptsVector.put(80, () -> {
 			this.interrupt = true;
-			System.out.println("Stopping the execution of the program after " + this.instructions.get(Math.abs(this.pc.getValue()/4-2)));
+			System.out.println("Stopping the execution of the program after "
+					+ this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2)));
 		});
+
 		this.interruptsVector.put(81, () -> {
+			this.breakpoint = true;
+			System.out.println("[DEBUG] BREAKPOINT after " + this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2)));
+		});
+
+		this.interruptsVector.put(100, () -> {
 			System.out.println(About.info());
 		});
 		this.interruptsVector.put(0, () -> {
@@ -213,7 +233,8 @@ public class Cpu {
 	/**
 	 * Decodes an instruction and pass the required parameters to the ALU.
 	 * 
-	 * @param i The instruction to decode and execute.
+	 * @param i
+	 *            The instruction to decode and execute.
 	 */
 	private void runInstruction(Instruction i) {
 		switch (i.getOp()) {
@@ -290,14 +311,16 @@ public class Cpu {
 		default:
 			System.out.println("OOPSIE WOOPSIE!! A PROBLEM OCCURED" + System.lineSeparator()
 					+ "Please report the problem @ " + About.EMAIL + System.lineSeparator()
-					+ "The code monkeys at our headquarters will work VEWY HAWD to fix this!");	
+					+ "The code monkeys at our headquarters will work VEWY HAWD to fix this!");
 		}
 	}
 
 	/**
 	 * Appends an instruction at the end of the instructions executable memory.
 	 * 
-	 * @param instruction Appends the instruction at the end of the Cpu's executable memory space.
+	 * @param instruction
+	 *            Appends the instruction at the end of the Cpu's executable memory
+	 *            space.
 	 */
 	public void addInstruction(Instruction instruction) {
 		this.instructions.add(instruction);
@@ -307,7 +330,8 @@ public class Cpu {
 	 * Returns a reference to a Cpu's register. Useful for debugging purposes by
 	 * ArmSimulator and Interpretor.
 	 * 
-	 * @param i Register id
+	 * @param i
+	 *            Register id
 	 */
 	public Register getRegisters(int i) {
 		if (i < 0 || i > 15) {
@@ -344,14 +368,27 @@ public class Cpu {
 		return labelMap;
 	}
 
-	
 	/**
 	 * Returns a reference to the Ram.
 	 */
 	public Ram getRam() {
 		return ram;
 	}
+	
+	/**
+	 * Returns if the processor was interrupted by the SWI call #80.
+	 */
+	public boolean isInterrupted() {
+		return this.interrupt;
+	}
 
+	/**
+	 * Returns if the processor was interrupted by a breakpoint / the SWI call #81.
+	 */
+	public boolean isBreakpoint() {
+		return this.breakpoint;
+	}
+	
 	/**
 	 * Returns the number of instructions stored in the Cpu's executable memory.
 	 */
@@ -371,11 +408,11 @@ public class Cpu {
 		public void updateFlags(long value) {
 			Cpu.this.cpsr.reset();
 			if (value < 0) {
-			    Cpu.this.cpsr.setN(true);
+				Cpu.this.cpsr.setN(true);
 			} else if (value == 0) {
-			    Cpu.this.cpsr.setZ(true);
+				Cpu.this.cpsr.setZ(true);
 			}
-		 }
+		}
 
 		/**
 		 * ADC - Add with Carry
@@ -486,7 +523,7 @@ public class Cpu {
 		public void cmn(Register r1, Operand2 op) {
 			long value = (long) r1.getValue() + op.getValue();
 			updateFlags(value);
-			
+
 			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
 				Cpu.this.cpsr.setV(true);
 			}
@@ -509,7 +546,7 @@ public class Cpu {
 		public void cmp(Register r1, Operand2 op) {
 			long value = (long) r1.getValue() - op.getValue();
 			updateFlags(value);
-			
+
 			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
 				Cpu.this.cpsr.setV(true);
 			}
@@ -650,8 +687,8 @@ public class Cpu {
 		 *            Source Register
 		 */
 		public void sdiv(Register r1, Register r2, Register r3) {
-			if(r3.getValue() != 0) {
-				r1.setValue(r2.getValue()/r3.getValue());	
+			if (r3.getValue() != 0) {
+				r1.setValue(r2.getValue() / r3.getValue());
 			}
 		}
 
@@ -714,7 +751,7 @@ public class Cpu {
 			r1.setValue(r2.getValue() - op.getValue());
 		}
 
-		//TODO (NOT DONE!)
+		// TODO (NOT DONE!)
 		/**
 		 * SWP - Swap
 		 * 
@@ -731,9 +768,8 @@ public class Cpu {
 		public void swp(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
 			try {
 				r1.setValue(Cpu.this.ram.getValue(new Address(op.getValue())));
-				Cpu.this.ram.setValue(new Address(op.getValue()),(r2.getValue()));
-			}
-			catch (InvalidMemoryAddressException e) {
+				Cpu.this.ram.setValue(new Address(op.getValue()), (r2.getValue()));
+			} catch (InvalidMemoryAddressException e) {
 				e.printStackTrace();
 			}
 		}
@@ -794,12 +830,10 @@ public class Cpu {
 		 *            Source Register
 		 */
 		public void udiv(Register r1, Register r2, Register r3) {
-			if(r3.getValue() != 0) {
-				r1.setValue(Integer.divideUnsigned(r2.getValue(), r3.getValue()));	
-			}	
+			if (r3.getValue() != 0) {
+				r1.setValue(Integer.divideUnsigned(r2.getValue(), r3.getValue()));
+			}
 		}
 	}
-	
-	
-	
+
 }
