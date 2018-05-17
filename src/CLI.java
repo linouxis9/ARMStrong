@@ -112,7 +112,12 @@ public class CLI {
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Run Step", () -> {
-	    		this.simulator.runStep();
+	    		try {
+	    			this.simulator.runStep();
+	    		}
+	    		catch (Exception e) {
+	    			System.out.println("[INFO] No more instructions to run");
+	    		}
 	    		this.updateGUI();
 	    	}));
 	    	
@@ -148,6 +153,7 @@ public class CLI {
 	    	    memory.put(key, value);
 	    	});
 	    	this.updateMemory();
+	    	
 	    	Panel bottomPanel = new Panel();
 	    	bodyPanel.addComponent(bottomPanel.withBorder(Borders.singleLine()));
 	    	bottomPanel.addComponent(new Button("⇡ Lo", () -> {
@@ -161,12 +167,12 @@ public class CLI {
 	    		this.memoryIndex++;
 	    		this.updateMemory();
 	    	}));
+	    	
 	    	this.console = new TextBox(new TerminalSize(size.getColumns()/2,4));
 	    	this.console.setReadOnly(true);
 	    	this.console.setText(About.info());
 	    	this.console.addLine("");
 			console.setCaretWarp(true);
-
 	    	centerPanel.addComponent(this.console.withBorder(Borders.singleLine("Console")));
 	    	OutputStream consoleOut = new OutputStream() {
 				public void write(int b) {
@@ -210,6 +216,7 @@ public class CLI {
     	this.updateMemory();
     	this.updateRegisters();
     	this.console.addLine("---");
+    	this.console.addLine("");
     }
     
 }
