@@ -123,8 +123,9 @@ public class ArmSimulator {
 	 * @throws InvalidRegisterException
 	 * @throws InvalidLabelException
 	 * @throws UnknownLabelException
+	 * @throws InvalidDirectiveException 
 	 */
-	public void setProgramString(String programAsString) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException, InvalidLabelException, UnknownLabelException{
+	public void setProgramString(String programAsString) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException, InvalidLabelException, UnknownLabelException, InvalidDirectiveException{
 		this.resetRun();
 		this.program.setNewProgram(programAsString);
 		this.interpretor.parseProgram();

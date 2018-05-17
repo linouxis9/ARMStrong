@@ -120,7 +120,6 @@ public class Preprocessor {
 					throw new UnknownLabelException(line, label);
 				}
 				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + Integer.toString(this.cpu.getLabelMap().get(label) - this.cpu.instructionsLen() * 4-4)));
-				System.out.println(tokens);
 			}
 		}
 		
