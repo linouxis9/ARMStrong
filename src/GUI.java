@@ -8,10 +8,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import simulator.*;
 
@@ -42,7 +46,9 @@ public class GUI extends Application {
 	private GUIMenuBar theGUIMenuBar;
 	private GUIMemoryView theGUIMemoryView;
 	private GUIRegisterView theGUIRegisterView;
-
+	
+	private String lastFilePath = null;
+	
 	public void startGUI() {
 		launch(null);
 	}
@@ -80,7 +86,7 @@ public class GUI extends Application {
 
 		stage.show(); //to be sure the scene.lookup() works properly //////////////////////////////////////////////////////////////////////
 
-
+	
 
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
@@ -140,9 +146,26 @@ public class GUI extends Application {
 		theGUIMenuBar.getOpenMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				FileChooser fileChooser = new FileChooser();
+				FileChooser fileChooser = null;
+				if(lastFilePath != null) {
+					fileChooser = new FileChooser();
+					fileChooser.setInitialDirectory(new File(lastFilePath));
+				}
+				else {
+					fileChooser = new FileChooser();
+				}
+
+				fileChooser.setInitialFileName("test");
 				fileChooser.setTitle("Open a source File");
+				fileChooser.getExtensionFilters().addAll(
+			         new ExtensionFilter("#@rm Files", "*.S")
+			    );
+				
+
 				String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+
+				lastFilePath = path;
+				
 				if(path != null) {
 					try {
 						codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
@@ -158,6 +181,9 @@ public class GUI extends Application {
 			public void handle(ActionEvent actionEvent) {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Save assembly program");
+				fileChooser.getExtensionFilters().addAll(
+				         new ExtensionFilter("#@rm Files", "*.S")
+				);
 				File chosenFile = fileChooser.showSaveDialog(stage);
 				saveFile(codingTextArea.getText(), chosenFile);
 
@@ -173,6 +199,9 @@ public class GUI extends Application {
 				{
 					FileChooser fileChooser = new FileChooser();
 					fileChooser.setTitle("Save assembly program");
+					fileChooser.getExtensionFilters().addAll(
+					         new ExtensionFilter("#@rm Files", "*.S")
+					);
 					File chosenFile = fileChooser.showSaveDialog(stage);
 					saveFile(codingTextArea.getText(), chosenFile);
 				}
@@ -181,6 +210,46 @@ public class GUI extends Application {
 			}
 		});
 
+		// Several keyboard shortcut
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
+            @Override
+            public void handle(KeyEvent ke){
+            	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+            	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
+            	final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+            	final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+            	final KeyCombination f5 = new KeyCodeCombination(KeyCode.F5);
+            	final KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
+            	final KeyCombination ctrlE = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+            	
+            	if (ctrlS.match(ke)) { 
+            		theGUIMenuBar.getSaveMenuItem().fire();
+            	}
+            	if (ctrlShiftS.match(ke)) { 
+            		theGUIMenuBar.getSaveAsMenuItem().fire();
+            	}
+            	if (ctrlO.match(ke)) { 
+            		theGUIMenuBar.getOpenMenuItem().fire();
+            	}
+            	if (ctrlN.match(ke)) { 
+            		theGUIMenuBar.getNewMenuItem().fire();
+            	}
+            	if (f5.match(ke)) { 
+            		theGUIMenuBar.getRunMenuItem().fire();
+            	}
+            	if (ctrlE.match(ke)) { 
+            		if(executionMode) {
+            			theGUIMenuBar.getExitExecutionModeMenuItem().fire();
+            		}
+            		else {
+            			theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
+            		}
+            	}
+            	if (f11.match(ke)) { 
+            		theGUIMenuBar.getRunSingleMenuItem().fire();
+            	}
+            }
+		});
 
 		//THE CONSOLE OUTPUT
 
@@ -229,4 +298,6 @@ public class GUI extends Application {
 			}
 		}
 	}
+	
+
 }
