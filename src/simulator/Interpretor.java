@@ -1,7 +1,9 @@
 package simulator;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 public class Interpretor {
 
@@ -22,6 +24,8 @@ public class Interpretor {
 	 */
 	private int line;
 
+	private final Preprocessor preprocessor;
+	
 	/**
 	 * Returns a fully initialized Interpretor able to convert a Tokenized's
 	 * representation of a program into instructions.
@@ -34,6 +38,7 @@ public class Interpretor {
 	 */
 	public Interpretor(Cpu cpu, Program program) {
 		this.program = program;
+		this.preprocessor = new Preprocessor(cpu);
 		this.cpu = cpu;
 		this.line = 0;
 	}
@@ -51,10 +56,19 @@ public class Interpretor {
 	 */
 	public void parseProgram() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException,
 			InvalidLabelException, UnknownLabelException {
+		List<List<Token>> lines = new ArrayList<List<Token>>();
+		
 		while (this.program.hasNext()) {
-			this.line++;
-			List<Token> tokens = this.program.next();
-			this.cpu.addInstruction(this.parse(tokens));
+			lines.add(this.program.next());
+		}
+		
+		this.preprocessor.preProcessPass1(lines);
+		
+		for (List<Token> tokens : lines) {
+			PreprocessorMessage message = this.preprocessor.preProcessPass2(tokens, line);
+			if (message == PreprocessorMessage.VALIDINSTRUCTION) {
+				this.cpu.addInstruction(this.parse(tokens));
+			}
 		}
 	}
 
@@ -70,36 +84,13 @@ public class Interpretor {
 	 *            The Tokenized's representation of an instruction.
 	 * @return An instance of the Instruction class representing the line of
 	 *         assembly.
-	 * @throws InvalidSyntaxException
-	 * @throws InvalidOperationException
-	 * @throws InvalidRegisterException
-	 * @throws InvalidLabelException
-	 * @throws UnknownLabelException
 	 */
-	private Instruction parse(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException,
-			InvalidRegisterException, InvalidLabelException, UnknownLabelException {
-		Preprocessor.preprocess(tokens, line);
+	private Instruction parse(List<Token> tokens) {
+		
 		ConditionCode cc = ConditionCode.AL;
 		HashSet<Flag> flags = new HashSet<Flag>();
-		int i = 0;
-		int b = 0;
-		
-		if (tokens.get(b).getTokenType() == TokenType.LABEL) {
-			String label = tokens.get(b).getRawLabel();
-			if (this.cpu.getLabelMap().containsKey(label)) {
-				throw new InvalidLabelException(line, label);
-			}
-			this.cpu.getLabelMap().put(label, this.cpu.instructionsLen() * 4);
-			b++;
-		}
-
-		if (tokens.get(tokens.size() - 1).getTokenType() == TokenType.IDENTIFIER) {
-			String label = tokens.get(tokens.size() - 1).getRawIdentifier();
-			if (!this.cpu.getLabelMap().containsKey(label)) {
-				throw new UnknownLabelException(line, label);
-			}
-		}
-		i = b + 1;
+		int i = 1;
+	
 		while (tokens.get(i).getTokenType() == TokenType.FLAG) {
 			switch (tokens.get(i).getRawFlag()) {
 			case 'b':
@@ -167,7 +158,7 @@ public class Interpretor {
 			i++;
 		}
 
-		switch (tokens.get(b).getRawOperation()) {
+		switch (tokens.get(0).getRawOperation()) {
 		case "adc":
 			return new Instruction(Operation.ADC, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
@@ -266,8 +257,6 @@ public class Interpretor {
 			return new ImmediateValue(ope2.getRawImmediateValue());
 		case OFFSET:
 			return toRegister(ope2);
-		case IDENTIFIER:
-			return new ImmediateValue(this.cpu.getLabelMap().get(ope2.getRawIdentifier()) - this.cpu.instructionsLen() * 4);
 		default:
 			throw new RuntimeException();
 		}

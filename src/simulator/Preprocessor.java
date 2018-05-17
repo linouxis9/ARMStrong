@@ -14,7 +14,7 @@ public class Preprocessor {
 	 * an Operand2.
 	 */
 	private static final Set<String> RROP2 = new HashSet<>(
-			Arrays.asList("adc", "add", "and", "bic", "eor", "sub", "mul", "orr", "sdiv", "udiv" ));
+			Arrays.asList("adc", "add", "and", "bic", "eor", "sub", "mul", "orr", "sdiv", "udiv"));
 
 	/**
 	 * Small Set containing the instructions that takes as input only one Operand2.
@@ -24,8 +24,7 @@ public class Preprocessor {
 	 * Small Set containing the instructions that takes as input one Register and
 	 * one Operand2.
 	 */
-	private static final Set<String> ROP2 = new HashSet<>(
-			Arrays.asList("cmp", "cmn", "tst", "teq", "mov", "mvn"));
+	private static final Set<String> ROP2 = new HashSet<>(Arrays.asList("cmp", "cmn", "tst", "teq", "mov", "mvn"));
 
 	/**
 	 * Small Set containing the special instructions that takes as input one
@@ -39,67 +38,90 @@ public class Preprocessor {
 	 */
 	private static final Set<String> BOP2 = new HashSet<>(Arrays.asList("b", "bl"));
 
-	/**
-	 * This static method converts Syntactic Sugar into their correct counterpart.
-	 * It then calls Preprocessor.checkInstruction(tokens,0);
-	 * Why is that a static method? The simulator package intends to be a library providing an ARM
-	 * simulator but also some encapsulatable ARM tools easy to integrate in others java programs
-	 * like for instance here, for manipulating a List of lexed Tokens.
-	 * The preprocessing is explicitly done before checking the syntax so we can also check the syntax of the expanded form of the Syntactic Sugar.
-	 *
-	 * @param tokens The Tokenized's representation of an instruction to handle.
-	 * @throws InvalidSyntaxException
-	 * @throws InvalidOperationException
-	 * @throws InvalidRegisterException
-	 */
-	public static void preprocess(List<Token> tokens) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
-		Preprocessor.preprocess(tokens, 0);
+	private final Cpu cpu;
+
+	public Preprocessor(Cpu cpu) {
+		this.cpu = cpu;
+	}
+
+	public void preProcessPass1(List<List<Token>> lines) throws InvalidLabelException {
+		int line = 0;
+		int instructions = 0;
+			for (List<Token> tokens : lines) {
+				line++;
+				instructions++;
+				if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
+					switch (tokens.get(0).getRawDirective()) {
+					case "breakpoint":
+						tokens.clear();
+						tokens.add(new Token(TokenType.OPERATION, "swi"));
+						tokens.add(new Token(TokenType.HASH, "#80"));
+					}
+					lines.remove(lines.indexOf(tokens));
+					instructions--;
+				}
+				
+				if (tokens.get(0).getTokenType() == TokenType.LABEL) {
+					String label = tokens.remove(0).getRawLabel();
+					if (this.cpu.getLabelMap().containsKey(label)) {
+						throw new InvalidLabelException(line, label);
+					}
+					this.cpu.getLabelMap().put(label, instructions * 4);
+				}
+				
+				for (Token token : tokens) {
+					if (token.getTokenType() == TokenType.HASHEDASCII) {
+						tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getRawAsciiValue()));
+					}
+				}
+				if (tokens.get(0).getTokenType() == TokenType.COMMENT || tokens.isEmpty()) {
+					lines.remove(lines.indexOf(tokens));
+					instructions--;
+				}
+			}
 	}
 	
 	/**
-	 * This static method converts Syntactic Sugar into their correct counterpart.
+	 * This method converts Syntactic Sugar into their correct counterpart.
 	 * It then calls Preprocessor.checkInstruction(tokens line);
-	 * Why is that a static method? The simulator package intends to be a library providing an ARM
-	 * simulator but also some encapsulatable ARM tools easy to integrate in others java programs
-	 * like for instance here, for manipulating a List of lexed Tokens.
-	 * The preprocessing is explicitly done before checking the syntax so we can also check the syntax of the expanded form of the Syntactic Sugar.
 	 *
-	 * @param tokens The Tokenized's representation of an instruction to handle.
-	 * @param line The line to show in the thrown errors.
+	 * @param tokens
+	 *            The Tokenized's representation of an instruction to handle.
+	 * @param line
+	 *            The line to show in the thrown errors.
 	 * @throws InvalidSyntaxException
 	 * @throws InvalidOperationException
 	 * @throws InvalidRegisterException
+	 * @throws UnknownLabelException
 	 */
-	public static void preprocess(List<Token> tokens, int line)
-			throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException {
-
+	public PreprocessorMessage preProcessPass2(List<Token> tokens, int line) throws InvalidSyntaxException,
+			InvalidOperationException, InvalidRegisterException, UnknownLabelException {
+		
 		for (Token token : tokens) {
-			if (token.getTokenType() == TokenType.HASHEDASCII) {
-				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getRawAsciiValue()));
+			if (token.getTokenType() == TokenType.IDENTIFIER) {
+				String label = token.getRawIdentifier();
+				if (!this.cpu.getLabelMap().containsKey(label)) {
+					throw new UnknownLabelException(line, label);
+				}
+				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + Integer.toString(this.cpu.getLabelMap().get(label) - this.cpu.instructionsLen() * 4-4)));
 			}
 		}
-
-		if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
-			switch(tokens.get(0).getRawDirective()) {
-			case "breakpoint":
-				tokens.clear();
-				tokens.add(new Token(TokenType.OPERATION, "swi"));
-				tokens.add(new Token(TokenType.HASH, "#80"));
-			}
-		} else {
-			Preprocessor.checkInstruction(tokens, line);
-		}
+		
+		Preprocessor.checkInstruction(tokens, line);
+		return PreprocessorMessage.VALIDINSTRUCTION;
 	}
 
-
 	/**
-	 * This static method checks the Instruction's Tokenized representation. 
-	 * Why is that a static method? The simulator package intends to be a library providing an ARM
-	 * simulator but also some ARM tools easy to integrate in others java programs
-	 * like for instance here, for checking the syntax of a List of lexed Tokens.
+	 * This static method checks the Instruction's Tokenized representation. Why is
+	 * that a static method? The simulator package intends to be a library providing
+	 * an ARM simulator but also some ARM tools easy to integrate in others java
+	 * programs like for instance here, for checking the syntax of a List of lexed
+	 * Tokens.
 	 * 
-	 * @param tokens The Tokenized's representation of an instruction to handle.
-	 * @param line The line to show in the thrown errors.
+	 * @param tokens
+	 *            The Tokenized's representation of an instruction to handle.
+	 * @param line
+	 *            The line to show in the thrown errors.
 	 * @throws InvalidSyntaxException
 	 * @throws InvalidOperationException
 	 * @throws InvalidRegisterException
@@ -109,9 +131,7 @@ public class Preprocessor {
 
 		try {
 			int i = 0;
-			if (tokens.get(i).getTokenType() == TokenType.LABEL) {
-				i++;
-			}
+
 			String op = tokens.get(i).getRawOperation();
 			if (tokens.get(i).getTokenType() != TokenType.OPERATION || !(Preprocessor.RROP2.contains(op)
 					|| Preprocessor.OOP2.contains(op) || Preprocessor.ROP2.contains(op)
@@ -126,7 +146,7 @@ public class Preprocessor {
 			if (tokens.get(i).getTokenType() == TokenType.CONDITIONCODE) {
 				i++;
 			}
-			
+
 			for (Token token : tokens) {
 				if (token.getTokenType() == TokenType.REGISTER) {
 					int registerId = token.getRawRegister();
@@ -182,7 +202,8 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkRROP2(List<Token> tokens, int i) {
-		return (tokens.get(i).getTokenType() != TokenType.REGISTER) || (tokens.get(i + 1).getTokenType() != TokenType.COMMA)
+		return (tokens.get(i).getTokenType() != TokenType.REGISTER)
+				|| (tokens.get(i + 1).getTokenType() != TokenType.COMMA)
 				|| (tokens.get(i + 2).getTokenType() != TokenType.REGISTER)
 				|| (tokens.get(i + 3).getTokenType() != TokenType.COMMA)
 				|| (tokens.get(i + 4).getTokenType() != TokenType.REGISTER
@@ -213,7 +234,8 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkROP2(List<Token> tokens, int i) {
-		return ((tokens.get(i).getTokenType() != TokenType.REGISTER) || (tokens.get(i + 1).getTokenType() != TokenType.COMMA)
+		return ((tokens.get(i).getTokenType() != TokenType.REGISTER)
+				|| (tokens.get(i + 1).getTokenType() != TokenType.COMMA)
 				|| (tokens.get(i + 2).getTokenType() != TokenType.REGISTER
 						&& tokens.get(i + 2).getTokenType() != TokenType.HASH));
 	}
@@ -256,6 +278,6 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkBOP2(List<Token> tokens, int i) {
-		return (tokens.get(i).getTokenType() != TokenType.IDENTIFIER);
+		return (tokens.get(i).getTokenType() != TokenType.HASH);
 	}
 }
