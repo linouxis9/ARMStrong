@@ -11,11 +11,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import simulator.*;
 
@@ -47,7 +51,9 @@ public class GUI extends Application {
 	private GUIMemoryView theGUIMemoryView;
 	private GUIRegisterView theGUIRegisterView;
 	
-	private String lastFilePath = null;
+	private String lastFilePath;
+
+	private List<Text> instructions;
 	
 	public void startGUI() {
 		launch(null);
@@ -57,7 +63,9 @@ public class GUI extends Application {
 	public void start(Stage stage) throws Exception {
 
 		theArmSimulator = new ArmSimulator();
-		programFilePath = null;
+		this.programFilePath = null;
+        this.lastFilePath = null;
+
 		this.executionMode = false;
 
 
@@ -136,6 +144,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent actionEvent) {
 				if (executionMode){
 					theArmSimulator.runStep();
+					highlightCurrentLine(theArmSimulator.getCurrentLine());
 					theGUIRegisterView.updateRegisters();
 					theGUIMemoryView.updateMemoryView();
 					stage.show();
@@ -146,13 +155,9 @@ public class GUI extends Application {
 		theGUIMenuBar.getOpenMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				FileChooser fileChooser = null;
+				FileChooser fileChooser = new FileChooser();
 				if(lastFilePath != null) {
-					fileChooser = new FileChooser();
-					fileChooser.setInitialDirectory(new File(lastFilePath));
-				}
-				else {
-					fileChooser = new FileChooser();
+					fileChooser.setInitialDirectory(new File (new File(lastFilePath).getParent()));
 				}
 
 				fileChooser.setInitialFileName("test");
@@ -160,16 +165,13 @@ public class GUI extends Application {
 				fileChooser.getExtensionFilters().addAll(
 			         new ExtensionFilter("#@rm Files", "*.S")
 			    );
-				
 
 				String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-
-				lastFilePath = path;
-				
 				if(path != null) {
 					try {
 						codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
 						programFilePath = new File(path);
+						lastFilePath = path;
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
@@ -195,18 +197,64 @@ public class GUI extends Application {
 				if (programFilePath != null){
 					saveFile(codingTextArea.getText(), programFilePath);
 				}
-				else
-				{
-					FileChooser fileChooser = new FileChooser();
-					fileChooser.setTitle("Save assembly program");
-					fileChooser.getExtensionFilters().addAll(
-					         new ExtensionFilter("#@rm Files", "*.S")
-					);
-					File chosenFile = fileChooser.showSaveDialog(stage);
-					saveFile(codingTextArea.getText(), chosenFile);
+				else {
+					theGUIMenuBar.getSaveAsMenuItem().fire();
 				}
+			}
+		});
 
+		theGUIMenuBar.getNewMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				Stage confirmBox = new Stage();
+				confirmBox.initModality(Modality.APPLICATION_MODAL);
+				confirmBox.initOwner(stage);
+				VBox dialogVbox = new VBox(20);
+				Label exitLabel = new Label("All unsaved work will be lost");
 
+				Button yesBtn = new Button("Yes");
+
+                 yesBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent arg0) {
+						confirmBox.close();
+						codingTextArea.setText("");
+						programFilePath = null;
+                    }
+                });
+                Button noBtn = new Button("No");
+
+                noBtn.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent arg0) {
+						confirmBox.close();
+					}
+                });
+
+				HBox hBox = new HBox();
+				hBox.getChildren().addAll(yesBtn, noBtn);
+				VBox vBox = new VBox();
+				vBox.getChildren().addAll(exitLabel, hBox);
+
+				confirmBox.setScene(new Scene(vBox));
+				confirmBox.show();
+			}
+		});
+
+		theGUIMenuBar.getHelpMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				final Stage helpPopup = new Stage();
+				helpPopup.initModality(Modality.APPLICATION_MODAL);
+				helpPopup.initOwner(stage);
+
+				VBox dialogVbox = new VBox(20);
+				dialogVbox.getChildren().add(new Text("This is very helpful help wow"));
+				Scene dialogScene = new Scene(dialogVbox, 300, 200);
+
+				helpPopup.setScene(dialogScene);
+				helpPopup.show();
 			}
 		});
 
@@ -271,7 +319,14 @@ public class GUI extends Application {
 
 	}
 
-	private void exitExecutionMode() {
+    private void highlightCurrentLine(int currentLine) {
+        for(int i=0; i<instructions.size(); i++){
+            instructions.get(i).setFill(Color.BLACK);
+        }
+        instructions.get(currentLine).setFill(Color.RED);
+	}
+
+    private void exitExecutionMode() {
 		this.executionMode = false;
 		codingTextArea.setEditable(true);
 		codingTextArea.setVisible(true);
@@ -283,7 +338,25 @@ public class GUI extends Application {
 		codingTextArea.setEditable(false);
 		codingTextArea.setVisible(false);
 		theGUIMenuBar.setExecMode();
-		executionModeTextFlow.getChildren().add(new Text(program));
+
+        executionModeTextFlow.getChildren().clear();
+
+		int startingPos=0;
+		int line = 0;
+		instructions = new ArrayList<Text>();
+		try {
+            for(line=0; true; line++){
+                instructions.add(new Text(line + "\t" +program.substring(startingPos, program.indexOf("\n", startingPos)+1)));
+                executionModeTextFlow.getChildren().add(instructions.get(line));
+                startingPos=program.indexOf("\n", startingPos) + 1;
+            }
+        }
+        catch (Exception e){
+		    //oulala https://www.e4developer.com/2018/05/13/how-to-write-horrible-java/ //TODO
+        }
+        line++;
+        instructions.add(new Text(line + "\t" +program.substring(startingPos, program.length())));
+        executionModeTextFlow.getChildren().add(instructions.get(line));
 	}
 
 	private void saveFile(String content, File theFile){
