@@ -6,6 +6,7 @@ import com.googlecode.lanterna.terminal.*;
 
 import javafx.scene.shape.Path;
 import simulator.About;
+import simulator.InvalidDirectiveException;
 import simulator.InvalidLabelException;
 import simulator.InvalidOperationException;
 import simulator.InvalidRegisterException;
@@ -100,7 +101,7 @@ public class CLI {
 	    		try {
 					this.simulator.setProgramString(this.textBox.getText());
 				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
-						| InvalidLabelException | UnknownLabelException e) {
+						| InvalidLabelException | UnknownLabelException | InvalidDirectiveException e) {
 					System.out.println(e);
 				}
 	    	}));
