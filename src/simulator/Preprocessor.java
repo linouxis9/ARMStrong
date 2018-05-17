@@ -3,7 +3,6 @@ package simulator;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 //TODO JAVADOOOC
@@ -72,10 +71,14 @@ public class Preprocessor {
 						throw new InvalidLabelException(line, label);
 					}
 					this.cpu.getLabelMap().put(label, instructions * 4);
-					
+
 					if (tokens.isEmpty()) {
 						instructions--;
 						continue;
+					}
+					
+					if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
+						this.cpu.getLabelMap().put(label, this.cpu.getPmsp());
 					}
 				}
 				
@@ -109,7 +112,7 @@ public class Preprocessor {
 			InvalidOperationException, InvalidRegisterException, UnknownLabelException {
 		
 		// We don't remove empty lines in Pass 1 or otherwise we can't accurately know the current line which is required to throw errors.
-		if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT) {
+		if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT || tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
 			return PreprocessorMessage.SKIP;
 		}
 		
@@ -120,6 +123,15 @@ public class Preprocessor {
 					throw new UnknownLabelException(line, label);
 				}
 				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + Integer.toString(this.cpu.getLabelMap().get(label) - this.cpu.instructionsLen() * 4-4)));
+			}
+			
+			if (token.getTokenType() == TokenType.DATAIDENTIFIER && tokens.get(0).getRawOperation().compareTo("ldr") == 0) {
+				String label = token.getRawDataIdentifier();
+				if (!this.cpu.getLabelMap().containsKey(label)) {
+					throw new UnknownLabelException(line, label);
+				}
+				tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + Integer.toString(this.cpu.getLabelMap().get(label))));
+				tokens.set(0, new Token(TokenType.OPERATION, "mov"));
 			}
 		}
 		
@@ -133,6 +145,12 @@ public class Preprocessor {
 			tokens.clear();
 			tokens.add(new Token(TokenType.OPERATION, "swi"));
 			tokens.add(new Token(TokenType.HASH, "#81"));
+			break;
+		case "asciz":
+			for (char chr : directive.getRawDirectiveData().toCharArray()) {
+				this.cpu.getRam().setByte(new Address(this.cpu.getPmsp()), (byte)chr);
+				this.cpu.incrementPmsp();
+			}
 			break;
 		default:
 			throw new InvalidDirectiveException(line,directive.getRawDirective());

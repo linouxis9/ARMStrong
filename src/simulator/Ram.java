@@ -40,9 +40,9 @@ public class Ram implements Memory {
 	 *            The address where we retrieve the byte
 	 * @return The byte corresponding stored at the specified address
 	 */
-	public byte getByte(Address myAddress) throws InvalidMemoryAddressException{
+	public byte getByte(Address myAddress) {
 		
-		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
+		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
 		
@@ -57,8 +57,8 @@ public class Ram implements Memory {
 	 * @param myByte
 	 *            The byte to set at the specified address
 	 */
-	public void setByte(Address myAddress, byte myByte) throws InvalidMemoryAddressException {
-
+	public void setByte(Address myAddress, byte myByte) {
+		
 		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
@@ -73,9 +73,9 @@ public class Ram implements Memory {
 	 *            The address where to get the half-word
 	 * @return The half-word stored at the specified address
 	 */
-	public short getHWord(Address myAddress) throws InvalidMemoryAddressException{
+	public short getHWord(Address myAddress) {
 		
-		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
+		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
 
@@ -91,9 +91,9 @@ public class Ram implements Memory {
 	 * @param myHWord
 	 *            The half-word to set in the memory
 	 */
-	public void setHWord(Address myAddress, short myHWord) throws InvalidMemoryAddressException {
-		
-		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
+	public void setHWord(Address myAddress, short myHWord) {
+
+		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
 		
@@ -114,13 +114,13 @@ public class Ram implements Memory {
 	 *		The address where to get the word
 	 * @return The word stored at the specified address
 	 */
-	public int getValue(Address myAddress) throws InvalidMemoryAddressException{
-		
-		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
+	public int getValue(Address myAddress) {
+
+		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
 
-		return (int) ((this.memory[myAddress.getAddress() + 3] & 0xFF)
+		return  ((this.memory[myAddress.getAddress() + 3] & 0xFF)
 				| (this.memory[myAddress.getAddress() + 2] & 0xFF) << 8
 				| (this.memory[myAddress.getAddress() + 1] & 0xFF) << 16
 				| (this.memory[myAddress.getAddress()] & 0xFF) << 24);
@@ -134,9 +134,9 @@ public class Ram implements Memory {
 	 * @param myWord
 	 *            The word to set in the memory
 	 */
-	public void setValue(Address myAddress, int myWord) throws InvalidMemoryAddressException{
-		
-		if((myAddress.getAddress()<0)||(myAddress.getAddress()>=memory.length)){
+	public void setValue(Address myAddress, int myWord) {
+
+		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= memory.length)) {
 			throw new InvalidMemoryAddressException();
 		}
 		

@@ -1,7 +1,5 @@
 package simulator;
 
-import java.util.List;
-
 /**
  * Each Token contains a group of characters logically bound together, easily
  * parsable and understandable by a parser.
@@ -25,70 +23,92 @@ public class Token {
 	
 	public int getRawOffset() {
 		if (this.type != TokenType.INDEXEDOFFSET && this.type != TokenType.OFFSET) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}
 		return Integer.parseInt(this.value.substring(2, this.value.length() - 1));
 	}
 
 	public int getRawImmediateValue() {
 		if (this.type != TokenType.HASH) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}
 		return Integer.parseInt(this.value.substring(1));
 	}
 	
 	public int getRawAsciiValue() {
 		if (this.type != TokenType.HASHEDASCII) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}
 		return this.value.substring(2, this.value.length() - 1).getBytes()[0];
 	}
 
 	public int getRawRegister() {
 		if (this.type != TokenType.REGISTER) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}
 		return Integer.parseInt(this.value.substring(1));
 	}
 	
 	public String getRawLabel() {
 		if (this.type != TokenType.LABEL) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}		
 		return this.value.substring(0, this.value.length() - 1);
 	}
-	
+
 	public String getRawDirective() {
 		if (this.type != TokenType.DIRECTIVE) {
-			new RuntimeException();
-		}		
-		return this.value.substring(1);
+			throw new RuntimeException();
+		}
+		if (this.value.indexOf(' ') == -1) {
+			return this.value.substring(1);
+		} else {
+			return this.value.substring(1,this.value.indexOf(' '));
+		}
 	}
-
+	
+	public String getRawDirectiveData() {
+		if (this.type != TokenType.DIRECTIVE) {
+			throw new RuntimeException();
+		}
+		if (this.value.indexOf(' ') == -1) {
+			return "";
+		} else {
+			return this.value.substring(this.value.indexOf(' ')+1,this.value.length());
+		}
+	}
+	
 	public String getRawOperation() {
 		if (this.type != TokenType.OPERATION) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}		
 		return this.value;
 	}
 	
 	public String getRawIdentifier() {
 		if (this.type != TokenType.IDENTIFIER) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}		
 		return this.value;
 	}
 
+	public String getRawDataIdentifier() {
+		if (this.type != TokenType.DATAIDENTIFIER) {
+			throw new RuntimeException();
+		}		
+		return this.value.substring(1);
+	}
+	
 	public char getRawFlag() {
 		if (this.type != TokenType.FLAG) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}		
 		return this.value.toCharArray()[0];
 	}
 
 	public String getRawConditionCode() {
 		if (this.type != TokenType.CONDITIONCODE) {
-			new RuntimeException();
+			throw new RuntimeException();
 		}		
 		return this.value;
 	}

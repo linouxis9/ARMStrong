@@ -13,6 +13,7 @@ public class InvalidLabelException extends AssemblyException {
 		this.label = label;
 	}
 
+	@Override
 	public String toString() {
 		return "INVALID LABEL: " + label + " @ line " + line + " already exists.";
 	}

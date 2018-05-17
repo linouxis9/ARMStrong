@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * ________/\\\\\\\\\__/\\\\\\\\\\\\\____/\\\________/\\\_
- * _____/\\\////////__\/\\\/////////\\\_\/\\\_______\/\\\_
- * ___/\\\/___________\/\\\_______\/\\\_\/\\\_______\/\\\_
- * __/\\\_____________\/\\\\\\\\\\\\\/__\/\\\_______\/\\\_
- * _\/\\\_____________\/\\\/////////____\/\\\_______\/\\\_
- * _\//\\\____________\/\\\_____________\/\\\_______\/\\\_
- * __\///\\\__________\/\\\_____________\//\\\______/\\\__
- * ____\////\\\\\\\\\_\/\\\______________\///\\\\\\\\\/___
- * _______\/////////__\///_________________\/////////_____
+/*
+- ________/\\\\\\\\\__/\\\\\\\\\\\\\____/\\\________/\\\_        
+-  _____/\\\////////__\/\\\/////////\\\_\/\\\_______\/\\\_       
+-   ___/\\\/___________\/\\\_______\/\\\_\/\\\_______\/\\\_      
+-    __/\\\_____________\/\\\\\\\\\\\\\/__\/\\\_______\/\\\_     
+-     _\/\\\_____________\/\\\/////////____\/\\\_______\/\\\_    
+-      _\//\\\____________\/\\\_____________\/\\\_______\/\\\_   
+-       __\///\\\__________\/\\\_____________\//\\\______/\\\__  
+-        ____\////\\\\\\\\\_\/\\\______________\///\\\\\\\\\/___ 
+-         _______\/////////__\///_________________\/////////_____
  */
 public class Cpu {
 
@@ -71,6 +71,13 @@ public class Cpu {
 	private boolean breakpoint;
 
 	/**
+	 * Poor's man stack pointer
+	 */
+	private int pmsp;
+	
+	private static final int DEFAULT_PMSP = 900000;
+	
+	/**
 	 * The Collection containing the instructions to execute by the processor.
 	 */
 	private final List<Instruction> instructions;
@@ -89,7 +96,6 @@ public class Cpu {
 	 */
 	private final Map<Integer, Callable> interruptsVector;
 
-	// TODO Refactor that to use a Label Class?
 	/**
 	 * Stores the addresses pointed by the assembly labels.
 	 */
@@ -130,6 +136,7 @@ public class Cpu {
 		this.interruptsVector.get(100).run();
 		this.interrupt = false;
 		this.breakpoint = false;
+		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap = new HashMap<>();
 	}
 
@@ -148,6 +155,7 @@ public class Cpu {
 		this.instructions.clear();
 		this.interrupt = false;
 		this.breakpoint = false;
+		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap.clear();
 	}
 
@@ -163,8 +171,7 @@ public class Cpu {
 			while (!this.interrupt && !this.breakpoint) {
 				this.executeStep();
 			}
-		} catch (Exception e) {
-
+		} catch (IndexOutOfBoundsException e) {
 		}
 	}
 
@@ -202,6 +209,7 @@ public class Cpu {
 			} catch (InvalidMemoryAddressException e) {
 
 			}
+			System.out.println("");
 		});
 
 		this.interruptsVector.put(1, () -> {
@@ -389,6 +397,13 @@ public class Cpu {
 		return this.breakpoint;
 	}
 	
+	public int getPmsp() {
+		return this.pmsp;
+	}
+
+	public void incrementPmsp() {
+		this.pmsp++;
+	}
 	/**
 	 * Returns the number of instructions stored in the Cpu's executable memory.
 	 */

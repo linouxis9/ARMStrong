@@ -10,6 +10,7 @@ public class InvalidOperationException extends AssemblyException {
 		this.op = op;
 	}
 
+	@Override
 	public String toString() {
 		return "INVALID OPERATION: "+ op + " @ line " + line + " is unknown.";
 	}

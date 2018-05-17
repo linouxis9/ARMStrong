@@ -3,7 +3,6 @@ package simulator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 public class Interpretor {
 
@@ -90,7 +89,7 @@ public class Interpretor {
 	private Instruction parse(List<Token> tokens) {
 		
 		ConditionCode cc = ConditionCode.AL;
-		HashSet<Flag> flags = new HashSet<Flag>();
+		HashSet<Flag> flags = new HashSet<>();
 		int i = 1;
 	
 		while (tokens.get(i).getTokenType() == TokenType.FLAG) {
@@ -219,10 +218,10 @@ public class Interpretor {
 		case "udiv":
 			return new Instruction(Operation.SDIV, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					toRegister(tokens.get(i + 4)), flags, cc);
+		default:
+			throw new RuntimeException();
 
 		}
-
-		throw new RuntimeException();
 	}
 	/**
 	 * Converts a Token representing a Register into a reference pointing to this very same register.

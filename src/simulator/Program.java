@@ -33,7 +33,7 @@ public class Program implements Iterator<List<Token>> {
 	 * Create an empty new program.
 	 */
 	public Program() {
-		this.setNewProgram("");
+		this("");
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class Program implements Iterator<List<Token>> {
 	 * 
 	 * @return The tokenized's representation of an assembly line.
 	 */
-	public List<Token> next() throws NoSuchElementException {
+	public List<Token> next() {
 		if (!this.hasNext()) {
 			throw new NoSuchElementException();
 		}
@@ -91,7 +91,7 @@ public class Program implements Iterator<List<Token>> {
 	 * @return an easily parsable List of Token.
 	 */
 	public static List<Token> lexer(String line) {
-		ArrayList<Token> list = new ArrayList<>();
+		List<Token> list = new ArrayList<>();
 
 		Matcher matcher = Program.getPattern().matcher(line);
 
