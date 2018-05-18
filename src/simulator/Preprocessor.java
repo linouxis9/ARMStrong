@@ -53,14 +53,12 @@ public class Preprocessor {
 	 */
 	public void preProcessPass1(List<List<Token>> lines) throws InvalidLabelException, InvalidDirectiveException {
 		int line = 0;
-		int instructions = 0;		
+		int instructions = 1;		
 			for (List<Token> tokens : lines) {
 				line++;				
-				instructions++;
 				
 				// We don't remove empty lines in Pass 1 or otherwise we can't accurately know the current line which is required to throw errors.
 				if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT) {
-					instructions--;
 					continue;
 				}
 				
@@ -73,7 +71,6 @@ public class Preprocessor {
 					this.cpu.getLabelMap().put(label, instructions * 4);
 
 					if (tokens.isEmpty()) {
-						instructions--;
 						continue;
 					}
 					
@@ -84,7 +81,7 @@ public class Preprocessor {
 				
 				if (tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
 					this.handleDirective(tokens,tokens.get(0),line);
-					instructions--;
+					continue;
 				}
 				
 				for (Token token : tokens) {
@@ -92,6 +89,8 @@ public class Preprocessor {
 						tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getRawAsciiValue()));
 					}
 				}
+				
+				instructions++;
 			}
 	}
 	
@@ -110,7 +109,7 @@ public class Preprocessor {
 	 */
 	public PreprocessorMessage preProcessPass2(List<Token> tokens, int line) throws InvalidSyntaxException,
 			InvalidOperationException, InvalidRegisterException, UnknownLabelException {
-		
+		System.out.println(tokens);
 		// We don't remove empty lines in Pass 1 or otherwise we can't accurately know the current line which is required to throw errors.
 		if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT || tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
 			return PreprocessorMessage.SKIP;
@@ -142,7 +141,7 @@ public class Preprocessor {
 	public void handleDirective(List<Token> tokens, Token directive, int line) throws InvalidDirectiveException {
 		switch (directive.getRawDirective()) {
 		case "breakpoint":
-			tokens.clear();
+			tokens.remove(directive);
 			tokens.add(new Token(TokenType.OPERATION, "swi"));
 			tokens.add(new Token(TokenType.HASH, "#81"));
 			break;

@@ -167,11 +167,10 @@ public class Cpu {
 	public void execute() {
 		this.interrupt = false;
 		this.breakpoint = false;
-		try {
-			while (!this.interrupt && !this.breakpoint) {
-				this.executeStep();
-			}
-		} catch (IndexOutOfBoundsException e) {
+		boolean sucessful = true;
+		
+		while (!this.interrupt && !this.breakpoint && sucessful) {
+			sucessful = this.executeStep();
 		}
 	}
 
@@ -223,19 +222,27 @@ public class Cpu {
 
 	/**
 	 * Executes the next instruction pointed by the Program Counter (pc).
+	 * 
+	 * @return True if the instruction was successful, else False if no others instructions are available at this Program Counter offset.
 	 */
-	public void executeStep() {
-		int offset = this.getPc().getValue();
-		offset = ((int) Math.ceil((double) offset / 4));
-		Instruction i = instructions.get(offset);
-		this.pc.setValue(this.pc.getValue() + 4);
-
-		if (this.cpsr.getConditionCodeStatus(i.getCc())) {
-			System.out.println("Exec.: " + i);
-			this.runInstruction(i);
-		} else {
-			System.out.println("Skip.: " + i + " (Condition not meet)");
+	public boolean executeStep() {
+		try {
+			int offset = this.getPc().getValue();
+			offset = ((int) Math.ceil((double) offset / 4));
+			Instruction i = instructions.get(offset);
+			this.pc.setValue(this.pc.getValue() + 4);
+	
+			if (this.cpsr.getConditionCodeStatus(i.getCc())) {
+				System.out.println("Exec.: " + i);
+				this.runInstruction(i);
+			} else {
+				System.out.println("Skip.: " + i + " (Condition not meet)");
+			}
 		}
+		catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+		return true;
 	}
 
 	/**
