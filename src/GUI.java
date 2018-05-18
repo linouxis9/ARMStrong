@@ -53,7 +53,7 @@ public class GUI extends Application {
 	
 	private String lastFilePath;
 
-	private List<Text> instructions;
+	private List<Text> instructionsAsText;
 	
 	public void startGUI() {
 		launch(null);
@@ -117,7 +117,7 @@ public class GUI extends Application {
 					theArmSimulator.setProgramString(programString);
 					enterExecutionMode(programString);
 				} catch (Exception e1) {
-					e1.printStackTrace();
+					System.out.println(e1.toString());
 				}
 			}
 		});
@@ -144,11 +144,18 @@ public class GUI extends Application {
 			public void handle(ActionEvent actionEvent) {
 				if (executionMode){
 					theArmSimulator.runStep();
-					highlightCurrentLine(theArmSimulator.getCurrentLine());
+					highlightCurrentLine(theArmSimulator.getCurrentLine()-1);
 					theGUIRegisterView.updateRegisters();
 					theGUIMemoryView.updateMemoryView();
 					stage.show();
 				}
+			}
+		});
+
+		theGUIMenuBar.getReloadProgramMenuItem().setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
 			}
 		});
 
@@ -258,6 +265,13 @@ public class GUI extends Application {
 			}
 		});
 
+		theGUIMenuBar.getDocumentationMenuItem() .setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				documentation();
+			}
+		});
+
 		// Several keyboard shortcut
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
             @Override
@@ -320,10 +334,15 @@ public class GUI extends Application {
 	}
 
     private void highlightCurrentLine(int currentLine) {
-        for(int i=0; i<instructions.size(); i++){
-            instructions.get(i).setFill(Color.BLACK);
+        for(int i=0; i<instructionsAsText.size(); i++){
+			instructionsAsText.get(i).setFill(Color.BLACK);
         }
-        instructions.get(currentLine).setFill(Color.RED);
+		try{
+			instructionsAsText.get(currentLine).setFill(Color.RED);
+		}
+        catch (IndexOutOfBoundsException e){
+        	//the program is arrived at the end, the next line to color does not exist
+		}
 	}
 
     private void exitExecutionMode() {
@@ -341,9 +360,17 @@ public class GUI extends Application {
 
         executionModeTextFlow.getChildren().clear();
 
-		int startingPos=0;
-		int line = 0;
-		instructions = new ArrayList<Text>();
+		String[] instructionsAsStrings = program.split("\\r?\\n");
+		instructionsAsText = new ArrayList<Text>();
+
+		for(int line=0; line<instructionsAsStrings.length; line++){
+			instructionsAsText.add(new Text ((line+1) + "\t" + instructionsAsStrings[line] + '\n'));
+			executionModeTextFlow.getChildren().add(instructionsAsText.get(line));
+		}
+		highlightCurrentLine(0);
+		theGUIMemoryView.updateMemoryView();
+		theGUIRegisterView.updateRegisters();
+/*
 		try {
             for(line=0; true; line++){
                 instructions.add(new Text(line + "\t" +program.substring(startingPos, program.indexOf("\n", startingPos)+1)));
@@ -357,6 +384,7 @@ public class GUI extends Application {
         line++;
         instructions.add(new Text(line + "\t" +program.substring(startingPos, program.length())));
         executionModeTextFlow.getChildren().add(instructions.get(line));
+        */
 	}
 
 	private void saveFile(String content, File theFile){
@@ -371,6 +399,24 @@ public class GUI extends Application {
 			}
 		}
 	}
-	
 
+	private void documentation(){
+		Stage docWindow = new Stage();
+
+		docWindow.initModality(Modality.APPLICATION_MODAL);
+		docWindow.initOwner(stage);
+		docWindow.setTitle("Documentation");
+
+		Parent container;
+		Scene docScene;
+
+		try {
+			container = FXMLLoader.load(getClass().getResource("documentation.fxml"));
+			docScene = new Scene(container, 100, 100);
+			docWindow.setScene(docScene);
+			docWindow.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

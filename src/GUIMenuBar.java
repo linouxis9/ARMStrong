@@ -1,10 +1,8 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -29,6 +27,9 @@ public class GUIMenuBar {
     private MenuItem exitExecutionModeMenuItem;
     private MenuItem runMenuItem;
     private MenuItem runSingleMenuItem;
+    private MenuItem helpMenuItem;
+    private MenuItem documentationMenuItem;
+    private MenuItem reloadProgramMenuItem;
 
     public GUIMenuBar(MenuBar aMenuBar){
 
@@ -46,18 +47,22 @@ public class GUIMenuBar {
         saveMenuItem 	= new MenuItem("Save");
         saveAsMenuItem  = new MenuItem("Save as");
         exitMenuItem 	= new MenuItem("Exit");
+        helpMenuItem 	= new MenuItem("Help");
+
 
         enterExecutionModeMenuItem = new MenuItem("Enter in execution mode");
         exitExecutionModeMenuItem 	= new MenuItem("Exit the execution mode");
         runMenuItem 				= new MenuItem("Run");
         runSingleMenuItem 			= new MenuItem("Run a single instruction");
+        reloadProgramMenuItem       = new MenuItem("Reload Program");
+        documentationMenuItem       = new MenuItem("Documentation");
 
         theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
 
-        fileMenu.getItems().addAll(newMenuItem,openMenuItem,saveMenuItem, saveAsMenuItem, exitMenuItem);
+        fileMenu.getItems().addAll(newMenuItem,openMenuItem,saveMenuItem, saveAsMenuItem,new SeparatorMenuItem(), exitMenuItem);
         editMenu.getItems().addAll();
-        runMenu.getItems().addAll(enterExecutionModeMenuItem,exitExecutionModeMenuItem, runMenuItem, runSingleMenuItem);
-        helpMenu.getItems().addAll();
+        runMenu.getItems().addAll(enterExecutionModeMenuItem,exitExecutionModeMenuItem,new SeparatorMenuItem(), runMenuItem, runSingleMenuItem,new SeparatorMenuItem(), reloadProgramMenuItem);
+        helpMenu.getItems().addAll(helpMenuItem, documentationMenuItem);
 
         menusToDisableInExecMode.add(newMenuItem);
         menusToDisableInExecMode.add(openMenuItem);
@@ -68,10 +73,18 @@ public class GUIMenuBar {
         //Button runAllButton = (Button) scene.lookup("#"); //TODO add an id
         //Button runStepByStepButton = (Button) scene.lookup("#"); //TODO add an id
 
+        exitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
+
+
         exitExecMode();
 
     }
-
 
     public void setExecMode(){
         for(int item = 0; item < menusToDisableInExecMode.size(); item++){
@@ -80,6 +93,7 @@ public class GUIMenuBar {
         exitExecutionModeMenuItem.setDisable(false);
         runMenuItem.setDisable(false);
         runSingleMenuItem.setDisable(false);
+        reloadProgramMenuItem.setDisable(false);
     }
 
     public void exitExecMode(){
@@ -89,9 +103,9 @@ public class GUIMenuBar {
         exitExecutionModeMenuItem.setDisable(true);
         runMenuItem.setDisable(true);
         runSingleMenuItem.setDisable(true);
+        reloadProgramMenuItem.setDisable(true);
+
     }
-
-
 
     public MenuItem getNewMenuItem() {
         return newMenuItem;
@@ -109,10 +123,6 @@ public class GUIMenuBar {
         return saveAsMenuItem;
     }
 
-    public MenuItem getExitMenuItem() {
-        return exitMenuItem;
-    }
-
     public MenuItem getEnterExecutionModeMenuItem() {
         return enterExecutionModeMenuItem;
     }
@@ -127,5 +137,17 @@ public class GUIMenuBar {
 
     public MenuItem getRunSingleMenuItem() {
         return runSingleMenuItem;
+    }
+
+    public MenuItem getHelpMenuItem() {
+        return helpMenuItem;
+    }
+
+    public MenuItem getReloadProgramMenuItem() {
+        return reloadProgramMenuItem;
+    }
+
+    public MenuItem getDocumentationMenuItem() {
+        return documentationMenuItem;
     }
 }
