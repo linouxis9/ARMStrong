@@ -145,6 +145,16 @@ public class Preprocessor {
 			tokens.add(new Token(TokenType.OPERATION, "swi"));
 			tokens.add(new Token(TokenType.HASH, "#81"));
 			break;
+		case "printf":
+			tokens.remove(directive);
+			tokens.add(new Token(TokenType.OPERATION, "swi"));
+			tokens.add(new Token(TokenType.HASH, "#0"));
+			break;		
+		case "about":
+			tokens.remove(directive);
+			tokens.add(new Token(TokenType.OPERATION, "swi"));
+			tokens.add(new Token(TokenType.HASH, "#100"));
+			break;				
 		case "asciz":
 			for (char chr : directive.getRawDirectiveData().toCharArray()) {
 				this.cpu.getRam().setByte(new Address(this.cpu.getPmsp()), (byte)chr);
@@ -202,6 +212,7 @@ public class Preprocessor {
 				}
 			}
 
+			//TODO Refactoring, methods could directly throw themselves?
 			boolean error = false;
 
 			if (Preprocessor.RROP2.contains(op)) {
@@ -220,7 +231,7 @@ public class Preprocessor {
 				throw new InvalidSyntaxException(line);
 			}
 
-		} catch (IndexOutOfBoundsException e) {
+		} catch (RuntimeException e) {
 			throw new InvalidSyntaxException(line);
 		}
 	}
@@ -294,6 +305,7 @@ public class Preprocessor {
 	 * @param i
 	 *            The index of the first element of the right-hand expression
 	 * @return True if the instruction is invalid, else otherwise.
+	 * @throws InvalidRegisterException 
 	 */
 	private static boolean checkLSOP2(List<Token> tokens, int i) {
 		if (tokens.get(i).getTokenType() == TokenType.REGISTER && tokens.get(i + 1).getTokenType() == TokenType.COMMA) {
