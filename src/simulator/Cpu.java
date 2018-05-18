@@ -384,6 +384,13 @@ public class Cpu {
 	}
 	
 	/**
+	 * Returns the list of instructions.
+	 */
+	public List<Instruction> getInstructions() {
+		return instructions;
+	}
+	
+	/**
 	 * Returns if the processor was interrupted by the SWI call #80.
 	 */
 	public boolean isInterrupted() {

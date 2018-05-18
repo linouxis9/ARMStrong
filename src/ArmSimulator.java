@@ -91,7 +91,7 @@ public class ArmSimulator {
 	 * @return
 	 */
 	public int getCurrentLine(){
-		return this.cpu.getPc().getValue() / 4+1; // Beware that this method doesn't take in account assembly directives or if you jump space.
+		return this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))).getLine();
 	}
 
 	/**
