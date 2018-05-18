@@ -17,7 +17,7 @@ public enum TokenType {
 	SHIFTEDREGISTER("(LSL|LSR)( )*#([0-9]+)"),
 	HASH("#(\\+|-)?([0-9]+)"),
 	HASHEDASCII("#'(([0-9]|[A-z]))'"),
-	REGISTER("r[0-9]+"),
+	REGISTER("(r|R)[0-9]+"),
 	NUMBER("(?<!r)[0-9]+"),
 	OPERATION("(adc|add|and|b|bic|bl|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)"),
 	DATAIDENTIFIER("=[a-z]+"),

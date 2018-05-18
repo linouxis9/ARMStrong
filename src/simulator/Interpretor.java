@@ -18,11 +18,6 @@ public class Interpretor {
 	 */
 	private final Cpu cpu;
 
-	/**
-	 * Stores the current line in the assembly code.
-	 */
-	private int line;
-
 	private final Preprocessor preprocessor;
 	
 	/**
@@ -160,62 +155,62 @@ public class Interpretor {
 
 		switch (tokens.get(0).getRawOperation()) {
 		case "adc":
-			return new Instruction(Operation.ADC, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.ADC, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "add":
-			return new Instruction(Operation.ADD, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.ADD, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "and":
-			return new Instruction(Operation.AND, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.AND, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "b":
-			return new Instruction(Operation.B, this.line, handleOpe2(tokens.get(i)), flags, cc);
+			return new Instruction(Operation.B, line, handleOpe2(tokens.get(i)), flags, cc);
 		case "bic":
-			return new Instruction(Operation.BIC, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.BIC, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "bl":
-			return new Instruction(Operation.BL, this.line, handleOpe2(tokens.get(i)), flags, cc);
+			return new Instruction(Operation.BL, line, handleOpe2(tokens.get(i)), flags, cc);
 		case "cmn":
-			return new Instruction(Operation.CMN, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.CMN, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "cmp":
-			return new Instruction(Operation.CMP, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.CMP, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "eor":
-			return new Instruction(Operation.EOR, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.EOR, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "ldr":
-			return new Instruction(Operation.LDR, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.LDR, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "mla":
-			return new Instruction(Operation.MLA, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.MLA, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)), flags, cc);
 		case "mov":
-			return new Instruction(Operation.MOV, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.MOV, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "mul":
-			return new Instruction(Operation.MUL, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.MUL, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					toRegister(tokens.get(i + 4)), flags, cc);
 		case "mvn":
-			return new Instruction(Operation.MVN, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.MVN, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "orr":
-			return new Instruction(Operation.ORR, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.ORR, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "sdiv":
-			return new Instruction(Operation.SDIV, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.SDIV, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					toRegister(tokens.get(i + 4)), flags, cc);
 		case "str":
-			return new Instruction(Operation.STR, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.STR, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "svc":
 		case "swi":
-			return new Instruction(Operation.SWI, this.line, handleOpe2(tokens.get(i)), flags, cc);
+			return new Instruction(Operation.SWI, line, handleOpe2(tokens.get(i)), flags, cc);
 		case "sub":
-			return new Instruction(Operation.SUB, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.SUB, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "swp":
-			return new Instruction(Operation.SWP, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.SWP, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					handleOpe2(tokens.get(i + 4)), flags, cc);
 		case "teq":
-			return new Instruction(Operation.TEQ, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.TEQ, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "tst":
-			return new Instruction(Operation.TST, this.line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
+			return new Instruction(Operation.TST, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "udiv":
-			return new Instruction(Operation.SDIV, this.line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.SDIV, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					toRegister(tokens.get(i + 4)), flags, cc);
 		default:
 			throw new RuntimeException();
