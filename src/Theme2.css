@@ -1,0 +1,7 @@
+/*green theme*/
+
+.menu-item:focused, .menu:hover, .menu:showing, .menu-item:focused{
+
+ -fx-background-color: #008000; 
+ -fx-text-fill: white; 
+}

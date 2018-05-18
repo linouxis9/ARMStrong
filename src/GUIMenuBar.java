@@ -30,6 +30,7 @@ public class GUIMenuBar {
     private MenuItem helpMenuItem;
     private MenuItem documentationMenuItem;
     private MenuItem reloadProgramMenuItem;
+    private MenuItem preferencesMenuItem;
 
     public GUIMenuBar(MenuBar aMenuBar){
 
@@ -56,10 +57,11 @@ public class GUIMenuBar {
         runSingleMenuItem 			= new MenuItem("Run a single instruction");
         reloadProgramMenuItem       = new MenuItem("Reload Program");
         documentationMenuItem       = new MenuItem("Documentation");
+        preferencesMenuItem 	= new MenuItem("Preferences");
 
         theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
 
-        fileMenu.getItems().addAll(newMenuItem,openMenuItem,saveMenuItem, saveAsMenuItem,new SeparatorMenuItem(), exitMenuItem);
+        fileMenu.getItems().addAll(newMenuItem,openMenuItem,saveMenuItem, saveAsMenuItem, preferencesMenuItem,new SeparatorMenuItem(), exitMenuItem);
         editMenu.getItems().addAll();
         runMenu.getItems().addAll(enterExecutionModeMenuItem,exitExecutionModeMenuItem,new SeparatorMenuItem(), runMenuItem, runSingleMenuItem,new SeparatorMenuItem(), reloadProgramMenuItem);
         helpMenu.getItems().addAll(helpMenuItem, documentationMenuItem);
@@ -150,4 +152,9 @@ public class GUIMenuBar {
     public MenuItem getDocumentationMenuItem() {
         return documentationMenuItem;
     }
+    
+    public MenuItem getPreferencesMenuItem() {
+        return preferencesMenuItem;
+    }
+
 }

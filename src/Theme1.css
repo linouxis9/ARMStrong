@@ -1,0 +1,7 @@
+/*blue theme*/
+
+.menu-item:focused, .menu:hover, .menu:showing, .menu-item:focused {
+
+ -fx-background-color: #0055ff; 
+ -fx-text-fill: white; 
+}

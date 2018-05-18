@@ -29,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.prefs.Preferences;
 
 /**
  * GUI is the class responsible of handling the JaveFX Graphical User Interface.
@@ -52,6 +53,8 @@ public class GUI extends Application {
 	private GUIRegisterView theGUIRegisterView;
 	
 	private String lastFilePath;
+	
+	private Preferences prefs;
 
 	private List<Text> instructionsAsText;
 	
@@ -91,6 +94,9 @@ public class GUI extends Application {
 		//Change the icon of the application
 		Image applicationIcon = new Image("file:logo.png");
 		stage.getIcons().add(applicationIcon);
+		
+		prefs = Preferences.userNodeForPackage(this.getClass());
+		currentTheme();
 
 		stage.show(); //to be sure the scene.lookup() works properly //////////////////////////////////////////////////////////////////////
 
@@ -108,7 +114,69 @@ public class GUI extends Application {
 
 
 		//THE ACTION EVENTS
+		theGUIMenuBar.getPreferencesMenuItem().setOnAction(new EventHandler<ActionEvent>() {
 
+            @Override
+            public void handle(ActionEvent actionEvent) {
+            	final Stage preferencesDialog = new Stage();
+                preferencesDialog.initModality(Modality.APPLICATION_MODAL);
+                preferencesDialog.initOwner(stage);
+                VBox dialogVbox = new VBox(20);
+               
+                ChoiceBox<String> theme = new ChoiceBox<String>();
+                
+                theme.getItems().add("blue");
+                theme.getItems().add("red");
+                theme.getItems().add("green");
+
+                theme.setTooltip(new Tooltip("Select a theme"));
+                
+                theme.setValue(prefs.get("THEME", ""));
+
+                Button button2 = new Button("Save");
+               
+                button2.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override 
+                    public void handle(ActionEvent e) {
+                    	String themeChoose =  theme.getValue();
+     	        		     	        	    
+     	        	    if(themeChoose != null) {
+     	        	    	
+	     	        	    if(themeChoose.equals("blue")) {
+	     	        	        prefs.put("THEME", "blue");
+	     	        	        currentTheme();
+	     	        	    }
+	     	        	    
+	     	        	    if(themeChoose.equals("red")) {
+	     	        	        prefs.put("THEME", "red");
+	     	        	        currentTheme();
+	     	        	    }
+	     	        	    
+	     	        	    if(themeChoose.equals("green")) {
+	     	        	        prefs.put("THEME", "green");
+	     	        	        currentTheme();
+	     	        	    }
+     	        	    }
+                    }
+                });
+                  
+                dialogVbox.getChildren().add(theme);
+                dialogVbox.getChildren().add(button2);
+                
+                Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
+                preferencesDialog.setScene(preferencesDialogScene);
+                
+                preferencesDialog.setTitle("Preferences");
+                Image preferencesIcon = new Image("file:logo.png");
+                preferencesDialog.getIcons().add(preferencesIcon);
+                
+                preferencesDialog.show();
+                
+            }
+         });
+
+		
+		
 		theGUIMenuBar.getEnterExecutionModeMenuItem()	.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent) {
@@ -144,7 +212,7 @@ public class GUI extends Application {
 			public void handle(ActionEvent actionEvent) {
 				if (executionMode){
 					theArmSimulator.runStep();
-					highlightCurrentLine(theArmSimulator.getCurrentLine()-1);
+					highlightCurrentLine(theArmSimulator.getCurrentLine());
 					theGUIRegisterView.updateRegisters();
 					theGUIMemoryView.updateMemoryView();
 					stage.show();
@@ -419,4 +487,34 @@ public class GUI extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	private void currentTheme(){
+		
+		String currentTheme = prefs.get("THEME", "");	
+		
+		if(currentTheme.equals("blue")) {
+			scene.getStylesheets().removeAll();
+			String css = getClass().getResource("css.css").toExternalForm();
+			scene.getStylesheets().addAll(css);
+			String theme1 = getClass().getResource("Theme1.css").toExternalForm();
+			scene.getStylesheets().addAll(theme1);
+			
+		}
+		else if(currentTheme.equals("green")) {
+			scene.getStylesheets().removeAll();
+			String css = getClass().getResource("css.css").toExternalForm();
+			scene.getStylesheets().addAll(css);
+			String theme2 = getClass().getResource("Theme2.css").toExternalForm();
+			scene.getStylesheets().addAll(theme2);
+		}
+		else {
+			scene.getStylesheets().removeAll();
+			String css = getClass().getResource("css.css").toExternalForm();
+			scene.getStylesheets().addAll(css);
+			String theme3 = getClass().getResource("Theme3.css").toExternalForm();
+			scene.getStylesheets().addAll(theme3);
+		}
+
+	}
+
 }
