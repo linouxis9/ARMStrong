@@ -27,8 +27,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 /**
@@ -44,7 +46,8 @@ public class GUI extends Application {
 	//the code editor
 	private TextArea codingTextArea;
 	private TextFlow executionModeTextFlow;
-	private boolean executionMode;
+	private AtomicBoolean executionMode;
+	private AtomicBoolean running;
 	private File programFilePath;
 
 
@@ -55,7 +58,10 @@ public class GUI extends Application {
 	private String lastFilePath;
 	
 	private Preferences prefs;
-
+	
+	private Set<String> themes;
+	private static final String DEFAULT_THEME = "red";
+	
 	private List<Text> instructionsAsText;
 	
 	public void startGUI() {
@@ -69,8 +75,8 @@ public class GUI extends Application {
 		this.programFilePath = null;
         this.lastFilePath = null;
 
-		this.executionMode = false;
-
+		this.executionMode = new AtomicBoolean(false);
+		this.running = new AtomicBoolean(false);
 
 		//setting static elements
 
@@ -96,12 +102,16 @@ public class GUI extends Application {
 		stage.getIcons().add(applicationIcon);
 		
 		prefs = Preferences.userNodeForPackage(this.getClass());
-		currentTheme();
 
 		stage.show(); //to be sure the scene.lookup() works properly //////////////////////////////////////////////////////////////////////
 
-	
+		themes = new HashSet<>();
+		themes.add("red");
+		themes.add("blue");
+		themes.add("green");
 
+		updateTheme();
+		
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
@@ -119,20 +129,15 @@ public class GUI extends Application {
 
 
 		//THE ACTION EVENTS
-		theGUIMenuBar.getPreferencesMenuItem().setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent actionEvent) {
+		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
             	final Stage preferencesDialog = new Stage();
                 preferencesDialog.initModality(Modality.APPLICATION_MODAL);
                 preferencesDialog.initOwner(stage);
                 VBox dialogVbox = new VBox(20);
                
-                ChoiceBox<String> theme = new ChoiceBox<String>();
+                ChoiceBox<String> theme = new ChoiceBox<>();
                 
-                theme.getItems().add("blue");
-                theme.getItems().add("red");
-                theme.getItems().add("green");
+                theme.getItems().addAll(themes);
 
                 theme.setTooltip(new Tooltip("Select a theme"));
                 
@@ -140,29 +145,13 @@ public class GUI extends Application {
 
                 Button button2 = new Button("Save");
                
-                button2.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override 
-                    public void handle(ActionEvent e) {
+                button2.setOnAction((ActionEvent e) -> {
                     	String themeChoose =  theme.getValue();
      	        		     	        	    
      	        	    if(themeChoose != null) {
-     	        	    	
-	     	        	    if(themeChoose.equals("blue")) {
-	     	        	        prefs.put("THEME", "blue");
-	     	        	        currentTheme();
-	     	        	    }
-	     	        	    
-	     	        	    if(themeChoose.equals("red")) {
-	     	        	        prefs.put("THEME", "red");
-	     	        	        currentTheme();
-	     	        	    }
-	     	        	    
-	     	        	    if(themeChoose.equals("green")) {
-	     	        	        prefs.put("THEME", "green");
-	     	        	        currentTheme();
-	     	        	    }
+	     	        	    prefs.put("THEME", themeChoose);
+	     	        	    updateTheme();
      	        	    }
-                    }
                 });
                   
                 dialogVbox.getChildren().add(theme);
@@ -177,64 +166,58 @@ public class GUI extends Application {
                 
                 preferencesDialog.show();
                 
-            }
          });
 
 		
 		
-		theGUIMenuBar.getEnterExecutionModeMenuItem()	.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
+		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				String programString = codingTextArea.getText();
+
 				try {
 					theArmSimulator.setProgramString(programString);
 					enterExecutionMode(programString);
-				} catch (Exception e1) {
+				} catch (AssemblyException e1) {
 					System.out.println(e1.toString());
 				}
-			}
 		});
-		theGUIMenuBar.getExitExecutionModeMenuItem()	.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				exitExecutionMode();
-			}
-		});
+		
+		theGUIMenuBar.getExitExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> exitExecutionMode());
 
-		theGUIMenuBar.getRunMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
-				if (executionMode){
-					theArmSimulator.run();
-					theGUIRegisterView.updateRegisters();
-					//theGUIMemoryView.updateMemoryView();
-					stage.show();
+		theGUIMenuBar.getRunMenuItem().setOnAction((ActionEvent actionEvent) -> {
+				if (executionMode.get() && !(running.get())){
+					new Thread(() -> {
+						this.running.set(true);
+						theArmSimulator.run();
+						
+						Platform.runLater(() -> {
+							theGUIRegisterView.updateRegisters();
+							//theGUIMemoryView.updateMemoryView();
+							stage.show();
+						});
+						
+						this.running.set(false);
+					}).start();
 				}
-			}
 		});
-		theGUIMenuBar.getRunSingleMenuItem().setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				if (executionMode){
-					theArmSimulator.runStep();
-					highlightCurrentLine(theArmSimulator.getCurrentLine());
-					theGUIRegisterView.updateRegisters();
-					//theGUIMemoryView.updateMemoryView();
-					stage.show();
+		theGUIMenuBar.getRunSingleMenuItem().setOnAction((ActionEvent actionEvent) -> {
+				if (executionMode.get() && !(running.get())){
+					new Thread(() -> {
+						theArmSimulator.runStep();
+						this.running.set(true);
+						Platform.runLater(() -> {
+							highlightCurrentLine(theArmSimulator.getCurrentLine());
+							theGUIRegisterView.updateRegisters();
+							//theGUIMemoryView.updateMemoryView();
+							stage.show();
+						});
+						this.running.set(false);
+					}).start();
 				}
-			}
 		});
 
-		theGUIMenuBar.getReloadProgramMenuItem().setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
-			}
-		});
+		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
 
-		theGUIMenuBar.getOpenMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent e) {
+		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				FileChooser fileChooser = new FileChooser();
 				if(lastFilePath != null) {
 					fileChooser.setInitialDirectory(new File (new File(lastFilePath).getParent()));
@@ -256,11 +239,9 @@ public class GUI extends Application {
 						e1.printStackTrace();
 					}
 				}
-			}
 		});
-		theGUIMenuBar.getSaveAsMenuItem()	.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
+		
+		theGUIMenuBar.getSaveAsMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Save assembly program");
 				fileChooser.getExtensionFilters().addAll(
@@ -268,24 +249,18 @@ public class GUI extends Application {
 				);
 				File chosenFile = fileChooser.showSaveDialog(stage);
 				saveFile(codingTextArea.getText(), chosenFile);
-
-			}
 		});
-		theGUIMenuBar.getSaveMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
+		
+		theGUIMenuBar.getSaveMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				if (programFilePath != null){
 					saveFile(codingTextArea.getText(), programFilePath);
 				}
 				else {
 					theGUIMenuBar.getSaveAsMenuItem().fire();
 				}
-			}
 		});
 
-		theGUIMenuBar.getNewMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
+		theGUIMenuBar.getNewMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				Stage confirmBox = new Stage();
 				confirmBox.initModality(Modality.APPLICATION_MODAL);
 				confirmBox.initOwner(stage);
@@ -294,23 +269,14 @@ public class GUI extends Application {
 
 				Button yesBtn = new Button("Yes");
 
-                 yesBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                    @Override
-                    public void handle(ActionEvent arg0) {
+                 yesBtn.setOnAction((ActionEvent arg0) -> {
 						confirmBox.close();
 						codingTextArea.setText("");
 						programFilePath = null;
-                    }
                 });
                 Button noBtn = new Button("No");
 
-                noBtn.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent arg0) {
-						confirmBox.close();
-					}
-                });
+                noBtn.setOnAction((ActionEvent arg0) ->	confirmBox.close());
 
 				HBox hBox = new HBox();
 				hBox.getChildren().addAll(yesBtn, noBtn);
@@ -319,12 +285,9 @@ public class GUI extends Application {
 
 				confirmBox.setScene(new Scene(vBox));
 				confirmBox.show();
-			}
 		});
 
-		theGUIMenuBar.getHelpMenuItem()		.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
+		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				final Stage helpPopup = new Stage();
 				helpPopup.initModality(Modality.APPLICATION_MODAL);
 				helpPopup.initOwner(stage);
@@ -335,20 +298,12 @@ public class GUI extends Application {
 
 				helpPopup.setScene(dialogScene);
 				helpPopup.show();
-			}
 		});
 
-		theGUIMenuBar.getDocumentationMenuItem() .setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent actionEvent) {
-				documentation();
-			}
-		});
+		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
 
 		// Several keyboard shortcut
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>(){
-            @Override
-            public void handle(KeyEvent ke){
+		scene.setOnKeyPressed((KeyEvent ke) -> {
             	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
             	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN);
             	final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
@@ -373,7 +328,7 @@ public class GUI extends Application {
             		theGUIMenuBar.getRunMenuItem().fire();
             	}
             	if (ctrlE.match(ke)) { 
-            		if(executionMode) {
+            		if(executionMode.get()) {
             			theGUIMenuBar.getExitExecutionModeMenuItem().fire();
             		}
             		else {
@@ -383,7 +338,6 @@ public class GUI extends Application {
             	if (f11.match(ke)) { 
             		theGUIMenuBar.getRunSingleMenuItem().fire();
             	}
-            }
 		});
 
 		//THE CONSOLE OUTPUT
@@ -411,6 +365,8 @@ public class GUI extends Application {
         for(int i=0; i<instructionsAsText.size(); i++){
 			instructionsAsText.get(i).setFill(Color.BLACK);
         }
+        
+        // TODO Can we do something better?
 		try{
 			instructionsAsText.get(currentLine).setFill(Color.RED);
 		}
@@ -420,14 +376,14 @@ public class GUI extends Application {
 	}
 
     private void exitExecutionMode() {
-		this.executionMode = false;
+		this.executionMode.set(false);;
 		codingTextArea.setEditable(true);
 		codingTextArea.setVisible(true);
 		theGUIMenuBar.exitExecMode();
 	}
 
 	private void enterExecutionMode(String program) { //TODO parametre peut etre temoraire
-		this.executionMode = true;
+		this.executionMode.set(true);
 		codingTextArea.setEditable(false);
 		codingTextArea.setVisible(false);
 		theGUIMenuBar.setExecMode();
@@ -463,10 +419,8 @@ public class GUI extends Application {
 
 	private void saveFile(String content, File theFile){
 		if (theFile != null) {
-			try {
-				FileWriter outputStream = new FileWriter(theFile);
+			try (FileWriter outputStream = new FileWriter(theFile)) {
 				outputStream.write(content);
-				outputStream.close();
 				this.programFilePath = theFile;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -474,7 +428,7 @@ public class GUI extends Application {
 		}
 	}
 
-	private void documentation(){
+	private void showDocumentation(){
 		Stage docWindow = new Stage();
 
 		docWindow.initModality(Modality.APPLICATION_MODAL);
@@ -484,6 +438,7 @@ public class GUI extends Application {
 		Parent container;
 		Scene docScene;
 
+		// TODO To remove once documentation.fxml is made
 		try {
 			container = FXMLLoader.load(getClass().getResource("documentation.fxml"));
 			docScene = new Scene(container, 100, 100);
@@ -494,33 +449,21 @@ public class GUI extends Application {
 		}
 	}
 	
-	private void currentTheme(){
+	private void updateTheme(){
 		
 		String currentTheme = prefs.get("THEME", "");	
 		
-		if(currentTheme.equals("blue")) {
-			scene.getStylesheets().removeAll();
-			String css = getClass().getResource("css.css").toExternalForm();
-			scene.getStylesheets().addAll(css);
-			String theme1 = getClass().getResource("Theme1.css").toExternalForm();
-			scene.getStylesheets().addAll(theme1);
-			
-		}
-		else if(currentTheme.equals("green")) {
-			scene.getStylesheets().removeAll();
-			String css = getClass().getResource("css.css").toExternalForm();
-			scene.getStylesheets().addAll(css);
-			String theme2 = getClass().getResource("Theme2.css").toExternalForm();
-			scene.getStylesheets().addAll(theme2);
-		}
-		else {
-			scene.getStylesheets().removeAll();
-			String css = getClass().getResource("css.css").toExternalForm();
-			scene.getStylesheets().addAll(css);
-			String theme3 = getClass().getResource("Theme3.css").toExternalForm();
-			scene.getStylesheets().addAll(theme3);
-		}
+		scene.getStylesheets().removeAll();
+		
+		String css = getClass().getResource("css.css").toExternalForm();
+		scene.getStylesheets().addAll(css);
 
+		if (!themes.contains(currentTheme)) {
+			currentTheme = GUI.DEFAULT_THEME;
+		}
+		
+		css = getClass().getResource(currentTheme+".css").toExternalForm();
+		scene.getStylesheets().addAll(css);
 	}
 
 }

@@ -60,26 +60,17 @@ public class GUIMemoryView {
             memoryPane.getChildren().add(MemoryContentList.get(address));
         }
 
-        button8bitView.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        button8bitView.setOnAction((ActionEvent e) -> {
                 memoryDisplayMode=8;
                 updateMemoryView();
-            }
         });
-        button16bitView.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        button16bitView.setOnAction((ActionEvent e) -> {
                 memoryDisplayMode = 16;
                 updateMemoryView();
-            }
         });
-        button32bitView.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        button32bitView.setOnAction((ActionEvent e) -> {
                 memoryDisplayMode = 32;
                 updateMemoryView();
-            }
         });
 
 
@@ -92,18 +83,13 @@ public class GUIMemoryView {
 
         scrollBar.setValue(0);
 
-        scrollBar.setOnScroll(new EventHandler<ScrollEvent>() {
-            @Override
-            public void handle(ScrollEvent scrollEvent) {
+        scrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
                 memoryViewFirstAddress = (int) scrollBar.getValue();
                 updateMemoryView();
-            }
         });
 
         /*
-        memoryButtonUp.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        memoryButtonUp.setOnAction((ActionEvent e) -> {
                 switch(memoryDisplayMode){
                     case 8:
                         memoryViewFirstAddress--;
@@ -119,11 +105,8 @@ public class GUIMemoryView {
                     memoryViewFirstAddress = 0;
                 }
                 updateMemoryView();
-            }
         });
-        memoryButtonDown.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
+        memoryButtonDown.setOnAction((ActionEvent e) -> {
                 switch(memoryDisplayMode){
                     case 8:
                         memoryViewFirstAddress++;
@@ -137,14 +120,10 @@ public class GUIMemoryView {
                 }
                 //TODO add max address check
                 updateMemoryView();
-            }
         });
         */
 
-        goToAddressField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke)
-            {
+        goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
                 if (ke.getCode().equals(KeyCode.ENTER))
                 {
                     String addressTyped = goToAddressField.getText();
@@ -178,7 +157,6 @@ public class GUIMemoryView {
                         MemoryViewTitleText.setUnderline(true);
                     }
                 }
-            }
         });
 
         memoryDisplayMode = 8;
@@ -190,6 +168,8 @@ public class GUIMemoryView {
     /**
      * updates the memory view
      */
+    
+    // TODO Maybe you could do something less redundant?
     public void updateMemoryView(){
 
         int displayedMemoryAddress = memoryViewFirstAddress;

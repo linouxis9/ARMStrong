@@ -75,12 +75,8 @@ public class GUIMenuBar {
         //Button runAllButton = (Button) scene.lookup("#"); //TODO add an id
         //Button runStepByStepButton = (Button) scene.lookup("#"); //TODO add an id
 
-        exitMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                Platform.exit();
+        exitMenuItem.setOnAction((ActionEvent actionEvent) -> {
                 System.exit(0);
-            }
         });
 
 
