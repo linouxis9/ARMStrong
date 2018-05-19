@@ -78,7 +78,7 @@ public class GUI extends Application {
 
 		this.stage = stage;
 
-		root = FXMLLoader.load(getClass().getResource("ihm_#@rm.fxml"));
+		root = FXMLLoader.load(getClass().getResource("ihmv4.fxml"));
 		scene = new Scene(root, 700, 275);
 
 		stage.setMaximized(true);
@@ -105,6 +105,11 @@ public class GUI extends Application {
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
+
+
+		//SplitPane theCentralSplitPane = (SplitPane) scene.lookup("#centerSplitPane");
+		//theCentralSplitPane.setDividerPosition(0, 100);
+		//theCentralSplitPane.setDividerPosition(1, 5);
 
 
 		//THE CODING AREA
@@ -202,7 +207,7 @@ public class GUI extends Application {
 				if (executionMode){
 					theArmSimulator.run();
 					theGUIRegisterView.updateRegisters();
-					theGUIMemoryView.updateMemoryView();
+					//theGUIMemoryView.updateMemoryView();
 					stage.show();
 				}
 			}
@@ -214,7 +219,7 @@ public class GUI extends Application {
 					theArmSimulator.runStep();
 					highlightCurrentLine(theArmSimulator.getCurrentLine());
 					theGUIRegisterView.updateRegisters();
-					theGUIMemoryView.updateMemoryView();
+					//theGUIMemoryView.updateMemoryView();
 					stage.show();
 				}
 			}
@@ -395,9 +400,10 @@ public class GUI extends Application {
 		System.setOut(new PrintStream(consoleOut, true));
 
 
-		theGUIMemoryView.updateMemoryView();
+		//theGUIMemoryView.updateMemoryView();
 		theGUIRegisterView.updateRegisters();
 		stage.show();
+		System.err.println("refresh");
 
 	}
 
@@ -436,7 +442,7 @@ public class GUI extends Application {
 			executionModeTextFlow.getChildren().add(instructionsAsText.get(line));
 		}
 		highlightCurrentLine(0);
-		theGUIMemoryView.updateMemoryView();
+		//theGUIMemoryView.updateMemoryView();
 		theGUIRegisterView.updateRegisters();
 /*
 		try {

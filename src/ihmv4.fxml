@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -11,89 +15,187 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="840.0" prefWidth="1122.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar layoutY="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit" />
-        </menus>
-      </MenuBar>
-      <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <SplitPane dividerPositions="0.7275641025641025" orientation="VERTICAL" prefHeight="681.0" prefWidth="917.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+      <MenuBar fx:id="theMenuBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <ToolBar fx:id="thebuttonBar" layoutY="29.0" prefHeight="37.0" prefWidth="1116.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
+      <SplitPane dividerPositions="0.625" layoutY="66.0" orientation="VERTICAL" prefHeight="669.0" prefWidth="1116.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="66.0">
         <items>
-          <AnchorPane minHeight="0.0" prefWidth="110.0" SplitPane.resizableWithParent="false">
+          <AnchorPane minHeight="0.0" prefWidth="110.0">
                <children>
-                  <SplitPane dividerPositions="0.25, 0.7265100671140939" layoutX="6.0" layoutY="112.0" prefHeight="100.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="50.0" minWidth="200.0" prefHeight="448.0" prefWidth="100.0">
+                  <SplitPane fx:id="centerSplitPane" dividerPositions="0.24865831842576028, 0.7576028622540251" prefHeight="479.0" prefWidth="1120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                        <AnchorPane>
                            <children>
                               <Accordion minHeight="50.0" prefHeight="448.0" prefWidth="224.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <panes>
-                                  <TitledPane animated="false" text="Hexadecimal">
-                                    <content>
-                                      <AnchorPane />
-                                    </content>
-                                  </TitledPane>
-                                  <TitledPane animated="false" text="Unsigned Decimal">
-                                    <content>
-                                      <AnchorPane />
-                                    </content>
-                                  </TitledPane>
-                                  <TitledPane animated="false" text="Signed Decimal">
-                                    <content>
-                                      <AnchorPane />
-                                    </content>
-                                  </TitledPane>
-                                </panes>
+                                 <panes>
+                                    <TitledPane animated="false" text="Hexadecimal">
+                                       <content>
+                                          <AnchorPane prefHeight="398.0" prefWidth="272.0">
+                                             <children>
+                                                <Text layoutX="14.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R0 :" />
+                                                <Text fx:id="register0Hex" layoutX="57.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text fx:id="register1Hex" layoutX="57.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R1 :" />
+                                                <Text fx:id="register2Hex" layoutX="57.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R2 :" />
+                                                <Text fx:id="register3Hex" layoutX="57.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R3 :" />
+                                                <Text fx:id="register4Hex" layoutX="57.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R4 :" />
+                                                <Text fx:id="register5Hex" layoutX="57.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R5 :" />
+                                                <Text fx:id="register6Hex" layoutX="57.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R6 :" />
+                                                <Text fx:id="register7Hex" layoutX="57.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R7 :" />
+                                                <Text fx:id="register8Hex" layoutX="57.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R8 :" />
+                                                <Text fx:id="register9Hex" layoutX="57.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R9 :" />
+                                                <Text fx:id="register10Hex" layoutX="57.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R10 :" />
+                                                <Text fx:id="register11Hex" layoutX="57.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R11 :" />
+                                                <Text fx:id="register13Hex" layoutX="57.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R13 :" />
+                                                <Text fx:id="register14Hex" layoutX="57.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R14 :" />
+                                                <Text fx:id="register12Hex" layoutX="57.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R12 :" />
+                                                <Text layoutX="14.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R15 :" />
+                                                <Text fx:id="register15Hex" layoutX="57.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Unsigned Decimal">
+                                       <content>
+                                          <AnchorPane prefHeight="398.0" prefWidth="272.0">
+                                             <children>
+                                                <Text layoutX="14.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R0 :" />
+                                                <Text fx:id="register0UDec" layoutX="57.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text fx:id="register1UDec" layoutX="57.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R1 :" />
+                                                <Text fx:id="register2UDec" layoutX="57.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R2 :" />
+                                                <Text fx:id="register3UDec" layoutX="57.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R3 :" />
+                                                <Text fx:id="register4UDec" layoutX="57.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R4 :" />
+                                                <Text fx:id="register5UDec" layoutX="57.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R5 :" />
+                                                <Text fx:id="register6UDec" layoutX="57.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R6 :" />
+                                                <Text fx:id="register7UDec" layoutX="57.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R7 :" />
+                                                <Text fx:id="register8UDec" layoutX="57.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R8 :" />
+                                                <Text fx:id="register9UDec" layoutX="57.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R9 :" />
+                                                <Text fx:id="register10UDec" layoutX="57.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R10 :" />
+                                                <Text fx:id="register11UDec" layoutX="57.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R11 :" />
+                                                <Text fx:id="register13UDec" layoutX="57.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R13 :" />
+                                                <Text fx:id="register14UDec" layoutX="57.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R14 :" />
+                                                <Text fx:id="register12UDec" layoutX="57.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R12 :" />
+                                                <Text layoutX="14.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R15 :" />
+                                                <Text fx:id="register15UDec" layoutX="57.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
+                                    <TitledPane animated="false" text="Signed Decimal">
+                                       <content>
+                                          <AnchorPane prefHeight="398.0" prefWidth="272.0">
+                                             <children>
+                                                <Text layoutX="14.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R0 :" />
+                                                <Text fx:id="register0Dec" layoutX="57.0" layoutY="24.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text fx:id="register1Dec" layoutX="57.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R1 :" />
+                                                <Text fx:id="register2Dec" layoutX="57.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R2 :" />
+                                                <Text fx:id="register3Dec" layoutX="57.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R3 :" />
+                                                <Text fx:id="register4Dec" layoutX="57.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R4 :" />
+                                                <Text fx:id="register5Dec" layoutX="57.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R5 :" />
+                                                <Text fx:id="register6Dec" layoutX="57.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R6 :" />
+                                                <Text fx:id="register7Dec" layoutX="57.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R7 :" />
+                                                <Text fx:id="register8Dec" layoutX="57.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R8 :" />
+                                                <Text fx:id="register9Dec" layoutX="57.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="231.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R9 :" />
+                                                <Text fx:id="register10Dec" layoutX="57.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R10 :" />
+                                                <Text fx:id="register11Dec" layoutX="57.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="277.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R11 :" />
+                                                <Text fx:id="register13Dec" layoutX="57.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R13 :" />
+                                                <Text fx:id="register14Dec" layoutX="57.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R14 :" />
+                                                <Text fx:id="register12Dec" layoutX="57.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                                <Text layoutX="14.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R12 :" />
+                                                <Text layoutX="14.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R15 :" />
+                                                <Text fx:id="register15Dec" layoutX="57.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </TitledPane>
+                                 </panes>
                               </Accordion>
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                        <AnchorPane prefHeight="477.0" prefWidth="233.0">
                            <children>
-                              <TextArea layoutX="14.0" layoutY="18.0" minHeight="300.0" minWidth="300.0" prefHeight="235.0" prefWidth="278.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TextArea fx:id="codeTextArea" minHeight="300.0" minWidth="300.0" prefHeight="477.0" prefWidth="271.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-                    </items>
+                        <AnchorPane fx:id="memoryViewPane">
+                           <children>
+                              <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to address:" />
+                              <TextField fx:id="goToAddressField" layoutX="115.0" layoutY="9.0" prefHeight="25.0" prefWidth="132.0" promptText="dec, hex or bin" />
+                              <Button fx:id="button8Bit" layoutX="99.0" layoutY="49.0" mnemonicParsing="false" text="8bit" />
+                              <Button fx:id="button32Bit" layoutX="148.0" layoutY="49.0" mnemonicParsing="false" text="32bit" />
+                              <Button fx:id="button16Bit" layoutX="205.0" layoutY="49.0" mnemonicParsing="false" text="16bit" />
+                              <Text layoutX="14.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" />
+                              <ScrollBar fx:id="memoryScrollBar" layoutX="12.0" layoutY="96.0" orientation="VERTICAL" prefHeight="361.0" prefWidth="17.0" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="96.0" />
+                              <Text fx:id="memoryAddress" layoutX="39.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                              <Text fx:id="memoryContent" layoutX="148.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                           </children>
+                        </AnchorPane>
+                     </items>
                   </SplitPane>
                </children>
             </AnchorPane>
-          <AnchorPane maxHeight="500.0" minHeight="100.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane maxHeight="400.0" minHeight="100.0" prefHeight="200.0">
                <children>
                   <TabPane layoutX="189.0" prefHeight="0.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
                       <Tab text="Info     ">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
+                           <content>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <TextFlow fx:id="consoleTextFlow" prefHeight="0.0" prefWidth="0.0" />
+                                 </content>
+                              </ScrollPane>
+                           </content>
                       </Tab>
                       <Tab text="Output">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
+                           <content>
+                              <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                                 <content>
+                                    <TextFlow fx:id="outputTextFlow" prefHeight="0.0" prefWidth="0.0" />
+                                 </content>
+                              </ScrollPane>
+                           </content>
                       </Tab>
                     </tabs>
                   </TabPane>

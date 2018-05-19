@@ -1,4 +1,5 @@
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
@@ -22,11 +23,9 @@ public class GUIRegisterView {
 
         for(int register=0; register<16; register++){
             this.hexadecimalRegisterText.	add((Text) theScene.lookup("#register"+register+"Hex"));
-            this.decimalRegisterText.		add((Text) theScene.lookup("#register"+register+"Dec"));
-            this.signedDecimalRegisterText.	add((Text) theScene.lookup("#register"+register+"SigDec"));
+            this.decimalRegisterText.		add((Text) theScene.lookup("#register"+register+"UDec"));
+            this.signedDecimalRegisterText.	add((Text) theScene.lookup("#register"+register+"Dec"));
         }
-
-
     }
 
     /**
@@ -39,8 +38,8 @@ public class GUIRegisterView {
         for(int currentRegisterNumber=0; currentRegisterNumber<16; currentRegisterNumber++){
             currentRegisterValue = theArmSimulator.getRegisterValue(currentRegisterNumber);
             hexadecimalRegisterText.	get(currentRegisterNumber).setText(Integer.toHexString(currentRegisterValue));
-            //decimalRegisterText.		get(currentRegisterNumber).setText(""+Integer.toUnsignedLong(currentRegisterValue));
-            //signedDecimalRegisterText.	get(currentRegisterNumber).setText(""+currentRegisterValue);
+            decimalRegisterText.		get(currentRegisterNumber).setText(""+Integer.toUnsignedLong(currentRegisterValue));
+            signedDecimalRegisterText.	get(currentRegisterNumber).setText(""+currentRegisterValue);
         }
     }
 }
