@@ -26,39 +26,37 @@ public class GUIMemoryView {
     private Button button16bitView;
     private Button button32bitView;
 
+    private ScrollBar scrollBar;
+
     private List<Text> MemoryAddressList;
     private List<Text> MemoryContentList;
     private int memoryViewFirstAddress;
     private int memoryDisplayMode;
 
     int displayableMemoryRows;
+    int displayedMemoryRows;
 
     public GUIMemoryView(Scene theScene, ArmSimulator anArmSimulator){
 
-        theArmSimulator = anArmSimulator;
+        this.theArmSimulator = anArmSimulator;
 
         AnchorPane memoryPane = (AnchorPane) theScene.lookup("#memoryViewPane");
+        Button alignMemoryButton = (Button) theScene.lookup("#alignMemory");
 
-        goToAddressField = (TextField) theScene.lookup("#goToAddressField");
+        this.goToAddressField = (TextField) theScene.lookup("#goToAddressField");
 
-        button8bitView 	= (Button) theScene.lookup("#button8Bit");
-        button16bitView = (Button) theScene.lookup("#button16Bit");
-        button32bitView = (Button) theScene.lookup("#button32Bit");
+        this.button8bitView  = (Button) theScene.lookup("#button8Bit");
+        this.button16bitView = (Button) theScene.lookup("#button16Bit");
+        this.button32bitView = (Button) theScene.lookup("#button32Bit");
 
-        this.MemoryAddressList 	= new ArrayList<Text>();
-        this.MemoryContentList 		= new ArrayList<Text>();
+        this.MemoryAddressList = new ArrayList<Text>();
+        this.MemoryContentList = new ArrayList<Text>();
 
-        MemoryAddressList.add((Text) theScene.lookup("#memoryAddress"));
-        MemoryContentList.add((Text) theScene.lookup("#memoryContent"));
+        this.MemoryAddressList.add((Text) theScene.lookup("#memoryAddress"));
+        this.MemoryContentList.add((Text) theScene.lookup("#memoryContent"));
 
-        displayableMemoryRows = (int)(((int) memoryPane.getHeight())/5.5);
-
-        for(int address=1; address<displayableMemoryRows; address++){
-            MemoryAddressList.add(new Text(MemoryAddressList.get(0).getBoundsInParent().getMinX(),MemoryAddressList.get(0).getBoundsInParent().getMinY()+(address*20)+13, "0x00000000"));
-            MemoryContentList.add(new Text(MemoryContentList.get(0).getBoundsInParent().getMinX(),MemoryContentList.get(0).getBoundsInParent().getMinY()+(address*20)+13, "0x00000000"));
-            memoryPane.getChildren().add(MemoryAddressList.get(address));
-            memoryPane.getChildren().add(MemoryContentList.get(address));
-        }
+        displayableMemoryRows = (int)(((int) memoryPane.getHeight())/20);
+        displayedMemoryRows = 1;
 
         button8bitView.setOnAction((ActionEvent e) -> {
                 memoryDisplayMode=8;
@@ -73,55 +71,68 @@ public class GUIMemoryView {
                 updateMemoryView();
         });
 
+        memoryPane.setOnScroll((ScrollEvent scrollEvent) -> {
+                if (scrollEvent.getDeltaY()<0) updateNewFirstAddress(-1);
+                else updateNewFirstAddress(1);
+                updateMemoryView();
+        });
 
-        ScrollBar scrollBar = (ScrollBar) theScene.lookup("#memoryScrollBar");
-        scrollBar.setMax(0);
+        memoryPane.heightProperty().addListener((obs, oldVal, newVal) -> {
+            displayableMemoryRows = (int)(((int) memoryPane.getHeight())/40);
 
 
-        scrollBar.setMax(Ram.DEFAULT_SIZE-displayableMemoryRows); //to update when a "redimentionnement" is done
-        scrollBar.setUnitIncrement(1);                             //change the value when the display mode changes (8bit, 16, 32)
+            if(displayableMemoryRows > displayedMemoryRows) { //there is space to display more lines
+                System.err.println("the number of displayed rows is"+displayedMemoryRows+" but there is space to display" + displayableMemoryRows+"rows");
+                if (displayableMemoryRows > MemoryAddressList.size()) { //there is not enough lines already loaded to use all space
+                    System.err.println("The number of loaded rows in the program is "+ MemoryAddressList.size() +" but we can display" + displayableMemoryRows);
+                    for (int address = MemoryAddressList.size(); address < displayableMemoryRows; address++) { //loading missing lines
+                        System.err.println("loading row:" + (address+1));
+                        MemoryAddressList.add(new Text(MemoryAddressList.get(0).getBoundsInParent().getMinX(), MemoryAddressList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
+                        MemoryContentList.add(new Text(MemoryContentList.get(0).getBoundsInParent().getMinX(), MemoryContentList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
+                    }
+                }
+                for (int address = displayedMemoryRows; address < displayableMemoryRows; address++) { //display the loaded lines
+                    System.err.println("displaying row:" + (address+1));
+                    memoryPane.getChildren().add(MemoryAddressList.get(address));
+                    memoryPane.getChildren().add(MemoryContentList.get(address));
+                }
+                displayedMemoryRows = displayableMemoryRows;
+            }
 
+            if(displayableMemoryRows < displayedMemoryRows) {
+                System.err.println("the number of displayed rows is"+displayedMemoryRows+" but there is ONLY space to load" + displayableMemoryRows+"rows");
+                for(int address=displayedMemoryRows-1; address>displayableMemoryRows-1; address--) {
+                    System.err.println("removing row :"+ address);
+                    memoryPane.getChildren().remove(MemoryAddressList.get(address));
+                    memoryPane.getChildren().remove(MemoryContentList.get(address));
+                }
+                displayedMemoryRows = displayableMemoryRows;
+            }
+            //System.err.println(displayableMemoryRows);
+        });
+
+        scrollBar = (ScrollBar) theScene.lookup("#memoryScrollBar");
+
+        scrollBar.setMin(0);
         scrollBar.setValue(0);
+        scrollBar.setUnitIncrement(1);
 
+        scrollBar.setMax(Ram.DEFAULT_SIZE-displayableMemoryRows);
+
+
+        //TODO how can I reduce this?
         scrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
                 memoryViewFirstAddress = (int) scrollBar.getValue();
                 updateMemoryView();
         });
-
-        /*
-        memoryButtonUp.setOnAction((ActionEvent e) -> {
-                switch(memoryDisplayMode){
-                    case 8:
-                        memoryViewFirstAddress--;
-                        break;
-                    case 16:
-                        memoryViewFirstAddress-=2;
-                        break;
-                    case 32:
-                        memoryViewFirstAddress-=4;
-                        break;
-                }
-                if (memoryViewFirstAddress<0){
-                    memoryViewFirstAddress = 0;
-                }
+        scrollBar.setOnDragDetected((MouseEvent mouseEvent) -> {
+                memoryViewFirstAddress = (int) scrollBar.getValue();
                 updateMemoryView();
         });
-        memoryButtonDown.setOnAction((ActionEvent e) -> {
-                switch(memoryDisplayMode){
-                    case 8:
-                        memoryViewFirstAddress++;
-                        break;
-                    case 16:
-                        memoryViewFirstAddress+=2;
-                        break;
-                    case 32:
-                        memoryViewFirstAddress+=4;
-                        break;
-                }
-                //TODO add max address check
-                updateMemoryView();
+        scrollBar.setOnMouseClicked((MouseEvent mouseEvent) -> {
+            memoryViewFirstAddress = (int) scrollBar.getValue();
+            updateMemoryView();
         });
-        */
 
         goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
                 if (ke.getCode().equals(KeyCode.ENTER))
@@ -159,16 +170,38 @@ public class GUIMemoryView {
                 }
         });
 
+        alignMemoryButton.setOnAction((ActionEvent e) ->{
+            if(this.memoryDisplayMode == 16 && this.memoryViewFirstAddress%2 != 0) memoryViewFirstAddress-=1;
+            if(this.memoryDisplayMode == 32) while(this.memoryViewFirstAddress%4 != 0) memoryViewFirstAddress-=1;
+        });
+
         memoryDisplayMode = 8;
         memoryViewFirstAddress=0;
         updateMemoryView();
     }
 
 
+
+
+    private void updateNewFirstAddress(int delta){
+        switch (this.memoryDisplayMode){
+            case 8:
+                this.memoryViewFirstAddress+=-delta;
+                break;
+            case 16:
+                this.memoryViewFirstAddress+=-2*delta;
+                break;
+            case 32:
+                this.memoryViewFirstAddress+=-4*delta;
+                break;
+            default:
+                this.memoryDisplayMode = 8;
+        }
+    }
+
     /**
      * updates the memory view
      */
-    
     // TODO Maybe you could do something less redundant?
     public void updateMemoryView(){
 
@@ -176,21 +209,24 @@ public class GUIMemoryView {
 
         switch(this.memoryDisplayMode){
             case 8:
-                for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
+                scrollBar.setUnitIncrement(1);
+                for (int labelNumber=0 ; labelNumber < displayedMemoryRows; labelNumber++){
                     MemoryAddressList.get(labelNumber).	setText("0x" + Integer.toHexString(displayedMemoryAddress));
                     MemoryContentList.get(labelNumber).		setText(""+theArmSimulator.getRamByte(displayedMemoryAddress));
                     displayedMemoryAddress++;
                 }
                 break;
             case 16:
-                for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++){
+                scrollBar.setUnitIncrement(2);
+                for (int labelNumber=0 ; labelNumber < displayedMemoryRows; labelNumber++){
                     MemoryAddressList.get(labelNumber).setText("0x" +Integer.toHexString(displayedMemoryAddress));
                     MemoryContentList.get(labelNumber).setText(""+theArmSimulator.getRamHWord(displayedMemoryAddress));
                     displayedMemoryAddress+=2;
                 }
                 break;
             case 32:
-                for (int labelNumber=0 ; labelNumber < displayableMemoryRows; labelNumber++) {
+                scrollBar.setUnitIncrement(4);
+                for (int labelNumber=0 ; labelNumber < displayedMemoryRows; labelNumber++) {
                     MemoryAddressList.get(labelNumber).setText("0x"+Integer.toHexString(displayedMemoryAddress));
                     MemoryContentList.get(labelNumber).setText("" +theArmSimulator.getRamWord(displayedMemoryAddress));
                     displayedMemoryAddress += 4;

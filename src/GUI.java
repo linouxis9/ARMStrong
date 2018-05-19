@@ -94,8 +94,8 @@ public class GUI extends Application {
 		stage.setScene(scene);
 
 		//Add the CSS file
-		String css = getClass().getResource("css.css").toExternalForm();
-		scene.getStylesheets().addAll(css);
+		/*String css = getClass().getResource("css.css").toExternalForm();
+		scene.getStylesheets().addAll(css);*/
 
 		//Change the icon of the application
 		Image applicationIcon = new Image("file:logo.png");
@@ -112,18 +112,12 @@ public class GUI extends Application {
 
 		updateTheme();
 		
+
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
 
-
-		//SplitPane theCentralSplitPane = (SplitPane) scene.lookup("#centerSplitPane");
-		//theCentralSplitPane.setDividerPosition(0, 100);
-		//theCentralSplitPane.setDividerPosition(1, 5);
-
-
 		//THE CODING AREA
-
 		codingTextArea = (TextArea) scene.lookup("#codeTexArea");
 		executionModeTextFlow = (TextFlow) scene.lookup("#executionModeTextFlow");
 
@@ -167,9 +161,6 @@ public class GUI extends Application {
                 preferencesDialog.show();
                 
          });
-
-		
-		
 		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				String programString = codingTextArea.getText();
 
@@ -180,9 +171,7 @@ public class GUI extends Application {
 					System.out.println(e1.toString());
 				}
 		});
-		
 		theGUIMenuBar.getExitExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> exitExecutionMode());
-
 		theGUIMenuBar.getRunMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				if (executionMode.get() && !(running.get())){
 					new Thread(() -> {
@@ -214,9 +203,7 @@ public class GUI extends Application {
 					}).start();
 				}
 		});
-
 		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
-
 		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				FileChooser fileChooser = new FileChooser();
 				if(lastFilePath != null) {
@@ -240,7 +227,6 @@ public class GUI extends Application {
 					}
 				}
 		});
-		
 		theGUIMenuBar.getSaveAsMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Save assembly program");
@@ -250,7 +236,6 @@ public class GUI extends Application {
 				File chosenFile = fileChooser.showSaveDialog(stage);
 				saveFile(codingTextArea.getText(), chosenFile);
 		});
-		
 		theGUIMenuBar.getSaveMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				if (programFilePath != null){
 					saveFile(codingTextArea.getText(), programFilePath);
@@ -259,7 +244,6 @@ public class GUI extends Application {
 					theGUIMenuBar.getSaveAsMenuItem().fire();
 				}
 		});
-
 		theGUIMenuBar.getNewMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				Stage confirmBox = new Stage();
 				confirmBox.initModality(Modality.APPLICATION_MODAL);
@@ -286,7 +270,6 @@ public class GUI extends Application {
 				confirmBox.setScene(new Scene(vBox));
 				confirmBox.show();
 		});
-
 		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				final Stage helpPopup = new Stage();
 				helpPopup.initModality(Modality.APPLICATION_MODAL);
@@ -299,7 +282,6 @@ public class GUI extends Application {
 				helpPopup.setScene(dialogScene);
 				helpPopup.show();
 		});
-
 		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
 
 		// Several keyboard shortcut
@@ -341,7 +323,6 @@ public class GUI extends Application {
 		});
 
 		//THE CONSOLE OUTPUT
-
 		OutputStream consoleOut = new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
@@ -357,7 +338,6 @@ public class GUI extends Application {
 		//theGUIMemoryView.updateMemoryView();
 		theGUIRegisterView.updateRegisters();
 		stage.show();
-		System.err.println("refresh");
 
 	}
 
