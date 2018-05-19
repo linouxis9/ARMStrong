@@ -3,6 +3,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,9 +13,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.DirectoryChooser;
@@ -71,6 +75,8 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 
+		Font.loadFont(getClass().getResource("QuickSand.ttf").toExternalForm(), 10);
+		
 		theArmSimulator = new ArmSimulator();
 		this.programFilePath = null;
         this.lastFilePath = null;
@@ -112,7 +118,14 @@ public class GUI extends Application {
 
 		updateTheme();
 		
-
+		boolean quicksandFont = prefs.getBoolean("FONT", true);	
+		if(quicksandFont) {
+			root.setStyle("-fx-font-family: \"Quicksand\";");
+		}else {
+			root.setStyle("-fx-font-family: \"\";");
+		}	
+		
+		
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
@@ -124,43 +137,121 @@ public class GUI extends Application {
 
 		//THE ACTION EVENTS
 		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
-            	final Stage preferencesDialog = new Stage();
-                preferencesDialog.initModality(Modality.APPLICATION_MODAL);
-                preferencesDialog.initOwner(stage);
-                VBox dialogVbox = new VBox(20);
-               
-                ChoiceBox<String> theme = new ChoiceBox<>();
-                
-                theme.getItems().addAll(themes);
+        	final Stage preferencesDialog = new Stage();
+            preferencesDialog.initModality(Modality.APPLICATION_MODAL);
+            preferencesDialog.initOwner(stage);
+            VBox dialogVbox = new VBox(20);
+           
+            ChoiceBox<String> theme = new ChoiceBox<>();
+            
+            theme.getItems().addAll(themes);
 
-                theme.setTooltip(new Tooltip("Select a theme"));
-                
-                theme.setValue(prefs.get("THEME", ""));
+            theme.setTooltip(new Tooltip("Select a theme"));
+            
+            theme.setValue(prefs.get("THEME", ""));
+            
+            theme.setId("choiceboxPreferences");
 
-                Button button2 = new Button("Save");
-               
-                button2.setOnAction((ActionEvent e) -> {
-                    	String themeChoose =  theme.getValue();
-     	        		     	        	    
-     	        	    if(themeChoose != null) {
-	     	        	    prefs.put("THEME", themeChoose);
-	     	        	    updateTheme();
-     	        	    }
-                });
-                  
-                dialogVbox.getChildren().add(theme);
-                dialogVbox.getChildren().add(button2);
-                
-                Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
-                preferencesDialog.setScene(preferencesDialogScene);
-                
-                preferencesDialog.setTitle("Preferences");
-                Image preferencesIcon = new Image("file:logo.png");
-                preferencesDialog.getIcons().add(preferencesIcon);
-                
-                preferencesDialog.show();
-                
-         });
+            Button button1 = new Button("Apply and Close");
+            button1.setId("applyAndClosePreferences");
+            
+            Button button2 = new Button("Apply");
+            button2.setId("applyPreferences");
+            
+            Label labelTheme = new Label();
+        	labelTheme.setText("Choose a theme:");
+        	labelTheme.setId("labelThemePreferences");
+        	
+        	Label labelQuicksand = new Label();
+        	labelQuicksand.setText("Choose Quicksand font:");
+        	labelQuicksand.setId("labelQuicksandPreferences");
+         	
+         	CheckBox checkBoxFont = new CheckBox();
+        	
+        	boolean quicksandFontV = prefs.getBoolean("FONT", true);	
+    		if(quicksandFontV) {
+    			checkBoxFont.setSelected(true);
+    		}else {
+    			checkBoxFont.setSelected(false);
+    		}	
+        	
+    		Text lineBreak = new Text();
+    		lineBreak.setFont(new Font(20));
+    		lineBreak.setText("\n");
+    		
+            button2.setOnAction((ActionEvent e) -> {
+            	   String themeChoose =  theme.getValue();
+	        		     	        	    
+ 	        	   if(themeChoose != null) {
+     	        	    prefs.put("THEME", themeChoose);
+     	        	    updateTheme();
+ 	        	   }
+ 	        	    
+ 	        	   if(checkBoxFont.isSelected()) {
+ 	        			prefs.putBoolean("FONT", true);
+ 	        			root.setStyle("-fx-font-family: \"Quicksand\";");	
+ 	        		   
+  	        	   }
+  	        	   else{
+  	        		   prefs.putBoolean("FONT", false);
+  	        		   root.setStyle("-fx-font-family: \"\";");
+  	        	   }
+ 	        	   
+        	   
+            });
+            
+            button1.setOnAction((ActionEvent e) -> {
+                	String themeChoose =  theme.getValue();
+ 	        		     	        	    
+ 	        	    if(themeChoose != null) {
+     	        	    prefs.put("THEME", themeChoose);
+     	        	    updateTheme();      	    
+ 	        	    }
+ 	        	    
+ 	        	   if(checkBoxFont.isSelected()) {
+ 	        			prefs.putBoolean("FONT", true);
+ 	     	        	root.setStyle("-fx-font-family: \"Quicksand\";");
+  	        	   }
+  	        	   else{
+  	        		   prefs.putBoolean("FONT", false);
+  	        		   root.setStyle("-fx-font-family: \"\";");
+  	        	   }
+ 	        	   
+ 	        	   preferencesDialog.close();
+            });
+            GridPane pane = new GridPane();
+            pane.setAlignment(Pos.CENTER);
+            pane.setHgap(5);
+            pane.setVgap(5);
+            pane.setPadding(new Insets(25,25,25,25)); 
+
+            pane.add(labelTheme, 0, 1);
+            pane.add(theme, 1, 1);
+            
+            pane.add(labelQuicksand, 0, 2);
+            pane.add(checkBoxFont, 1, 2);
+            
+            pane.add(lineBreak, 0, 3);
+            
+            pane.add(button2, 0, 4);
+            pane.add(button1, 1, 4);
+            
+            dialogVbox.getChildren().add(pane);   
+            
+            Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
+            preferencesDialog.setScene(preferencesDialogScene);
+           
+            String cssPreferences = getClass().getResource("css.css").toExternalForm();
+            preferencesDialogScene.getStylesheets().addAll(cssPreferences);
+    		
+            preferencesDialog.setTitle("Preferences");
+            Image preferencesIcon = new Image("file:logo.png");
+            preferencesDialog.getIcons().add(preferencesIcon);
+            
+            preferencesDialog.show();
+            
+		});	
+
 		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
 				String programString = codingTextArea.getText();
 
