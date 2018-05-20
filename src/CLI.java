@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 public class CLI {
@@ -35,12 +36,14 @@ public class CLI {
 	private TextBox textBox;
 	private TextBox console;
 	private int memoryIndex;
-	
+	private AtomicBoolean running;
+
     public CLI() {
     	this.registers = new Label[16];
     	this.simulator = new ArmSimulator();
     	this.memory = new LinkedHashMap<>();
     	this.memoryIndex = 0;
+    	this.running = new AtomicBoolean(false);
     	
 		try {
 			Terminal terminal;
@@ -107,13 +110,24 @@ public class CLI {
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Run", () -> {
-	    		this.simulator.run();
-	    		this.updateGUI();
+	    		if (!this.running.get()) {
+	    			new Thread(()  -> {
+	    				this.running.set(true);
+    	    			this.simulator.run();
+    	    			this.updateGUI();
+	    				this.running.set(false);
+	    			}).start();
+	    			this.updateGUI();
+	    		}
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Run Step", () -> {
 	    		try {
-	    			this.simulator.runStep();
+	    			if (!this.running.get()) {
+	    				this.running.set(true);
+	    				this.simulator.runStep();
+	    				this.running.set(false);
+	    			}
 	    		}
 	    		catch (Exception e) {
 	    			System.out.println("[INFO] No more instructions to run");
@@ -121,6 +135,10 @@ public class CLI {
 	    		this.updateGUI();
 	    	}));
 	    	
+	    	menuPanel.addComponent(new Button("Stop", () -> {
+	    		this.simulator.interruptExecutionFlow(true);
+	    	}));
+
 	    	menuPanel.addComponent(new Button("Exit", () -> {
 	    		System.exit(0);
 	    	}));
