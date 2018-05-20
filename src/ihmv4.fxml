@@ -25,7 +25,7 @@
                <left>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Accordion minHeight="50.0" prefHeight="448.0" prefWidth="337.0">
+                        <Accordion prefHeight="623.0" prefWidth="337.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <panes>
                               <TitledPane animated="false" text="Hexadecimal">
                                  <content>
@@ -158,16 +158,15 @@
                <right>
                   <AnchorPane fx:id="memoryViewPane" prefWidth="267.0">
                      <children>
-                        <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to address:" AnchorPane.rightAnchor="165.40380859375" AnchorPane.topAnchor="13.93310546875" />
+                        <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to address:" AnchorPane.rightAnchor="165.40380859375" AnchorPane.topAnchor="13.0" />
                         <TextField fx:id="goToAddressField" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="132.0" promptText="dec, hex or bin" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                         <Button fx:id="button8Bit" layoutX="99.0" layoutY="50.0" mnemonicParsing="false" text="8bit" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="50.0" />
                         <Button fx:id="button32Bit" layoutX="212.0" layoutY="50.0" mnemonicParsing="false" text="32bit" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
                         <Button fx:id="button16Bit" layoutX="153.0" layoutY="49.0" mnemonicParsing="false" text="16bit" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="50.0" />
                         <Text layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.rightAnchor="183.970703125" AnchorPane.topAnchor="54.0" />
-                        <Text fx:id="memoryAddress" layoutX="27.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" AnchorPane.rightAnchor="166.86767578125" AnchorPane.topAnchor="128.0" />
-                        <Text fx:id="memoryContent" layoutX="139.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00 00 00 00" AnchorPane.rightAnchor="52.43505859375" />
-                        <ScrollBar fx:id="memoryScrollBar" layoutX="234.0" layoutY="123.0" orientation="VERTICAL" prefHeight="309.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="123.0" />
-                        <Button fx:id="alignMemory" layoutX="86.0" layoutY="86.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="165.0" text="Align Addresses" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="86.0" />
+                        <Text fx:id="memoryAddress" layoutX="20.19482421875" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                        <Text fx:id="memoryContent" layoutX="119.44677734375" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                        <ScrollBar fx:id="memoryScrollBar" layoutX="234.0" layoutY="93.0" orientation="VERTICAL" prefHeight="514.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="93.0" />
                      </children>
                   </AnchorPane>
                </right>
