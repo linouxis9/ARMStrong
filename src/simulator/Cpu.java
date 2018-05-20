@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /*
 - ________/\\\\\\\\\__/\\\\\\\\\\\\\____/\\\________/\\\_        
@@ -57,11 +58,10 @@ public class Cpu {
 	private final ALU alu;
 
 	/**
-	 * Boolean indicating if the normal flow of execution of the CPU has to be
-	 * stopped. It can be controlled from assembly using Software Interrupts (SWI)
-	 * or Supervisor (SVC) calls.
+	 * Boolean indicating if the normal flow of execution of the CPU has been
+	 * stopped by an external object.
 	 */
-	private boolean isInterrupt;
+	private AtomicBoolean isInterrupted;
 
 	/**
 	 * Boolean indicating if the normal flow of execution of the CPU has been
@@ -139,8 +139,9 @@ public class Cpu {
 		this.interruptsVector = new HashMap<>();
 		this.fillInterruptsVector();
 		this.interruptsVector.get(100).run();
-		this.isInterrupt = false;
+		this.isInterrupted = new AtomicBoolean(false);
 		this.isBreakpoint = false;
+		this.hasFinished = false;
 		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap = new HashMap<>();
 	}
@@ -158,8 +159,9 @@ public class Cpu {
 		this.lr = this.registers[14]; // LR should reference to the same register as this.registers[14]
 		this.pc = this.registers[15]; // PC should reference to the same register as this.registers[15]
 		this.instructions.clear();
-		this.isInterrupt = false;
+		this.isInterrupted.set(false);
 		this.isBreakpoint = false;
+		this.hasFinished = false;
 		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap.clear();
 	}
@@ -170,10 +172,10 @@ public class Cpu {
 	 * invalid addresses.
 	 */
 	public void execute() {
-		this.isInterrupt = false;
+		this.isInterrupted.set(false);
 		this.isBreakpoint = false;
 		
-		while (!this.isInterrupt && !this.isBreakpoint && !hasFinished) {
+		while (!this.isInterrupted.get() && !this.isBreakpoint && !hasFinished) {
 			hasFinished = this.executeStep();
 		}
 	}
@@ -185,19 +187,14 @@ public class Cpu {
 	 * small methods, we use lambdas to implements Callable anonymous subclasses.
 	 */
 	private void fillInterruptsVector() {
-		this.interruptsVector.put(80, () -> {
-			this.isInterrupt = true;
-			System.out.println("Stopping the execution of the program after "
-					+ this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2)));
-		});
-
 		this.interruptsVector.put(81, () -> {
 			this.isBreakpoint = true;
-			System.out.println("[DEBUG] BREAKPOINT after " + this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2)));
+			Instruction instruction = this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2));
+			System.out.println("[DEBUG] BREAKPOINT after " + instruction + " @ line " + instruction.getLine());
 		});
 
 		this.interruptsVector.put(100, () -> {
-			System.out.println(About.info());
+			System.out.println("[INFO] " + About.info());
 		});
 		this.interruptsVector.put(0, () -> {
 			char c = '\0';
@@ -210,7 +207,7 @@ public class Cpu {
 					c = (char) (this.ram.getByte(new Address(this.registers[0].getValue() + i)));
 				}
 			} catch (InvalidMemoryAddressException e) {
-
+				System.out.println("[/!\\] Invalid address in r0 for SVC call #0 ");
 			}
 			System.out.println("");
 		});
@@ -402,12 +399,19 @@ public class Cpu {
 	}
 	
 	/**
-	 * Returns if the processor was interrupted by the SWI call #80.
+	 * Returns if the processor was interrupted by an external object using the interrupts() method.
 	 */
 	public boolean isInterrupted() {
-		return this.isInterrupt;
+		return this.isInterrupted.get();
 	}
 
+	/**
+	 * Interrupts the execution flow of the processor.
+	 */
+	public void interruptMe(boolean interrupt) {
+		this.isInterrupted.set(interrupt);
+	}
+	
 	/**
 	 * Returns if the processor was interrupted by a breakpoint / the SWI call #81.
 	 */

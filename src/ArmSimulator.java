@@ -133,4 +133,12 @@ public class ArmSimulator {
 	public boolean hasFinished() {
 		return this.cpu.hasFinished();
 	}
+	
+	public boolean isInterrupted() {
+		return this.cpu.isInterrupted();
+	}
+	
+	public void interruptExecutionFlow(boolean interrupt) {
+		this.cpu.interruptMe(interrupt);
+	}
 }
