@@ -66,7 +66,8 @@ public class GUI extends Application {
 
 	private Set<String> themes;
 	private static final String DEFAULT_THEME = "red";
-
+	private Color themeColor;
+	
 	private List<Text> instructionsAsText;
 
 	public void startGUI() {
@@ -105,7 +106,8 @@ public class GUI extends Application {
 		prefs = Preferences.userNodeForPackage(this.getClass());
 		prefs.getBoolean("FONT", true);
 		prefs.get("THEME", GUI.DEFAULT_THEME);
-
+		themeColor = Color.RED;
+		
 		themes = new HashSet<>();
 		themes.add("red");
 		themes.add("blue");
@@ -412,7 +414,7 @@ public class GUI extends Application {
 		}
 		if (!theArmSimulator.hasFinished()) {
 			try {
-				instructionsAsText.get(this.theArmSimulator.getCurrentLine()).setFill(Color.RED);
+				instructionsAsText.get(this.theArmSimulator.getCurrentLine()).setFill(themeColor);
 			}
 			catch (IndexOutOfBoundsException e) {}
 		}
@@ -507,6 +509,18 @@ public class GUI extends Application {
 
 		scene.getStylesheets().addAll(css);
 
+		switch(currentTheme) {
+		case "green":
+			themeColor = Color.SEAGREEN;
+			break;
+		case "blue":
+			themeColor = Color.BLUE;
+			break;
+		case "red":
+		default:
+			themeColor = Color.RED;
+		}
+		
 		if (prefs.getBoolean("FONT", true)) {
 			this.root.setStyle("-fx-font-family: \"Quicksand\"; -fx-font-size: 16px;");
 		} else {
