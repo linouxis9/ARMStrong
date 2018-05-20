@@ -19,7 +19,7 @@ public enum TokenType {
 	HASHEDASCII("#'.'"),
 	REGISTER("(r|R)[0-9]+"),
 	NUMBER("(?<!r)[0-9]+"),
-	OPERATION("(adc|add|and|b|bic|bl|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)"),
+	OPERATION("(adc|add|and|bic|bl|b|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)"),
 	DATAIDENTIFIER("=[a-z]+"),
 	IDENTIFIER("[a-z]+"),
 	CATCHSYNTAXERROR("^([^\\s])");
