@@ -179,7 +179,7 @@
                            <content>
                               <ScrollPane prefHeight="200.0" prefWidth="200.0">
                                  <content>
-                                    <TextFlow fx:id="consoleTextFlow" prefHeight="0.0" prefWidth="0.0" />
+                                    <TextFlow fx:id="consoleTextFlow" />
                                  </content>
                               </ScrollPane>
                            </content>
