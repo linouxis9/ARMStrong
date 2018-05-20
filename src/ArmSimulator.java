@@ -129,4 +129,8 @@ public class ArmSimulator {
 		this.program.setNewProgram(programAsString);
 		this.interpretor.parseProgram();
 	}
+	
+	public boolean hasFinished() {
+		return this.cpu.hasFinished();
+	}
 }

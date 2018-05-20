@@ -61,15 +61,20 @@ public class Cpu {
 	 * stopped. It can be controlled from assembly using Software Interrupts (SWI)
 	 * or Supervisor (SVC) calls.
 	 */
-	private boolean interrupt;
+	private boolean isInterrupt;
 
 	/**
 	 * Boolean indicating if the normal flow of execution of the CPU has been
 	 * stopped by a breakpoint. It can be controlled from assembly using Software
 	 * Interrupts (SWI) or Supervisor (SVC) calls.
 	 */
-	private boolean breakpoint;
+	private boolean isBreakpoint;
 
+	/**
+	 * Boolean indicating if the CPU has finished to execute all the instructions available at hand.
+	 */
+	private boolean hasFinished;
+	
 	/**
 	 * Poor's man stack pointer
 	 */
@@ -134,8 +139,8 @@ public class Cpu {
 		this.interruptsVector = new HashMap<>();
 		this.fillInterruptsVector();
 		this.interruptsVector.get(100).run();
-		this.interrupt = false;
-		this.breakpoint = false;
+		this.isInterrupt = false;
+		this.isBreakpoint = false;
 		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap = new HashMap<>();
 	}
@@ -153,8 +158,8 @@ public class Cpu {
 		this.lr = this.registers[14]; // LR should reference to the same register as this.registers[14]
 		this.pc = this.registers[15]; // PC should reference to the same register as this.registers[15]
 		this.instructions.clear();
-		this.interrupt = false;
-		this.breakpoint = false;
+		this.isInterrupt = false;
+		this.isBreakpoint = false;
 		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap.clear();
 	}
@@ -165,12 +170,11 @@ public class Cpu {
 	 * invalid addresses.
 	 */
 	public void execute() {
-		this.interrupt = false;
-		this.breakpoint = false;
-		boolean sucessful = true;
+		this.isInterrupt = false;
+		this.isBreakpoint = false;
 		
-		while (!this.interrupt && !this.breakpoint && sucessful) {
-			sucessful = this.executeStep();
+		while (!this.isInterrupt && !this.isBreakpoint && !hasFinished) {
+			hasFinished = this.executeStep();
 		}
 	}
 
@@ -182,13 +186,13 @@ public class Cpu {
 	 */
 	private void fillInterruptsVector() {
 		this.interruptsVector.put(80, () -> {
-			this.interrupt = true;
+			this.isInterrupt = true;
 			System.out.println("Stopping the execution of the program after "
 					+ this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2)));
 		});
 
 		this.interruptsVector.put(81, () -> {
-			this.breakpoint = true;
+			this.isBreakpoint = true;
 			System.out.println("[DEBUG] BREAKPOINT after " + this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2)));
 		});
 
@@ -223,7 +227,7 @@ public class Cpu {
 	/**
 	 * Executes the next instruction pointed by the Program Counter (pc).
 	 * 
-	 * @return True if the instruction was successful, else False if no others instructions are available at this Program Counter offset.
+	 * @return True if no others instructions are available at this Program Counter offset.
 	 */
 	public boolean executeStep() {
 		try {
@@ -240,9 +244,9 @@ public class Cpu {
 			}
 		}
 		catch (IndexOutOfBoundsException e) {
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -401,14 +405,21 @@ public class Cpu {
 	 * Returns if the processor was interrupted by the SWI call #80.
 	 */
 	public boolean isInterrupted() {
-		return this.interrupt;
+		return this.isInterrupt;
 	}
 
 	/**
 	 * Returns if the processor was interrupted by a breakpoint / the SWI call #81.
 	 */
 	public boolean isBreakpoint() {
-		return this.breakpoint;
+		return this.isBreakpoint;
+	}
+	
+	/**
+	 * Returns if the processor was interrupted by a breakpoint / the SWI call #81.
+	 */
+	public boolean hasFinished() {
+		return this.hasFinished;
 	}
 	
 	public int getPmsp() {
