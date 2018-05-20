@@ -82,21 +82,21 @@ public class GUIMemoryView {
 		memoryPane.heightProperty().addListener((obs, oldVal, newVal) -> {
 			displayableMemoryRows = (((int) memoryPane.getHeight()) / 27);
 			if (displayableMemoryRows > displayedMemoryRows) { // there is space to display more lines
-				System.err.println("the number of displayed rows is" + displayedMemoryRows + " but there is space to display" + displayableMemoryRows + "rows");
+				//System.err.println("the number of displayed rows is" + displayedMemoryRows + " but there is space to display" + displayableMemoryRows + "rows");
 				if (displayableMemoryRows > MemoryAddressList.size()) { // there is not enough lines already loaded to
 																		// use all space
-					System.err.println("The number of loaded rows in the program is " + MemoryAddressList.size()+ " but we can display" + displayableMemoryRows);
+					//System.err.println("The number of loaded rows in the program is " + MemoryAddressList.size()+ " but we can display" + displayableMemoryRows);
 					for (int address = MemoryAddressList.size(); address < displayableMemoryRows; address++) { // loading
 																												// missing
 																												// lines
-						System.err.println("loading row:" + (address + 1) + "at X = " + MemoryAddressList.get(0).getBoundsInParent().getMinX());
+						//System.err.println("loading row:" + (address + 1) + "at X = " + MemoryAddressList.get(0).getBoundsInParent().getMinX());
 						MemoryAddressList.add(new Text(MemoryAddressList.get(0).getBoundsInParent().getMinX(), MemoryAddressList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
 						MemoryContentList.add(new Text(MemoryContentList.get(0).getBoundsInParent().getMinX(), MemoryContentList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
 					}
 				}
 				for (int address = displayedMemoryRows; address < displayableMemoryRows; address++) { // display the
 																										// loaded lines
-					System.err.println("displaying row:" + (address + 1));
+					//System.err.println("displaying row:" + (address + 1));
 					memoryPane.getChildren().add(MemoryAddressList.get(address));
 					memoryPane.getChildren().add(MemoryContentList.get(address));
 				}
@@ -104,9 +104,9 @@ public class GUIMemoryView {
 			}
 
 			if (displayableMemoryRows < displayedMemoryRows) {
-				System.err.println("the number of displayed rows is" + displayedMemoryRows + " but there is ONLY space to load" + displayableMemoryRows + "rows");
+				//System.err.println("the number of displayed rows is" + displayedMemoryRows + " but there is ONLY space to load" + displayableMemoryRows + "rows");
 				for (int address = displayedMemoryRows - 1; address > displayableMemoryRows - 1; address--) {
-					System.err.println("removing row :" + address);
+					//System.err.println("removing row :" + address);
 					memoryPane.getChildren().remove(MemoryAddressList.get(address));
 					memoryPane.getChildren().remove(MemoryContentList.get(address));
 				}

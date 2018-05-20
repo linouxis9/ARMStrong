@@ -21,7 +21,7 @@
       <ToolBar fx:id="thebuttonBar" layoutY="29.0" prefHeight="37.0" prefWidth="1116.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
       <SplitPane dividerPositions="0.8121761658031088" layoutY="66.0" orientation="VERTICAL" prefHeight="669.0" prefWidth="1116.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="66.0">
         <items>
-            <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
                <left>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
@@ -153,7 +153,7 @@
                   </AnchorPane>
                </left>
                <center>
-                  <TextArea prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+                  <TextArea fx:id="codeTexArea" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
                </center>
                <right>
                   <AnchorPane fx:id="memoryViewPane" prefWidth="267.0">

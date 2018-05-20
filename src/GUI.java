@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -120,7 +121,7 @@ public class GUI extends Application {
 
 		// THE CODING AREA
 		codingTextArea = (TextArea) scene.lookup("#codeTexArea");
-		executionModeTextFlow = (TextFlow) scene.lookup("#executionModeTextFlow");
+		executionModeTextFlow = new TextFlow();
 
 		// THE PREFERENCES MENU
 		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
@@ -210,12 +211,13 @@ public class GUI extends Application {
 		// THE ACTION EVENTS
 		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
 			String programString = codingTextArea.getText();
-
-			try {
-				theArmSimulator.setProgramString(programString);
-				enterExecutionMode(programString);
-			} catch (AssemblyException e1) {
-				System.out.println(e1.toString());
+			if(programString.length() != 0){
+				try {
+					theArmSimulator.setProgramString(programString);
+					enterExecutionMode(programString);
+				} catch (AssemblyException e1) {
+					System.out.println(e1.toString());
+				}
 			}
 		});
 		
@@ -403,49 +405,38 @@ public class GUI extends Application {
 		}
 
 		if (!theArmSimulator.hasFinished()) {
-			instructionsAsText.get(currentLine).setFill(Color.RED);
+			try {
+				instructionsAsText.get(currentLine).setFill(Color.RED);
+			}
+			catch (IndexOutOfBoundsException e) {}
 		}
 	}
 
 	private void exitExecutionMode() {
 		this.executionMode.set(false);
 		codingTextArea.setEditable(true);
-		codingTextArea.setVisible(true);
+		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
+		borderPane.setCenter(codingTextArea);
 		theGUIMenuBar.exitExecMode();
 	}
 
 	private void enterExecutionMode(String program) { // TODO parametre peut etre temoraire
 		this.executionMode.set(true);
 		codingTextArea.setEditable(false);
-		codingTextArea.setVisible(false);
+		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
+		borderPane.setCenter(executionModeTextFlow);
 		theGUIMenuBar.setExecMode();
-
 		executionModeTextFlow.getChildren().clear();
 
 		String[] instructionsAsStrings = program.split("\\r?\\n");
 		instructionsAsText = new ArrayList<Text>();
 
 		for (int line = 1; line < instructionsAsStrings.length; line++) {
-			instructionsAsText.add(new Text(line + "\t" + instructionsAsStrings[line] + '\n'));
-			executionModeTextFlow.getChildren().add(instructionsAsText.get(line));
+			instructionsAsText.add(new Text(line + "\t" + instructionsAsStrings[line-1] + '\n'));
+			executionModeTextFlow.getChildren().add(instructionsAsText.get(line-1));
 		}
 		highlightCurrentLine(0);
 		updateGUI();
-		/*
-			try {
-	            for(line=0; true; line++){
-	                instructions.add(new Text(line + "\t" +program.substring(startingPos, program.indexOf("\n", startingPos)+1)));
-	                executionModeTextFlow.getChildren().add(instructions.get(line));
-	                startingPos=program.indexOf("\n", startingPos) + 1;
-	            }
-	        }
-	        catch (Exception e){
-			    //oulala https://www.e4developer.com/2018/05/13/how-to-write-horrible-java/ //TODO
-	        }
-	        line++;
-	        instructions.add(new Text(line + "\t" +program.substring(startingPos, program.length())));
-	        executionModeTextFlow.getChildren().add(instructions.get(line));
-        */
 	}
 
 	private void updateGUI() {
