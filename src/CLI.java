@@ -103,6 +103,7 @@ public class CLI {
 	    	menuPanel.addComponent(new Button("L0ad", () -> {
 	    		try {
 					this.simulator.setProgramString(this.textBox.getText());
+					System.out.println("---");
 				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
 						| InvalidLabelException | UnknownLabelException | InvalidDirectiveException e) {
 					System.out.println(e);
@@ -113,8 +114,9 @@ public class CLI {
 	    		if (!this.running.get()) {
 	    			new Thread(()  -> {
 	    				this.running.set(true);
-    	    			this.simulator.run();
-    	    			this.updateGUI();
+	    				while (!this.simulator.run()) {
+	    					this.updateGUI();
+	    				}
 	    				this.running.set(false);
 	    			}).start();
 	    			this.updateGUI();
@@ -233,8 +235,6 @@ public class CLI {
     private void updateGUI() {
     	this.updateMemory();
     	this.updateRegisters();
-    	this.console.addLine("---");
-    	this.console.addLine("");
     }
     
 }
