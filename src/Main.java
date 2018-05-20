@@ -21,7 +21,9 @@ public class Main {
 		Interpretor interpretorTest = new Interpretor(cpuTest,new Program(test));
 		try {
 			interpretorTest.parseProgram();
-			cpuTest.execute();
+			while (!cpuTest.hasFinished()) {
+					cpuTest.execute();
+			}
 		} catch (AssemblyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

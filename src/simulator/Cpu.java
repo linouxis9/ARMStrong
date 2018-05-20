@@ -172,10 +172,9 @@ public class Cpu {
 	 * invalid addresses.
 	 */
 	public void execute() {
-		this.isInterrupted.set(false);
-		this.isBreakpoint = false;
-		
-		hasFinished = this.executeInstruction();
+		if (!this.hasFinished && !this.isBreakpoint() && !this.isInterrupted()) {
+			hasFinished = this.executeInstruction();
+		}
 	}
 
 	public void executeStep() {
