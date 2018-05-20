@@ -139,8 +139,8 @@ public class GUI extends Application {
 
 			theme.setId("choiceboxPreferences");
 
-			Button button1 = new Button("Apply");
-			button1.setId("applyPreferences");
+			Button button1 = new Button("Apply and Close");
+			button1.setId("applyClosePreferences");
 
 			Button button2 = new Button("Close");
 			button2.setId("closePreferences");
@@ -167,6 +167,8 @@ public class GUI extends Application {
 				prefs.putBoolean("FONT", checkBoxFont.isSelected());
 
 				applyTheme();
+				
+				preferencesDialog.close();
 			});
 
 			button2.setOnAction((ActionEvent e) ->	preferencesDialog.close());
@@ -185,8 +187,8 @@ public class GUI extends Application {
 
 			pane.add(lineBreak, 0, 3);
 
-			pane.add(button2, 0, 4);
-			pane.add(button1, 1, 4);
+			pane.add(button1, 0, 4);
+			pane.add(button2, 1, 4);
 
 			dialogVbox.getChildren().add(pane);
 

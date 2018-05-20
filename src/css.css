@@ -30,7 +30,7 @@
     -fx-graphic: none;
 }
 
-#applyPreferences, #applyAndClosePreferences, #choiceboxPreferences{
+#closePreferences, #applyClosePreferences, #choiceboxPreferences{
 	-fx-border-radius: 10;
 	-fx-label-padding: 800%;
 	-fx-font-size: 1.2em;

@@ -5,3 +5,7 @@
  -fx-background-color: #008000; 
  -fx-text-fill: white; 
 }
+
+.root{
+	-fx-focus-color: #008000;
+}

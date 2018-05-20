@@ -6,3 +6,6 @@
  -fx-text-fill: white; 
 }
 
+.root{
+	-fx-focus-color: #AA0000;
+}
