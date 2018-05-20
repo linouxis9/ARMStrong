@@ -4,15 +4,13 @@
 
 [The Javadoc is available here](http://projectarm.devling.net/api/)
 
-```java
-public class HelloWorld {
+### The first alpha version of our project has been released!
+We are now entering the Final Testing Stage!
 
-    public static void main(String[] args) {
-        System.out.println("Bienvenue sur le dépot du Projet S2 2017-2018 #@rmsim de l'IUT de Valence!");
-    }
+You can now try the two JAR of our project!
 
-}
-```
+[GUI.jar](https://gitlab.iut-valence.fr/demmanuv/projet_s2/uploads/f33c6fdb07526707d8f7413ca8e8a1d6/GUI.jar)
+[CLI.jar](https://gitlab.iut-valence.fr/demmanuv/projet_s2/uploads/c2f64647a085f61fb6ceead34222b897/CLI.jar)
 
 > We now have split our project into 3 branches...
 >
