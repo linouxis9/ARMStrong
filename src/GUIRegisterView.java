@@ -37,9 +37,9 @@ public class GUIRegisterView {
 
 		for (int currentRegisterNumber = 0; currentRegisterNumber < 16; currentRegisterNumber++) {
 			currentRegisterValue = theArmSimulator.getRegisterValue(currentRegisterNumber);
-			hexadecimalRegisterText.get(currentRegisterNumber).setText(Integer.toHexString(currentRegisterValue));
-			decimalRegisterText.get(currentRegisterNumber).setText("" + Integer.toUnsignedLong(currentRegisterValue));
-			signedDecimalRegisterText.get(currentRegisterNumber).setText("" + currentRegisterValue);
+			hexadecimalRegisterText.get(currentRegisterNumber).setText("0x" + Integer.toHexString(currentRegisterValue));
+			decimalRegisterText.get(currentRegisterNumber).setText(Integer.toUnsignedString(currentRegisterValue));
+			signedDecimalRegisterText.get(currentRegisterNumber).setText(Integer.toString(currentRegisterValue));
 		}
 	}
 }

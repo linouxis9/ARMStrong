@@ -227,13 +227,18 @@ public class GUI extends Application {
 			if (executionMode.get() && !(running.get())) {
 				new Thread(() -> {
 					this.running.set(true);
-					theArmSimulator.run();
-
-					Platform.runLater(() -> {
-						updateGUI();
-						stage.show();
-					});
-
+					int counter = 0;
+					
+					while(!this.theArmSimulator.run()) {
+						if (counter >= 1000) {
+							this.updateGUIfromThread();
+							counter = 0;
+						}
+						counter++;
+					}
+					
+					this.updateGUIfromThread();
+					
 					this.running.set(false);
 				}).start();
 			}
@@ -242,13 +247,12 @@ public class GUI extends Application {
 		theGUIMenuBar.getRunSingleMenuItem().setOnAction((ActionEvent actionEvent) -> {
 			if (executionMode.get() && !(running.get())) {
 				new Thread(() -> {
-					theArmSimulator.runStep();
 					this.running.set(true);
-					Platform.runLater(() -> {
-						highlightCurrentLine(theArmSimulator.getCurrentLine());
-						updateGUI();
-						stage.show();
-					});
+					
+					theArmSimulator.runStep();
+
+					this.updateGUIfromThread();
+					
 					this.running.set(false);
 				}).start();
 			}
@@ -273,6 +277,7 @@ public class GUI extends Application {
 					codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
 					programFilePath = new File(path);
 					lastFilePath = path;
+					stage.setTitle("#@RM - " + programFilePath.getName());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -338,15 +343,17 @@ public class GUI extends Application {
 
 		// Several keyboard shortcut
 		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
-
+		TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
+		consoleTextFlow.getChildren().add(new Text(""));
+		
 		// THE CONSOLE OUTPUT
 		OutputStream consoleOut = new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
-				Platform.runLater(() -> {
-					TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
-					consoleTextFlow.getChildren().add(new Text((String.valueOf((char) b))));
-				});
+					Platform.runLater(() -> {
+						Text text = (Text)consoleTextFlow.getChildren().get(0);
+						text.setText(text.getText() + (char)b);
+					});
 			}
 		};
 		System.setOut(new PrintStream(consoleOut, true));
@@ -399,20 +406,20 @@ public class GUI extends Application {
 		}
 	}
 
-	private void highlightCurrentLine(int currentLine) {
+	private void highlightCurrentLine() {
 		for (int i = 0; i < instructionsAsText.size(); i++) {
 			instructionsAsText.get(i).setFill(Color.BLACK);
 		}
-
 		if (!theArmSimulator.hasFinished()) {
 			try {
-				instructionsAsText.get(currentLine).setFill(Color.RED);
+				instructionsAsText.get(this.theArmSimulator.getCurrentLine()).setFill(Color.RED);
 			}
 			catch (IndexOutOfBoundsException e) {}
 		}
 	}
 
 	private void exitExecutionMode() {
+		this.theArmSimulator.interruptExecutionFlow(true);
 		this.executionMode.set(false);
 		codingTextArea.setEditable(true);
 		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
@@ -431,23 +438,32 @@ public class GUI extends Application {
 		String[] instructionsAsStrings = program.split("\\r?\\n");
 		instructionsAsText = new ArrayList<Text>();
 
-		for (int line = 1; line < instructionsAsStrings.length; line++) {
+		for (int line = 1; line <= instructionsAsStrings.length; line++) {
 			instructionsAsText.add(new Text(line + "\t" + instructionsAsStrings[line-1] + '\n'));
 			executionModeTextFlow.getChildren().add(instructionsAsText.get(line-1));
 		}
-		highlightCurrentLine(0);
+		highlightCurrentLine();
 		updateGUI();
 	}
 
 	private void updateGUI() {
-		// theGUIMemoryView.updateMemoryView();
+		theGUIMemoryView.updateMemoryView();
 		theGUIRegisterView.updateRegisters();
 	}
 
+	private void updateGUIfromThread() {
+		Platform.runLater(() -> {
+			highlightCurrentLine();
+			updateGUI();
+			stage.show();
+		});
+	}
+	
 	private void saveFile(String content, File theFile) {
 		try (FileWriter outputStream = new FileWriter(theFile)) {
 			outputStream.write(content);
 			this.programFilePath = theFile;
+			stage.setTitle("#@RM - " + theFile.getName());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

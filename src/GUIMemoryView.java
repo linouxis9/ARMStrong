@@ -212,7 +212,7 @@ public class GUIMemoryView {
 
 		int displayedMemoryAddress = memoryViewFirstAddress;
 
-		scrollBar.setUnitIncrement((int)this.memoryDisplayMode/8);
+		scrollBar.setUnitIncrement(this.memoryDisplayMode/8);
 
 		for (int labelNumber = 0; labelNumber < displayedMemoryRows; labelNumber++) {
 			String address = Integer.toHexString(displayedMemoryAddress);
