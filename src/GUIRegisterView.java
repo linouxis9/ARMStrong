@@ -7,39 +7,39 @@ import java.util.List;
 
 public class GUIRegisterView {
 
-    private ArmSimulator theArmSimulator;
+	private ArmSimulator theArmSimulator;
 
-    private List<Text> hexadecimalRegisterText;
-    private List<Text> decimalRegisterText;
-    private List<Text> signedDecimalRegisterText;
+	private List<Text> hexadecimalRegisterText;
+	private List<Text> decimalRegisterText;
+	private List<Text> signedDecimalRegisterText;
 
-    public GUIRegisterView(Scene theScene, ArmSimulator anArmSimulator){
+	public GUIRegisterView(Scene theScene, ArmSimulator anArmSimulator) {
 
-        this.theArmSimulator = anArmSimulator;
+		this.theArmSimulator = anArmSimulator;
 
-        this.hexadecimalRegisterText 	= new ArrayList<Text>();
-        this.decimalRegisterText 		= new ArrayList<Text>();
-        this.signedDecimalRegisterText 	= new ArrayList<Text>();
+		this.hexadecimalRegisterText = new ArrayList<Text>();
+		this.decimalRegisterText = new ArrayList<Text>();
+		this.signedDecimalRegisterText = new ArrayList<Text>();
 
-        for(int register=0; register<16; register++){
-            this.hexadecimalRegisterText.	add((Text) theScene.lookup("#register"+register+"Hex"));
-            this.decimalRegisterText.		add((Text) theScene.lookup("#register"+register+"UDec"));
-            this.signedDecimalRegisterText.	add((Text) theScene.lookup("#register"+register+"Dec"));
-        }
-    }
+		for (int register = 0; register < 16; register++) {
+			this.hexadecimalRegisterText.add((Text) theScene.lookup("#register" + register + "Hex"));
+			this.decimalRegisterText.add((Text) theScene.lookup("#register" + register + "UDec"));
+			this.signedDecimalRegisterText.add((Text) theScene.lookup("#register" + register + "Dec"));
+		}
+	}
 
-    /**
-     * Update the displayed registers
-     */
-    public void updateRegisters(){
+	/**
+	 * Update the displayed registers
+	 */
+	public void updateRegisters() {
 
-        int currentRegisterValue;
+		int currentRegisterValue;
 
-        for(int currentRegisterNumber=0; currentRegisterNumber<16; currentRegisterNumber++){
-            currentRegisterValue = theArmSimulator.getRegisterValue(currentRegisterNumber);
-            hexadecimalRegisterText.	get(currentRegisterNumber).setText(Integer.toHexString(currentRegisterValue));
-            decimalRegisterText.		get(currentRegisterNumber).setText(""+Integer.toUnsignedLong(currentRegisterValue));
-            signedDecimalRegisterText.	get(currentRegisterNumber).setText(""+currentRegisterValue);
-        }
-    }
+		for (int currentRegisterNumber = 0; currentRegisterNumber < 16; currentRegisterNumber++) {
+			currentRegisterValue = theArmSimulator.getRegisterValue(currentRegisterNumber);
+			hexadecimalRegisterText.get(currentRegisterNumber).setText(Integer.toHexString(currentRegisterValue));
+			decimalRegisterText.get(currentRegisterNumber).setText("" + Integer.toUnsignedLong(currentRegisterValue));
+			signedDecimalRegisterText.get(currentRegisterNumber).setText("" + currentRegisterValue);
+		}
+	}
 }
