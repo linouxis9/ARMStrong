@@ -102,8 +102,8 @@ public class GUI extends Application {
 		stage.getIcons().add(applicationIcon);
 
 		prefs = Preferences.userNodeForPackage(this.getClass());
-		prefs.putBoolean("FONT", true);
-		prefs.put("THEME", GUI.DEFAULT_THEME);
+		prefs.getBoolean("FONT", true);
+		prefs.get("THEME", GUI.DEFAULT_THEME);
 
 		themes = new HashSet<>();
 		themes.add("red");
@@ -501,7 +501,7 @@ public class GUI extends Application {
 		if (prefs.getBoolean("FONT", true)) {
 			this.root.setStyle("-fx-font-family: \"Quicksand\"; -fx-font-size: 16px;");
 		} else {
-			this.root.setStyle("-fx-font-family: ;");
+			this.root.setStyle("-fx-font-family: ''; -fx-font-size: 16px;");
 		}
 	
 	}
