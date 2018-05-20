@@ -68,8 +68,9 @@ public class ArmSimulator {
 	/**
 	 * 
 	 */
-	public void run() {
+	public boolean run() {
 		this.cpu.execute();
+		return this.isHalted();
 	}
 
 	/**
@@ -136,6 +137,14 @@ public class ArmSimulator {
 	
 	public boolean isInterrupted() {
 		return this.cpu.isInterrupted();
+	}
+	
+	public boolean isBreakpoint() {
+		return this.cpu.isBreakpoint();
+	}
+	
+	public boolean isHalted() {
+		return this.hasFinished() || this.isBreakpoint() || this.isInterrupted();
 	}
 	
 	public void interruptExecutionFlow(boolean interrupt) {

@@ -175,11 +175,13 @@ public class Cpu {
 		this.isInterrupted.set(false);
 		this.isBreakpoint = false;
 		
-		while (!this.isInterrupted.get() && !this.isBreakpoint && !hasFinished) {
-			hasFinished = this.executeStep();
-		}
+		hasFinished = this.executeInstruction();
 	}
 
+	public void executeStep() {
+		hasFinished = this.executeInstruction();
+	}
+	
 	/**
 	 * This function is responsible of the filing of Map<Integer,Callable>
 	 * interruptsVector. It provides several functions directly accessible from
@@ -220,13 +222,14 @@ public class Cpu {
 			System.out.println((int) (this.registers[1].getValue()));
 		});
 	}
-
+	
 	/**
 	 * Executes the next instruction pointed by the Program Counter (pc).
 	 * 
 	 * @return True if no others instructions are available at this Program Counter offset.
 	 */
-	public boolean executeStep() {
+	public boolean executeInstruction() {
+		boolean result = false;
 		try {
 			int offset = this.getPc().getValue();
 			offset = ((int) Math.ceil((double) offset / 4));
@@ -234,16 +237,16 @@ public class Cpu {
 			this.pc.setValue(this.pc.getValue() + 4);
 	
 			if (this.cpsr.getConditionCodeStatus(i.getCc())) {
-				System.out.println("Exec.: " + i);
+				//System.out.println("Exec.: " + i);
 				this.runInstruction(i);
 			} else {
-				System.out.println("Skip.: " + i + " (Condition not meet)");
+				System.out.println("Skip.: " + i + " (Condition not meet) at line " + i.getLine());
 			}
 		}
 		catch (IndexOutOfBoundsException e) {
-			return true;
+			result = true;
 		}
-		return false;
+		return result;
 	}
 
 	/**
