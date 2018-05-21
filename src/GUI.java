@@ -233,13 +233,18 @@ public class GUI extends Application {
 				new Thread(() -> {
 					this.running.set(true);
 					int counter = 0;
-					
+					this.theArmSimulator.interruptExecutionFlow(false);
 					while(!this.theArmSimulator.run()) {
-						if (counter >= 1000) {
+						if (counter >= 1) {
 							this.updateGUIfromThread();
 							counter = 0;
 						}
 						counter++;
+						try {
+							Thread.sleep(1);
+						} catch (InterruptedException e) {
+							break;
+						}
 					}
 					
 					this.updateGUIfromThread();
@@ -362,7 +367,7 @@ public class GUI extends Application {
 		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
 		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
 		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
-		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem());
+		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem().fire());
 
 
 
