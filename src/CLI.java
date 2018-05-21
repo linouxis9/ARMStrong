@@ -1,4 +1,6 @@
 import com.googlecode.lanterna.*;
+import com.googlecode.lanterna.graphics.SimpleTheme;
+import com.googlecode.lanterna.graphics.Theme;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder;
 import com.googlecode.lanterna.screen.*;
@@ -33,7 +35,7 @@ public class CLI {
 	private MultiWindowTextGUI gui;
 	private Window window;
 	private LinkedHashMap<Label,Label> memory;
-	private TextBox textBox;
+	private TextBox codeEditor;
 	private TextBox console;
 	private int memoryIndex;
 	private AtomicBoolean running;
@@ -73,7 +75,7 @@ public class CLI {
 					.setActionLabel("Open")
 					.build()
 					.showDialog(gui).getAbsolutePath();
-	    			this.textBox.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
+	    			this.codeEditor.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -90,7 +92,7 @@ public class CLI {
 					.build()
 					.showDialog(gui).getAbsolutePath();
 	    			try (PrintWriter out = new PrintWriter(path)) {
-	    			    out.println(this.textBox.getText());
+	    			    out.println(this.codeEditor.getText());
 	    			}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -102,12 +104,16 @@ public class CLI {
 	    	
 	    	menuPanel.addComponent(new Button("L0ad", () -> {
 	    		try {
-					this.simulator.setProgramString(this.textBox.getText());
+					this.simulator.setProgramString(this.codeEditor.getText());
 					System.out.println("---");
 				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
 						| InvalidLabelException | UnknownLabelException | InvalidDirectiveException e) {
 					System.out.println(e);
+					showCurrentLine(e.getLine()-1);
+					return;
 				}
+    			this.codeEditor.setReadOnly(true);
+    			this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.GREEN));
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Run", () -> {
@@ -116,6 +122,7 @@ public class CLI {
 	    				this.running.set(true);
 	    				while (!this.simulator.run()) {
 	    					this.updateGUI();
+		    				this.showCurrentLine();
 	    				}
 	    				this.running.set(false);
 	    			}).start();
@@ -128,6 +135,7 @@ public class CLI {
 	    			if (!this.running.get()) {
 	    				this.running.set(true);
 	    				this.simulator.runStep();
+	    				this.showCurrentLine();
 	    				this.running.set(false);
 	    			}
 	    		}
@@ -139,6 +147,8 @@ public class CLI {
 	    	
 	    	menuPanel.addComponent(new Button("Stop", () -> {
 	    		this.simulator.interruptExecutionFlow(true);
+    			this.codeEditor.setReadOnly(false);
+    			this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
 	    	}));
 
 	    	menuPanel.addComponent(new Button("Exit", () -> {
@@ -160,8 +170,8 @@ public class CLI {
 	    	
 	    	Panel centerPanel = new Panel();
 	    	bodyPanel.addComponent(centerPanel);
-	    	textBox = new TextBox(new TerminalSize(size.getColumns()/2,size.getColumns()/8));
-	    	centerPanel.addComponent(textBox.withBorder(Borders.singleLine("Editor")));
+	    	codeEditor = new TextBox(new TerminalSize(size.getColumns()/2,size.getColumns()/8));
+	    	centerPanel.addComponent(codeEditor.withBorder(Borders.singleLine("Editor")));
 	    	
 	    	Panel rightPanel = new Panel(new GridLayout(2));
 	    	bodyPanel.addComponent(rightPanel.withBorder(Borders.singleLine("Memory")));
@@ -190,7 +200,7 @@ public class CLI {
 	    	
 	    	this.console = new TextBox(new TerminalSize(size.getColumns()/2,4));
 	    	this.console.setReadOnly(true);
-	    	this.console.setText(About.info());
+	    	this.console.setText(About.COPYRIGHT);
 	    	this.console.addLine("");
 			console.setCaretWarp(true);
 	    	centerPanel.addComponent(this.console.withBorder(Borders.singleLine("Console")));
@@ -235,6 +245,17 @@ public class CLI {
     private void updateGUI() {
     	this.updateMemory();
     	this.updateRegisters();
+    }
+    
+    private void showCurrentLine() {
+		showCurrentLine(this.simulator.getCurrentLine());
+    }
+    
+    private void showCurrentLine(int line) {
+		String code = this.codeEditor.getText().replaceAll("-> ", "");
+		String[] codes = code.split(System.lineSeparator());
+		codes[line] = "-> " + codes[line];
+		this.codeEditor.setText(String.join(System.lineSeparator(), codes));
     }
     
 }
