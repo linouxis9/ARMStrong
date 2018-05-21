@@ -12,6 +12,6 @@ public class InvalidOperationException extends AssemblyException {
 
 	@Override
 	public String toString() {
-		return "INVALID OPERATION: "+ op + " @ line " + line + " is unknown.";
+		return "INVALID OPERATION: '"+ op + "' @ line " + line + " is unknown.";
 	}
 }

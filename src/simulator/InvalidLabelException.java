@@ -15,6 +15,6 @@ public class InvalidLabelException extends AssemblyException {
 
 	@Override
 	public String toString() {
-		return "INVALID LABEL: " + label + " @ line " + line + " already exists.";
+		return "INVALID LABEL: '" + label + "' @ line " + line + " already exists.";
 	}
 }

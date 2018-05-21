@@ -9,6 +9,6 @@ public class InvalidDirectiveException extends AssemblyException {
 	}
 
 	public String toString() {
-		return "INVALID DIRECTIVE: " + directive + " @ line " + line + " is unknown.";
+		return "INVALID DIRECTIVE: '" + directive + "' @ line " + line + " is unknown.";
 	}
 }

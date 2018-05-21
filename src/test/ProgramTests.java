@@ -105,8 +105,7 @@ public class ProgramTests {
 		
 		tokens = Program.lexer(".align 4");
 		expected = new HashSet<Token>() {{
-			add(new Token(TokenType.DIRECTIVE,".align"));
-			add(new Token(TokenType.NUMBER,"4"));
+			add(new Token(TokenType.DIRECTIVE,".align 4"));
 		}};
 		assertTrue(expected.containsAll(tokens));
 		assertTrue(tokens.containsAll(expected));

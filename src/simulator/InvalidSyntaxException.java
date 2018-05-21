@@ -16,7 +16,7 @@ public class InvalidSyntaxException extends AssemblyException {
 	}
 	
 	public String toString() {
-		return "INVALID SYNTAX: " + error + " @ line " + line + " is not understood.";
+		return "INVALID SYNTAX: '" + error + "' @ line " + line + " is not understood.";
 	}
 	
 }
