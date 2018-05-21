@@ -6,9 +6,8 @@ package simulator;
  */
 public enum TokenType {
 	COMMENT("@.*"),
-	LABEL("[a-z]+:"),
 	CONDITIONCODE("(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)"),
-	FLAG("(?<!^)(?<!:)(b|h|s)"),
+	FLAG("(?<!^)(?<!\\s)(?<!:)(b|h|s)"),
 	DIRECTIVE("\\.[a-z]+( )*([a-z]|[0-9])*"),
 	OFFSET("\\[r[0-9]+\\]"), 
 	INDEXEDOFFSET("\\[r[0-9]{1,2}\\,(\\+|-)?[1-9]+\\]"), 
@@ -19,9 +18,10 @@ public enum TokenType {
 	HASHEDASCII("#'.'"),
 	REGISTER("(r|R)[0-9]+"),
 	NUMBER("(?<!r)[0-9]+"),
-	OPERATION("(adc|add|and|bic|bl|b|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)"),
-	DATAIDENTIFIER("=[a-z]+"),
+	OPERATION("(?<![a-z])(adc|add|and|bic|bl|b|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)((?=(b|h|f))|(?=((b|h|f)(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al))|(?=(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)| )))"),
+	LABEL("[a-z]+:"),
 	IDENTIFIER("[a-z]+"),
+	DATAIDENTIFIER("=[a-z]+"),
 	CATCHSYNTAXERROR("^([^\\s])");
 	
     public final String regexp;

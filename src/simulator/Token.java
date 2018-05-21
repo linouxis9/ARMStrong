@@ -82,7 +82,7 @@ public class Token {
 		if (this.type != TokenType.OPERATION) {
 			throw new RuntimeException();
 		}		
-		return this.value;
+		return this.value.replaceAll("\\s", "");
 	}
 	
 	public String getRawIdentifier() {
@@ -108,6 +108,13 @@ public class Token {
 
 	public String getRawConditionCode() {
 		if (this.type != TokenType.CONDITIONCODE) {
+			throw new RuntimeException();
+		}		
+		return this.value;
+	}
+	
+	public String getSyntaxError() {
+		if (this.type != TokenType.CATCHSYNTAXERROR) {
 			throw new RuntimeException();
 		}		
 		return this.value;

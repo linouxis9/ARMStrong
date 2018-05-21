@@ -51,7 +51,7 @@ public class Preprocessor {
 	 *            The Tokenized's representation of the full program.
 	 * @throws InvalidLabelException
 	 */
-	public void preProcessPass1(List<List<Token>> lines) throws InvalidLabelException, InvalidDirectiveException {
+	public void preProcessPass1(List<List<Token>> lines) throws InvalidLabelException, InvalidDirectiveException, InvalidSyntaxException {
 		int line = 0;
 		int instructions = 1;		
 			for (List<Token> tokens : lines) {
@@ -87,6 +87,10 @@ public class Preprocessor {
 				for (Token token : tokens) {
 					if (token.getTokenType() == TokenType.HASHEDASCII) {
 						tokens.set(tokens.indexOf(token), new Token(TokenType.HASH, "#" + token.getRawAsciiValue()));
+					}
+					
+					if (token.getTokenType() == TokenType.CATCHSYNTAXERROR) {
+						throw new InvalidSyntaxException(token.getSyntaxError(), line);
 					}
 				}
 				
