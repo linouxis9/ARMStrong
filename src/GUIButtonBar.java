@@ -30,16 +30,16 @@ public class GUIButtonBar {
 
         this.theToolBar = aToolBar;
 
-
-        exececutionMode = new Button("(switchMode)", new ImageView(new Image("file:images/logoSmall.png")));
+        
+        exececutionMode = new Button("", new ImageView(new Image("file:images/switch.png")));
 
         run = new Button("", new ImageView(new Image("file:images/run.png")));
-        runSingle = new Button("(run step)", new ImageView(new Image("file:images/logoSmall.png")));
-        reload = new Button("(reload)", new ImageView(new Image("file:images/logoSmall.png")));
-        stop = new Button("(stop)", new ImageView(new Image("file:images/logoSmall.png")));
+        runSingle = new Button("", new ImageView(new Image("file:images/runByStep.png")));
+        reload = new Button("", new ImageView(new Image("file:images/reload.png")));
+        stop = new Button("", new ImageView(new Image("file:images/stop.png")));
 
         Save = new Button("", new ImageView(new Image("file:images/save.png")));
-        newFile = new Button("(new file)", new ImageView(new Image("file:images/logoSmall.png")));
+        newFile = new Button("", new ImageView(new Image("file:images/newFile.png")));
 
         editMode = new ArrayList<Button>();
         execMode = new ArrayList<Button>();
