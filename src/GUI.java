@@ -59,6 +59,7 @@ public class GUI extends Application {
 	private GUIMenuBar theGUIMenuBar;
 	private GUIMemoryView theGUIMemoryView;
 	private GUIRegisterView theGUIRegisterView;
+	private GUIButtonBar theGUIButtonBar;
 
 	private String lastFilePath;
 
@@ -120,6 +121,7 @@ public class GUI extends Application {
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
+		theGUIButtonBar = new GUIButtonBar((ToolBar) scene.lookup("#thebuttonBar"));
 
 		// THE CODING AREA
 		codingTextArea = (TextArea) scene.lookup("#codeTexArea");
@@ -210,6 +212,7 @@ public class GUI extends Application {
 		});
 
 		// TODO I'm wondering if we shouldn't move the logic somewhere else? We are quite bloating the constructor there? Maybe we could move that into GUIMenuBar? Maybe methods instead of lambdas?
+		// TODO the problem is that these buttons are using a lot of methods/attributes in this class... =/, if we move them in GUIMenuBar we have to give access it to GUI (his parent)
 		// THE ACTION EVENTS
 		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
 			String programString = codingTextArea.getText();
@@ -260,8 +263,7 @@ public class GUI extends Application {
 			}
 		});
 		
-		theGUIMenuBar.getReloadProgramMenuItem()
-				.setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
+		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
 		
 		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
 			FileChooser fileChooser = new FileChooser();
@@ -342,6 +344,24 @@ public class GUI extends Application {
 		});
 		
 		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
+
+		theGUIButtonBar.getExececutionModeButton().setOnAction((ActionEvent actionEvent) -> {
+			if(this.executionMode.get()){
+				theGUIMenuBar.getExitExecutionModeMenuItem().fire();
+			}
+			else{
+				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
+			}
+		});
+
+		theGUIButtonBar.getNewFileButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getNewMenuItem().fire());
+		theGUIButtonBar.getSaveButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getSaveMenuItem().fire());
+
+		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
+		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
+		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
+
+
 
 		// Several keyboard shortcut
 		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
@@ -424,17 +444,25 @@ public class GUI extends Application {
 		this.theArmSimulator.interruptExecutionFlow(true);
 		this.executionMode.set(false);
 		codingTextArea.setEditable(true);
+
 		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
 		borderPane.setCenter(codingTextArea);
+
 		theGUIMenuBar.exitExecMode();
+		theGUIButtonBar.exitExecMode();
 	}
 
 	private void enterExecutionMode(String program) { // TODO parametre peut etre temoraire
+
 		this.executionMode.set(true);
+
+		theGUIMenuBar.setExecMode();
+		theGUIButtonBar.setExecMode();
+
 		codingTextArea.setEditable(false);
+
 		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
 		borderPane.setCenter(executionModeTextFlow);
-		theGUIMenuBar.setExecMode();
 		executionModeTextFlow.getChildren().clear();
 
 		String[] instructionsAsStrings = program.split("\\r?\\n");
