@@ -262,7 +262,9 @@ public class GUI extends Application {
 				}).start();
 			}
 		});
-		
+
+		theGUIMenuBar.getStopMenuItem().setOnAction((ActionEvent actionEvent) -> theArmSimulator.interruptExecutionFlow(true));
+
 		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
 		
 		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
@@ -360,6 +362,7 @@ public class GUI extends Application {
 		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
 		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
 		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
+		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem());
 
 
 
@@ -468,9 +471,13 @@ public class GUI extends Application {
 		String[] instructionsAsStrings = program.split("\\r?\\n");
 		instructionsAsText = new ArrayList<Text>();
 
-		for (int line = 1; line <= instructionsAsStrings.length; line++) {
-			instructionsAsText.add(new Text(line + "\t" + instructionsAsStrings[line-1] + '\n'));
-			executionModeTextFlow.getChildren().add(instructionsAsText.get(line-1));
+		for (int lineNumber = 1; lineNumber <= instructionsAsStrings.length; lineNumber++) {
+			String line = lineNumber + "\t" + instructionsAsStrings[lineNumber-1] + '\n';
+			if(theArmSimulator.getBreakPointStatus(lineNumber)){
+				line = "->>>" + line;
+			}
+			instructionsAsText.add(new Text(line));
+			executionModeTextFlow.getChildren().add(instructionsAsText.get(lineNumber-1));
 		}
 		highlightCurrentLine();
 		updateGUI();

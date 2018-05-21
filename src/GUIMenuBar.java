@@ -1,21 +1,13 @@
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GUIMenuBar {
 
-	private List<MenuItem> menusToDisableInExecMode;
+	private List<MenuItem> diabledInExecMode;
+	private List<MenuItem> enabledInExecMode;
 	private MenuBar theMenuBar;
 
 	private MenuItem newMenuItem;
@@ -31,12 +23,14 @@ public class GUIMenuBar {
 	private MenuItem documentationMenuItem;
 	private MenuItem reloadProgramMenuItem;
 	private MenuItem preferencesMenuItem;
+	private MenuItem stopMenuItem;
 
 	public GUIMenuBar(MenuBar aMenuBar) {
 
 		theMenuBar = aMenuBar;
 
-		menusToDisableInExecMode = new ArrayList<MenuItem>();
+		diabledInExecMode = new ArrayList<MenuItem>();
+		enabledInExecMode = new ArrayList<MenuItem>();
 
 		Menu fileMenu = new Menu("File");
 		Menu editMenu = new Menu("Edit");
@@ -55,23 +49,28 @@ public class GUIMenuBar {
 		runMenuItem = new MenuItem("Run");
 		runSingleMenuItem = new MenuItem("Run a single instruction");
 		reloadProgramMenuItem = new MenuItem("Reload Program");
+		stopMenuItem = new MenuItem("Stop Execution");
 		documentationMenuItem = new MenuItem("Documentation");
 		preferencesMenuItem = new MenuItem("Preferences");
 
 		theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
 
-		fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, preferencesMenuItem,
-				new SeparatorMenuItem(), exitMenuItem);
+		fileMenu.getItems().addAll(newMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, preferencesMenuItem, new SeparatorMenuItem(), exitMenuItem);
 		editMenu.getItems().addAll();
-		runMenu.getItems().addAll(enterExecutionModeMenuItem, exitExecutionModeMenuItem, new SeparatorMenuItem(),
-				runMenuItem, runSingleMenuItem, new SeparatorMenuItem(), reloadProgramMenuItem);
+		runMenu.getItems().addAll(enterExecutionModeMenuItem, exitExecutionModeMenuItem, new SeparatorMenuItem(), runMenuItem, runSingleMenuItem, stopMenuItem, new SeparatorMenuItem(), reloadProgramMenuItem);
 		helpMenu.getItems().addAll(helpMenuItem, documentationMenuItem);
 
-		menusToDisableInExecMode.add(newMenuItem);
-		menusToDisableInExecMode.add(openMenuItem);
-		menusToDisableInExecMode.add(saveMenuItem);
-		menusToDisableInExecMode.add(saveAsMenuItem);
-		menusToDisableInExecMode.add(enterExecutionModeMenuItem);
+		diabledInExecMode.add(newMenuItem);
+		diabledInExecMode.add(openMenuItem);
+		diabledInExecMode.add(saveMenuItem);
+		diabledInExecMode.add(saveAsMenuItem);
+		diabledInExecMode.add(enterExecutionModeMenuItem);
+
+		enabledInExecMode.add(exitExecutionModeMenuItem);
+		enabledInExecMode.add(runMenuItem);
+		enabledInExecMode.add(runSingleMenuItem);
+		enabledInExecMode.add(stopMenuItem);
+		enabledInExecMode.add(reloadProgramMenuItem);
 
 		// Button runAllButton = (Button) scene.lookup("#"); //TODO add an id
 		// Button runStepByStepButton = (Button) scene.lookup("#"); //TODO add an id
@@ -93,13 +92,12 @@ public class GUIMenuBar {
 	}
 
 	private void switchMenuState(boolean state) {
-		for (int item = 0; item < menusToDisableInExecMode.size(); item++) {
-			menusToDisableInExecMode.get(item).setDisable(!state);
+		for (int item = 0; item < diabledInExecMode.size(); item++) {
+			diabledInExecMode.get(item).setDisable(!state);
 		}
-		exitExecutionModeMenuItem.setDisable(state);
-		runMenuItem.setDisable(state);
-		runSingleMenuItem.setDisable(state);
-		reloadProgramMenuItem.setDisable(state);
+		for (int item=0; item < enabledInExecMode.size(); item++){
+			enabledInExecMode.get(item).setDisable(state);
+		}
 	}
 
 	public MenuItem getNewMenuItem() {
@@ -150,4 +148,7 @@ public class GUIMenuBar {
 		return preferencesMenuItem;
 	}
 
+	public MenuItem getStopMenuItem() {
+		return stopMenuItem;
+	}
 }

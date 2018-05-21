@@ -15,10 +15,13 @@ public class GUIButtonBar {
 
     Button newFile;
     Button Save;
+
     Button exececutionMode;
+
     Button run;
     Button runSingle;
     Button reload;
+    Button stop;
 
     List<Button> editMode;
     List<Button> execMode;
@@ -33,6 +36,7 @@ public class GUIButtonBar {
         run = new Button("", new ImageView(new Image("file:images/run.png")));
         runSingle = new Button("(run step)", new ImageView(new Image("file:images/logoSmall.png")));
         reload = new Button("(reload)", new ImageView(new Image("file:images/logoSmall.png")));
+        stop = new Button("(stop)", new ImageView(new Image("file:images/logoSmall.png")));
 
         Save = new Button("", new ImageView(new Image("file:images/save.png")));
         newFile = new Button("(new file)", new ImageView(new Image("file:images/logoSmall.png")));
@@ -48,6 +52,7 @@ public class GUIButtonBar {
         execMode.add(runSingle);
         execMode.add(reload);
         execMode.add(exececutionMode);
+        execMode.add(stop);
 
         exitExecMode();
     }
@@ -89,5 +94,9 @@ public class GUIButtonBar {
 
     public Button getReloadButton() {
         return reload;
+    }
+
+    public Button getStopButton() {
+        return stop;
     }
 }
