@@ -412,6 +412,9 @@ public class Cpu {
 	 */
 	public void interruptMe(boolean interrupt) {
 		this.isInterrupted.set(interrupt);
+		if (!interrupt) {
+			this.isBreakpoint = interrupt;
+		}
 	}
 	
 	/**
