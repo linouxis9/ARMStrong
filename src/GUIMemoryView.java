@@ -19,9 +19,9 @@ import java.util.List;
 
 public class GUIMemoryView {
 
-	ArmSimulator theArmSimulator;
+	private ArmSimulator theArmSimulator;
 
-	TextField goToAddressField;
+	private TextField goToAddressField;
 
 	private Button button8bitView;
 	private Button button16bitView;
@@ -29,19 +29,21 @@ public class GUIMemoryView {
 
 	private ScrollBar scrollBar;
 
+	AnchorPane memoryPane;
+
 	private List<Text> MemoryAddressList;
 	private List<Text> MemoryContentList;
 	private int memoryViewFirstAddress;
 	private int memoryDisplayMode;
 
-	int displayableMemoryRows;
-	int displayedMemoryRows;
+	private int displayableMemoryRows;
+	private int displayedMemoryRows;
 
 	public GUIMemoryView(Scene theScene, ArmSimulator anArmSimulator) {
 
 		this.theArmSimulator = anArmSimulator;
 
-		AnchorPane memoryPane = (AnchorPane) theScene.lookup("#memoryViewPane");
+		this.memoryPane = (AnchorPane) theScene.lookup("#memoryViewPane");
 
 		this.goToAddressField = (TextField) theScene.lookup("#goToAddressField");
 
@@ -55,8 +57,6 @@ public class GUIMemoryView {
 		this.MemoryAddressList.add((Text) theScene.lookup("#memoryAddress"));
 		this.MemoryContentList.add((Text) theScene.lookup("#memoryContent"));
 
-
-		displayedMemoryRows = 1;
 
 		button8bitView.setOnAction((ActionEvent e) -> {
 			memoryDisplayMode = 8;
@@ -72,48 +72,17 @@ public class GUIMemoryView {
 		});
 
 		memoryPane.setOnScroll((ScrollEvent scrollEvent) -> {
-			if (scrollEvent.getDeltaY() < 0)
+			if (scrollEvent.getDeltaY() < 0) {
 				updateNewFirstAddress(-1);
-			else
+			}
+			else {
 				updateNewFirstAddress(1);
+			}
 			updateMemoryView();
 		});
 
 		memoryPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-			displayableMemoryRows = (((int) memoryPane.getHeight()) / 27);
-			if (displayableMemoryRows > displayedMemoryRows) { // there is space to display more lines
-				//System.err.println("the number of displayed rows is" + displayedMemoryRows + " but there is space to display" + displayableMemoryRows + "rows");
-				if (displayableMemoryRows > MemoryAddressList.size()) { // there is not enough lines already loaded to
-																		// use all space
-					//System.err.println("The number of loaded rows in the program is " + MemoryAddressList.size()+ " but we can display" + displayableMemoryRows);
-					for (int address = MemoryAddressList.size(); address < displayableMemoryRows; address++) { // loading
-																												// missing
-																												// lines
-						//System.err.println("loading row:" + (address + 1) + "at X = " + MemoryAddressList.get(0).getBoundsInParent().getMinX());
-						MemoryAddressList.add(new Text(MemoryAddressList.get(0).getBoundsInParent().getMinX(), MemoryAddressList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
-						MemoryContentList.add(new Text(MemoryContentList.get(0).getBoundsInParent().getMinX(), MemoryContentList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
-					}
-				}
-				for (int address = displayedMemoryRows; address < displayableMemoryRows; address++) { // display the
-																										// loaded lines
-					//System.err.println("displaying row:" + (address + 1));
-					memoryPane.getChildren().add(MemoryAddressList.get(address));
-					memoryPane.getChildren().add(MemoryContentList.get(address));
-				}
-				displayedMemoryRows = displayableMemoryRows;
-			}
-
-			if (displayableMemoryRows < displayedMemoryRows) {
-				//System.err.println("the number of displayed rows is" + displayedMemoryRows + " but there is ONLY space to load" + displayableMemoryRows + "rows");
-				for (int address = displayedMemoryRows - 1; address > displayableMemoryRows - 1; address--) {
-					//System.err.println("removing row :" + address);
-					memoryPane.getChildren().remove(MemoryAddressList.get(address));
-					memoryPane.getChildren().remove(MemoryContentList.get(address));
-				}
-				displayedMemoryRows = displayableMemoryRows;
-			}
-			// System.err.println(displayableMemoryRows);
-			updateMemoryView();
+			updateDisplayedRows();
 		});
 
 		scrollBar = (ScrollBar) theScene.lookup("#memoryScrollBar");
@@ -145,16 +114,16 @@ public class GUIMemoryView {
 				try {
 					if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
 						newAddress = Integer.parseInt(addressTyped.substring(2), 16); // parsing a int in base 16, the 2
-																						// first chars of the string are
-																						// removed (0x)
+						// first chars of the string are
+						// removed (0x)
 					} else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
 						newAddress = Integer.parseInt(addressTyped.substring(2), 2); // parsing a int in base 2, the 2
-																						// first chars of the string are
-																						// removed (0b)
+						// first chars of the string are
+						// removed (0b)
 					} else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
 						newAddress = Integer.parseInt(addressTyped.substring(2)); // parsing a int in base 10, the 2
-																						// first chars of the string are
-																						// removed (0b)
+						// first chars of the string are
+						// removed (0b)
 					} else {
 						newAddress = Integer.parseInt(addressTyped);
 					}
@@ -163,21 +132,23 @@ public class GUIMemoryView {
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
-				
+
 				if (newAddress < 0 || newAddress > Ram.DEFAULT_SIZE - displayableMemoryRows) {
 					memoryViewTitleText.setText("The address too low or to high");
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
-				
+
 				memoryViewFirstAddress = newAddress;
 				scrollBar.setValue(memoryViewFirstAddress);
 				updateMemoryView();
 			}
 		});
 
+		displayedMemoryRows = 1;
 		memoryDisplayMode = 8;
 		memoryViewFirstAddress = 0;
+		updateDisplayedRows();
 		updateMemoryView();
 	}
 
@@ -206,7 +177,6 @@ public class GUIMemoryView {
 	/**
 	 * updates the memory view
 	 */
-	// TODO Maybe you could do something less redundant? (done)
 	public void updateMemoryView() {
 		alignMemoryAddress();
 
@@ -250,5 +220,32 @@ public class GUIMemoryView {
 		} else if (this.memoryDisplayMode == 32) {
 			memoryViewFirstAddress = memoryViewFirstAddress - memoryViewFirstAddress % 4;
 		}
+		//TODO or memoryViewFirstAddress = memoryViewFirstAddress - memoryViewFirstAddress % (memoryDisplayMode/8);
+	}
+
+	private void updateDisplayedRows(){
+		displayableMemoryRows = (((int) memoryPane.getHeight()) / 27);
+		if (displayableMemoryRows > displayedMemoryRows) { // there is space to display more lines
+			if (displayableMemoryRows > MemoryAddressList.size()) { // there is not enough lines already loaded to use all space
+				for (int address = MemoryAddressList.size(); address < displayableMemoryRows; address++) { // loading missing lines
+					MemoryAddressList.add(new Text(MemoryAddressList.get(0).getBoundsInParent().getMinX(), MemoryAddressList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
+					MemoryContentList.add(new Text(MemoryContentList.get(0).getBoundsInParent().getMinX(), MemoryContentList.get(0).getBoundsInParent().getMinY() + (address * 20) + 13, "0x00000000"));
+				}
+			}
+			for (int address = displayedMemoryRows; address < displayableMemoryRows; address++) { // display the loaded lines
+				memoryPane.getChildren().add(MemoryAddressList.get(address));
+				memoryPane.getChildren().add(MemoryContentList.get(address));
+			}
+			displayedMemoryRows = displayableMemoryRows;
+		}
+
+		if (displayableMemoryRows < displayedMemoryRows) { //remove the lines that can't be displayed
+			for (int address = displayedMemoryRows - 1; address > displayableMemoryRows - 1; address--) {
+				memoryPane.getChildren().remove(MemoryAddressList.get(address));
+				memoryPane.getChildren().remove(MemoryContentList.get(address));
+			}
+			displayedMemoryRows = displayableMemoryRows;
+		}
+		updateMemoryView();
 	}
 }

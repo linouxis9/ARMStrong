@@ -18,10 +18,10 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="840.0" prefWidth="1122.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar fx:id="theMenuBar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <ToolBar fx:id="thebuttonBar" layoutY="29.0" prefHeight="37.0" prefWidth="1116.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0" />
-      <SplitPane dividerPositions="0.8121761658031088" layoutY="66.0" orientation="VERTICAL" prefHeight="669.0" prefWidth="1116.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="66.0">
+      <ToolBar fx:id="thebuttonBar" layoutY="29.0" prefHeight="41.0" prefWidth="1122.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="35.0" />
+      <SplitPane dividerPositions="0.8121761658031088" layoutY="93.0" orientation="VERTICAL" prefHeight="747.0" prefWidth="1122.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="85.0">
         <items>
-            <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
+            <BorderPane fx:id="borderPane" prefHeight="599.0" prefWidth="1120.0">
                <left>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
@@ -177,7 +177,7 @@
                     <tabs>
                       <Tab text="Info     ">
                            <content>
-                              <ScrollPane prefHeight="200.0" prefWidth="200.0">
+                              <ScrollPane fx:id="consoleScrollPane" prefHeight="200.0" prefWidth="200.0">
                                  <content>
                                     <TextFlow fx:id="consoleTextFlow" />
                                  </content>

@@ -1,7 +1,6 @@
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,11 +20,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
+import javafx.stage.*;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import simulator.*;
 
 import java.io.*;
@@ -39,12 +35,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
 
 /**
- * GUI is the class responsible of handling the JaveFX Graphical User Interface.
+ * GUI is the class responsible of handling the JavaFX Graphical User Interface.
  */
 public class GUI extends Application {
 
-	private ArmSimulator theArmSimulator;
-
+	//THE GRAPHICAL ELEMENTS
 	private Scene scene;
 	private Stage stage;
 	private Parent root;
@@ -52,24 +47,32 @@ public class GUI extends Application {
 	// the code editor
 	private TextArea codingTextArea;
 	private TextFlow executionModeTextFlow;
-	private AtomicBoolean executionMode;
-	private AtomicBoolean running;
-	private File programFilePath;
 
+	//the views
 	private GUIMenuBar theGUIMenuBar;
 	private GUIMemoryView theGUIMemoryView;
 	private GUIRegisterView theGUIRegisterView;
 	private GUIButtonBar theGUIButtonBar;
+	private ScrollPane consoleScrollPane; //the console
 
+	BorderPane centralBorderPaneContainer; //contains: theGUIRegisterView and (the codingTextArea or the executionModeTextFlow) and theGUIMemoryView
+
+	//THE OTHER ELEMENTS
+	private ArmSimulator theArmSimulator;
+
+	private AtomicBoolean executionMode;
+	private AtomicBoolean running;
+
+	private File programFilePath;
 	private String lastFilePath;
 
-	private Preferences prefs;
+	private List<Text> instructionsAsText;
 
+	//the settings
+	private Preferences prefs;
 	private Set<String> themes;
 	private static final String DEFAULT_THEME = "red";
 	private Color themeColor;
-	
-	private List<Text> instructionsAsText;
 
 	public void startGUI() {
 		launch(null);
@@ -78,46 +81,48 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 
-		theArmSimulator = new ArmSimulator();
+		this.theArmSimulator = new ArmSimulator();
 		this.programFilePath = null;
 		this.lastFilePath = null;
-
 		this.executionMode = new AtomicBoolean(false);
 		this.running = new AtomicBoolean(false);
 
-		// setting static elements
-
+		// setting graphical "static" elements
 		this.stage = stage;
+		this.root = FXMLLoader.load(getClass().getResource("ihmv4.fxml"));
+		this.scene = new Scene(root, 800, 800); //TODO for smaller screens
 
-		root = FXMLLoader.load(getClass().getResource("ihmv4.fxml"));
-		scene = new Scene(root, 700, 275);
-
-		stage.setMaximized(true);
-		stage.setMinHeight(800);
-		stage.setMinWidth(800);
-		stage.setTitle("#@RM");
-		stage.setScene(scene);
-
-		Font.loadFont(getClass().getResource("Quicksand.ttf").toExternalForm(), 16);
+		//this.stage.setMaximized(true);
+		this.stage.setMinHeight(800);
+		this.stage.setMinWidth(800);
+		this.stage.setTitle("#@RM");
+		this.stage.setScene(this.scene);
+		this.stage.setOnHiding((WindowEvent event) -> {
+			this.theArmSimulator.interruptExecutionFlow(true);
+			System.exit(0);
+		});
 
 		// Change the icon of the application
 		Image applicationIcon = new Image("file:logo.png");
-		stage.getIcons().add(applicationIcon);
+		this.stage.getIcons().add(applicationIcon);
 
-		prefs = Preferences.userNodeForPackage(this.getClass());
-		prefs.getBoolean("FONT", true);
-		prefs.get("THEME", GUI.DEFAULT_THEME);
-		themeColor = Color.RED;
+		Font.loadFont(getClass().getResource("Quicksand.ttf").toExternalForm(), 16);
+
+		this.prefs = Preferences.userNodeForPackage(this.getClass());
+		this.prefs.getBoolean("FONT", true);
+		this.prefs.get("THEME", GUI.DEFAULT_THEME);
+		this.themeColor = Color.RED;
 		
 		themes = new HashSet<>();
 		themes.add("red");
 		themes.add("blue");
 		themes.add("green");
-
 		applyTheme();
 
 		stage.show(); // to be sure the scene.lookup() works properly
-		
+
+		centralBorderPaneContainer = (BorderPane) scene.lookup("#borderPane");
+
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
@@ -211,183 +216,27 @@ public class GUI extends Application {
 
 		});
 
-		// TODO I'm wondering if we shouldn't move the logic somewhere else? We are quite bloating the constructor there? Maybe we could move that into GUIMenuBar? Maybe methods instead of lambdas?
-		// TODO the problem is that these buttons are using a lot of methods/attributes in this class... =/, if we move them in GUIMenuBar we have to give access it to GUI (his parent)
-		// THE ACTION EVENTS
-		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			String programString = codingTextArea.getText();
-			if(programString.length() != 0){
-				try {
-					theArmSimulator.setProgramString(programString);
-					enterExecutionMode(programString);
-				} catch (AssemblyException e1) {
-					System.out.println(e1.toString());
-				}
-			}
-		});
-		
-		theGUIMenuBar.getExitExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> exitExecutionMode());
-		
-		theGUIMenuBar.getRunMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			if (executionMode.get() && !(running.get())) {
-				new Thread(() -> {
-					this.running.set(true);
-					int counter = 0;
-					this.theArmSimulator.interruptExecutionFlow(false);
-					while(!this.theArmSimulator.run()) {
-						if (counter >= 1) {
-							this.updateGUIfromThread();
-							counter = 0;
-						}
-						counter++;
-						try {
-							Thread.sleep(1);
-						} catch (InterruptedException e) {
-							break;
-						}
-					}
-					
-					this.updateGUIfromThread();
-					
-					this.running.set(false);
-				}).start();
-			}
-		});
-		
-		theGUIMenuBar.getRunSingleMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			if (executionMode.get() && !(running.get())) {
-				new Thread(() -> {
-					this.running.set(true);
-					
-					theArmSimulator.runStep();
-
-					this.updateGUIfromThread();
-					
-					this.running.set(false);
-				}).start();
-			}
-		});
-
-		theGUIMenuBar.getStopMenuItem().setOnAction((ActionEvent actionEvent) -> theArmSimulator.interruptExecutionFlow(true));
-
-		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
-		
-		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			FileChooser fileChooser = new FileChooser();
-			if (lastFilePath != null) {
-				fileChooser.setInitialDirectory(new File(new File(lastFilePath).getParent()));
-			}
-
-			fileChooser.setInitialFileName("test");
-			fileChooser.setTitle("Open a source File");
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
-
-			String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-			if (path != null) {
-				try {
-					codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
-					programFilePath = new File(path);
-					lastFilePath = path;
-					stage.setTitle("#@RM - " + programFilePath.getName());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		
-		theGUIMenuBar.getSaveAsMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save assembly program");
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
-			File chosenFile = fileChooser.showSaveDialog(stage);
-			saveFile(codingTextArea.getText(), chosenFile);
-		});
-		
-		theGUIMenuBar.getSaveMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			if (programFilePath != null) {
-				saveFile(codingTextArea.getText(), programFilePath);
-			} else {
-				theGUIMenuBar.getSaveAsMenuItem().fire();
-			}
-		});
-		
-		theGUIMenuBar.getNewMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			Stage confirmBox = new Stage();
-			confirmBox.initModality(Modality.APPLICATION_MODAL);
-			confirmBox.initOwner(stage);
-			VBox dialogVbox = new VBox(20);
-			Label exitLabel = new Label("All unsaved work will be lost");
-
-			Button yesBtn = new Button("Yes");
-
-			yesBtn.setOnAction((ActionEvent arg0) -> {
-				confirmBox.close();
-				codingTextArea.setText("");
-				programFilePath = null;
-			});
-			Button noBtn = new Button("No");
-
-			noBtn.setOnAction((ActionEvent arg0) -> confirmBox.close());
-
-			HBox hBox = new HBox();
-			hBox.getChildren().addAll(yesBtn, noBtn);
-			VBox vBox = new VBox();
-			vBox.getChildren().addAll(exitLabel, hBox);
-
-			confirmBox.setScene(new Scene(vBox));
-			confirmBox.show();
-		});
-		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			final Stage helpPopup = new Stage();
-			helpPopup.initModality(Modality.APPLICATION_MODAL);
-			helpPopup.initOwner(stage);
-
-			VBox dialogVbox = new VBox(20);
-			dialogVbox.getChildren().add(new Text("This is very helpful help wow"));
-			Scene dialogScene = new Scene(dialogVbox, 300, 200);
-
-			helpPopup.setScene(dialogScene);
-			helpPopup.show();
-		});
-		
-		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
-
-		theGUIButtonBar.getExececutionModeButton().setOnAction((ActionEvent actionEvent) -> {
-			if(this.executionMode.get()){
-				theGUIMenuBar.getExitExecutionModeMenuItem().fire();
-			}
-			else{
-				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
-			}
-		});
-
-		theGUIButtonBar.getNewFileButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getNewMenuItem().fire());
-		theGUIButtonBar.getSaveButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getSaveMenuItem().fire());
-
-		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
-		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
-		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
-		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem().fire());
-
-
-
 		// Several keyboard shortcut
 		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
+
+		//THE CONSOLE
 		TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
 		consoleTextFlow.getChildren().add(new Text(""));
-		
-		// THE CONSOLE OUTPUT
+		consoleScrollPane = (ScrollPane) scene.lookup("#consoleScrollPane");
+
 		OutputStream consoleOut = new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
 					Platform.runLater(() -> {
 						Text text = (Text)consoleTextFlow.getChildren().get(0);
 						text.setText(text.getText() + (char)b);
+						consoleScrollPane.setVvalue(consoleScrollPane.getHmax());
 					});
 			}
 		};
 		System.setOut(new PrintStream(consoleOut, true));
 
+		setActionEvents();
 		updateGUI();
 		stage.show();
 
@@ -451,38 +300,33 @@ public class GUI extends Application {
 	private void exitExecutionMode() {
 		this.theArmSimulator.interruptExecutionFlow(true);
 		this.executionMode.set(false);
-		codingTextArea.setEditable(true);
+		this.codingTextArea.setEditable(true);
 
-		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
-		borderPane.setCenter(codingTextArea);
+		this.centralBorderPaneContainer.setCenter(codingTextArea);
 
-		theGUIMenuBar.exitExecMode();
-		theGUIButtonBar.exitExecMode();
+		this.theGUIMenuBar.exitExecMode();
+		this.theGUIButtonBar.exitExecMode();
 	}
 
-	private void enterExecutionMode(String program) { // TODO parametre peut etre temoraire
+	private void enterExecutionMode(String program){
 
 		this.executionMode.set(true);
 
-		theGUIMenuBar.setExecMode();
-		theGUIButtonBar.setExecMode();
+		this.theGUIMenuBar.setExecMode();
+		this.theGUIButtonBar.setExecMode();
 
-		codingTextArea.setEditable(false);
+		this.codingTextArea.setEditable(false);
 
-		BorderPane borderPane = (BorderPane) scene.lookup("#borderPane");
-		borderPane.setCenter(executionModeTextFlow);
-		executionModeTextFlow.getChildren().clear();
+		this.centralBorderPaneContainer.setCenter(this.executionModeTextFlow);
+		this.executionModeTextFlow.getChildren().clear();
 
 		String[] instructionsAsStrings = program.split("\\r?\\n");
-		instructionsAsText = new ArrayList<Text>();
+		this.instructionsAsText = new ArrayList<Text>();
 
 		for (int lineNumber = 1; lineNumber <= instructionsAsStrings.length; lineNumber++) {
 			String line = lineNumber + "\t" + instructionsAsStrings[lineNumber-1] + '\n';
-			if(theArmSimulator.getBreakPointStatus(lineNumber)){
-				line = "->>>" + line;
-			}
-			instructionsAsText.add(new Text(line));
-			executionModeTextFlow.getChildren().add(instructionsAsText.get(lineNumber-1));
+			this.instructionsAsText.add(new Text(line));
+			this.executionModeTextFlow.getChildren().add(this.instructionsAsText.get(lineNumber-1));
 		}
 		highlightCurrentLine();
 		updateGUI();
@@ -491,6 +335,7 @@ public class GUI extends Application {
 	private void updateGUI() {
 		theGUIMemoryView.updateMemoryView();
 		theGUIRegisterView.updateRegisters();
+		consoleScrollPane.setVvalue(consoleScrollPane.getHmax());
 	}
 
 	private void updateGUIfromThread() {
@@ -569,4 +414,151 @@ public class GUI extends Application {
 	
 	}
 
+	private void setActionEvents(){
+		// TODO I'm wondering if we shouldn't move the logic somewhere else? We are quite bloating the constructor there? Maybe we could move that into GUIMenuBar? Maybe methods instead of lambdas?
+		// TODO the problem is that these buttons are using a lot of methods/attributes in this class... =/, if we move them in GUIMenuBar we have to give access it to GUI (his parent)
+		// THE ACTION EVENTS
+		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			String programString = codingTextArea.getText();
+			if(programString.length() != 0){
+				try {
+					theArmSimulator.setProgramString(programString);
+					enterExecutionMode(programString);
+				} catch (AssemblyException e1) {
+					System.out.println(e1.toString());
+				}
+			}
+		});
+		theGUIMenuBar.getExitExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> exitExecutionMode());
+		theGUIMenuBar.getRunMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			if (executionMode.get() && !(running.get())) {
+				new Thread(() -> {
+					this.running.set(true);
+					int counter = 0;
+					this.theArmSimulator.interruptExecutionFlow(false);
+					while(!this.theArmSimulator.run()) {
+						if (counter >= 1) {
+							this.updateGUIfromThread();
+							counter = 0;
+						}
+						counter++;
+						try {
+							Thread.sleep(1);
+						} catch (InterruptedException e) {
+							break;
+						}
+					}
+
+					this.updateGUIfromThread();
+
+					this.running.set(false);
+				}).start();
+			}
+		});
+		theGUIMenuBar.getRunSingleMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			if (executionMode.get() && !(running.get())) {
+				new Thread(() -> {
+					this.running.set(true);
+
+					theArmSimulator.runStep();
+
+					this.updateGUIfromThread();
+
+					this.running.set(false);
+				}).start();
+			}
+		});
+		theGUIMenuBar.getStopMenuItem().setOnAction((ActionEvent actionEvent) -> theArmSimulator.interruptExecutionFlow(true));
+		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
+		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			FileChooser fileChooser = new FileChooser();
+			if (lastFilePath != null) {
+				fileChooser.setInitialDirectory(new File(new File(lastFilePath).getParent()));
+			}
+
+			fileChooser.setInitialFileName("test");
+			fileChooser.setTitle("Open a source File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
+
+			String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+			if (path != null) {
+				try {
+					codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
+					programFilePath = new File(path);
+					lastFilePath = path;
+					stage.setTitle("#@RM - " + programFilePath.getName());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		theGUIMenuBar.getSaveAsMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save assembly program");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
+			File chosenFile = fileChooser.showSaveDialog(stage);
+			saveFile(codingTextArea.getText(), chosenFile);
+		});
+		theGUIMenuBar.getSaveMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			if (programFilePath != null) {
+				saveFile(codingTextArea.getText(), programFilePath);
+			} else {
+				theGUIMenuBar.getSaveAsMenuItem().fire();
+			}
+		});
+		theGUIMenuBar.getNewMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			Stage confirmBox = new Stage();
+			confirmBox.initModality(Modality.APPLICATION_MODAL);
+			confirmBox.initOwner(stage);
+			VBox dialogVbox = new VBox(20);
+			Label exitLabel = new Label("All unsaved work will be lost");
+
+			Button yesBtn = new Button("Yes");
+
+			yesBtn.setOnAction((ActionEvent arg0) -> {
+				confirmBox.close();
+				codingTextArea.setText("");
+				programFilePath = null;
+			});
+			Button noBtn = new Button("No");
+
+			noBtn.setOnAction((ActionEvent arg0) -> confirmBox.close());
+
+			HBox hBox = new HBox();
+			hBox.getChildren().addAll(yesBtn, noBtn);
+			VBox vBox = new VBox();
+			vBox.getChildren().addAll(exitLabel, hBox);
+
+			confirmBox.setScene(new Scene(vBox));
+			confirmBox.show();
+		});
+		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			final Stage helpPopup = new Stage();
+			helpPopup.initModality(Modality.APPLICATION_MODAL);
+			helpPopup.initOwner(stage);
+
+			VBox dialogVbox = new VBox(20);
+			dialogVbox.getChildren().add(new Text("This is very helpful help wow"));
+			Scene dialogScene = new Scene(dialogVbox, 300, 200);
+
+			helpPopup.setScene(dialogScene);
+			helpPopup.show();
+		});
+		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
+
+		theGUIButtonBar.getExececutionModeButton().setOnAction((ActionEvent actionEvent) -> {
+			if(this.executionMode.get()){
+				theGUIMenuBar.getExitExecutionModeMenuItem().fire();
+			}
+			else{
+				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
+			}
+		});
+		theGUIButtonBar.getNewFileButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getNewMenuItem().fire());
+		theGUIButtonBar.getSaveButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getSaveMenuItem().fire());
+		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
+		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
+		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
+		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem().fire());
+	}
 }

@@ -30,7 +30,6 @@ public class GUIButtonBar {
 
         this.theToolBar = aToolBar;
 
-        
         exececutionMode = new Button("", new ImageView(new Image("file:images/switch.png")));
 
         run = new Button("", new ImageView(new Image("file:images/run.png")));
@@ -48,10 +47,10 @@ public class GUIButtonBar {
         editMode.add(newFile);
         editMode.add(exececutionMode);
 
+        execMode.add(exececutionMode);
         execMode.add(run);
         execMode.add(runSingle);
         execMode.add(reload);
-        execMode.add(exececutionMode);
         execMode.add(stop);
 
         exitExecMode();
@@ -70,7 +69,6 @@ public class GUIButtonBar {
             theToolBar.getItems().add(this.editMode.get(i));
         }
     }
-
 
     public Button getNewFileButton() {
         return newFile;

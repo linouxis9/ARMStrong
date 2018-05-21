@@ -72,9 +72,6 @@ public class GUIMenuBar {
 		enabledInExecMode.add(stopMenuItem);
 		enabledInExecMode.add(reloadProgramMenuItem);
 
-		// Button runAllButton = (Button) scene.lookup("#"); //TODO add an id
-		// Button runStepByStepButton = (Button) scene.lookup("#"); //TODO add an id
-
 		exitMenuItem.setOnAction((ActionEvent actionEvent) -> {
 			System.exit(0);
 		});
