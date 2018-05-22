@@ -1,13 +1,11 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import javax.tools.Tool;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public class GUIButtonBar {
 
@@ -16,7 +14,7 @@ public class GUIButtonBar {
     private Button newFile;
     private Button Save;
 
-    private Button exececutionMode;
+    private Button executionMode;
 
     private Button run;
     private Button runSingle;
@@ -30,7 +28,7 @@ public class GUIButtonBar {
 
         this.theToolBar = aToolBar;
 
-        exececutionMode = new Button("", new ImageView(new Image("file:images/switch.png")));
+        executionMode = new Button("", new ImageView(new Image("file:images/switch.png")));
 
         run = new Button("", new ImageView(new Image("file:images/run.png")));
         runSingle = new Button("", new ImageView(new Image("file:images/runByStep.png")));
@@ -45,14 +43,18 @@ public class GUIButtonBar {
 
         editMode.add(Save);
         editMode.add(newFile);
-        editMode.add(exececutionMode);
+        editMode.add(executionMode);
 
-        execMode.add(exececutionMode);
+        execMode.add(executionMode);
         execMode.add(run);
         execMode.add(runSingle);
         execMode.add(reload);
         execMode.add(stop);
 
+        Save.setTooltip(new Tooltip("Save (Ctrl+S)"));
+        executionMode.setTooltip(new Tooltip("Switch Execution/Edit mode"));
+        newFile.setTooltip(new Tooltip("New file"));
+        
         exitExecMode();
     }
 
@@ -79,7 +81,7 @@ public class GUIButtonBar {
     }
 
     public Button getExececutionModeButton() {
-        return exececutionMode;
+        return executionMode;
     }
 
     public Button getRunButton() {
