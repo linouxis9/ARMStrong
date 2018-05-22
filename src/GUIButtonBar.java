@@ -11,20 +11,20 @@ import java.util.List;
 
 public class GUIButtonBar {
 
-    ToolBar theToolBar;
+    private ToolBar theToolBar;
 
-    Button newFile;
-    Button Save;
+    private Button newFile;
+    private Button Save;
 
-    Button exececutionMode;
+    private Button exececutionMode;
 
-    Button run;
-    Button runSingle;
-    Button reload;
-    Button stop;
+    private Button run;
+    private Button runSingle;
+    private Button reload;
+    private Button stop;
 
-    List<Button> editMode;
-    List<Button> execMode;
+    private List<Button> editMode;
+    private List<Button> execMode;
 
     public GUIButtonBar(ToolBar aToolBar){
 

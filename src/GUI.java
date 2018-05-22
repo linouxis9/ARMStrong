@@ -132,93 +132,6 @@ public class GUI extends Application {
 		codingTextArea = (TextArea) scene.lookup("#codeTexArea");
 		executionModeTextFlow = new TextFlow();
 
-		// THE PREFERENCES MENU
-		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			Stage preferencesDialog = new Stage();
-			preferencesDialog.initModality(Modality.APPLICATION_MODAL);
-			preferencesDialog.initOwner(stage);
-			VBox dialogVbox = new VBox(20);
-
-			ChoiceBox<String> theme = new ChoiceBox<>();
-
-			theme.getItems().addAll(themes);
-
-			theme.setTooltip(new Tooltip("Select a theme"));
-
-			theme.setValue(prefs.get("THEME", ""));
-
-			theme.setId("choiceboxPreferences");
-
-			Button button1 = new Button("Apply and Close");
-			button1.setId("applyClosePreferences");
-
-			Button button2 = new Button("Close");
-			button2.setId("closePreferences");
-
-			Label labelTheme = new Label();
-			labelTheme.setText("Choose a theme:");
-			labelTheme.setId("labelThemePreferences");
-
-			Label labelQuicksand = new Label();
-			labelQuicksand.setText("Use the Quicksand font:");
-			labelQuicksand.setId("labelQuicksandPreferences");
-
-			CheckBox checkBoxFont = new CheckBox();
-
-			checkBoxFont.setSelected(prefs.getBoolean("FONT", true));
-
-			Text lineBreak = new Text();
-			lineBreak.setFont(new Font(20));
-			lineBreak.setText("\n");
-
-			button1.setOnAction((ActionEvent e) -> {
-				prefs.put("THEME", theme.getValue());
-
-				prefs.putBoolean("FONT", checkBoxFont.isSelected());
-
-				applyTheme();
-				
-				preferencesDialog.close();
-			});
-
-			button2.setOnAction((ActionEvent e) ->	preferencesDialog.close());
-
-			GridPane pane = new GridPane();
-			pane.setAlignment(Pos.CENTER);
-			pane.setHgap(5);
-			pane.setVgap(5);
-			pane.setPadding(new Insets(25, 25, 25, 25));
-
-			pane.add(labelTheme, 0, 1);
-			pane.add(theme, 1, 1);
-
-			pane.add(labelQuicksand, 0, 2);
-			pane.add(checkBoxFont, 1, 2);
-
-			pane.add(lineBreak, 0, 3);
-
-			pane.add(button1, 0, 4);
-			pane.add(button2, 1, 4);
-
-			dialogVbox.getChildren().add(pane);
-
-			Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
-			preferencesDialog.setScene(preferencesDialogScene);
-
-			String cssPreferences = getClass().getResource("css.css").toExternalForm();
-			preferencesDialogScene.getStylesheets().addAll(cssPreferences);
-
-			preferencesDialog.setTitle("Preferences");
-			Image preferencesIcon = new Image("file:logo.png");
-			preferencesDialog.getIcons().add(preferencesIcon);
-
-			preferencesDialog.show();
-
-		});
-
-		// Several keyboard shortcut
-		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
-
 		//THE CONSOLE
 		TextFlow consoleTextFlow = (TextFlow) scene.lookup("#consoleTextFlow");
 		consoleTextFlow.getChildren().add(new Text(""));
@@ -351,8 +264,8 @@ public class GUI extends Application {
 			outputStream.write(content);
 			this.programFilePath = theFile;
 			stage.setTitle("#@RM - " + theFile.getName());
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException | NullPointerException e) {
+
 		}
 	}
 
@@ -560,5 +473,93 @@ public class GUI extends Application {
 		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
 		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
 		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem().fire());
+
+		// THE PREFERENCES MENU
+		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			Stage preferencesDialog = new Stage();
+			preferencesDialog.initModality(Modality.APPLICATION_MODAL);
+			preferencesDialog.initOwner(stage);
+			VBox dialogVbox = new VBox(20);
+
+			ChoiceBox<String> theme = new ChoiceBox<>();
+
+			theme.getItems().addAll(themes);
+
+			theme.setTooltip(new Tooltip("Select a theme"));
+
+			theme.setValue(prefs.get("THEME", ""));
+
+			theme.setId("choiceboxPreferences");
+
+			Button button1 = new Button("Apply and Close");
+			button1.setId("applyClosePreferences");
+
+			Button button2 = new Button("Close");
+			button2.setId("closePreferences");
+
+			Label labelTheme = new Label();
+			labelTheme.setText("Choose a theme:");
+			labelTheme.setId("labelThemePreferences");
+
+			Label labelQuicksand = new Label();
+			labelQuicksand.setText("Use the Quicksand font:");
+			labelQuicksand.setId("labelQuicksandPreferences");
+
+			CheckBox checkBoxFont = new CheckBox();
+
+			checkBoxFont.setSelected(prefs.getBoolean("FONT", true));
+
+			Text lineBreak = new Text();
+			lineBreak.setFont(new Font(20));
+			lineBreak.setText("\n");
+
+			button1.setOnAction((ActionEvent e) -> {
+				prefs.put("THEME", theme.getValue());
+
+				prefs.putBoolean("FONT", checkBoxFont.isSelected());
+
+				applyTheme();
+
+				preferencesDialog.close();
+			});
+
+			button2.setOnAction((ActionEvent e) ->	preferencesDialog.close());
+
+			GridPane pane = new GridPane();
+			pane.setAlignment(Pos.CENTER);
+			pane.setHgap(5);
+			pane.setVgap(5);
+			pane.setPadding(new Insets(25, 25, 25, 25));
+
+			pane.add(labelTheme, 0, 1);
+			pane.add(theme, 1, 1);
+
+			pane.add(labelQuicksand, 0, 2);
+			pane.add(checkBoxFont, 1, 2);
+
+			pane.add(lineBreak, 0, 3);
+
+			pane.add(button1, 0, 4);
+			pane.add(button2, 1, 4);
+
+			dialogVbox.getChildren().add(pane);
+
+			Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
+			preferencesDialog.setScene(preferencesDialogScene);
+
+			String cssPreferences = getClass().getResource("css.css").toExternalForm();
+			preferencesDialogScene.getStylesheets().addAll(cssPreferences);
+
+			preferencesDialog.setTitle("Preferences");
+			Image preferencesIcon = new Image("file:logo.png");
+			preferencesDialog.getIcons().add(preferencesIcon);
+
+			preferencesDialog.show();
+
+		});
+
+		// Several keyboard shortcut
+		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
+
 	}
 }
