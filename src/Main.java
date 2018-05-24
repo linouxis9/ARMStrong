@@ -1,5 +1,7 @@
 import java.util.Scanner;
-import simulator.*;
+
+import simulator.core.*;
+import simulator.ui.javafx.GUI;
 /**
  * Our software's entrypoint
  */
