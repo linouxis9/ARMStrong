@@ -25,6 +25,7 @@ import javafx.stage.*;
 import javafx.stage.FileChooser.ExtensionFilter;
 import simulator.boilerplate.ArmSimulator;
 import simulator.core.*;
+import simulator.ui.SimulatorUI;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -39,7 +40,7 @@ import java.util.prefs.Preferences;
 /**
  * GUI is the class responsible of handling the JavaFX Graphical User Interface.
  */
-public class GUI extends Application {
+public class GUI extends Application implements SimulatorUI {
 
 	//THE GRAPHICAL ELEMENTS
 	private Scene scene;
@@ -76,7 +77,7 @@ public class GUI extends Application {
 	private static final String DEFAULT_THEME = "red";
 	private Color themeColor;
 
-	public void startGUI() {
+	public void startUI() {
 		launch(null);
 	}
 

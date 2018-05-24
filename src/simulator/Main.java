@@ -1,6 +1,5 @@
-import java.util.Scanner;
-
 import simulator.core.*;
+import simulator.ui.cli.CLI;
 import simulator.ui.javafx.GUI;
 /**
  * Our software's entrypoint
@@ -9,13 +8,15 @@ public class Main {
 
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			//new GUI().start();
+			new GUI().startUI();
 		}
 		switch("cli") {
-		case "gui":
-			// new GUI().start();
 		case "cli":
-	        new CLI().start();
+	        new CLI().startUI();
+	        break;
+		default:
+		case "gui":
+			new GUI().startUI();
 		}
 	}
 }

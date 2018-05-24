@@ -12,14 +12,6 @@ You can now try the two JAR of our project!
 [GUI.jar](https://gitlab.iut-valence.fr/demmanuv/projet_s2/uploads/f33c6fdb07526707d8f7413ca8e8a1d6/GUI.jar)
 [CLI.jar](https://gitlab.iut-valence.fr/demmanuv/projet_s2/uploads/c2f64647a085f61fb6ceead34222b897/CLI.jar)
 
-> We now have split our project into 3 branches...
->
-> * master is the branch containing the latest work around the simulator backend / library.
-> * theGUI is the branch containing the latest work regarding the Graphical User Interface in JavaFX.
-> * cli is the branch containing the latest work regarding the Command Line Interface.
->
-> These last two branches pulls from master from time to time to keep their backend in sync.
-
 > Screenshots:
 
 > ![gui_s1](images/gui_s1.png)
@@ -32,7 +24,7 @@ You can now try the two JAR of our project!
 
 ## Petite explication
 
-> ![classes](src/simulator/Classes.png)
+> ![classes](images/Classes.png)
 
 
 Le Main s'occupe de créer l'instance (singleton) d'ArmSimulator.

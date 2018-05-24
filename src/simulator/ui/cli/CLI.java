@@ -1,3 +1,4 @@
+package simulator.ui.cli;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.SimpleTheme;
 import com.googlecode.lanterna.graphics.Theme;
@@ -7,13 +8,10 @@ import com.googlecode.lanterna.screen.*;
 import com.googlecode.lanterna.terminal.*;
 
 import javafx.scene.shape.Path;
-import simulator.About;
-import simulator.InvalidDirectiveException;
-import simulator.InvalidLabelException;
-import simulator.InvalidOperationException;
-import simulator.InvalidRegisterException;
-import simulator.InvalidSyntaxException;
-import simulator.UnknownLabelException;
+import simulator.boilerplate.*;
+import simulator.core.About;
+import simulator.core.exceptions.*;
+import simulator.ui.SimulatorUI;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
-public class CLI {
+public class CLI implements SimulatorUI {
 	
 	private Label[] registers;
 	private ArmSimulator simulator;
@@ -223,7 +221,7 @@ public class CLI {
 		}
     }
     
-    public void start() {
+    public void startUI() {
         gui.addWindowAndWait(window);
     }
     
