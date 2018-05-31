@@ -29,15 +29,15 @@ public class GUIButtonBar {
 
         this.theToolBar = aToolBar;
 
-        executionMode = new Button("", new ImageView(new Image("file:images/switch.png")));
+        executionMode = new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm())));
 
-        run = new Button("", new ImageView(new Image("file:images/run.png")));
-        runSingle = new Button("", new ImageView(new Image("file:images/runByStep.png")));
-        reload = new Button("", new ImageView(new Image("file:images/reload.png")));
-        stop = new Button("", new ImageView(new Image("file:images/stop.png")));
+        run = new Button("", new ImageView(new Image(getClass().getResource("/resources/run.png").toExternalForm())));
+        runSingle = new Button("", new ImageView(new Image(getClass().getResource("/resources/runByStep.png").toExternalForm())));
+        reload = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
+        stop = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
 
-        Save = new Button("", new ImageView(new Image("file:images/save.png")));
-        newFile = new Button("", new ImageView(new Image("file:images/newFile.png")));
+        Save = new Button("", new ImageView(new Image(getClass().getResource("/resources/save.png").toExternalForm())));
+        newFile = new Button("", new ImageView(new Image(getClass().getResource("/resources/newFile.png").toExternalForm())));
 
         editMode = new ArrayList<Button>();
         execMode = new ArrayList<Button>();

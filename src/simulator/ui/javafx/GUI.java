@@ -92,7 +92,7 @@ public class GUI extends Application implements SimulatorUI {
 
 		// setting graphical "static" elements
 		this.stage = stage;
-		this.root = FXMLLoader.load(getClass().getResource("ihmv4.fxml"));
+		this.root = FXMLLoader.load(getClass().getResource("/resources/ihmv4.fxml"));
 		this.scene = new Scene(root, 800, 800); //TODO for smaller screens
 
 		//this.stage.setMaximized(true);
@@ -109,7 +109,7 @@ public class GUI extends Application implements SimulatorUI {
 		Image applicationIcon = new Image("file:logo.png");
 		this.stage.getIcons().add(applicationIcon);
 
-		Font.loadFont(getClass().getResource("Quicksand.ttf").toExternalForm(), 16);
+		Font.loadFont(getClass().getResource("/resources/Quicksand.ttf").toExternalForm(), 16);
 
 		this.prefs = Preferences.userNodeForPackage(this.getClass());
 		this.prefs.getBoolean("FONT", true);
@@ -299,14 +299,14 @@ public class GUI extends Application implements SimulatorUI {
 
 		scene.getStylesheets().clear();
 		
-		String css = getClass().getResource("css.css").toExternalForm();
+		String css = getClass().getResource("/resources/css.css").toExternalForm();
 		scene.getStylesheets().addAll(css);
 
 		if (!themes.contains(currentTheme)) {
 			currentTheme = GUI.DEFAULT_THEME;
 		}
 
-		css = getClass().getResource(currentTheme + ".css").toExternalForm();
+		css = getClass().getResource("/resources/" + currentTheme + ".css").toExternalForm();
 
 		scene.getStylesheets().addAll(css);
 
@@ -550,11 +550,10 @@ public class GUI extends Application implements SimulatorUI {
 			Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
 			preferencesDialog.setScene(preferencesDialogScene);
 
-			String cssPreferences = getClass().getResource("css.css").toExternalForm();
-			preferencesDialogScene.getStylesheets().addAll(cssPreferences);
+			String cssPreferences = getClass().getResource("/resources/css.css").toExternalForm();
 
 			preferencesDialog.setTitle("Preferences");
-			Image preferencesIcon = new Image("file:logo.png");
+			Image preferencesIcon = new Image("file:/resources/logo.png");
 			preferencesDialog.getIcons().add(preferencesIcon);
 
 			preferencesDialog.show();

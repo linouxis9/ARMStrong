@@ -99,7 +99,12 @@ public class ArmSimulator {
 	 * @return
 	 */
 	public int getCurrentLine(){
-		return this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))).getLine()-1;
+		try {
+			return this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))).getLine()-1;
+		}
+		catch (IndexOutOfBoundsException e) {
+			return 0;
+		}
 	}
 
 	/**

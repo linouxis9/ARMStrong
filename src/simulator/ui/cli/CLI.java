@@ -75,8 +75,6 @@ public class CLI implements SimulatorUI {
 					.showDialog(gui).getAbsolutePath();
 	    			this.codeEditor.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 	    	}));
 	    	
@@ -93,8 +91,6 @@ public class CLI implements SimulatorUI {
 	    			    out.println(this.codeEditor.getText());
 	    			}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 	    	}));
 	    	
@@ -102,7 +98,12 @@ public class CLI implements SimulatorUI {
 	    	
 	    	menuPanel.addComponent(new Button("L0ad", () -> {
 	    		try {
+	    			if (this.codeEditor.isReadOnly()) {
+	    				this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
+	    			}
 					this.simulator.setProgramString(this.codeEditor.getText());
+	    			this.codeEditor.setReadOnly(true);
+	    			this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.GREEN));
 					System.out.println("---");
 				} catch (InvalidSyntaxException | InvalidOperationException | InvalidRegisterException
 						| InvalidLabelException | UnknownLabelException | InvalidDirectiveException e) {
@@ -110,12 +111,10 @@ public class CLI implements SimulatorUI {
 					showCurrentLine(e.getLine()-1);
 					return;
 				}
-    			this.codeEditor.setReadOnly(true);
-    			this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.GREEN));
 	    	}));
 	    	
 	    	menuPanel.addComponent(new Button("Run", () -> {
-	    		if (!this.running.get()) {
+	    		if (!this.running.get() && this.codeEditor.isReadOnly()) {
 	    			new Thread(()  -> {
 	    				this.running.set(true);
 	    				while (!this.simulator.run()) {
@@ -130,7 +129,7 @@ public class CLI implements SimulatorUI {
 	    	
 	    	menuPanel.addComponent(new Button("Run Step", () -> {
 	    		try {
-	    			if (!this.running.get()) {
+	    			if (!this.running.get() && this.codeEditor.isReadOnly()) {
 	    				this.running.set(true);
 	    				this.simulator.runStep();
 	    				this.showCurrentLine();
@@ -147,6 +146,7 @@ public class CLI implements SimulatorUI {
 	    		this.simulator.interruptExecutionFlow(true);
     			this.codeEditor.setReadOnly(false);
     			this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
+    			this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
 	    	}));
 
 	    	menuPanel.addComponent(new Button("Exit", () -> {
@@ -170,20 +170,9 @@ public class CLI implements SimulatorUI {
 	    	bodyPanel.addComponent(centerPanel);
 	    	codeEditor = new TextBox(new TerminalSize(size.getColumns()/2,size.getColumns()/8));
 	    	centerPanel.addComponent(codeEditor.withBorder(Borders.singleLine("Editor")));
+	    	codeEditor.setVerticalFocusSwitching(true);
 	    	
-	    	Panel rightPanel = new Panel(new GridLayout(2));
-	    	bodyPanel.addComponent(rightPanel.withBorder(Borders.singleLine("Memory")));
-	    	IntStream.range(0, 16).forEachOrdered(n -> {
-	    		Label key = new Label("0x" + n);
-	    	    Label value = new Label("0");
-	    	    rightPanel.addComponent(key);
-	    	    rightPanel.addComponent(value);
-	    	    memory.put(key, value);
-	    	});
-	    	this.updateMemory();
-	    	
-	    	Panel bottomPanel = new Panel();
-	    	bodyPanel.addComponent(bottomPanel.withBorder(Borders.singleLine()));
+	    	Panel bottomPanel = new Panel(new GridLayout(2));
 	    	bottomPanel.addComponent(new Button("⇡ Lo", () -> {
 	    		this.memoryIndex--;
 	    		if (this.memoryIndex < 0) {
@@ -195,7 +184,16 @@ public class CLI implements SimulatorUI {
 	    		this.memoryIndex++;
 	    		this.updateMemory();
 	    	}));
+	    	bodyPanel.addComponent(bottomPanel.withBorder(Borders.singleLine("Memory")));
+	    	IntStream.range(0, 16).forEachOrdered(n -> {
+	    		Label key = new Label("0x" + n);
+	    	    Label value = new Label("0");
+	    	    bottomPanel.addComponent(key);
+	    	    bottomPanel.addComponent(value);
+	    	    memory.put(key, value);
+	    	});
 	    	
+	    	this.updateMemory();
 	    	this.console = new TextBox(new TerminalSize(size.getColumns()/2,4));
 	    	this.console.setReadOnly(true);
 	    	this.console.setText(About.COPYRIGHT);
@@ -214,7 +212,7 @@ public class CLI implements SimulatorUI {
 
 	    	window = new BasicWindow();
 	        window.setComponent(masterPanel.withBorder(Borders.doubleLine("#@rmSim")));
-	    	window.setHints(Arrays.asList(Window.Hint.CENTERED));	
+	    	window.setHints(Arrays.asList(Window.Hint.CENTERED, Window.Hint.FIT_TERMINAL_WINDOW));	
 	    	
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -246,7 +244,7 @@ public class CLI implements SimulatorUI {
     }
     
     private void showCurrentLine() {
-		showCurrentLine(this.simulator.getCurrentLine());
+    		showCurrentLine(this.simulator.getCurrentLine());
     }
     
     private void showCurrentLine(int line) {
