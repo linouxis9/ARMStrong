@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import simulator.core.exceptions.Bug;
 import simulator.core.exceptions.InvalidDirectiveException;
 import simulator.core.exceptions.InvalidLabelException;
 import simulator.core.exceptions.InvalidOperationException;
@@ -217,11 +218,10 @@ public class Interpretor {
 		case "tst":
 			return new Instruction(Operation.TST, line, toRegister(tokens.get(i)), handleOpe2(tokens.get(i + 2)), flags, cc);
 		case "udiv":
-			return new Instruction(Operation.SDIV, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
+			return new Instruction(Operation.UDIV, line, toRegister(tokens.get(i)), toRegister(tokens.get(i + 2)),
 					toRegister(tokens.get(i + 4)), flags, cc);
 		default:
-			throw new RuntimeException();
-
+			throw new Bug("Unknown operation caught by the Lexer? op: " + tokens.get(0).getRawOperation());
 		}
 	}
 	/**
@@ -240,7 +240,7 @@ public class Interpretor {
 			registerId = register.getRawOffset();
 			break;
 		default:
-			throw new RuntimeException();
+			throw new Bug("toRegister: invalid token");
 		}
 		return this.cpu.getRegister(registerId);
 	}
@@ -260,7 +260,7 @@ public class Interpretor {
 		case OFFSET:
 			return toRegister(ope2);
 		default:
-			throw new RuntimeException();
+			throw new Bug("handleOpe2: invalid token");
 		}
 	}
 }

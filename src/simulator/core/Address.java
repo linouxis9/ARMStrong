@@ -1,5 +1,7 @@
 package simulator.core;
 
+import simulator.core.exceptions.InvalidMemoryAddressException;
+
 /**
  * An Address class used to interact with the Memory classes.
  */
@@ -22,10 +24,13 @@ public class Address {
 	 *            A valid address on 32bit
 	 */
 	public Address(int address) {
+		if (Integer.compareUnsigned(address,Ram.DEFAULT_SIZE) > 0) {
+			throw new InvalidMemoryAddressException();
+		}
 		this.addr = address;
 	}
 
-	public Address add(int offset) {
+	public Address offset(int offset) {
 		return new Address(addr + offset);
 	}
 
@@ -57,7 +62,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return "Address [address=" + addr + "]";
+		return "Address [address=" + Integer.toUnsignedString(addr) + "]";
 	}
 
 }

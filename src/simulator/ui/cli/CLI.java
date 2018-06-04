@@ -1,19 +1,16 @@
 package simulator.ui.cli;
 import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.SimpleTheme;
-import com.googlecode.lanterna.graphics.Theme;
 import com.googlecode.lanterna.gui2.*;
 import com.googlecode.lanterna.gui2.dialogs.FileDialogBuilder;
 import com.googlecode.lanterna.screen.*;
 import com.googlecode.lanterna.terminal.*;
 
-import javafx.scene.shape.Path;
 import simulator.boilerplate.*;
 import simulator.core.About;
 import simulator.core.exceptions.*;
 import simulator.ui.SimulatorUI;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;

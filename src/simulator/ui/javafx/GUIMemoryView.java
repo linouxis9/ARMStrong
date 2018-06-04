@@ -1,21 +1,15 @@
 package simulator.ui.javafx;
-import com.sun.xml.internal.ws.util.StringUtils;
+
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import simulator.boilerplate.ArmSimulator;
 import simulator.core.Ram;
-
-import org.omg.CORBA.Any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +88,7 @@ public class GUIMemoryView {
 		scrollBar.setValue(0);
 		scrollBar.setUnitIncrement(1);
 
-		scrollBar.setMax(Ram.DEFAULT_SIZE - displayableMemoryRows);
+		scrollBar.setMax(Ram.DEFAULT_SIZE);
 
 		scrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
 			memoryViewFirstAddress = (int) scrollBar.getValue();
@@ -181,9 +175,13 @@ public class GUIMemoryView {
 	 * updates the memory view
 	 */
 	public void updateMemoryView() {
+		if (memoryViewFirstAddress > Ram.DEFAULT_SIZE - displayedMemoryRows * this.memoryDisplayMode / 8) {
+			memoryViewFirstAddress = Ram.DEFAULT_SIZE - displayedMemoryRows * this.memoryDisplayMode / 8;
+		}
+		
 		alignMemoryAddress();
-
-		int displayedMemoryAddress = memoryViewFirstAddress;
+		
+ 		int displayedMemoryAddress = memoryViewFirstAddress;
 
 		scrollBar.setUnitIncrement(this.memoryDisplayMode/8);
 

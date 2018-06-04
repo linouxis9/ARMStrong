@@ -76,7 +76,17 @@ public class GUI extends Application implements SimulatorUI {
 	private Set<String> themes;
 	private static final String DEFAULT_THEME = "red";
 	private Color themeColor;
-
+	
+	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
+			KeyCombination.SHIFT_DOWN);
+	final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+	final KeyCombination ctrlP = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
+	final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+	final KeyCombination f5 = new KeyCodeCombination(KeyCode.F5);
+	final KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
+	final KeyCombination ctrlE = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+	
 	public void startUI() {
 		launch(null);
 	}
@@ -152,6 +162,9 @@ public class GUI extends Application implements SimulatorUI {
 		};
 		System.setOut(new PrintStream(consoleOut, true));
 
+		TextFlow outputTextFlow = (TextFlow) scene.lookup("#outputTextFlow");
+		consoleTextFlow.getChildren().add(new Text(""));
+
 		setActionEvents();
 		updateGUI();
 		stage.show();
@@ -160,17 +173,6 @@ public class GUI extends Application implements SimulatorUI {
 
 	private void handleKeyboardEvent(KeyEvent ke) {
 		// TODO Maybe we should make them static or in a enum or something to avoid allocating new objects every time someone push a key on the keyboard?
-		
-		final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-		final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
-				KeyCombination.SHIFT_DOWN);
-		final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
-		final KeyCombination ctrlP = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
-		final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-		final KeyCombination f5 = new KeyCodeCombination(KeyCode.F5);
-		final KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
-		final KeyCombination ctrlE = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
-
 		if (ctrlS.match(ke)) {
 			theGUIMenuBar.getSaveMenuItem().fire();
 		}
@@ -361,7 +363,8 @@ public class GUI extends Application implements SimulatorUI {
 						try {
 							Thread.sleep(1);
 						} catch (InterruptedException e) {
-							break;
+							this.running.set(false);
+							Thread.currentThread().interrupt();
 						}
 					}
 

@@ -121,6 +121,7 @@ public class Preprocessor {
 	 */
 	public PreprocessorMessage preProcessPass2(List<Token> tokens, int line) throws InvalidSyntaxException,
 			InvalidOperationException, InvalidRegisterException, UnknownLabelException {
+
 		// We don't remove empty lines in Pass 1 or otherwise we can't accurately know the current line which is required to throw errors.
 		if (tokens.isEmpty() || tokens.get(0).getTokenType() == TokenType.COMMENT || tokens.get(0).getTokenType() == TokenType.DIRECTIVE) {
 			return PreprocessorMessage.SKIP;
@@ -171,6 +172,8 @@ public class Preprocessor {
 				this.cpu.getRam().setByte(new Address(this.cpu.getPmsp()), (byte)chr);
 				this.cpu.incrementPmsp();
 			}
+			this.cpu.getRam().setByte(new Address(this.cpu.getPmsp()), (byte)0);
+			this.cpu.incrementPmsp();
 			break;
 		default:
 			throw new InvalidDirectiveException(line,directive.getRawDirective());

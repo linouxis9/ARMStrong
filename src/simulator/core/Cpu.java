@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import simulator.core.exceptions.Bug;
 import simulator.core.exceptions.InvalidMemoryAddressException;
 
 /*
@@ -204,6 +205,11 @@ public class Cpu {
 		this.interruptsVector.put(100, () -> {
 			System.out.println("[INFO] " + About.info());
 		});
+		
+		this.interruptsVector.put(-1, () -> {
+			this.isInterrupted.set(true);
+		});
+		
 		this.interruptsVector.put(0, () -> {
 			char c = '\0';
 			int i = 0;
@@ -303,13 +309,13 @@ public class Cpu {
 			this.alu.mvn(i.getR1(), i.getOpe2(), i.getFlags());
 			break;
 		case MUL:
-			this.alu.mul(i.getR1(), i.getR2(), i.getR3());
+			this.alu.mul(i.getR1(), i.getR2(), (Register)i.getOpe2());
 			break;
 		case ORR:
 			this.alu.orr(i.getR1(), i.getR2(), i.getOpe2(), i.getFlags());
 			break;
 		case SDIV:
-			this.alu.sdiv(i.getR1(), i.getR2(), i.getR3());
+			this.alu.sdiv(i.getR1(), i.getR2(), (Register)i.getOpe2());
 			break;
 		case STR:
 			this.alu.str(i.getR1(), i.getOpe2(), i.getFlags());
@@ -331,7 +337,7 @@ public class Cpu {
 			this.alu.tst(i.getR1(), i.getOpe2());
 			break;
 		case UDIV:
-			this.alu.udiv(i.getR1(), i.getR2(), i.getR3());
+			this.alu.udiv(i.getR1(), i.getR2(), (Register)i.getOpe2());
 			break;
 		default:
 			System.out.println("OOPSIE WOOPSIE!! A PROBLEM OCCURED" + System.lineSeparator()
@@ -360,7 +366,7 @@ public class Cpu {
 	 */
 	public Register getRegister(int i) {
 		if (i < 0 || i >= DEFAULT_ARM_REGISTERS) {
-			throw new RuntimeException();
+			throw new Bug("Invalid Register ID provided");
 		}
 		return this.registers[i];
 	}
@@ -640,12 +646,17 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void ldr(Register r1, Operand2 op, Set<Flag> flags) {
-			if (flags.contains(Flag.B)) {
-				r1.setValue(Cpu.this.ram.getByte(new Address(op.getValue())));
-			} else if (flags.contains(Flag.H)) {
-				r1.setValue(Cpu.this.ram.getHWord(new Address(op.getValue())));
-			} else {
-				r1.setValue(Cpu.this.ram.getValue(new Address(op.getValue())));
+			try {
+				if (flags.contains(Flag.B)) {
+					r1.setValue(Cpu.this.ram.getByte(new Address(op.getValue())));
+				} else if (flags.contains(Flag.H)) {
+					r1.setValue(Cpu.this.ram.getHWord(new Address(op.getValue())));
+				} else {
+					r1.setValue(Cpu.this.ram.getValue(new Address(op.getValue())));
+				}
+			}
+			catch (InvalidMemoryAddressException e) {
+				aluError("Memory address out of bounds " + Integer.toUnsignedString(op.getValue()) + ">" + Ram.DEFAULT_SIZE);
 			}
 		}
 
@@ -745,6 +756,8 @@ public class Cpu {
 		public void sdiv(Register r1, Register r2, Register r3) {
 			if (r3.getValue() != 0) {
 				r1.setValue(r2.getValue() / r3.getValue());
+			} else {
+				aluError("Division by 0");
 			}
 		}
 
@@ -759,12 +772,17 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void str(Register r1, Operand2 op, Set<Flag> flags) {
-			if (flags.contains(Flag.B)) {
-				Cpu.this.ram.setByte(new Address(op.getValue()), (byte) (r1.getValue()));
-			} else if (flags.contains(Flag.H)) {
-				Cpu.this.ram.setHWord(new Address(op.getValue()), (short) (r1.getValue()));
-			} else {
-				Cpu.this.ram.setValue(new Address(op.getValue()), (r1.getValue()));
+			try {
+				if (flags.contains(Flag.B)) {
+					Cpu.this.ram.setByte(new Address(op.getValue()), (byte) (r1.getValue()));
+				} else if (flags.contains(Flag.H)) {
+					Cpu.this.ram.setHWord(new Address(op.getValue()), (short) (r1.getValue()));
+				} else {
+					Cpu.this.ram.setValue(new Address(op.getValue()), (r1.getValue()));
+				}
+			}
+			catch (InvalidMemoryAddressException e) {
+				aluError("Memory address out of bounds " + Integer.toUnsignedString(op.getValue()) + ">" + Ram.DEFAULT_SIZE);
 			}
 		}
 
@@ -786,7 +804,7 @@ public class Cpu {
 			try {
 				Cpu.this.interruptsVector.get(value.getValue()).run();
 			} catch (Exception e) {
-
+				aluError("SWI Call no" + value.getValue() + " doesn't exist.");
 			}
 		}
 
@@ -826,7 +844,7 @@ public class Cpu {
 				r1.setValue(Cpu.this.ram.getValue(new Address(op.getValue())));
 				Cpu.this.ram.setValue(new Address(op.getValue()), (r2.getValue()));
 			} catch (InvalidMemoryAddressException e) {
-				e.printStackTrace();
+				aluError("Memory address out of bounds " + Integer.toUnsignedString(op.getValue()) + ">" + Ram.DEFAULT_SIZE);
 			}
 		}
 
@@ -888,7 +906,14 @@ public class Cpu {
 		public void udiv(Register r1, Register r2, Register r3) {
 			if (r3.getValue() != 0) {
 				r1.setValue(Integer.divideUnsigned(r2.getValue(), r3.getValue()));
+			} else {
+				aluError("Division by 0");
 			}
+		}
+		
+		// TODO Yeah.. We could use a logger
+		private void aluError(String string) {
+			System.out.println("[WARNING] " + string);
 		}
 	}
 

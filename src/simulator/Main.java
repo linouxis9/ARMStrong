@@ -1,6 +1,5 @@
 package simulator;
 
-import simulator.core.*;
 import simulator.ui.cli.CLI;
 import simulator.ui.javafx.GUI;
 /**

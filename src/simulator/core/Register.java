@@ -31,6 +31,6 @@ public class Register implements Operand2 {
 
 	@Override
 	public String toString() {
-		return "rx = [" + value + "]";
+		return "r = [" + value + "]";
 	}
 }

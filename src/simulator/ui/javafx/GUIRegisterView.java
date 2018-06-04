@@ -1,6 +1,5 @@
 package simulator.ui.javafx;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import simulator.boilerplate.ArmSimulator;
 

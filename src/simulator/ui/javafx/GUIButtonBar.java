@@ -13,7 +13,7 @@ public class GUIButtonBar {
     private ToolBar theToolBar;
 
     private Button newFile;
-    private Button Save;
+    private Button save;
 
     private Button executionMode;
 
@@ -36,13 +36,13 @@ public class GUIButtonBar {
         reload = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
         stop = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
 
-        Save = new Button("", new ImageView(new Image(getClass().getResource("/resources/save.png").toExternalForm())));
+        save = new Button("", new ImageView(new Image(getClass().getResource("/resources/save.png").toExternalForm())));
         newFile = new Button("", new ImageView(new Image(getClass().getResource("/resources/newFile.png").toExternalForm())));
 
         editMode = new ArrayList<Button>();
         execMode = new ArrayList<Button>();
 
-        editMode.add(Save);
+        editMode.add(save);
         editMode.add(newFile);
         editMode.add(executionMode);
 
@@ -52,7 +52,7 @@ public class GUIButtonBar {
         execMode.add(reload);
         execMode.add(stop);
 
-        Save.setTooltip(new Tooltip("Save (Ctrl+S)"));
+        save.setTooltip(new Tooltip("Save (Ctrl+S)"));
         executionMode.setTooltip(new Tooltip("Switch Execution/Edit mode"));
         newFile.setTooltip(new Tooltip("New file"));
         
@@ -78,7 +78,7 @@ public class GUIButtonBar {
     }
 
     public Button getSaveButton() {
-        return Save;
+        return save;
     }
 
     public Button getExececutionModeButton() {

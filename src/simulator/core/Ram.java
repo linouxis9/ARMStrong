@@ -38,8 +38,6 @@ public class Ram implements Memory {
 	 * @return The byte corresponding stored at the specified address
 	 */
 	public byte getByte(Address myAddress) {
-		
-		checkAddress(myAddress);
 
 		return this.memory.getOrDefault(myAddress,(byte)0);
 	}
@@ -53,8 +51,6 @@ public class Ram implements Memory {
 	 *            The byte to set at the specified address
 	 */
 	public void setByte(Address myAddress, byte myByte) {
-		
-		checkAddress(myAddress);
 
 		this.memory.put(myAddress,myByte);
 	}
@@ -67,10 +63,8 @@ public class Ram implements Memory {
 	 * @return The half-word stored at the specified address
 	 */
 	public short getHWord(Address myAddress) {
-		
-		checkAddress(myAddress);
 
-		return (short) ((getByte(myAddress.add(1)) & 0xFF)
+		return (short) ((getByte(myAddress.offset(1)) & 0xFF)
 				| (getByte(myAddress) & 0xFF) << 8);
 	}
 
@@ -83,16 +77,14 @@ public class Ram implements Memory {
 	 *            The half-word to set in the memory
 	 */
 	public void setHWord(Address myAddress, short myHWord) {
-
-		checkAddress(myAddress);
-
+		
 		byte[] bytes = new byte[2];
 
 		bytes[0] = (byte) (myHWord & 0xff);
 		bytes[1] = (byte) ((myHWord >> 8) & 0xff);
 
 		this.memory.put(myAddress,bytes[1]);
-		this.memory.put(myAddress.add(1),bytes[0]);
+		this.memory.put(myAddress.offset(1),bytes[0]);
 
 	}
 
@@ -105,11 +97,9 @@ public class Ram implements Memory {
 	 */
 	public int getValue(Address myAddress) {
 
-		checkAddress(myAddress);
-
-		return  ((getByte(myAddress.add(3)) & 0xFF)
-				| (getByte(myAddress.add(2)) & 0xFF) << 8
-				| (getByte(myAddress.add(1)) & 0xFF) << 16
+		return  ((getByte(myAddress.offset(3)) & 0xFF)
+				| (getByte(myAddress.offset(2)) & 0xFF) << 8
+				| (getByte(myAddress.offset(1)) & 0xFF) << 16
 				| (getByte(myAddress) & 0xFF) << 24);
 
 	}
@@ -124,8 +114,6 @@ public class Ram implements Memory {
 	 */
 	public void setValue(Address myAddress, int myWord) {
 
-		checkAddress(myAddress);
-
 		byte[] bytes = new byte[4];
 
 		// TODO We could loop the whole method
@@ -136,16 +124,10 @@ public class Ram implements Memory {
 		bytes[3] = (byte) (myWord >> 24);
 
 		this.memory.put(myAddress,bytes[3]);
-		this.memory.put(myAddress.add(1),bytes[2]);
-		this.memory.put(myAddress.add(2),bytes[1]);
-		this.memory.put(myAddress.add(3),bytes[0]);
+		this.memory.put(myAddress.offset(1),bytes[2]);
+		this.memory.put(myAddress.offset(2),bytes[1]);
+		this.memory.put(myAddress.offset(3),bytes[0]);
 
-	}
-
-	private void checkAddress(Address myAddress) {
-		if ((myAddress.getAddress() < 0) || (myAddress.getAddress() >= DEFAULT_SIZE)) {
-			throw new InvalidMemoryAddressException();
-		}
 	}
 
 	/**
