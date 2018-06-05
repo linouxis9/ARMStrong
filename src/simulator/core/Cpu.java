@@ -130,9 +130,7 @@ public class Cpu {
 			this.registers[i] = new Register();
 		}
 		this.instructions = null;
-		
 		reset();
-		
 		this.alu = new ALU();
 		this.interruptsVector = new HashMap<>();
 		this.fillInterruptsVector();
