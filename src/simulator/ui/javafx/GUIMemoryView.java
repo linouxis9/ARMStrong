@@ -1,15 +1,22 @@
 package simulator.ui.javafx;
-
+import com.sun.xml.internal.ws.util.StringUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import simulator.boilerplate.ArmSimulator;
 import simulator.core.Ram;
+
+import org.omg.CORBA.Any;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +24,8 @@ import java.util.List;
 public class GUIMemoryView {
 
 	private ArmSimulator theArmSimulator;
+	
+	private Scene theScene;
 
 	private TextField goToAddressField;
 
@@ -35,11 +44,17 @@ public class GUIMemoryView {
 
 	private int displayableMemoryRows;
 	private int displayedMemoryRows;
+	
+	private Text memoryViewTitleText;
 
 	public GUIMemoryView(Scene theScene, ArmSimulator anArmSimulator) {
 
 		this.theArmSimulator = anArmSimulator;
-
+		
+		this.theScene = theScene;
+		
+		memoryViewTitleText = (Text) theScene.lookup("#goToAddressLabel");
+		
 		this.memoryPane = (AnchorPane) theScene.lookup("#memoryViewPane");
 
 		this.goToAddressField = (TextField) theScene.lookup("#goToAddressField");
@@ -53,8 +68,7 @@ public class GUIMemoryView {
 
 		this.MemoryAddressList.add((Text) theScene.lookup("#memoryAddress"));
 		this.MemoryContentList.add((Text) theScene.lookup("#memoryContent"));
-
-
+		
 		button8bitView.setOnAction((ActionEvent e) -> {
 			memoryDisplayMode = 8;
 			updateMemoryView();
@@ -88,7 +102,7 @@ public class GUIMemoryView {
 		scrollBar.setValue(0);
 		scrollBar.setUnitIncrement(1);
 
-		scrollBar.setMax(Ram.DEFAULT_SIZE);
+		scrollBar.setMax(Ram.DEFAULT_SIZE - displayableMemoryRows);
 
 		scrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
 			memoryViewFirstAddress = (int) scrollBar.getValue();
@@ -102,9 +116,13 @@ public class GUIMemoryView {
 		goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
 			if (ke.getCode().equals(KeyCode.ENTER)) {
 				String addressTyped = goToAddressField.getText();
-				Text memoryViewTitleText = (Text) theScene.lookup("#goToAddressLabel");
-				memoryViewTitleText.setText("Go to address: ");
-				memoryViewTitleText.setUnderline(false);
+				
+				if(GUI.language.equals("French")) {
+					this.memoryViewTitleText.setText("Aller à l'adresse: ");
+				}
+				else {
+					this.memoryViewTitleText.setText("Go to address: ");
+				}
 
 				int newAddress = 0;
 
@@ -125,17 +143,26 @@ public class GUIMemoryView {
 						newAddress = Integer.parseInt(addressTyped);
 					}
 				} catch (NumberFormatException exeption) {
-					memoryViewTitleText.setText("The address is invalid");
+					
+					if(GUI.language.equals("French")) {
+						memoryViewTitleText.setText("Adresse invalide");
+					}else{
+						memoryViewTitleText.setText("The address is invalid");
+					}
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
 
 				if (newAddress < 0 || newAddress > Ram.DEFAULT_SIZE - displayableMemoryRows) {
-					memoryViewTitleText.setText("The address too low or to high");
+					if(GUI.language.equals("French")) {
+						memoryViewTitleText.setText("Adresse invalide");
+					}else {
+						memoryViewTitleText.setText("The address is invalid");
+					}
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
-
+				memoryViewTitleText.setUnderline(false);
 				memoryViewFirstAddress = newAddress;
 				scrollBar.setValue(memoryViewFirstAddress);
 				updateMemoryView();
@@ -147,8 +174,31 @@ public class GUIMemoryView {
 		memoryViewFirstAddress = 0;
 		updateDisplayedRows();
 		updateMemoryView();
+		
+		translate();
 	}
 
+	public void translate() {
+		
+		if(GUI.language.equals("French")) {
+			this.memoryViewTitleText.setText("Aller à l'adresse: ");
+		}
+		else {
+			this.memoryViewTitleText.setText("Go to address: ");
+		}
+
+		memoryViewTitleText.setUnderline(false);
+		
+		if(GUI.language.equals("French")) {
+			((Text) this.theScene.lookup("#viewModeLabel")).setText("Mode d'affichage: ");
+			
+		}else{
+			((Text) this.theScene.lookup("#viewModeLabel")).setText("View mode: ");
+		}
+		
+	}
+	
+	
 	private void updateNewFirstAddress(int delta) {
 		int oldAddress = memoryViewFirstAddress;
 		
@@ -175,13 +225,9 @@ public class GUIMemoryView {
 	 * updates the memory view
 	 */
 	public void updateMemoryView() {
-		if (memoryViewFirstAddress > Ram.DEFAULT_SIZE - displayedMemoryRows * this.memoryDisplayMode / 8) {
-			memoryViewFirstAddress = Ram.DEFAULT_SIZE - displayedMemoryRows * this.memoryDisplayMode / 8;
-		}
-		
 		alignMemoryAddress();
-		
- 		int displayedMemoryAddress = memoryViewFirstAddress;
+
+		int displayedMemoryAddress = memoryViewFirstAddress;
 
 		scrollBar.setUnitIncrement(this.memoryDisplayMode/8);
 
@@ -249,4 +295,6 @@ public class GUIMemoryView {
 		}
 		updateMemoryView();
 	}
+	
+	
 }
