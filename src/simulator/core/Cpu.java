@@ -115,22 +115,13 @@ public class Cpu {
 	private final Map<String, Integer> labelMap;
 
 	/**
-	 * Returns a fully initialized Cpu with an empty List of instructions to
-	 * execute.
-	 */
-	public Cpu() {
-		this(new ArrayList<Instruction>());
-	}
-
-	/**
 	 * Returns a fully initialized Cpu with an already specified set of instructions
 	 * to execute.
 	 * 
-	 * @param instructions
 	 *            An initial list of Instructions to add to the Cpu's executable
 	 *            memory space.
 	 */
-	public Cpu(List<Instruction> instructions) {
+	public Cpu() {
 		this.ram = new Ram();
 		this.cpsr = new Cpsr();
 		this.registers = new Register[DEFAULT_ARM_REGISTERS];
@@ -138,19 +129,15 @@ public class Cpu {
 		for (int i = 0; i < DEFAULT_ARM_REGISTERS; i++) {
 			this.registers[i] = new Register();
 		}
-
-		this.sp = this.registers[13]; // SP should reference to the same register as this.registers[13]
-		this.lr = this.registers[14]; // LR should reference to the same register as this.registers[14]
-		this.pc = this.registers[15]; // PC should reference to the same register as this.registers[15]
+		this.instructions = null;
+		
+		reset();
+		
 		this.alu = new ALU();
-		this.instructions = instructions;
 		this.interruptsVector = new HashMap<>();
 		this.fillInterruptsVector();
 		this.interruptsVector.get(100).run();
 		this.isInterrupted = new AtomicBoolean(false);
-		this.isBreakpoint = false;
-		this.hasFinished = false;
-		this.pmsp = Cpu.DEFAULT_PMSP;
 		this.labelMap = new HashMap<>();
 	}
 
