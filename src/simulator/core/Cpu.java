@@ -129,14 +129,14 @@ public class Cpu {
 		for (int i = 0; i < DEFAULT_ARM_REGISTERS; i++) {
 			this.registers[i] = new Register();
 		}
-		this.instructions = null;
-		reset();
+		this.instructions = new ArrayList<Instruction>();
 		this.alu = new ALU();
 		this.interruptsVector = new HashMap<>();
 		this.fillInterruptsVector();
 		this.interruptsVector.get(100).run();
 		this.isInterrupted = new AtomicBoolean(false);
 		this.labelMap = new HashMap<>();
+		this.reset();
 	}
 
 	/**
