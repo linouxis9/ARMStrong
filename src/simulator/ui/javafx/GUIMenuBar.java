@@ -25,25 +25,18 @@ public class GUIMenuBar {
 	private MenuItem reloadProgramMenuItem;
 	private MenuItem preferencesMenuItem;
 	private MenuItem stopMenuItem;
-	
-	private Menu fileMenu;
-	private Menu editMenu;
-	private Menu runMenu;
-	private Menu helpMenu;
 
-	
-	
 	public GUIMenuBar(MenuBar aMenuBar) {
 
 		theMenuBar = aMenuBar;
 
 		diabledInExecMode = new ArrayList<MenuItem>();
 		enabledInExecMode = new ArrayList<MenuItem>();
-		
-		this.fileMenu = new Menu("File");
-		this.editMenu = new Menu("Edit");
-		this.runMenu = new Menu("Run");
-		this.helpMenu = new Menu("Help");
+
+		Menu fileMenu = new Menu("File");
+		Menu editMenu = new Menu("Edit");
+		Menu runMenu = new Menu("Run");
+		Menu helpMenu = new Menu("Help");
 
 		newMenuItem = new MenuItem("New");
 		openMenuItem = new MenuItem("Open file");
@@ -83,61 +76,11 @@ public class GUIMenuBar {
 		exitMenuItem.setOnAction((ActionEvent actionEvent) -> {
 			System.exit(0);
 		});
-		
-		translate();
 
 		exitExecMode();
 
 	}
 
-	public void translate() {
-		if(GUI.language.equals("French")) {
-			fileMenu.setText("Fichier");
-			editMenu.setText("Editer");
-			runMenu.setText("Lancer");
-			helpMenu.setText("Aide");
-
-			newMenuItem.setText("Nouveau");
-			openMenuItem.setText("Ouvrir");
-			saveMenuItem.setText("Sauvegarder");
-			saveAsMenuItem.setText("Sauvegarder sous");
-			exitMenuItem.setText("Fermer");
-			helpMenuItem.setText("Aide");
-			
-			enterExecutionModeMenuItem.setText("Passer en mode execution");
-			exitExecutionModeMenuItem.setText("Sortir du mode execution");
-			runMenuItem.setText("Lancer");
-			runSingleMenuItem.setText("Lancer une instruction");
-			reloadProgramMenuItem.setText("Recharger le Programme");
-			stopMenuItem.setText("Stopper l'Execution");
-			documentationMenuItem.setText("Documentation");
-			preferencesMenuItem.setText("Préférences");
-		}else{
-			fileMenu.setText("File");
-			editMenu.setText("Edit");
-			runMenu.setText("Run");
-			helpMenu.setText("Help");
-
-			newMenuItem.setText("New");
-			openMenuItem.setText("Open file");
-			saveMenuItem.setText("Save");
-			saveAsMenuItem.setText("Save as");
-			exitMenuItem.setText("Exit");
-			helpMenuItem.setText("Help");
-			
-			enterExecutionModeMenuItem.setText("Enter in execution mode");
-			exitExecutionModeMenuItem.setText("Exit the execution mode");
-			runMenuItem.setText("Run a single instruction");
-			runSingleMenuItem.setText("Run a single instruction");
-			reloadProgramMenuItem.setText("Reload Program");
-			stopMenuItem.setText("Stop Execution");
-			documentationMenuItem.setText("Documentation");
-			preferencesMenuItem.setText("Preferences");
-		}
-		
-	}
-	
-	
 	public void setExecMode() {
 		switchMenuState(false);
 	}

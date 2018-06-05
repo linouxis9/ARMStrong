@@ -27,7 +27,7 @@
                      <children>
                         <Accordion prefHeight="623.0" prefWidth="337.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <panes>
-                              <TitledPane fx:id="hexadecimal" animated="false" text="Hexadecimal">
+                              <TitledPane animated="false" text="Hexadecimal">
                                  <content>
                                     <AnchorPane prefHeight="393.0" prefWidth="234.0">
                                        <children>
@@ -67,7 +67,7 @@
                                     </AnchorPane>
                                  </content>
                               </TitledPane>
-                              <TitledPane fx:id="unsignedDecimal" animated="false" text="Unsigned Decimal">
+                              <TitledPane animated="false" text="Unsigned Decimal">
                                  <content>
                                     <AnchorPane prefHeight="398.0" prefWidth="272.0">
                                        <children>
@@ -107,7 +107,7 @@
                                     </AnchorPane>
                                  </content>
                               </TitledPane>
-                              <TitledPane fx:id="signedDecimal" animated="false" text="Signed Decimal">
+                              <TitledPane animated="false" text="Signed Decimal">
                                  <content>
                                     <AnchorPane prefHeight="398.0" prefWidth="272.0">
                                        <children>
@@ -163,7 +163,7 @@
                         <Button fx:id="button8Bit" layoutX="99.0" layoutY="50.0" mnemonicParsing="false" text="8bit" AnchorPane.rightAnchor="131.0" AnchorPane.topAnchor="50.0" />
                         <Button fx:id="button32Bit" layoutX="212.0" layoutY="50.0" mnemonicParsing="false" text="32bit" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0" />
                         <Button fx:id="button16Bit" layoutX="153.0" layoutY="49.0" mnemonicParsing="false" text="16bit" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="50.0" />
-                        <Text fx:id="viewModeLabel" layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.rightAnchor="183.970703125" AnchorPane.topAnchor="54.0" />
+                        <Text layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.rightAnchor="183.970703125" AnchorPane.topAnchor="54.0" />
                         <Text fx:id="memoryAddress" layoutX="20.19482421875" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                         <Text fx:id="memoryContent" layoutX="119.44677734375" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                         <ScrollBar fx:id="memoryScrollBar" layoutX="234.0" layoutY="93.0" orientation="VERTICAL" prefHeight="514.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="93.0" />

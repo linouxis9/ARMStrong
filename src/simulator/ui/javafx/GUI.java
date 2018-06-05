@@ -25,6 +25,7 @@ import javafx.stage.*;
 import javafx.stage.FileChooser.ExtensionFilter;
 import simulator.boilerplate.ArmSimulator;
 import simulator.core.*;
+import simulator.ui.SimulatorUI;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -39,7 +40,7 @@ import java.util.prefs.Preferences;
 /**
  * GUI is the class responsible of handling the JavaFX Graphical User Interface.
  */
-public class GUI extends Application {
+public class GUI extends Application implements SimulatorUI {
 
 	//THE GRAPHICAL ELEMENTS
 	private Scene scene;
@@ -76,10 +77,17 @@ public class GUI extends Application {
 	private static final String DEFAULT_THEME = "red";
 	private Color themeColor;
 	
-	private Set<String> languages;
-	public static String language = "English";
-
-	public void startGUI() {
+	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
+			KeyCombination.SHIFT_DOWN);
+	final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+	final KeyCombination ctrlP = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
+	final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+	final KeyCombination f5 = new KeyCodeCombination(KeyCode.F5);
+	final KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
+	final KeyCombination ctrlE = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+	
+	public void startUI() {
 		launch(null);
 	}
 
@@ -94,7 +102,7 @@ public class GUI extends Application {
 
 		// setting graphical "static" elements
 		this.stage = stage;
-		this.root = FXMLLoader.load(getClass().getResource("ihmv4.fxml"));
+		this.root = FXMLLoader.load(getClass().getResource("/resources/ihmv4.fxml"));
 		this.scene = new Scene(root, 800, 800); //TODO for smaller screens
 
 		//this.stage.setMaximized(true);
@@ -111,31 +119,18 @@ public class GUI extends Application {
 		Image applicationIcon = new Image("file:logo.png");
 		this.stage.getIcons().add(applicationIcon);
 
-		Font.loadFont(getClass().getResource("Quicksand.ttf").toExternalForm(), 16);
+		Font.loadFont(getClass().getResource("/resources/Quicksand.ttf").toExternalForm(), 16);
 
 		this.prefs = Preferences.userNodeForPackage(this.getClass());
 		this.prefs.getBoolean("FONT", true);
 		this.prefs.get("THEME", GUI.DEFAULT_THEME);
 		this.themeColor = Color.RED;
 		
-		String colorR = "red";
-		String colorB = "blue";
-		String colorG = "green";
-		
 		themes = new HashSet<>();
-		themes.add(colorR);
-		themes.add(colorB);
-		themes.add(colorG);
+		themes.add("red");
+		themes.add("blue");
+		themes.add("green");
 		applyTheme();
-		
-		GUI.language = this.prefs.get("LANGUAGE", language);
-		
-		String languageEN = "English";
-		String languageFR = "French";
-		
-		languages = new HashSet<>();
-		languages.add(languageEN);
-		languages.add(languageFR);
 
 		stage.show(); // to be sure the scene.lookup() works properly
 
@@ -167,297 +162,17 @@ public class GUI extends Application {
 		};
 		System.setOut(new PrintStream(consoleOut, true));
 
+		TextFlow outputTextFlow = (TextFlow) scene.lookup("#outputTextFlow");
+		consoleTextFlow.getChildren().add(new Text(""));
+
 		setActionEvents();
 		updateGUI();
 		stage.show();
 
 	}
 
-	private void setActionEvents(){
-		
-		// THE PREFERENCES MENU
-		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			Stage preferencesDialog = new Stage();
-			preferencesDialog.initModality(Modality.APPLICATION_MODAL);
-			preferencesDialog.initOwner(stage);
-			VBox dialogVbox = new VBox(20);
-
-			String selectTheme = "Select a theme";
-			String applyClose = "Apply and Close";
-			String close = "Close";
-			String chooseaTheme = "Choose a theme:";
-			String chooseaLanguage = "Choose a language:";
-			String useQuicksand = "Use the Quicksand font:";
-			
-			ChoiceBox<String> languageChoiceBox = new ChoiceBox<>();
-			
-			languageChoiceBox.getItems().addAll(languages);
-
-			languageChoiceBox.setTooltip(new Tooltip("Choose a language"));
-
-			languageChoiceBox.setValue(prefs.get("LANGUAGE", ""));
-
-			languageChoiceBox.setId("choiceboxPreferencesLang");
-			
-			ChoiceBox<String> theme = new ChoiceBox<>();
-			
-			theme.getItems().addAll(themes);
-
-			theme.setTooltip(new Tooltip(selectTheme));
-
-			theme.setValue(prefs.get("THEME", ""));
-
-			theme.setId("choiceboxPreferences");
-
-			Button button1 = new Button(applyClose);
-			button1.setId("applyClosePreferences");
-
-			Button button2 = new Button(close);
-			button2.setId("closePreferences");
-
-			Label labelLanguage = new Label();
-			labelLanguage.setText(chooseaLanguage);
-			labelLanguage.setId("labelLanguagePreferences");
-			
-			Label labelTheme = new Label();
-			labelTheme.setText(chooseaTheme);
-			labelTheme.setId("labelThemePreferences");
-
-			Label labelQuicksand = new Label();
-			labelQuicksand.setText(useQuicksand);
-			labelQuicksand.setId("labelQuicksandPreferences");
-
-			CheckBox checkBoxFont = new CheckBox();
-
-			checkBoxFont.setSelected(prefs.getBoolean("FONT", true));
-
-			Text lineBreak = new Text();
-			lineBreak.setFont(new Font(20));
-			lineBreak.setText("\n");
-
-			button1.setOnAction((ActionEvent e) -> {
-				prefs.put("THEME", theme.getValue());
-
-				prefs.putBoolean("FONT", checkBoxFont.isSelected());
-				
-				prefs.put("LANGUAGE", languageChoiceBox.getValue());
-				
-				GUI.language = languageChoiceBox.getValue();
-				
-				theGUIMenuBar.translate();
-				theGUIRegisterView.translate();
-				theGUIMemoryView.translate();
-				
-				applyTheme();
-
-				preferencesDialog.close();
-			});
-
-			button2.setOnAction((ActionEvent e) ->	preferencesDialog.close());
-
-			GridPane pane = new GridPane();
-			pane.setAlignment(Pos.CENTER);
-			pane.setHgap(5);
-			pane.setVgap(5);
-			pane.setPadding(new Insets(25, 25, 25, 25));
-
-			pane.add(labelTheme, 0, 1);
-			pane.add(theme, 1, 1);
-			
-			pane.add(labelLanguage, 0, 2);
-			pane.add(languageChoiceBox, 1, 2);
-
-			pane.add(labelQuicksand, 0, 3);
-			pane.add(checkBoxFont, 1, 3);
-
-			pane.add(lineBreak, 0, 4);
-
-			pane.add(button1, 0, 5);
-			pane.add(button2, 1, 5);
-
-			dialogVbox.getChildren().add(pane);
-
-			Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
-			preferencesDialog.setScene(preferencesDialogScene);
-
-			String cssPreferences = getClass().getResource("css.css").toExternalForm();
-			preferencesDialogScene.getStylesheets().addAll(cssPreferences);
-
-			preferencesDialog.setTitle("Preferences");
-			Image preferencesIcon = new Image("file:logo.png");
-			preferencesDialog.getIcons().add(preferencesIcon);
-
-			preferencesDialog.show();
-
-		});
-		
-		
-		// TODO I'm wondering if we shouldn't move the logic somewhere else? We are quite bloating the constructor there? Maybe we could move that into GUIMenuBar? Maybe methods instead of lambdas?
-		// TODO the problem is that these buttons are using a lot of methods/attributes in this class... =/, if we move them in GUIMenuBar we have to give access it to GUI (his parent)
-		// THE ACTION EVENTS
-		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			String programString = codingTextArea.getText();
-			if(programString.length() != 0){
-				try {
-					theArmSimulator.setProgramString(programString);
-					enterExecutionMode(programString);
-				} catch (AssemblyException e1) {
-					System.out.println(e1.toString());
-				}
-			}
-		});
-		theGUIMenuBar.getExitExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> exitExecutionMode());
-		theGUIMenuBar.getRunMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			if (executionMode.get() && !(running.get())) {
-				new Thread(() -> {
-					this.running.set(true);
-					int counter = 0;
-					this.theArmSimulator.interruptExecutionFlow(false);
-					while(!this.theArmSimulator.run()) {
-						if (counter >= 1) {
-							this.updateGUIfromThread();
-							counter = 0;
-						}
-						counter++;
-						try {
-							Thread.sleep(1);
-						} catch (InterruptedException e) {
-							break;
-						}
-					}
-
-					this.updateGUIfromThread();
-
-					this.running.set(false);
-				}).start();
-			}
-		});
-		theGUIMenuBar.getRunSingleMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			if (executionMode.get() && !(running.get())) {
-				new Thread(() -> {
-					this.running.set(true);
-
-					theArmSimulator.runStep();
-
-					this.updateGUIfromThread();
-
-					this.running.set(false);
-				}).start();
-			}
-		});
-		theGUIMenuBar.getStopMenuItem().setOnAction((ActionEvent actionEvent) -> theArmSimulator.interruptExecutionFlow(true));
-		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
-		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			FileChooser fileChooser = new FileChooser();
-			if (lastFilePath != null) {
-				fileChooser.setInitialDirectory(new File(new File(lastFilePath).getParent()));
-			}
-
-			fileChooser.setInitialFileName("test");
-			fileChooser.setTitle("Open a source File");
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
-
-			String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
-			if (path != null) {
-				try {
-					codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
-					programFilePath = new File(path);
-					lastFilePath = path;
-					stage.setTitle("#@RM - " + programFilePath.getName());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		theGUIMenuBar.getSaveAsMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Save assembly program");
-			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
-			File chosenFile = fileChooser.showSaveDialog(stage);
-			saveFile(codingTextArea.getText(), chosenFile);
-		});
-		theGUIMenuBar.getSaveMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			if (programFilePath != null) {
-				saveFile(codingTextArea.getText(), programFilePath);
-			} else {
-				theGUIMenuBar.getSaveAsMenuItem().fire();
-			}
-		});
-		theGUIMenuBar.getNewMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			Stage confirmBox = new Stage();
-			confirmBox.initModality(Modality.APPLICATION_MODAL);
-			confirmBox.initOwner(stage);
-			VBox dialogVbox = new VBox(20);
-			Label exitLabel = new Label("All unsaved work will be lost");
-
-			Button yesBtn = new Button("Yes");
-
-			yesBtn.setOnAction((ActionEvent arg0) -> {
-				confirmBox.close();
-				codingTextArea.setText("");
-				programFilePath = null;
-			});
-			Button noBtn = new Button("No");
-
-			noBtn.setOnAction((ActionEvent arg0) -> confirmBox.close());
-
-			HBox hBox = new HBox();
-			hBox.getChildren().addAll(yesBtn, noBtn);
-			VBox vBox = new VBox();
-			vBox.getChildren().addAll(exitLabel, hBox);
-
-			confirmBox.setScene(new Scene(vBox));
-			confirmBox.show();
-		});
-		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
-			final Stage helpPopup = new Stage();
-			helpPopup.initModality(Modality.APPLICATION_MODAL);
-			helpPopup.initOwner(stage);
-
-			VBox dialogVbox = new VBox(20);
-			dialogVbox.getChildren().add(new Text("This is very helpful help wow"));
-			Scene dialogScene = new Scene(dialogVbox, 300, 200);
-
-			helpPopup.setScene(dialogScene);
-			helpPopup.show();
-		});
-		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
-
-		theGUIButtonBar.getExececutionModeButton().setOnAction((ActionEvent actionEvent) -> {
-			if(this.executionMode.get()){
-				theGUIMenuBar.getExitExecutionModeMenuItem().fire();
-			}
-			else{
-				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
-			}
-		});
-		theGUIButtonBar.getNewFileButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getNewMenuItem().fire());
-		theGUIButtonBar.getSaveButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getSaveMenuItem().fire());
-		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
-		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
-		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
-		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem().fire());
-
-		
-
-		// Several keyboard shortcut
-		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
-
-	}
-	
 	private void handleKeyboardEvent(KeyEvent ke) {
 		// TODO Maybe we should make them static or in a enum or something to avoid allocating new objects every time someone push a key on the keyboard?
-		
-		final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-		final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
-				KeyCombination.SHIFT_DOWN);
-		final KeyCombination ctrlO = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
-		final KeyCombination ctrlP = new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN);
-		final KeyCombination ctrlN = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-		final KeyCombination f5 = new KeyCodeCombination(KeyCode.F5);
-		final KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
-		final KeyCombination ctrlE = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
-
 		if (ctrlS.match(ke)) {
 			theGUIMenuBar.getSaveMenuItem().fire();
 		}
@@ -586,14 +301,14 @@ public class GUI extends Application {
 
 		scene.getStylesheets().clear();
 		
-		String css = getClass().getResource("css.css").toExternalForm();
+		String css = getClass().getResource("/resources/css.css").toExternalForm();
 		scene.getStylesheets().addAll(css);
 
 		if (!themes.contains(currentTheme)) {
 			currentTheme = GUI.DEFAULT_THEME;
 		}
 
-		css = getClass().getResource(currentTheme + ".css").toExternalForm();
+		css = getClass().getResource("/resources/" + currentTheme + ".css").toExternalForm();
 
 		scene.getStylesheets().addAll(css);
 
@@ -617,5 +332,239 @@ public class GUI extends Application {
 	
 	}
 
-	
+	private void setActionEvents(){
+		// TODO I'm wondering if we shouldn't move the logic somewhere else? We are quite bloating the constructor there? Maybe we could move that into GUIMenuBar? Maybe methods instead of lambdas?
+		// TODO the problem is that these buttons are using a lot of methods/attributes in this class... =/, if we move them in GUIMenuBar we have to give access it to GUI (his parent)
+		// THE ACTION EVENTS
+		theGUIMenuBar.getEnterExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			String programString = codingTextArea.getText();
+			if(programString.length() != 0){
+				try {
+					theArmSimulator.setProgramString(programString);
+					enterExecutionMode(programString);
+				} catch (AssemblyException e1) {
+					System.out.println(e1.toString());
+				}
+			}
+		});
+		theGUIMenuBar.getExitExecutionModeMenuItem().setOnAction((ActionEvent actionEvent) -> exitExecutionMode());
+		theGUIMenuBar.getRunMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			if (executionMode.get() && !(running.get())) {
+				new Thread(() -> {
+					this.running.set(true);
+					int counter = 0;
+					this.theArmSimulator.interruptExecutionFlow(false);
+					while(!this.theArmSimulator.run()) {
+						if (counter >= 1) {
+							this.updateGUIfromThread();
+							counter = 0;
+						}
+						counter++;
+						try {
+							Thread.sleep(1);
+						} catch (InterruptedException e) {
+							this.running.set(false);
+							Thread.currentThread().interrupt();
+						}
+					}
+
+					this.updateGUIfromThread();
+
+					this.running.set(false);
+				}).start();
+			}
+		});
+		theGUIMenuBar.getRunSingleMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			if (executionMode.get() && !(running.get())) {
+				new Thread(() -> {
+					this.running.set(true);
+
+					theArmSimulator.runStep();
+
+					this.updateGUIfromThread();
+
+					this.running.set(false);
+				}).start();
+			}
+		});
+		theGUIMenuBar.getStopMenuItem().setOnAction((ActionEvent actionEvent) -> theArmSimulator.interruptExecutionFlow(true));
+		theGUIMenuBar.getReloadProgramMenuItem().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getEnterExecutionModeMenuItem().fire());
+		theGUIMenuBar.getOpenMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			FileChooser fileChooser = new FileChooser();
+			if (lastFilePath != null) {
+				fileChooser.setInitialDirectory(new File(new File(lastFilePath).getParent()));
+			}
+
+			fileChooser.setInitialFileName("test");
+			fileChooser.setTitle("Open a source File");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
+
+			String path = fileChooser.showOpenDialog(stage).getAbsolutePath();
+			if (path != null) {
+				try {
+					codingTextArea.setText(new String(Files.readAllBytes(Paths.get(path)), "UTF-8"));
+					programFilePath = new File(path);
+					lastFilePath = path;
+					stage.setTitle("#@RM - " + programFilePath.getName());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		theGUIMenuBar.getSaveAsMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save assembly program");
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("#@rm Files", "*.S"));
+			File chosenFile = fileChooser.showSaveDialog(stage);
+			saveFile(codingTextArea.getText(), chosenFile);
+		});
+		theGUIMenuBar.getSaveMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			if (programFilePath != null) {
+				saveFile(codingTextArea.getText(), programFilePath);
+			} else {
+				theGUIMenuBar.getSaveAsMenuItem().fire();
+			}
+		});
+		theGUIMenuBar.getNewMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			Stage confirmBox = new Stage();
+			confirmBox.initModality(Modality.APPLICATION_MODAL);
+			confirmBox.initOwner(stage);
+			VBox dialogVbox = new VBox(20);
+			Label exitLabel = new Label("All unsaved work will be lost");
+
+			Button yesBtn = new Button("Yes");
+
+			yesBtn.setOnAction((ActionEvent arg0) -> {
+				confirmBox.close();
+				codingTextArea.setText("");
+				programFilePath = null;
+			});
+			Button noBtn = new Button("No");
+
+			noBtn.setOnAction((ActionEvent arg0) -> confirmBox.close());
+
+			HBox hBox = new HBox();
+			hBox.getChildren().addAll(yesBtn, noBtn);
+			VBox vBox = new VBox();
+			vBox.getChildren().addAll(exitLabel, hBox);
+
+			confirmBox.setScene(new Scene(vBox));
+			confirmBox.show();
+		});
+		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			final Stage helpPopup = new Stage();
+			helpPopup.initModality(Modality.APPLICATION_MODAL);
+			helpPopup.initOwner(stage);
+
+			VBox dialogVbox = new VBox(20);
+			dialogVbox.getChildren().add(new Text("This is very helpful help wow"));
+			Scene dialogScene = new Scene(dialogVbox, 300, 200);
+
+			helpPopup.setScene(dialogScene);
+			helpPopup.show();
+		});
+		theGUIMenuBar.getDocumentationMenuItem().setOnAction((ActionEvent actionEvent) -> showDocumentation());
+
+		theGUIButtonBar.getExececutionModeButton().setOnAction((ActionEvent actionEvent) -> {
+			if(this.executionMode.get()){
+				theGUIMenuBar.getExitExecutionModeMenuItem().fire();
+			}
+			else{
+				theGUIMenuBar.getEnterExecutionModeMenuItem().fire();
+			}
+		});
+		theGUIButtonBar.getNewFileButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getNewMenuItem().fire());
+		theGUIButtonBar.getSaveButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getSaveMenuItem().fire());
+		theGUIButtonBar.getReloadButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getReloadProgramMenuItem().fire());
+		theGUIButtonBar.getRunButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunMenuItem().fire());
+		theGUIButtonBar.getRunSingleButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getRunSingleMenuItem().fire());
+		theGUIButtonBar.getStopButton().setOnAction((ActionEvent actionEvent) -> theGUIMenuBar.getStopMenuItem().fire());
+
+		// THE PREFERENCES MENU
+		theGUIMenuBar.getPreferencesMenuItem().setOnAction((ActionEvent actionEvent) -> {
+			Stage preferencesDialog = new Stage();
+			preferencesDialog.initModality(Modality.APPLICATION_MODAL);
+			preferencesDialog.initOwner(stage);
+			VBox dialogVbox = new VBox(20);
+
+			ChoiceBox<String> theme = new ChoiceBox<>();
+
+			theme.getItems().addAll(themes);
+
+			theme.setTooltip(new Tooltip("Select a theme"));
+
+			theme.setValue(prefs.get("THEME", ""));
+
+			theme.setId("choiceboxPreferences");
+
+			Button button1 = new Button("Apply and Close");
+			button1.setId("applyClosePreferences");
+
+			Button button2 = new Button("Close");
+			button2.setId("closePreferences");
+
+			Label labelTheme = new Label();
+			labelTheme.setText("Choose a theme:");
+			labelTheme.setId("labelThemePreferences");
+
+			Label labelQuicksand = new Label();
+			labelQuicksand.setText("Use the Quicksand font:");
+			labelQuicksand.setId("labelQuicksandPreferences");
+
+			CheckBox checkBoxFont = new CheckBox();
+
+			checkBoxFont.setSelected(prefs.getBoolean("FONT", true));
+
+			Text lineBreak = new Text();
+			lineBreak.setFont(new Font(20));
+			lineBreak.setText("\n");
+
+			button1.setOnAction((ActionEvent e) -> {
+				prefs.put("THEME", theme.getValue());
+
+				prefs.putBoolean("FONT", checkBoxFont.isSelected());
+
+				applyTheme();
+
+				preferencesDialog.close();
+			});
+
+			button2.setOnAction((ActionEvent e) ->	preferencesDialog.close());
+
+			GridPane pane = new GridPane();
+			pane.setAlignment(Pos.CENTER);
+			pane.setHgap(5);
+			pane.setVgap(5);
+			pane.setPadding(new Insets(25, 25, 25, 25));
+
+			pane.add(labelTheme, 0, 1);
+			pane.add(theme, 1, 1);
+
+			pane.add(labelQuicksand, 0, 2);
+			pane.add(checkBoxFont, 1, 2);
+
+			pane.add(lineBreak, 0, 3);
+
+			pane.add(button1, 0, 4);
+			pane.add(button2, 1, 4);
+
+			dialogVbox.getChildren().add(pane);
+
+			Scene preferencesDialogScene = new Scene(dialogVbox, 600, 400);
+			preferencesDialog.setScene(preferencesDialogScene);
+
+			String cssPreferences = getClass().getResource("/resources/css.css").toExternalForm();
+
+			preferencesDialog.setTitle("Preferences");
+			Image preferencesIcon = new Image("file:/resources/logo.png");
+			preferencesDialog.getIcons().add(preferencesIcon);
+
+			preferencesDialog.show();
+
+		});
+
+		// Several keyboard shortcut
+		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
+
+	}
 }
