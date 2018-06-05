@@ -26,6 +26,11 @@ public class GUIMenuBar {
 	private MenuItem preferencesMenuItem;
 	private MenuItem stopMenuItem;
 
+	private Menu fileMenu;
+	private Menu editMenu;
+	private Menu runMenu;
+	private Menu helpMenu;
+	
 	public GUIMenuBar(MenuBar aMenuBar) {
 
 		theMenuBar = aMenuBar;
@@ -33,26 +38,26 @@ public class GUIMenuBar {
 		diabledInExecMode = new ArrayList<MenuItem>();
 		enabledInExecMode = new ArrayList<MenuItem>();
 
-		Menu fileMenu = new Menu("File");
-		Menu editMenu = new Menu("Edit");
-		Menu runMenu = new Menu("Run");
-		Menu helpMenu = new Menu("Help");
+		this.fileMenu = new Menu("File");
+		this.editMenu = new Menu("Edit");
+		this.runMenu = new Menu("Run");
+		this.helpMenu = new Menu("Help");
 
-		newMenuItem = new MenuItem("New");
-		openMenuItem = new MenuItem("Open file");
-		saveMenuItem = new MenuItem("Save");
-		saveAsMenuItem = new MenuItem("Save as");
-		exitMenuItem = new MenuItem("Exit");
-		helpMenuItem = new MenuItem("Help");
+		this.newMenuItem = new MenuItem("New");
+		this.openMenuItem = new MenuItem("Open file");
+		this.saveMenuItem = new MenuItem("Save");
+		this.saveAsMenuItem = new MenuItem("Save as");
+		this.exitMenuItem = new MenuItem("Exit");
+		this.helpMenuItem = new MenuItem("Help");
 
-		enterExecutionModeMenuItem = new MenuItem("Enter in execution mode");
-		exitExecutionModeMenuItem = new MenuItem("Exit the execution mode");
-		runMenuItem = new MenuItem("Run");
-		runSingleMenuItem = new MenuItem("Run a single instruction");
-		reloadProgramMenuItem = new MenuItem("Reload Program");
-		stopMenuItem = new MenuItem("Stop Execution");
-		documentationMenuItem = new MenuItem("Documentation");
-		preferencesMenuItem = new MenuItem("Preferences");
+		this.enterExecutionModeMenuItem = new MenuItem("Enter in execution mode");
+		this.exitExecutionModeMenuItem = new MenuItem("Exit the execution mode");
+		this.runMenuItem = new MenuItem("Run");
+		this.runSingleMenuItem = new MenuItem("Run a single instruction");
+		this.reloadProgramMenuItem = new MenuItem("Reload Program");
+		this.stopMenuItem = new MenuItem("Stop Execution");
+		this.documentationMenuItem = new MenuItem("Documentation");
+		this.preferencesMenuItem = new MenuItem("Preferences");
 
 		theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
 
@@ -77,10 +82,59 @@ public class GUIMenuBar {
 			System.exit(0);
 		});
 
+		translate();
+		
 		exitExecMode();
 
 	}
 
+	public void translate() {
+		if(GUI.language.equals("French")) {
+			fileMenu.setText("Fichier");
+			editMenu.setText("Editer");
+			runMenu.setText("Lancer");
+			helpMenu.setText("Aide");
+
+			newMenuItem.setText("Nouveau");
+			openMenuItem.setText("Ouvrir");
+			saveMenuItem.setText("Sauvegarder");
+			saveAsMenuItem.setText("Sauvegarder sous");
+			exitMenuItem.setText("Fermer");
+			helpMenuItem.setText("Aide");
+			
+			enterExecutionModeMenuItem.setText("Passer en mode execution");
+			exitExecutionModeMenuItem.setText("Sortir du mode execution");
+			runMenuItem.setText("Lancer");
+			runSingleMenuItem.setText("Lancer une instruction");
+			reloadProgramMenuItem.setText("Recharger le Programme");
+			stopMenuItem.setText("Stopper l'Execution");
+			documentationMenuItem.setText("Documentation");
+			preferencesMenuItem.setText("Préférences");
+		}else{
+			fileMenu.setText("File");
+			editMenu.setText("Edit");
+			runMenu.setText("Run");
+			helpMenu.setText("Help");
+
+			newMenuItem.setText("New");
+			openMenuItem.setText("Open file");
+			saveMenuItem.setText("Save");
+			saveAsMenuItem.setText("Save as");
+			exitMenuItem.setText("Exit");
+			helpMenuItem.setText("Help");
+			
+			enterExecutionModeMenuItem.setText("Enter in execution mode");
+			exitExecutionModeMenuItem.setText("Exit the execution mode");
+			runMenuItem.setText("Run a single instruction");
+			runSingleMenuItem.setText("Run a single instruction");
+			reloadProgramMenuItem.setText("Reload Program");
+			stopMenuItem.setText("Stop Execution");
+			documentationMenuItem.setText("Documentation");
+			preferencesMenuItem.setText("Preferences");
+		}
+		
+	}
+	
 	public void setExecMode() {
 		switchMenuState(false);
 	}

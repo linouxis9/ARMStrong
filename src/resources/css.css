@@ -30,12 +30,12 @@
     -fx-graphic: none;
 }
 
-#closePreferences, #applyClosePreferences, #choiceboxPreferences{
+#closePreferences, #applyClosePreferences, #choiceboxPreferences, #choiceboxPreferencesLang{
 	-fx-border-radius: 10;
 	-fx-label-padding: 800%;
 	-fx-font-size: 1.2em;
 }
 
-#labelThemePreferences, #labelQuicksandPreferences{
+#labelThemePreferences, #labelQuicksandPreferences, #labelLanguagePreferences{
 	-fx-font-size: 1.2em;
 }

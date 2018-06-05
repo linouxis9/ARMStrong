@@ -17,6 +17,8 @@ import java.util.List;
 public class GUIMemoryView {
 
 	private ArmSimulator theArmSimulator;
+	
+	private Scene theScene;
 
 	private TextField goToAddressField;
 
@@ -35,10 +37,16 @@ public class GUIMemoryView {
 
 	private int displayableMemoryRows;
 	private int displayedMemoryRows;
+	
+	private Text memoryViewTitleText;
 
 	public GUIMemoryView(Scene theScene, ArmSimulator anArmSimulator) {
 
 		this.theArmSimulator = anArmSimulator;
+		
+		this.theScene = theScene;
+		
+		this.memoryViewTitleText = (Text) theScene.lookup("#goToAddressLabel");
 
 		this.memoryPane = (AnchorPane) theScene.lookup("#memoryViewPane");
 
@@ -102,9 +110,13 @@ public class GUIMemoryView {
 		goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
 			if (ke.getCode().equals(KeyCode.ENTER)) {
 				String addressTyped = goToAddressField.getText();
-				Text memoryViewTitleText = (Text) theScene.lookup("#goToAddressLabel");
-				memoryViewTitleText.setText("Go to address: ");
-				memoryViewTitleText.setUnderline(false);
+				
+				if(GUI.language.equals("French")) {
+					this.memoryViewTitleText.setText("Aller à l'adresse: ");
+				}
+				else {
+					this.memoryViewTitleText.setText("Go to address: ");
+				}
 
 				int newAddress = 0;
 
@@ -125,7 +137,11 @@ public class GUIMemoryView {
 						newAddress = Integer.parseInt(addressTyped);
 					}
 				} catch (NumberFormatException exeption) {
-					memoryViewTitleText.setText("The address is invalid");
+					if(GUI.language.equals("French")) {
+						memoryViewTitleText.setText("Adresse invalide");
+					}else{
+						memoryViewTitleText.setText("The address is invalid");
+					}
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
@@ -147,8 +163,30 @@ public class GUIMemoryView {
 		memoryViewFirstAddress = 0;
 		updateDisplayedRows();
 		updateMemoryView();
+		
+		translate();
 	}
 
+	public void translate() {
+		
+		if(GUI.language.equals("French")) {
+			this.memoryViewTitleText.setText("Aller à l'adresse: ");
+		}
+		else {
+			this.memoryViewTitleText.setText("Go to address: ");
+		}
+
+		memoryViewTitleText.setUnderline(false);
+		
+		if(GUI.language.equals("French")) {
+			((Text) this.theScene.lookup("#viewModeLabel")).setText("Mode d'affichage: ");
+			
+		}else{
+			((Text) this.theScene.lookup("#viewModeLabel")).setText("View mode: ");
+		}
+		
+	}
+	
 	private void updateNewFirstAddress(int delta) {
 		int oldAddress = memoryViewFirstAddress;
 		

@@ -77,6 +77,9 @@ public class GUI extends Application implements SimulatorUI {
 	private static final String DEFAULT_THEME = "red";
 	private Color themeColor;
 	
+	private Set<String> languages;
+	public static String language = "English";
+	
 	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
 			KeyCombination.SHIFT_DOWN);
@@ -132,6 +135,25 @@ public class GUI extends Application implements SimulatorUI {
 		themes.add("green");
 		applyTheme();
 
+		String colorR = "red";
+		String colorB = "blue";
+		String colorG = "green";
+		
+		themes = new HashSet<>();
+		themes.add(colorR);
+		themes.add(colorB);
+		themes.add(colorG);
+		applyTheme();
+		
+		GUI.language = this.prefs.get("LANGUAGE", language);
+		
+		String languageEN = "English";
+		String languageFR = "French";
+		
+		languages = new HashSet<>();
+		languages.add(languageEN);
+		languages.add(languageFR);
+		
 		stage.show(); // to be sure the scene.lookup() works properly
 
 		centralBorderPaneContainer = (BorderPane) scene.lookup("#borderPane");
@@ -487,6 +509,16 @@ public class GUI extends Application implements SimulatorUI {
 			preferencesDialog.initOwner(stage);
 			VBox dialogVbox = new VBox(20);
 
+			ChoiceBox<String> languageChoiceBox = new ChoiceBox<>();
+			
+			languageChoiceBox.getItems().addAll(languages);
+
+			languageChoiceBox.setTooltip(new Tooltip("Choose a language"));
+
+			languageChoiceBox.setValue(prefs.get("LANGUAGE", ""));
+
+			languageChoiceBox.setId("choiceboxPreferencesLang");
+			
 			ChoiceBox<String> theme = new ChoiceBox<>();
 
 			theme.getItems().addAll(themes);
@@ -502,11 +534,15 @@ public class GUI extends Application implements SimulatorUI {
 
 			Button button2 = new Button("Close");
 			button2.setId("closePreferences");
-
+			
 			Label labelTheme = new Label();
 			labelTheme.setText("Choose a theme:");
 			labelTheme.setId("labelThemePreferences");
 
+			Label labelLanguage = new Label();
+			labelLanguage.setText("Choose a language:");
+			labelLanguage.setId("labelLanguagePreferences");
+			
 			Label labelQuicksand = new Label();
 			labelQuicksand.setText("Use the Quicksand font:");
 			labelQuicksand.setId("labelQuicksandPreferences");
@@ -524,6 +560,14 @@ public class GUI extends Application implements SimulatorUI {
 
 				prefs.putBoolean("FONT", checkBoxFont.isSelected());
 
+				prefs.put("LANGUAGE", languageChoiceBox.getValue());
+				
+				GUI.language = languageChoiceBox.getValue();
+				
+				theGUIMenuBar.translate();
+				theGUIRegisterView.translate();
+				theGUIMemoryView.translate();
+				
 				applyTheme();
 
 				preferencesDialog.close();
@@ -539,14 +583,17 @@ public class GUI extends Application implements SimulatorUI {
 
 			pane.add(labelTheme, 0, 1);
 			pane.add(theme, 1, 1);
+			
+			pane.add(labelLanguage, 0, 2);
+			pane.add(languageChoiceBox, 1, 2);
 
-			pane.add(labelQuicksand, 0, 2);
-			pane.add(checkBoxFont, 1, 2);
+			pane.add(labelQuicksand, 0, 3);
+			pane.add(checkBoxFont, 1, 3);
 
-			pane.add(lineBreak, 0, 3);
+			pane.add(lineBreak, 0, 4);
 
-			pane.add(button1, 0, 4);
-			pane.add(button2, 1, 4);
+			pane.add(button1, 0, 5);
+			pane.add(button2, 1, 5);
 
 			dialogVbox.getChildren().add(pane);
 
@@ -554,9 +601,10 @@ public class GUI extends Application implements SimulatorUI {
 			preferencesDialog.setScene(preferencesDialogScene);
 
 			String cssPreferences = getClass().getResource("/resources/css.css").toExternalForm();
+			preferencesDialogScene.getStylesheets().addAll(cssPreferences);
 
 			preferencesDialog.setTitle("Preferences");
-			Image preferencesIcon = new Image("file:/resources/logo.png");
+			Image preferencesIcon = new Image("file:logo.png");
 			preferencesDialog.getIcons().add(preferencesIcon);
 
 			preferencesDialog.show();
