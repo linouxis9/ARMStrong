@@ -453,24 +453,48 @@ public class GUI extends Application implements SimulatorUI {
 			confirmBox.initOwner(stage);
 			VBox dialogVbox = new VBox(20);
 			Label exitLabel = new Label("All unsaved work will be lost");
-
+			exitLabel.setId("exitLabel");
+			
 			Button yesBtn = new Button("Yes");
-
+			yesBtn.setId("yesNew");
+			
 			yesBtn.setOnAction((ActionEvent arg0) -> {
 				confirmBox.close();
 				codingTextArea.setText("");
 				programFilePath = null;
 			});
 			Button noBtn = new Button("No");
-
+			noBtn.setId("noNew");
+			
 			noBtn.setOnAction((ActionEvent arg0) -> confirmBox.close());
 
 			HBox hBox = new HBox();
-			hBox.getChildren().addAll(yesBtn, noBtn);
-			VBox vBox = new VBox();
-			vBox.getChildren().addAll(exitLabel, hBox);
+			
+			GridPane pane = new GridPane();
+			pane.setAlignment(Pos.CENTER);
+			pane.setHgap(5);
+			pane.setVgap(5);
+			pane.setPadding(new Insets(25, 25, 25, 25));
 
-			confirmBox.setScene(new Scene(vBox));
+			pane.add(exitLabel, 0, 1);
+			pane.add(hBox, 1, 1);
+			
+			pane.add(yesBtn, 0, 2);
+			pane.add(noBtn, 1, 2);
+			
+
+			dialogVbox.getChildren().add(pane);
+		
+			Scene dialogNew = new Scene(dialogVbox, 400, 200);
+			confirmBox.setScene(dialogNew);
+
+			String cssNew = getClass().getResource("/resources/css.css").toExternalForm();
+			dialogNew.getStylesheets().addAll(cssNew);
+
+			confirmBox.setTitle("New file");
+			Image preferencesIcon = new Image("file:logo.png");
+			confirmBox.getIcons().add(preferencesIcon);
+			
 			confirmBox.show();
 		});
 		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
