@@ -297,24 +297,42 @@ public class GUI extends Application implements SimulatorUI {
 	}
 
 	private void showDocumentation() {
-		Stage docWindow = new Stage();
-
-		docWindow.initModality(Modality.APPLICATION_MODAL);
-		docWindow.initOwner(stage);
-		docWindow.setTitle("Documentation");
-
-		Parent container;
-		Scene docScene;
-
-		// TODO To remove once documentation.fxml is made
+		Stage docStage = new Stage();
+		docStage.initModality(Modality.APPLICATION_MODAL);
+		docStage.initOwner(this.stage);
+		Parent root;
 		try {
-			container = FXMLLoader.load(getClass().getResource("documentation.fxml"));
-			docScene = new Scene(container, 100, 100);
-			docWindow.setScene(docScene);
-			docWindow.show();
+			root = FXMLLoader.load(getClass().getResource("/resources/doc.fxml"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		Scene docScene = new Scene(root, 600, 400); //TODO for smaller screens
+
+		docStage.setTitle("Documentation");
+		docStage.setResizable(false);
+
+		docStage.setScene(docScene);
+
+		docStage.show(); //to be sure scene.lookup works properly
+
+		TextFlow syntax = (TextFlow) docScene.lookup("#doc_syntax");
+		TextFlow fields = (TextFlow) docScene.lookup("#doc_fields");
+		TextFlow conditionCode = (TextFlow) docScene.lookup("#doc_conditionCode");
+		TextFlow instructionSupport = (TextFlow) docScene.lookup("#instructionSupport");
+		TextFlow labels = (TextFlow) docScene.lookup("#labels");
+
+		try {
+			syntax.getChildren().add(new Text(new String(Files.readAllBytes(Paths.get("bin/resources/doc/instruction")), "UTF-8")));
+			fields.getChildren().add(new Text(new String(Files.readAllBytes(Paths.get("bin/resources/doc/fields")), "UTF-8")));
+			conditionCode.getChildren().add(new Text(new String(Files.readAllBytes(Paths.get("bin/resources/doc/conditionCode")), "UTF-8")));
+			instructionSupport.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get("bin/resources/doc/availableInstructions"))))));
+			labels.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get("bin/resources/doc/labels"))))));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		docStage.show();
 	}
 
 	private void applyTheme() {
