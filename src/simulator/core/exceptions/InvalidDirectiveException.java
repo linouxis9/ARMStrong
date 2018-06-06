@@ -10,6 +10,7 @@ public class InvalidDirectiveException extends AssemblyException {
 		this.directive = directive;
 	}
 
+	@Override
 	public String toString() {
 		return "INVALID DIRECTIVE: '" + directive + "' @ line " + line + " is unknown.";
 	}

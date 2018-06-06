@@ -34,7 +34,7 @@ public enum Language {
 		language.put("Enter in execution mode", "Enter in execution mode");
 		language.put("Exit the execution mode", "Exit the execution mode");
 		language.put("Run a single instruction", "Run a single instruction");
-		language.put("Reload Program", "Reload Program");
+		language.put("Rel oad Program", "Reload Program");
 		language.put("Stop Execution", "Stop Execution");
 		language.put("Documentation", "Documentation");
 		language.put("Preferences", "Preferences");

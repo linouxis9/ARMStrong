@@ -317,7 +317,6 @@ public class Preprocessor {
 	 * @param i
 	 *            The index of the first element of the right-hand expression
 	 * @return True if the instruction is invalid, else otherwise.
-	 * @throws InvalidRegisterException 
 	 */
 	private static boolean checkLSOP2(List<Token> tokens, int i) {
 		if (tokens.get(i).getTokenType() == TokenType.REGISTER && tokens.get(i + 1).getTokenType() == TokenType.COMMA) {

@@ -5,7 +5,7 @@ import simulator.core.AssemblyException;
 public class InvalidSyntaxException extends AssemblyException {
 
 	private static final long serialVersionUID = -3576420336871736366L;
-	private String error;
+	private final String error;
 
 	public InvalidSyntaxException(int line) {
 		super(line);
@@ -17,6 +17,7 @@ public class InvalidSyntaxException extends AssemblyException {
 		this.error = error;
 	}
 	
+	@Override
 	public String toString() {
 		return "INVALID SYNTAX: '" + error + "' @ line " + line + " is not understood.";
 	}

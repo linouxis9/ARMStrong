@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
@@ -177,7 +178,6 @@ public class GUI extends Application implements SimulatorUI {
 		};
 		System.setOut(new PrintStream(consoleOut, true));
 
-		TextFlow outputTextFlow = (TextFlow) scene.lookup("#outputTextFlow");
 		consoleTextFlow.getChildren().add(new Text(""));
 
 		setActionEvents();
@@ -187,7 +187,6 @@ public class GUI extends Application implements SimulatorUI {
 	}
 
 	private void handleKeyboardEvent(KeyEvent ke) {
-		// TODO Maybe we should make them static or in a enum or something to avoid allocating new objects every time someone push a key on the keyboard?
 		if (ctrlS.match(ke)) {
 			theGUIMenuBar.getSaveMenuItem().fire();
 		}
@@ -315,15 +314,13 @@ public class GUI extends Application implements SimulatorUI {
 		TextFlow instructionSupport = (TextFlow) docScene.lookup("#instructionSupport");
 		TextFlow labels = (TextFlow) docScene.lookup("#labels");
 
-		try {
-			syntax.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/instruction").getPath()))),"UTF-8")));
-			fields.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/fields").getPath()))),"UTF-8")));
-			conditionCode.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/conditionCode").getPath()))),"UTF-8")));
-			instructionSupport.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/availableInstructions").getPath()))),"UTF-8")));
-			labels.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/labels").getPath()))),"UTF-8")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+			syntax.getChildren().add(new Text(new Scanner(getClass().getResourceAsStream("/resources/doc/instruction"), "UTF-8").useDelimiter("\\A").next()));
+			fields.getChildren().add(new Text(new Scanner(getClass().getResourceAsStream("/resources/doc/fields"), "UTF-8").useDelimiter("\\A").next()));
+			conditionCode.getChildren().add(new Text(new Scanner(getClass().getResourceAsStream("/resources/doc/conditionCode"), "UTF-8").useDelimiter("\\A").next()));
+			instructionSupport.getChildren().add(new Text(new Scanner(getClass().getResourceAsStream("/resources/doc/availableInstructions"), "UTF-8").useDelimiter("\\A").next()));
+			labels.getChildren().add(new Text(new Scanner(getClass().getResourceAsStream("/resources/doc/labels"), "UTF-8").useDelimiter("\\A").next()));
+
 
 		docStage.show();
 	}
@@ -651,7 +648,7 @@ public class GUI extends Application implements SimulatorUI {
 
 	}
 	
-	public static Map<String,Language> getLanguagesData() {
+	public static synchronized Map<String,Language> getLanguagesData() {
 		if (GUI.languages == null) {
 			GUI.languages = new HashMap<>();
 			for (Language language : Language.values()) {

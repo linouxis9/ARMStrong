@@ -114,7 +114,7 @@ public class Program implements Iterator<List<Token>> {
 	 * 
 	 * @return A Pattern able to match ARM instructions
 	 */
-	private static Pattern getPattern() {
+	private static synchronized Pattern getPattern() {
 		if (pattern == null) {
 			String myFuturePattern = "";
 
