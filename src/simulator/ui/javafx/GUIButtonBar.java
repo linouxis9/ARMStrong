@@ -54,11 +54,11 @@ public class GUIButtonBar {
         execMode.add(stop);
 
         save.setTooltip(new Tooltip("Save (Ctrl+S)"));
-        executionMode.setTooltip(new Tooltip("Switch Execution/Edit mode"));
-        newFile.setTooltip(new Tooltip("New file"));
+        executionMode.setTooltip(new Tooltip("Switch Execution/Edit mode (Ctrl+E)"));
+        newFile.setTooltip(new Tooltip("New file (Ctrl+N)"));
         
-        run.setTooltip(new Tooltip("Run !"));
-        runSingle.setTooltip(new Tooltip("Run step by step"));
+        run.setTooltip(new Tooltip("Run ! (F5)"));
+        runSingle.setTooltip(new Tooltip("Run step by step (F11)"));
         reload.setTooltip(new Tooltip("Reload"));
         stop.setTooltip(new Tooltip("Stop"));
         
