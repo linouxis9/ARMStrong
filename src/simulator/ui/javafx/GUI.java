@@ -323,11 +323,11 @@ public class GUI extends Application implements SimulatorUI {
 		TextFlow labels = (TextFlow) docScene.lookup("#labels");
 
 		try {
-			syntax.getChildren().add(new Text(new String(Files.readAllBytes(Paths.get("bin/resources/doc/instruction")), "UTF-8")));
-			fields.getChildren().add(new Text(new String(Files.readAllBytes(Paths.get("bin/resources/doc/fields")), "UTF-8")));
-			conditionCode.getChildren().add(new Text(new String(Files.readAllBytes(Paths.get("bin/resources/doc/conditionCode")), "UTF-8")));
-			instructionSupport.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get("bin/resources/doc/availableInstructions"))))));
-			labels.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get("bin/resources/doc/labels"))))));
+			syntax.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/instruction").getPath()))),"UTF-8")));
+			fields.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/fields").getPath()))),"UTF-8")));
+			conditionCode.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/conditionCode").getPath()))),"UTF-8")));
+			instructionSupport.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/availableInstructions").getPath()))),"UTF-8")));
+			labels.getChildren().add(new Text(new String(Files.readAllBytes((Paths.get(getClass().getResource("/resources/doc/labels").getPath()))),"UTF-8")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
