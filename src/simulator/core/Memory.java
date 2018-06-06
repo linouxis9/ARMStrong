@@ -2,10 +2,6 @@ package simulator.core;
 
 import simulator.core.exceptions.InvalidMemoryAddressException;
 
-//TODO JAVADOOC
-/**
- *
- */
 public interface Memory {
 
 	/**

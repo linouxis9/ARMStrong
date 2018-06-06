@@ -21,7 +21,6 @@ public class PreprocessorTests {
 			preprocessor.preProcessPass2(tokens,0);
 		}
 		catch (Exception e) {
-			System.out.println(e);
 			fail();
 		}
 		tokens = Program.lexer("mov r4,r40");
@@ -85,7 +84,6 @@ public class PreprocessorTests {
 			preprocessor.preProcessPass2(tokens,0);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			fail();
 		}
 	}

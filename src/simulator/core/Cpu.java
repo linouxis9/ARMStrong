@@ -451,9 +451,6 @@ public class Cpu {
 	 */
 	private class ALU {
 
-		/**
-		 * TODO write javadoc comment
-		 */
 		public void updateFlags(long value) {
 			Cpu.this.cpsr.reset();
 			if (value < 0) {
@@ -812,7 +809,6 @@ public class Cpu {
 			r1.setValue(r2.getValue() - op.getValue());
 		}
 
-		// TODO (NOT DONE!)
 		/**
 		 * SWP - Swap
 		 * 

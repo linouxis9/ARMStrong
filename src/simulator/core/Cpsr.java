@@ -48,7 +48,6 @@ public class Cpsr {
 
 	}
 
-	// TODO To move
 	/**
 	 * Converts a bool into an int.
 	 * 

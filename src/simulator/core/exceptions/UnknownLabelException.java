@@ -4,9 +4,6 @@ import simulator.core.AssemblyException;
 
 public class UnknownLabelException extends AssemblyException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1239647656703191214L;
 	private final String label;
 	

@@ -13,8 +13,6 @@ import simulator.core.exceptions.UnknownLabelException;
 import java.util.HashSet;
 import java.util.Arrays;
 
-//TODO JAVADOOOC
-
 public class Preprocessor {
 
 	/**
