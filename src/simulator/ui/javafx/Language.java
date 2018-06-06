@@ -16,10 +16,9 @@ public enum Language {
 	private static Map initializeEnglish() {
 		Map<String,String> language = new HashMap<>();
 
-
-		language.put("displayMode", "Dislay Mode");
+		language.put("displayMode", "Display Mode");
 		language.put("memoryViewTitleText", "Go to address");
-		language.put("invalidAddress", "Invalid Adress");
+		language.put("invalidAddress", "Invalid Address");
 
 		language.put("File", "File");
 		language.put("Edit", "Edit");
@@ -69,13 +68,13 @@ public enum Language {
         language.put("Exit the execution mode", "Quitter le mode execution");
         language.put("Run a single instruction", "Executer une instruction");
         language.put("Reload Program", "Recharger le programme");
-        language.put("Stop Execution", "Arreter l'execution");
+        language.put("Stop Execution", "Arrêter l'exécution");
         language.put("Documentation", "Documentation");
         language.put("Preferences", "Préférences");
 
-        language.put("Unsigned Decimal", "Decimal non signé");
-        language.put("Signed Decimal", "Decimal signé");
-        language.put("Hexadecimal", "Hexadecimal");
+        language.put("Unsigned Decimal", "Décimal non signé");
+        language.put("Signed Decimal", "Décimal signé");
+        language.put("Hexadecimal", "Hexadécimal");
 
 
         return language;
