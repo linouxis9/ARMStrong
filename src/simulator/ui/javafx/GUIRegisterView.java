@@ -86,10 +86,10 @@ public class GUIRegisterView {
 		}
 
 		for (int i = 0; i<3; i++){
-			this.flagN.get(i).setText(theArmSimulator.getN());
-			this.flagZ.get(i).setText(theArmSimulator.getZ());
-			this.flagC.get(i).setText(theArmSimulator.getC());
-			this.flagV.get(i).setText(theArmSimulator.getV());
+			this.flagN.get(i).setText(theArmSimulator.getN()?"1":"0");
+			this.flagZ.get(i).setText(theArmSimulator.getZ()?"1":"0");
+			this.flagC.get(i).setText(theArmSimulator.getC()?"1":"0");
+			this.flagV.get(i).setText(theArmSimulator.getV()?"1":"0");
 		}
 	}
 }
