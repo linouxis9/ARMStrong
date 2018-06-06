@@ -46,16 +46,9 @@ public class GUIRegisterView {
 	}
 
 	public void changeLanguage() {
-		if(GUI.language.equals("French")) {
-			((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText("D�cimal non sign�");
-			((TitledPane) this.theScene.lookup("#signedDecimal")).setText("D�cimal sign�");
-			((TitledPane) this.theScene.lookup("#hexadecimal")).setText("Hexad�cimal");
-		}else{
-			((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText("Unsigned Decimal");
-			((TitledPane) this.theScene.lookup("#signedDecimal")).setText("Signed Decimal");
-			((TitledPane) this.theScene.lookup("#hexadecimal")).setText("Hexadecimal");
-		}		
-		
+		((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText(this.languages.get(language).getTranslation("Unsigned Decimal"));
+		((TitledPane) this.theScene.lookup("#signedDecimal")).setText(this.languages.get(language).getTranslation("Signed Decimal"));
+		((TitledPane) this.theScene.lookup("#hexadecimal")).setText(this.languages.get(language).getTranslation("Hexadecimal"));
 	}
 	
 	/**

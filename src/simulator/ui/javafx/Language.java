@@ -15,28 +15,46 @@ public enum Language {
 
 	private static Map initializeFrench() {
 		Map<String,String> language = new HashMap<>();
+
 		language.put("viewMode", "Mode d'affichage");
+
 		language.put("goToAddressField", "Aller à l'adresse");
 		language.put("invalidAddress", "Adresse Invalide");
 		language.put("addressTooLowOrTooHigh", "Adresse hors RAM");
-		language.put("fileMenu", "File");
-		language.put("editMenu", "Edit");
-		language.put("runMenu", "Run");
-		language.put("helpMenu", "Help");
+
+		language.put("File", "");
+		language.put("Edit", "");
+		language.put("Run", "");
+		language.put("Help", "");
+
+		language.put("New", "");
+		language.put("Open file", "");
+		language.put("Save", "");
+		language.put("Save as", "");
+		language.put("Exit", "");
+		language.put("Help", "");
+
+
+		language.put("Enter in execution mode", "");
+		language.put("Exit the execution mode", "");
+		language.put("Run a single instruction", "");
+		language.put("Reload Program", "");
+		language.put("Stop Execution", "");
+		language.put("Documentation", "");
+		language.put("Preferences", "");
+
+
+		language.put("Unsigned Decimal", "");
+		language.put("Signed Decimal", "");
+		language.put("Hexadecimal", "");
+
 		
 		return language;
 	}
 
 	private static Map initializeEnglish() {
 		Map<String,String> language = new HashMap<>();
-		language.put("viewMode", "View mode");
-		language.put("goToAddressField", "Go to adress");
-		language.put("invalidAddress", "Invalid Address");
-		language.put("addressTooLowOrTooHigh", "Address too low or too high");
-		language.put("fileMenu", "Fichier");
-		language.put("editMenu", "Editer");
-		language.put("runMenu", "Executer");
-		language.put("helpMenu", "Aide");
+		
 		return language;
 	}
 	

@@ -39,6 +39,28 @@ public class GUIMenuBar {
 
 		theMenuBar = aMenuBar;
 
+		this.fileMenu = new Menu("File");
+		this.editMenu = new Menu("Edit");
+		this.runMenu = new Menu("Run");
+		this.helpMenu = new Menu("Help");
+
+		this.newMenuItem = new MenuItem("New");
+		this.openMenuItem = new MenuItem("Open file");
+		this.saveMenuItem = new MenuItem("Save");
+		this.saveAsMenuItem = new MenuItem("Save as");
+		this.exitMenuItem = new MenuItem("Exit");
+		this.helpMenuItem = new MenuItem("Help");
+
+		this.enterExecutionModeMenuItem = new MenuItem("Enter in execution mode");
+		this.exitExecutionModeMenuItem = new MenuItem("Exit the execution mode");
+		this.runMenuItem = new MenuItem("Run");
+		this.runSingleMenuItem = new MenuItem("Run a single instruction");
+		this.reloadProgramMenuItem = new MenuItem("Reload Program");
+		this.stopMenuItem = new MenuItem("Stop Execution");
+		this.documentationMenuItem = new MenuItem("Documentation");
+		this.preferencesMenuItem = new MenuItem("Preferences");
+
+
 		this.languages = GUI.getLanguagesData();
 		
 		this.language = GUI.getCurrentLanguage();
@@ -76,44 +98,26 @@ public class GUIMenuBar {
 	}
 
 	public void changeLanguage() {
-		fileMenu.setText(this.languages.get(language).getTranslation("fileMenu"));
-		editMenu.setText(this.languages.get(language).getTranslation("editMenu"));
-		runMenu.setText(this.languages.get(language).getTranslation("runMenu"));
-		helpMenu.setText(this.languages.get(language).getTranslation("helpMenu"));
+		fileMenu.setText(this.languages.get(language).getTranslation("File"));
+		editMenu.setText(this.languages.get(language).getTranslation("Edit"));
+		runMenu.setText(this.languages.get(language).getTranslation("Run"));
+		helpMenu.setText(this.languages.get(language).getTranslation("Help"));
 
-		if(GUI.language.equals("French")) {
-			newMenuItem.setText("Nouveau");
-			openMenuItem.setText("Ouvrir");
-			saveMenuItem.setText("Sauvegarder");
-			saveAsMenuItem.setText("Sauvegarder sous");
-			exitMenuItem.setText("Fermer");
-			helpMenuItem.setText("Aide");
-			
-			enterExecutionModeMenuItem.setText("Passer en mode execution");
-			exitExecutionModeMenuItem.setText("Sortir du mode execution");
-			runMenuItem.setText("Lancer");
-			runSingleMenuItem.setText("Lancer une instruction");
-			reloadProgramMenuItem.setText("Recharger le Programme");
-			stopMenuItem.setText("Stopper l'Execution");
-			documentationMenuItem.setText("Documentation");
-			preferencesMenuItem.setText("Pr�f�rences");
-		}else{
-			newMenuItem.setText("New");
-			openMenuItem.setText("Open file");
-			saveMenuItem.setText("Save");
-			saveAsMenuItem.setText("Save as");
-			exitMenuItem.setText("Exit");
-			helpMenuItem.setText("Help");
-			
-			enterExecutionModeMenuItem.setText("Enter in execution mode");
-			exitExecutionModeMenuItem.setText("Exit the execution mode");
-			runMenuItem.setText("Run a single instruction");
-			runSingleMenuItem.setText("Run a single instruction");
-			reloadProgramMenuItem.setText("Reload Program");
-			stopMenuItem.setText("Stop Execution");
-			documentationMenuItem.setText("Documentation");
-			preferencesMenuItem.setText("Preferences");
-		}
+		newMenuItem.setText(this.languages.get(language).getTranslation("New"));
+		openMenuItem.setText(this.languages.get(language).getTranslation("Open file"));
+		saveMenuItem.setText(this.languages.get(language).getTranslation("Save"));
+		saveAsMenuItem.setText(this.languages.get(language).getTranslation("Save as"));
+		exitMenuItem.setText(this.languages.get(language).getTranslation("Exit"));
+		helpMenuItem.setText(this.languages.get(language).getTranslation("Help"));
+
+		enterExecutionModeMenuItem.setText(this.languages.get(language).getTranslation("Enter in execution mode"));
+		exitExecutionModeMenuItem.setText(this.languages.get(language).getTranslation("Exit the execution mode"));
+		runMenuItem.setText(this.languages.get(language).getTranslation("Run a single instruction"));
+		runSingleMenuItem.setText(this.languages.get(language).getTranslation("Run a single instruction"));
+		reloadProgramMenuItem.setText(this.languages.get(language).getTranslation("Reload Program"));
+		stopMenuItem.setText(this.languages.get(language).getTranslation("Stop Execution"));
+		documentationMenuItem.setText(this.languages.get(language).getTranslation("Documentation"));
+		preferencesMenuItem.setText(this.languages.get(language).getTranslation("Preferences"));
 		
 	}
 	
