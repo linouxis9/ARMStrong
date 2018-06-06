@@ -24,8 +24,15 @@ public class Interpretor {
 	 */
 	private final Cpu cpu;
 
+	/**
+	 * Stores a reference to the preprocessor.
+	 */
 	private final Preprocessor preprocessor;
 
+	/**
+	 * Stores a reference on the Map, that keep the link between the instruction and it's line, from the ArmSimulator
+	 * it refreshes it when a new program is parsed
+	 */
 	private final Map<Instruction, Integer> linesMap;
 	
 	/**
@@ -227,6 +234,7 @@ public class Interpretor {
 			throw new Bug("Unknown operation caught by the Lexer? op: " + tokens.get(0).getRawOperation());
 		}
 	}
+
 	/**
 	 * Converts a Token representing a Register into a reference pointing to this very same register.
 	 * 

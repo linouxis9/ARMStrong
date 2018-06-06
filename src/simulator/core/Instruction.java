@@ -185,8 +185,7 @@ public class Instruction {
 	public Set<Flag> getFlags() {
 		return flags;
 	}
-	
-	// We can't do much better without using Reflection
+
 	@Override
 	public String toString() {
 		StringBuilder string = new StringBuilder();

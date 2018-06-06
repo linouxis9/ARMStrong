@@ -15,7 +15,9 @@ public class Ram implements Memory {
 	 */
 	public static final int DEFAULT_SIZE = 1000000;
 
-	
+	/**
+	 * The default initial capacity
+	 */
 	public static final int DEFAULT_CAPACITY = 1 << 10;
 	
 	/**

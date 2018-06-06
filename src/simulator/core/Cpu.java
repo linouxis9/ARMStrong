@@ -430,14 +430,21 @@ public class Cpu {
 	public boolean hasFinished() {
 		return this.hasFinished;
 	}
-	
+
+	/**
+	 * Returns the Psmp
+	 */
 	public int getPmsp() {
 		return this.pmsp;
 	}
 
+	/**
+	 * Increments the Pmsp
+	 */
 	public void incrementPmsp() {
 		this.pmsp++;
 	}
+
 	/**
 	 * Returns the number of instructions stored in the Cpu's executable memory.
 	 */

@@ -15,11 +15,29 @@ import simulator.core.exceptions.UnknownLabelException;
  * ArmSimulator is class responsible for handling the creation of the main ARM Simulator classes.
  */
 public class ArmSimulator {
+    /**
+     * The current loaded program
+     */
 	private final Program program;
+
+    /**
+     * The interpretor to parse the program
+     */
 	private final Interpretor interpretor;
+
+    /**
+     * The cpu to execute the prorgam
+     */
 	private final Cpu cpu;
+
+    /**
+     * A map to make the link between the instruction and the line number
+     */
 	private final Map<Instruction, Integer> linesMap;
 
+    /**
+     * Creates a arm simulator ready to use, with all the needed components (cpu, program, linesMap, interpretor)
+     */
 	public ArmSimulator() {	
 		this.cpu = new Cpu();
 		this.program = new Program();
@@ -27,62 +45,108 @@ public class ArmSimulator {
 		this.interpretor = new Interpretor(this.cpu, this.program, this.linesMap);
 	}
 
+    /**
+     * Returns the register value corresponding to the given number
+     */
 	public int getRegisterValue(int registerNumber) {
 		return this.cpu.getRegister(registerNumber).getValue();
 	}
 
-
+    /**
+     * Returns a byte(8bits) from the ram corresponding to the given address
+     */
 	public byte getRamByte(int address) {
 		return this.cpu.getRam().getByte(new Address(address));
 	}
 
+    /**
+     * Returns a half word(16bits) from the ram corresponding to the given address
+     */
 	public short getRamHWord(int address) {
 		return this.cpu.getRam().getHWord(new Address(address));
 	}
 
+    /**
+     * Returns a word(32bits) from the ram corresponding to the given address
+     */
 	public int getRamWord(int address) {
 		return this.cpu.getRam().getValue(new Address(address));
 	}
 
+    /**
+     * Starting the processor to the next break or to the end
+     */
 	public boolean run() {
 		this.cpu.execute();
 		return this.isHalted();
 	}
 
+    /**
+     * Staring the processor to execute a single instruction
+     */
 	public void runStep(){
 		this.cpu.executeStep();
 	}
 
+    /**
+     * Resets the execution (clears the current execution point)
+     */
 	public void resetRun(){
 		this.linesMap.clear();
 		this.cpu.reset();
 	}
 
+    /**
+     * Returns the next line to be executed
+     */
 	public int getCurrentLine(){
 		return linesMap.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1	;
 	}
 
+    /**
+     * Returns the Negative Flag status
+     */
 	public boolean getN() {
 		return this.cpu.getCPSR().isN();
 	}
 
+    /**
+     * Returns the Zero Flag status
+     */
 	public boolean getZ() {
 		return this.cpu.getCPSR().isZ();
 	}
-	
+
+    /**
+     * Returns the Carry Flag status
+     */
 	public boolean getC() {
 		return this.cpu.getCPSR().isC();
 	}
-	
+
+    /**
+     * Returns the oVerflow Flag status
+     */
 	public boolean getV() {
 		return this.cpu.getCPSR().isV();
 	}
 
+    /**
+     * Refresh the Program by a new program given in parameter
+     * @param programAsString the sting containing the program typed by the user
+     * @throws InvalidSyntaxException
+     * @throws InvalidOperationException
+     * @throws InvalidRegisterException
+     * @throws InvalidLabelException
+     * @throws UnknownLabelException
+     * @throws InvalidDirectiveException
+     */
 	public void setProgramString(String programAsString) throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException, InvalidLabelException, UnknownLabelException, InvalidDirectiveException{
 		this.resetRun();
 		this.program.setNewProgram(programAsString);
 		this.interpretor.parseProgram();
 	}
+
 	
 	public boolean hasFinished() {
 		return this.cpu.hasFinished();

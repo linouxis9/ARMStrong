@@ -1,0 +1,47 @@
+ADC - Add with Carry The ADC instruction adds the values in R2 and Operand2, together with the carry flag. r1 <- r2 + op2 + carry
+
+ADD - Add The ADD instruction adds the value of Operand2 to the value in R2. r1 <- r2 + op2
+
+AND - And The AND instruction performs bitwise AND operations on the values in R2 and Operand2. r1 <- r2 AND op2
+
+B - Branch The B instruction causes a branch to op. pc <- op2
+
+BIC - And not The BIC instruction performs an R2 AND NOT OP operation. r1 <- r2 AND NOT op2
+
+B - Branch with link The BL instruction copies the address of the next instruction into r14 (lr, the link register), and causes a branch to op. pc <- op2
+
+CMN - Compare Negative The CMN instruction adds the value of Operand2 to the value in Rn and update the flags. - DISCARD <- r1 - (-op) - Update the flags in CPSR
+
+CMP - Compare The CMP instruction subtracts the value of Operand2 to the value in Rn and update the flags. - DISCARD <- r1 - op - Update the flags in CPSR
+
+EOR - Exclusive OR The EOR instruction performs a logical Exclusive OR operation. r1 <- r2 XOR op2
+
+LDR - Load The LDR instruction loads the value stored in the memory at the address op.
+
+MLA - Multiply Accumulate The MLA instruction performs a multiplication between r2 and r3 and adds the value from r4. r1 <- r2 * r3 + r4
+
+MOV - Move The MOV instruction copies the value of Operand2 into r1. r1 <- op
+
+MUL - Multiply The MUL instruction performs a multiplication between r2 and r3. r1 <- r2 * r3
+
+MVN - Move NOT The MVN instruction copies the complement of Operand2 into r1. r1 <- NOT op
+
+ORR - OR The OR instruction performs a logical OR operation. r1 <- r2 OR op2
+
+SDIV - Signed division The SDIV instruction performs a signed division between r2 and r3. r1 <- r2 / r3
+
+STR - Store The STR instruction stores r1 in the memory at the address op. mem[op] <- r1
+
+SUB - Substract The SUB instruction subtracts the value of Operand2 to the value in R2. r1 <- r2 - op2
+
+SVC - Supervisor call The SVC instruction causes a SWI exception.
+
+SWI - Software Interrupt The SWI instruction causes a SWI exception.
+
+SWP - Swap The SWP instruction swaps data between registers and memory. - r1 <- mem[pointer] - mem[pointer] <- r2
+
+TEQ - Test equivalence The TEQ instruction performs a bitwise Exclusive OR on the value of Operand2 and the value in r1 and update the flags. - DISCARD <- r1 XOR op - Update the flags in CPSR
+
+TST - Test bits The TST instruction performs a bitwise AND on the value of Operand2 and the value in r1 and update the flags. - DISCARD <- r1 AND op - Update the flags in CPSR
+
+UDIV - Signed division The UDIV instruction performs an unsigned division between r2 and r3. r1 <- r2 / r3
