@@ -63,6 +63,15 @@
                                           <Text layoutX="14.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R12 :" />
                                           <Text layoutX="14.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R15 :" />
                                           <Text fx:id="register15Hex" layoutX="57.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                          <Text layoutX="34.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flags" />
+                                          <Text layoutX="43.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N : " />
+                                          <Text layoutX="42.0" layoutY="438.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Z : " />
+                                          <Text layoutX="43.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C : " />
+                                          <Text layoutX="43.0" layoutY="484.0" strokeType="OUTSIDE" strokeWidth="0.0" text="V : " />
+                                          <Text fx:id="n_flag1" layoutX="68.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="z_flag1" layoutX="68.0" layoutY="438.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="c_flag1" layoutX="68.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="v_flag1" layoutX="68.0" layoutY="484.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -103,6 +112,15 @@
                                           <Text layoutX="14.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R12 :" />
                                           <Text layoutX="14.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R15 :" />
                                           <Text fx:id="register15UDec" layoutX="57.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                          <Text layoutX="34.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flags" />
+                                          <Text layoutX="43.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N : " />
+                                          <Text layoutX="42.0" layoutY="436.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Z : " />
+                                          <Text layoutX="43.0" layoutY="458.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C : " />
+                                          <Text layoutX="43.0" layoutY="482.0" strokeType="OUTSIDE" strokeWidth="0.0" text="V : " />
+                                          <Text fx:id="n_flag2" layoutX="68.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="z_flag2" layoutX="68.0" layoutY="436.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="c_flag2" layoutX="68.0" layoutY="458.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="v_flag2" layoutX="68.0" layoutY="482.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                                        </children>
                                     </AnchorPane>
                                  </content>
@@ -143,6 +161,15 @@
                                           <Text layoutX="14.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R12 :" />
                                           <Text layoutX="14.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="R15 :" />
                                           <Text fx:id="register15Dec" layoutX="57.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+                                          <Text layoutX="36.0" layoutY="394.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Flags" />
+                                          <Text layoutX="45.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N : " />
+                                          <Text layoutX="44.0" layoutY="435.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Z : " />
+                                          <Text layoutX="45.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="C : " />
+                                          <Text layoutX="45.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="V : " />
+                                          <Text fx:id="n_flag3" layoutX="70.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="z_flag3" layoutX="70.0" layoutY="435.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="c_flag3" layoutX="70.0" layoutY="457.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                                          <Text fx:id="v_flag3" layoutX="70.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                                        </children>
                                     </AnchorPane>
                                  </content>

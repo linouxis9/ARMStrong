@@ -16,6 +16,11 @@ public class GUIRegisterView {
 	private List<Text> decimalRegisterText;
 	private List<Text> signedDecimalRegisterText;
 
+	private List<Text> flagN;
+	private List<Text> flagZ;
+	private List<Text> flagC;
+	private List<Text> flagV;
+
 	private Scene theScene;
 
 	private Map<String, Language> languages;
@@ -41,7 +46,21 @@ public class GUIRegisterView {
 			this.decimalRegisterText.add((Text) theScene.lookup("#register" + register + "UDec"));
 			this.signedDecimalRegisterText.add((Text) theScene.lookup("#register" + register + "Dec"));
 		}
-		
+
+		this.flagN = new ArrayList<Text>();
+		this.flagZ = new ArrayList<Text>();
+		this.flagC = new ArrayList<Text>();
+		this.flagV = new ArrayList<Text>();
+
+
+		for (int i=1; i<4; i++){
+			this.flagN.add((Text) theScene.lookup("#n_flag" + i));
+			this.flagZ.add((Text) theScene.lookup("#z_flag" + i));
+			this.flagC.add((Text) theScene.lookup("#c_flag" + i));
+			this.flagV.add((Text) theScene.lookup("#v_flag" + i));
+
+		}
+
 		changeLanguage();
 	}
 
@@ -64,6 +83,13 @@ public class GUIRegisterView {
 			hexadecimalRegisterText.get(currentRegisterNumber).setText("0x" + Integer.toHexString(currentRegisterValue));
 			decimalRegisterText.get(currentRegisterNumber).setText(Integer.toUnsignedString(currentRegisterValue));
 			signedDecimalRegisterText.get(currentRegisterNumber).setText(Integer.toString(currentRegisterValue));
+		}
+
+		for (int i = 0; i<3; i++){
+			this.flagN.get(i).setText(theArmSimulator.getN());
+			this.flagZ.get(i).setText(theArmSimulator.getZ());
+			this.flagC.get(i).setText(theArmSimulator.getC());
+			this.flagV.get(i).setText(theArmSimulator.getV());
 		}
 	}
 }
