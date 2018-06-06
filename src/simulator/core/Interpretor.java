@@ -65,7 +65,6 @@ public class Interpretor {
 	 * 
 	 */
 	public void parseProgram() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException, InvalidLabelException, UnknownLabelException, InvalidDirectiveException {
-		this.linesMap.clear();
 		List<List<Token>> lines = new ArrayList<>();
 		int line = 0;
 		while (this.program.hasNext()) {

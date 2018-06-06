@@ -100,7 +100,12 @@ public class ArmSimulator {
      * Returns the next line to be executed
      */
 	public int getCurrentLine(){
-		return linesMap.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1	;
+		try {
+			return linesMap.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1;
+		}
+		catch (IndexOutOfBoundsException e) {
+			return 0;
+		}
 	}
 
     /**
