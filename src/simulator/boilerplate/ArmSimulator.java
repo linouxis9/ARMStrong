@@ -103,6 +103,21 @@ public class ArmSimulator {
 		return linesMap.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1	;
 	}
 
+	public boolean getN() {
+		return this.cpu.getCPSR().isN();
+	}
+
+	public boolean getZ() {
+		return this.cpu.getCPSR().isZ();
+	}
+	
+	public boolean getC() {
+		return this.cpu.getCPSR().isC();
+	}
+	
+	public boolean getV() {
+		return this.cpu.getCPSR().isV();
+	}
 	/**
 	 * 
 	 * @param programAsString

@@ -387,6 +387,13 @@ public class Cpu {
 	}
 	
 	/**
+	 * Returns a reference to the CPSR.
+	 */
+	public Cpsr getCPSR() {
+		return this.cpsr;
+	}
+	
+	/**
 	 * Returns the list of instructions.
 	 */
 	public List<Instruction> getInstructions() {
