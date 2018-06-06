@@ -148,13 +148,14 @@ public class GUIMemoryView {
 				}
 
 				if (newAddress < 0 || newAddress > Ram.DEFAULT_SIZE - displayableMemoryRows) {
-					this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("addressTooLowOrTooHigh"));
+					this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("invalidAddress"));
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
-
 				memoryViewFirstAddress = newAddress;
 				scrollBar.setValue(memoryViewFirstAddress);
+				this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("memoryViewTitleText"));
+				memoryViewTitleText.setUnderline(false);
 				updateMemoryView();
 			}
 		});
@@ -169,12 +170,12 @@ public class GUIMemoryView {
 	}
 
 	public void changeLanguage() {
-		
-		this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("goToAddressField"));
+		this.language = GUI.getCurrentLanguage();
+		this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("memoryViewTitleText"));
 
 		memoryViewTitleText.setUnderline(false);
 		
-		((Text) this.theScene.lookup("#viewModeLabel")).setText(this.languages.get(this.language).getTranslation("viewMode"));
+		((Text) this.theScene.lookup("#viewModeLabel")).setText(this.languages.get(this.language).getTranslation("displayMode"));
 
 		
 	}

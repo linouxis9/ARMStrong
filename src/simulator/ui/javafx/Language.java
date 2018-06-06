@@ -13,50 +13,73 @@ public enum Language {
 		this.language = language;
 	}
 
-	private static Map initializeFrench() {
-		Map<String,String> language = new HashMap<>();
-
-		language.put("viewMode", "Mode d'affichage");
-
-		language.put("goToAddressField", "Aller à l'adresse");
-		language.put("invalidAddress", "Adresse Invalide");
-		language.put("addressTooLowOrTooHigh", "Adresse hors RAM");
-
-		language.put("File", "");
-		language.put("Edit", "");
-		language.put("Run", "");
-		language.put("Help", "");
-
-		language.put("New", "");
-		language.put("Open file", "");
-		language.put("Save", "");
-		language.put("Save as", "");
-		language.put("Exit", "");
-		language.put("Help", "");
-
-
-		language.put("Enter in execution mode", "");
-		language.put("Exit the execution mode", "");
-		language.put("Run a single instruction", "");
-		language.put("Reload Program", "");
-		language.put("Stop Execution", "");
-		language.put("Documentation", "");
-		language.put("Preferences", "");
-
-
-		language.put("Unsigned Decimal", "");
-		language.put("Signed Decimal", "");
-		language.put("Hexadecimal", "");
-
-		
-		return language;
-	}
-
 	private static Map initializeEnglish() {
 		Map<String,String> language = new HashMap<>();
-		
+
+
+		language.put("displayMode", "Dislay Mode");
+		language.put("memoryViewTitleText", "Go to address");
+		language.put("invalidAddress", "Invalid Adress");
+
+		language.put("File", "File");
+		language.put("Edit", "Edit");
+		language.put("Run", "Run");
+		language.put("Help", "Help");
+
+		language.put("New", "New");
+		language.put("Open file", "Open file");
+		language.put("Save", "Save");
+		language.put("Save as", "Save as");
+		language.put("Exit", "Exit");
+
+		language.put("Enter in execution mode", "Enter in execution mode");
+		language.put("Exit the execution mode", "Exit the execution mode");
+		language.put("Run a single instruction", "Run a single instruction");
+		language.put("Reload Program", "Reload Program");
+		language.put("Stop Execution", "Stop Execution");
+		language.put("Documentation", "Documentation");
+		language.put("Preferences", "Preferences");
+
+		language.put("Unsigned Decimal", "Unsigned Decimal");
+		language.put("Signed Decimal", "Signed Decimal");
+		language.put("Hexadecimal", "Hexadecimal");
+
 		return language;
 	}
+
+    private static Map initializeFrench() {
+        Map<String,String> language = new HashMap<>();
+
+        language.put("displayMode", "Mode d'affichage");
+        language.put("memoryViewTitleText", "Aller à l'adresse");
+        language.put("invalidAddress", "Adresse Invalide");
+
+        language.put("File", "Fichier");
+        language.put("Edit", "Editer");
+        language.put("Run", "Executer");
+        language.put("Help", "Aide");
+
+        language.put("New", "Nouveau");
+        language.put("Open file", "Ouvrir");
+        language.put("Save", "Enregistrer");
+        language.put("Save as", "Enregistrer sous");
+        language.put("Exit", "Quitter");
+
+        language.put("Enter in execution mode", "Entrer en mode execution");
+        language.put("Exit the execution mode", "Quitter le mode execution");
+        language.put("Run a single instruction", "Executer une instruction");
+        language.put("Reload Program", "Recharger le programme");
+        language.put("Stop Execution", "Arreter l'execution");
+        language.put("Documentation", "Documentation");
+        language.put("Preferences", "Préférences");
+
+        language.put("Unsigned Decimal", "Decimal non signé");
+        language.put("Signed Decimal", "Decimal signé");
+        language.put("Hexadecimal", "Hexadecimal");
+
+
+        return language;
+    }
 	
 	public String getTranslation(String name) {
 		return this.language.get(name);

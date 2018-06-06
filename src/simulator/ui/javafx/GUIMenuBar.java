@@ -98,6 +98,7 @@ public class GUIMenuBar {
 	}
 
 	public void changeLanguage() {
+		this.language = GUI.getCurrentLanguage();
 		fileMenu.setText(this.languages.get(language).getTranslation("File"));
 		editMenu.setText(this.languages.get(language).getTranslation("Edit"));
 		runMenu.setText(this.languages.get(language).getTranslation("Run"));

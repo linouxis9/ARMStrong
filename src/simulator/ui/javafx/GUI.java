@@ -78,10 +78,10 @@ public class GUI extends Application implements SimulatorUI {
 	private Set<String> themes;
 	private static String DEFAULT_THEME = "red";
 	private Color themeColor;
-	
+
 	private static Map<String,Language> languages;
 	private static String currentLanguage;
-	
+
 	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
 			KeyCombination.SHIFT_DOWN);
@@ -91,7 +91,7 @@ public class GUI extends Application implements SimulatorUI {
 	final KeyCombination f5 = new KeyCodeCombination(KeyCode.F5);
 	final KeyCombination f11 = new KeyCodeCombination(KeyCode.F11);
 	final KeyCombination ctrlE = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
-	
+
 	public void startUI() {
 		launch(null);
 	}
@@ -130,7 +130,7 @@ public class GUI extends Application implements SimulatorUI {
 		this.prefs.getBoolean("FONT", true);
 		this.prefs.get("THEME", GUI.DEFAULT_THEME);
 		this.themeColor = Color.RED;
-		
+
 		themes = new HashSet<>();
 		themes.add("red");
 		themes.add("blue");
@@ -138,15 +138,19 @@ public class GUI extends Application implements SimulatorUI {
 		applyTheme();
 
 		GUI.currentLanguage = this.prefs.get("LANGUAGE", "ENGLISH");
-		
+
 		stage.show(); // to be sure the scene.lookup() works properly
 
+
 		centralBorderPaneContainer = (BorderPane) scene.lookup("#borderPane");
+
 
 		theGUIMenuBar = new GUIMenuBar((MenuBar) scene.lookup("#theMenuBar"));
 		theGUIMemoryView = new GUIMemoryView(scene, theArmSimulator);
 		theGUIRegisterView = new GUIRegisterView(scene, theArmSimulator);
 		theGUIButtonBar = new GUIButtonBar((ToolBar) scene.lookup("#thebuttonBar"));
+
+
 
 		// THE CODING AREA
 		codingTextArea = (TextArea) scene.lookup("#codeTexArea");
@@ -270,7 +274,7 @@ public class GUI extends Application implements SimulatorUI {
 			stage.show();
 		});
 	}
-	
+
 	private void saveFile(String content, File theFile) {
 		try (FileWriter outputStream = new FileWriter(theFile)) {
 			outputStream.write(content);
@@ -325,7 +329,7 @@ public class GUI extends Application implements SimulatorUI {
 		String currentTheme = prefs.get("THEME", "");
 
 		scene.getStylesheets().clear();
-		
+
 		String css = getClass().getResource("/resources/css.css").toExternalForm();
 		scene.getStylesheets().addAll(css);
 
@@ -348,13 +352,13 @@ public class GUI extends Application implements SimulatorUI {
 		default:
 			themeColor = Color.RED;
 		}
-		
+
 		if (prefs.getBoolean("FONT", true)) {
 			this.root.setStyle("-fx-font-family: \"Quicksand\"; -fx-font-size: 16px;");
 		} else {
 			this.root.setStyle("-fx-font-family: ''; -fx-font-size: 16px;");
 		}
-	
+
 	}
 
 	private void setActionEvents(){
@@ -457,10 +461,10 @@ public class GUI extends Application implements SimulatorUI {
 			VBox dialogVbox = new VBox(20);
 			Label exitLabel = new Label("All unsaved work will be lost");
 			exitLabel.setId("exitLabel");
-			
+
 			Button yesBtn = new Button("Yes");
 			yesBtn.setId("yesNew");
-			
+
 			yesBtn.setOnAction((ActionEvent arg0) -> {
 				confirmBox.close();
 				codingTextArea.setText("");
@@ -468,11 +472,11 @@ public class GUI extends Application implements SimulatorUI {
 			});
 			Button noBtn = new Button("No");
 			noBtn.setId("noNew");
-			
+
 			noBtn.setOnAction((ActionEvent arg0) -> confirmBox.close());
 
 			HBox hBox = new HBox();
-			
+
 			GridPane pane = new GridPane();
 			pane.setAlignment(Pos.CENTER);
 			pane.setHgap(5);
@@ -481,13 +485,13 @@ public class GUI extends Application implements SimulatorUI {
 
 			pane.add(exitLabel, 0, 1);
 			pane.add(hBox, 1, 1);
-			
+
 			pane.add(yesBtn, 0, 2);
 			pane.add(noBtn, 1, 2);
-			
+
 
 			dialogVbox.getChildren().add(pane);
-		
+
 			Scene dialogNew = new Scene(dialogVbox, 400, 200);
 			confirmBox.setScene(dialogNew);
 
@@ -497,7 +501,7 @@ public class GUI extends Application implements SimulatorUI {
 			confirmBox.setTitle("New file");
 			Image preferencesIcon = new Image("file:logo.png");
 			confirmBox.getIcons().add(preferencesIcon);
-			
+
 			confirmBox.show();
 		});
 		theGUIMenuBar.getHelpMenuItem().setOnAction((ActionEvent actionEvent) -> {
@@ -537,7 +541,7 @@ public class GUI extends Application implements SimulatorUI {
 			VBox dialogVbox = new VBox(20);
 
 			ChoiceBox<String> languageChoiceBox = new ChoiceBox<>();
-			
+
 			languageChoiceBox.getItems().addAll(GUI.languages.keySet());
 
 			languageChoiceBox.setTooltip(new Tooltip("Choose a language"));
@@ -545,7 +549,7 @@ public class GUI extends Application implements SimulatorUI {
 			languageChoiceBox.setValue(prefs.get("LANGUAGE", ""));
 
 			languageChoiceBox.setId("choiceboxPreferencesLang");
-			
+
 			ChoiceBox<String> theme = new ChoiceBox<>();
 
 			theme.getItems().addAll(themes);
@@ -561,7 +565,7 @@ public class GUI extends Application implements SimulatorUI {
 
 			Button button2 = new Button("Close");
 			button2.setId("closePreferences");
-			
+
 			Label labelTheme = new Label();
 			labelTheme.setText("Choose a theme:");
 			labelTheme.setId("labelThemePreferences");
@@ -569,7 +573,7 @@ public class GUI extends Application implements SimulatorUI {
 			Label labelLanguage = new Label();
 			labelLanguage.setText("Choose a language:");
 			labelLanguage.setId("labelLanguagePreferences");
-			
+
 			Label labelQuicksand = new Label();
 			labelQuicksand.setText("Use the Quicksand font:");
 			labelQuicksand.setId("labelQuicksandPreferences");
@@ -588,9 +592,9 @@ public class GUI extends Application implements SimulatorUI {
 				prefs.putBoolean("FONT", checkBoxFont.isSelected());
 
 				prefs.put("LANGUAGE", languageChoiceBox.getValue());
-				
+
 				GUI.currentLanguage = languageChoiceBox.getValue();
-				
+
 				theGUIMenuBar.changeLanguage();
 				theGUIRegisterView.changeLanguage();
 				theGUIMemoryView.changeLanguage();
@@ -644,7 +648,7 @@ public class GUI extends Application implements SimulatorUI {
 	}
 	
 	public static Map<String,Language> getLanguagesData() {
-		if (GUI.languages != null) {
+		if (GUI.languages == null) {
 			GUI.languages = new HashMap<>();
 			for (Language language : Language.values()) {
 				languages.put(language.name(), language);

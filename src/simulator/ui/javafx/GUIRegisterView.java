@@ -46,6 +46,7 @@ public class GUIRegisterView {
 	}
 
 	public void changeLanguage() {
+		this.language = GUI.getCurrentLanguage();
 		((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText(this.languages.get(language).getTranslation("Unsigned Decimal"));
 		((TitledPane) this.theScene.lookup("#signedDecimal")).setText(this.languages.get(language).getTranslation("Signed Decimal"));
 		((TitledPane) this.theScene.lookup("#hexadecimal")).setText(this.languages.get(language).getTranslation("Hexadecimal"));
