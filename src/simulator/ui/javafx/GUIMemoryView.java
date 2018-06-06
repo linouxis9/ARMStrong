@@ -12,7 +12,9 @@ import simulator.boilerplate.ArmSimulator;
 import simulator.core.Ram;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GUIMemoryView {
 
@@ -40,9 +42,16 @@ public class GUIMemoryView {
 	
 	private Text memoryViewTitleText;
 
+    private Map<String,Language> languages;
+    private String language;
+	
 	public GUIMemoryView(Scene theScene, ArmSimulator anArmSimulator) {
 
 		this.theArmSimulator = anArmSimulator;
+		
+		this.languages = GUI.getLanguagesData();
+		
+		this.language = GUI.getCurrentLanguage();
 		
 		this.theScene = theScene;
 		
@@ -111,12 +120,8 @@ public class GUIMemoryView {
 			if (ke.getCode().equals(KeyCode.ENTER)) {
 				String addressTyped = goToAddressField.getText();
 				
-				if(GUI.language.equals("French")) {
-					this.memoryViewTitleText.setText("Aller à l'adresse: ");
-				}
-				else {
-					this.memoryViewTitleText.setText("Go to address: ");
-				}
+				
+				this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("goToAddressField"));
 
 				int newAddress = 0;
 
@@ -137,17 +142,13 @@ public class GUIMemoryView {
 						newAddress = Integer.parseInt(addressTyped);
 					}
 				} catch (NumberFormatException exeption) {
-					if(GUI.language.equals("French")) {
-						memoryViewTitleText.setText("Adresse invalide");
-					}else{
-						memoryViewTitleText.setText("The address is invalid");
-					}
+					this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("invalidAddress"));
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
 
 				if (newAddress < 0 || newAddress > Ram.DEFAULT_SIZE - displayableMemoryRows) {
-					memoryViewTitleText.setText("The address too low or to high");
+					this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("addressTooLowOrTooHigh"));
 					memoryViewTitleText.setUnderline(true);
 					return;
 				}
@@ -164,26 +165,17 @@ public class GUIMemoryView {
 		updateDisplayedRows();
 		updateMemoryView();
 		
-		translate();
+		changeLanguage();
 	}
 
-	public void translate() {
+	public void changeLanguage() {
 		
-		if(GUI.language.equals("French")) {
-			this.memoryViewTitleText.setText("Aller à l'adresse: ");
-		}
-		else {
-			this.memoryViewTitleText.setText("Go to address: ");
-		}
+		this.memoryViewTitleText.setText(this.languages.get(this.language).getTranslation("goToAddressField"));
 
 		memoryViewTitleText.setUnderline(false);
 		
-		if(GUI.language.equals("French")) {
-			((Text) this.theScene.lookup("#viewModeLabel")).setText("Mode d'affichage: ");
-			
-		}else{
-			((Text) this.theScene.lookup("#viewModeLabel")).setText("View mode: ");
-		}
+		((Text) this.theScene.lookup("#viewModeLabel")).setText(this.languages.get(this.language).getTranslation("viewMode"));
+
 		
 	}
 	

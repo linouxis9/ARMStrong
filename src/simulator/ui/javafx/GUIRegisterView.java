@@ -6,6 +6,7 @@ import simulator.boilerplate.ArmSimulator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GUIRegisterView {
 
@@ -16,11 +17,19 @@ public class GUIRegisterView {
 	private List<Text> signedDecimalRegisterText;
 
 	private Scene theScene;
+
+	private Map<String, Language> languages;
+
+	private String language;
 	
 	public GUIRegisterView(Scene theScene, ArmSimulator anArmSimulator) {
 
 		this.theArmSimulator = anArmSimulator;
-
+		
+		this.languages = GUI.getLanguagesData();
+		
+		this.language = GUI.getCurrentLanguage();
+		
 		this.theScene = theScene;
 		
 		this.hexadecimalRegisterText = new ArrayList<Text>();
@@ -33,14 +42,14 @@ public class GUIRegisterView {
 			this.signedDecimalRegisterText.add((Text) theScene.lookup("#register" + register + "Dec"));
 		}
 		
-		translate();
+		changeLanguage();
 	}
 
-	public void translate() {
+	public void changeLanguage() {
 		if(GUI.language.equals("French")) {
-			((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText("Décimal non signé");
-			((TitledPane) this.theScene.lookup("#signedDecimal")).setText("Décimal signé");
-			((TitledPane) this.theScene.lookup("#hexadecimal")).setText("Hexadécimal");
+			((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText("Dï¿½cimal non signï¿½");
+			((TitledPane) this.theScene.lookup("#signedDecimal")).setText("Dï¿½cimal signï¿½");
+			((TitledPane) this.theScene.lookup("#hexadecimal")).setText("Hexadï¿½cimal");
 		}else{
 			((TitledPane) this.theScene.lookup("#unsignedDecimal")).setText("Unsigned Decimal");
 			((TitledPane) this.theScene.lookup("#signedDecimal")).setText("Signed Decimal");

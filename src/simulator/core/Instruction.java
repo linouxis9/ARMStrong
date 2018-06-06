@@ -189,8 +189,6 @@ public class Instruction {
 	// We can't do much better without using Reflection
 	@Override
 	public String toString() {
-	/*	return "Instruction [op=" + op + ", r1=" + r1 + ", r2=" + r2 + ", r3=" + r3 + ", ope2=" + ope2 + ", cc=" + cc
-				+ ", flags=" + flags + "]";*/
 		StringBuilder string = new StringBuilder();
 		
 		string.append(this.op);

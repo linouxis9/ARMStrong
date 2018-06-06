@@ -26,7 +26,7 @@ public class Interpretor {
 
 	private final Preprocessor preprocessor;
 
-	private final Map<Instruction, Integer> lines;
+	private final Map<Instruction, Integer> linesMap;
 	
 	/**
 	 * Returns a fully initialized Interpretor able to convert a Tokenized's
@@ -42,7 +42,7 @@ public class Interpretor {
 		this.program = program;
 		this.preprocessor = new Preprocessor(cpu);
 		this.cpu = cpu;
-		this.lines = lines;
+		this.linesMap = lines;
 	}
 
 	/**
@@ -58,7 +58,7 @@ public class Interpretor {
 	 * 
 	 */
 	public void parseProgram() throws InvalidSyntaxException, InvalidOperationException, InvalidRegisterException, InvalidLabelException, UnknownLabelException, InvalidDirectiveException {
-		this.lines.clear();
+		this.linesMap.clear();
 		List<List<Token>> lines = new ArrayList<>();
 		int line = 0;
 		while (this.program.hasNext()) {
@@ -73,7 +73,7 @@ public class Interpretor {
 			if (message == PreprocessorMessage.VALIDINSTRUCTION) {
 				Instruction i = this.parse(tokens);
 				this.cpu.addInstruction(i);
-				this.lines.put(i, line);
+				this.linesMap.put(i, line);
 			}
 		}
 	}

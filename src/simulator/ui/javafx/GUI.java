@@ -31,8 +31,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.prefs.Preferences;
@@ -74,11 +76,11 @@ public class GUI extends Application implements SimulatorUI {
 	//the settings
 	private Preferences prefs;
 	private Set<String> themes;
-	private static final String DEFAULT_THEME = "red";
+	private static String DEFAULT_THEME = "red";
 	private Color themeColor;
 	
-	private Set<String> languages;
-	public static String language = "English";
+	private static Map<String,Language> languages;
+	private static String currentLanguage;
 	
 	final KeyCombination ctrlS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
 	final KeyCombination ctrlShiftS = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,
@@ -135,24 +137,7 @@ public class GUI extends Application implements SimulatorUI {
 		themes.add("green");
 		applyTheme();
 
-		String colorR = "red";
-		String colorB = "blue";
-		String colorG = "green";
-		
-		themes = new HashSet<>();
-		themes.add(colorR);
-		themes.add(colorB);
-		themes.add(colorG);
-		applyTheme();
-		
-		GUI.language = this.prefs.get("LANGUAGE", language);
-		
-		String languageEN = "English";
-		String languageFR = "French";
-		
-		languages = new HashSet<>();
-		languages.add(languageEN);
-		languages.add(languageFR);
+		GUI.currentLanguage = this.prefs.get("LANGUAGE", "ENGLISH");
 		
 		stage.show(); // to be sure the scene.lookup() works properly
 
@@ -553,7 +538,7 @@ public class GUI extends Application implements SimulatorUI {
 
 			ChoiceBox<String> languageChoiceBox = new ChoiceBox<>();
 			
-			languageChoiceBox.getItems().addAll(languages);
+			languageChoiceBox.getItems().addAll(GUI.languages.keySet());
 
 			languageChoiceBox.setTooltip(new Tooltip("Choose a language"));
 
@@ -604,11 +589,11 @@ public class GUI extends Application implements SimulatorUI {
 
 				prefs.put("LANGUAGE", languageChoiceBox.getValue());
 				
-				GUI.language = languageChoiceBox.getValue();
+				GUI.currentLanguage = languageChoiceBox.getValue();
 				
-				theGUIMenuBar.translate();
-				theGUIRegisterView.translate();
-				theGUIMemoryView.translate();
+				theGUIMenuBar.changeLanguage();
+				theGUIRegisterView.changeLanguage();
+				theGUIMemoryView.changeLanguage();
 				
 				applyTheme();
 
@@ -656,5 +641,19 @@ public class GUI extends Application implements SimulatorUI {
 		// Several keyboard shortcut
 		scene.setOnKeyPressed((KeyEvent ke) -> handleKeyboardEvent(ke));
 
+	}
+	
+	public static Map<String,Language> getLanguagesData() {
+		if (GUI.languages != null) {
+			GUI.languages = new HashMap<>();
+			for (Language language : Language.values()) {
+				languages.put(language.name(), language);
+			}
+		}
+		return GUI.languages;
+	}
+	
+	public static String getCurrentLanguage() {
+		return GUI.currentLanguage;
 	}
 }

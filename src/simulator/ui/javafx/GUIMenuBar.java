@@ -4,6 +4,7 @@ import javafx.scene.control.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GUIMenuBar {
 
@@ -31,33 +32,21 @@ public class GUIMenuBar {
 	private Menu runMenu;
 	private Menu helpMenu;
 	
+	private Map<String, Language> languages;
+	private String language;
+	
 	public GUIMenuBar(MenuBar aMenuBar) {
 
 		theMenuBar = aMenuBar;
 
+		this.languages = GUI.getLanguagesData();
+		
+		this.language = GUI.getCurrentLanguage();
+		
 		diabledInExecMode = new ArrayList<MenuItem>();
 		enabledInExecMode = new ArrayList<MenuItem>();
 
-		this.fileMenu = new Menu("File");
-		this.editMenu = new Menu("Edit");
-		this.runMenu = new Menu("Run");
-		this.helpMenu = new Menu("Help");
-
-		this.newMenuItem = new MenuItem("New");
-		this.openMenuItem = new MenuItem("Open file");
-		this.saveMenuItem = new MenuItem("Save");
-		this.saveAsMenuItem = new MenuItem("Save as");
-		this.exitMenuItem = new MenuItem("Exit");
-		this.helpMenuItem = new MenuItem("Help");
-
-		this.enterExecutionModeMenuItem = new MenuItem("Enter in execution mode");
-		this.exitExecutionModeMenuItem = new MenuItem("Exit the execution mode");
-		this.runMenuItem = new MenuItem("Run");
-		this.runSingleMenuItem = new MenuItem("Run a single instruction");
-		this.reloadProgramMenuItem = new MenuItem("Reload Program");
-		this.stopMenuItem = new MenuItem("Stop Execution");
-		this.documentationMenuItem = new MenuItem("Documentation");
-		this.preferencesMenuItem = new MenuItem("Preferences");
+		changeLanguage();
 
 		theMenuBar.getMenus().addAll(fileMenu, editMenu, runMenu, helpMenu);
 
@@ -81,20 +70,18 @@ public class GUIMenuBar {
 		exitMenuItem.setOnAction((ActionEvent actionEvent) -> {
 			System.exit(0);
 		});
-
-		translate();
 		
 		exitExecMode();
 
 	}
 
-	public void translate() {
-		if(GUI.language.equals("French")) {
-			fileMenu.setText("Fichier");
-			editMenu.setText("Editer");
-			runMenu.setText("Lancer");
-			helpMenu.setText("Aide");
+	public void changeLanguage() {
+		fileMenu.setText(this.languages.get(language).getTranslation("fileMenu"));
+		editMenu.setText(this.languages.get(language).getTranslation("editMenu"));
+		runMenu.setText(this.languages.get(language).getTranslation("runMenu"));
+		helpMenu.setText(this.languages.get(language).getTranslation("helpMenu"));
 
+		if(GUI.language.equals("French")) {
 			newMenuItem.setText("Nouveau");
 			openMenuItem.setText("Ouvrir");
 			saveMenuItem.setText("Sauvegarder");
@@ -109,13 +96,8 @@ public class GUIMenuBar {
 			reloadProgramMenuItem.setText("Recharger le Programme");
 			stopMenuItem.setText("Stopper l'Execution");
 			documentationMenuItem.setText("Documentation");
-			preferencesMenuItem.setText("Préférences");
+			preferencesMenuItem.setText("Prï¿½fï¿½rences");
 		}else{
-			fileMenu.setText("File");
-			editMenu.setText("Edit");
-			runMenu.setText("Run");
-			helpMenu.setText("Help");
-
 			newMenuItem.setText("New");
 			openMenuItem.setText("Open file");
 			saveMenuItem.setText("Save");

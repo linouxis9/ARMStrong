@@ -1,5 +1,6 @@
 package simulator.ui.javafx;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javafx.scene.control.Button;
@@ -24,9 +25,9 @@ public class GUIButtonBar {
 
     private List<Button> editMode;
     private List<Button> execMode;
-
+    
     public GUIButtonBar(ToolBar aToolBar){
-
+    	
         this.theToolBar = aToolBar;
 
         executionMode = new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm())));

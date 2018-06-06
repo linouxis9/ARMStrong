@@ -23,8 +23,7 @@ public class ArmSimulator {
 	private final Program program;
 	private final Interpretor interpretor;
 	private final Cpu cpu;
-	private final Map<Integer, Boolean> breakpoints;
-	private final Map<Instruction, Integer> lines;
+	private final Map<Instruction, Integer> linesMap;
 
 	// TODO write javadoc comment
 	/**
@@ -33,9 +32,8 @@ public class ArmSimulator {
 	public ArmSimulator() {	
 		this.cpu = new Cpu();
 		this.program = new Program();
-		this.lines = new HashMap<>();
-		this.interpretor = new Interpretor(this.cpu, this.program, this.lines);
-		this.breakpoints = new HashMap<>();
+		this.linesMap = new HashMap<>();
+		this.interpretor = new Interpretor(this.cpu, this.program, this.linesMap);
 	}
 
 	/**
@@ -93,6 +91,7 @@ public class ArmSimulator {
 	 * 
 	 */
 	public void resetRun(){
+		this.linesMap.clear();
 		this.cpu.reset();
 	}
 
@@ -101,27 +100,7 @@ public class ArmSimulator {
 	 * @return
 	 */
 	public int getCurrentLine(){
-		return lines.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1	;
-	}
-
-	/**
-	 * 
-	 * @param line
-	 */
-	public void flipBreakPointStatus(int line){
-		this.breakpoints.put(line, !this.getBreakPointStatus(line));
-	}
-
-	/**
-	 * 
-	 * @param line
-	 * @return
-	 */
-	public boolean getBreakPointStatus(int line){
-		if(!this.breakpoints.containsKey(line)) {
-			return false;
-		}
-		return this.breakpoints.get(line);
+		return linesMap.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1	;
 	}
 
 	/**

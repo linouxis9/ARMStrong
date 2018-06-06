@@ -10,14 +10,15 @@ public class Main {
 	public static void main(String[] args) {
 		if (args.length == 0) {
 			new GUI().startUI();
-		}
-		switch("cli") {
-		case "cli":
-	        new CLI().startUI();
-	        break;
-		default:
-		case "gui":
-			new GUI().startUI();
+		} else {
+			switch(args[0]) {
+			case "cli":
+		        new CLI().startUI();
+		        break;
+			case "gui":
+			default:
+				new GUI().startUI();
+			}
 		}
 	}
 }
