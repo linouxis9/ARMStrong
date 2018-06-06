@@ -139,6 +139,10 @@ public class GUI extends Application implements SimulatorUI {
 
 		GUI.currentLanguage = this.prefs.get("LANGUAGE", "ENGLISH");
 
+		if (!GUI.getLanguagesData().keySet().contains(GUI.currentLanguage)) {
+			GUI.currentLanguage = "ENGLISH";
+		}
+		
 		stage.show(); // to be sure the scene.lookup() works properly
 
 
