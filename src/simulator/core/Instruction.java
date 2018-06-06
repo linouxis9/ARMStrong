@@ -43,8 +43,6 @@ public class Instruction {
 	 */
 	private final Set<Flag> flags;
 
-	private final int line;
-	
 	/**
 	 * Build a usable instruction of type: opreationConditionCode register, register, register, operand2
 	 * @param op
@@ -62,7 +60,7 @@ public class Instruction {
 	 * @param cc
 	 * 		The condition for the execution of the instruction
 	 */
-	public Instruction(Operation op, int line, Register r1, Register r2, Register r3, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
+	public Instruction(Operation op, Register r1, Register r2, Register r3, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
 		this.op = op;
 		this.r1 = r1;
 		this.r2 = r2;
@@ -70,7 +68,6 @@ public class Instruction {
 		this.ope2 = ope2;
 		this.cc = cc;
 		this.flags = flags;
-		this.line = line;
 	}
 
 	/**
@@ -88,8 +85,8 @@ public class Instruction {
 	 * @param cc
 	 * 		The condition for the execution of the instruction
 	 */
-	public Instruction(Operation op, int line, Register r1, Register r2, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
-		this(op, line, r1, r2, null, ope2, flags, cc);
+	public Instruction(Operation op, Register r1, Register r2, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
+		this(op, r1, r2, null, ope2, flags, cc);
 	}
 
 	/**
@@ -105,8 +102,8 @@ public class Instruction {
 	 * @param cc
 	 * 		The condition for the execution of the instruction
 	 */
-	public Instruction(Operation op, int line, Register r1, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
-		this(op, line, r1, null, null, ope2, flags, cc);
+	public Instruction(Operation op, Register r1, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
+		this(op, r1, null, null, ope2, flags, cc);
 	}
 
 	/**
@@ -120,8 +117,8 @@ public class Instruction {
 	 * @param cc
 	 * 		The condition for the execution of the instruction
 	 */
-	public Instruction(Operation op, int line, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
-		this(op, line, null, null, null, ope2, flags, cc);
+	public Instruction(Operation op, Operand2 ope2, Set<Flag> flags, ConditionCode cc) {
+		this(op, null, null, null, ope2, flags, cc);
 	}
 
 	/**
@@ -135,8 +132,8 @@ public class Instruction {
 	 * @param cc
 	 * 		The condition for the execution of the instruction
 	 */
-	public Instruction(Operation op, int line, Register r1, Set<Flag> flags, ConditionCode cc) {
-		this(op, line, r1, null, null, null, flags, cc);
+	public Instruction(Operation op, Register r1, Set<Flag> flags, ConditionCode cc) {
+		this(op, r1, null, null, null, flags, cc);
 	}
 
 	
@@ -187,13 +184,6 @@ public class Instruction {
 	 */
 	public Set<Flag> getFlags() {
 		return flags;
-	}
-
-	/**
-	 * Returns the line of the instruction in the assembly program
-	 */
-	public int getLine() {
-		return line;
 	}
 	
 	// We can't do much better without using Reflection

@@ -24,7 +24,8 @@ public class ArmSimulator {
 	private final Interpretor interpretor;
 	private final Cpu cpu;
 	private final Map<Integer, Boolean> breakpoints;
-	
+	private final Map<Instruction, Integer> lines;
+
 	// TODO write javadoc comment
 	/**
 	 * 
@@ -32,7 +33,8 @@ public class ArmSimulator {
 	public ArmSimulator() {	
 		this.cpu = new Cpu();
 		this.program = new Program();
-		this.interpretor = new Interpretor(this.cpu, this.program);
+		this.lines = new HashMap<>();
+		this.interpretor = new Interpretor(this.cpu, this.program, this.lines);
 		this.breakpoints = new HashMap<>();
 	}
 
@@ -99,12 +101,7 @@ public class ArmSimulator {
 	 * @return
 	 */
 	public int getCurrentLine(){
-		try {
-			return this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))).getLine()-1;
-		}
-		catch (IndexOutOfBoundsException e) {
-			return 0;
-		}
+		return lines.get(this.cpu.getInstructions().get(((int) Math.ceil((double) this.cpu.getPc().getValue() / 4))))-1	;
 	}
 
 	/**

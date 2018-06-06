@@ -125,10 +125,6 @@ public class Cpu {
 		this.ram = new Ram();
 		this.cpsr = new Cpsr();
 		this.registers = new Register[DEFAULT_ARM_REGISTERS];
-
-		for (int i = 0; i < DEFAULT_ARM_REGISTERS; i++) {
-			this.registers[i] = new Register();
-		}
 		this.instructions = new ArrayList<Instruction>();
 		this.alu = new ALU();
 		this.interruptsVector = new HashMap<>();
@@ -184,7 +180,7 @@ public class Cpu {
 		this.interruptsVector.put(81, () -> {
 			this.isBreakpoint = true;
 			Instruction instruction = this.instructions.get(Math.abs(this.pc.getValue() / 4 - 2));
-			System.out.println("[DEBUG] BREAKPOINT after " + instruction + " @ line " + instruction.getLine());
+			System.out.println("[DEBUG] BREAKPOINT after " + instruction + " @ line ??" ); //TODO how to get the line from here
 		});
 
 		this.interruptsVector.put(100, () -> {
@@ -206,7 +202,7 @@ public class Cpu {
 					c = (char) (this.ram.getByte(new Address(this.registers[0].getValue() + i)));
 				}
 			} catch (InvalidMemoryAddressException e) {
-				System.out.println("[/!\\] Invalid address in r0 for SVC call #0 ");
+				System.out.println("[/!\\] Invalid address in r0 for SVC call #0 ");//TODO how to get the line from here
 			}
 			System.out.println("");
 		});
@@ -237,7 +233,7 @@ public class Cpu {
 				//System.out.println("Exec.: " + i);
 				this.runInstruction(i);
 			} else {
-				System.out.println("Skip.: " + i + " (Condition not meet) at line " + i.getLine());
+				System.out.println("Skip.: " + i + " (Condition not meet) at line ??");
 			}
 		}
 		catch (IndexOutOfBoundsException e) {
