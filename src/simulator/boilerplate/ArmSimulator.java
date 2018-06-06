@@ -147,23 +147,37 @@ public class ArmSimulator {
 		this.interpretor.parseProgram();
 	}
 
-	
+	/**
+     * Returns true if the program is totally executed
+	 */
 	public boolean hasFinished() {
 		return this.cpu.hasFinished();
 	}
-	
+
+    /**
+     * Returns true if the cpu have been interrupted
+     */
 	public boolean isInterrupted() {
 		return this.cpu.isInterrupted();
 	}
-	
+
+    /**
+     * Returns true if the cpu have been stopped by a breakpoint
+     */
 	public boolean isBreakpoint() {
 		return this.cpu.isBreakpoint();
 	}
-	
+
+    /**
+     * Returns true if the cpu is halted
+     */
 	public boolean isHalted() {
 		return this.hasFinished() || this.isBreakpoint() || this.isInterrupted();
 	}
-	
+
+	/**
+     * Stops the execution
+     */
 	public void interruptExecutionFlow(boolean interrupt) {
 		this.cpu.interruptMe(interrupt);
 	}
