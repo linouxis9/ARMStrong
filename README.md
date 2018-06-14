@@ -4,15 +4,12 @@
 
 [The Javadoc is available here](http://projectarm.devling.net/api/)
 
-### The first alpha version of our project has been released!
-We are now entering the Final Testing Stage!
+### The first version of our project has been released!
+You can now try the JAR of our project!
 
-You can now try the two JAR of our project!
+[ProjectARM.jar](https://github.com/linouxis9/ProjectARM/releases/download/v1.0.0/ProjectARM.jar)
 
-[GUI.jar](https://gitlab.iut-valence.fr/demmanuv/projet_s2/uploads/f33c6fdb07526707d8f7413ca8e8a1d6/GUI.jar)
-[CLI.jar](https://gitlab.iut-valence.fr/demmanuv/projet_s2/uploads/c2f64647a085f61fb6ceead34222b897/CLI.jar)
-
-> Screenshots:
+> Outdated Screenshots:
 
 > ![gui_s1](images/gui_s1.png)
 > ![gui_s2](images/gui_s2.png)
@@ -24,8 +21,11 @@ You can now try the two JAR of our project!
 
 ## Petite explication
 
+### Diagramme de classes
 > ![classes](images/Classes.png)
 
+### Le compilateur
+> ![interpretor](images/Interpretor.png)
 
 Le Main s'occupe de créer l'instance (singleton) d'ArmSimulator.
 
