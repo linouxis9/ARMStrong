@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import jdk.nashorn.internal.ir.Flags;
 import simulator.core.exceptions.Bug;
 import simulator.core.exceptions.InvalidMemoryAddressException;
 
@@ -514,6 +515,9 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void add(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
+			if (flags.contains(Flag.S)) {
+				this.cmn(r2, op);
+			}
 			r1.setValue(r2.getValue() + op.getValue());
 		}
 
@@ -543,7 +547,11 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void b(Operand2 op) {
-			Cpu.this.pc.setValue(Cpu.this.pc.getValue() - 4 + op.getValue());
+			if (op instanceof Register) {
+				Cpu.this.pc.setValue(op.getValue());
+			} else {
+				Cpu.this.pc.setValue(Cpu.this.pc.getValue() - 4 + op.getValue());
+			}
 		}
 
 		/**
@@ -590,13 +598,15 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmn(Register r1, Operand2 op) {
-			long value = (long) r1.getValue() + op.getValue();
+			long value = Integer.toUnsignedLong(r1.getValue()) + Integer.toUnsignedLong(op.getValue());
+			long value2 = (long)r1.getValue() + op.getValue();
 			updateFlags(value);
 
-			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
+			if ((r1.getValue() + op.getValue()) != value2) {
 				Cpu.this.cpsr.setV(true);
 			}
-			if (r1.getValue() > Math.abs((long) op.getValue())) {
+
+			if (value > Math.pow(2, 32)) {
 				Cpu.this.cpsr.setC(true);
 			}
 		}
@@ -613,13 +623,15 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void cmp(Register r1, Operand2 op) {
-			long value = (long) r1.getValue() - op.getValue();
+			long value = Integer.toUnsignedLong(r1.getValue()) - Integer.toUnsignedLong(op.getValue());
+			long value2 = (long)r1.getValue() - op.getValue();
 			updateFlags(value);
 
-			if (value > Integer.MAX_VALUE || value < Integer.MIN_VALUE) {
+			if ((r1.getValue() + op.getValue()) != value2) {
 				Cpu.this.cpsr.setV(true);
 			}
-			if (r1.getValue() <= Math.abs((long) op.getValue())) {
+
+			if (value > Math.pow(2, 32)) {
 				Cpu.this.cpsr.setC(true);
 			}
 		}
@@ -804,7 +816,7 @@ public class Cpu {
 		 * OS kernel. Please read the User Manual for more informations about the
 		 * available calls.
 		 * 
-		 * @param value
+		 * @param value 
 		 *            Operand2
 		 */
 		public void swi(Operand2 value) {
@@ -829,6 +841,9 @@ public class Cpu {
 		 *            Operand2
 		 */
 		public void sub(Register r1, Register r2, Operand2 op, Set<Flag> flags) {
+			if (flags.contains(Flag.S)) {
+				this.cmp(r2, op);
+			}
 			r1.setValue(r2.getValue() - op.getValue());
 		}
 

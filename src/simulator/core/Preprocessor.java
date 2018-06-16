@@ -362,6 +362,6 @@ public class Preprocessor {
 	 * @return True if the instruction is invalid, else otherwise.
 	 */
 	private static boolean checkBOP2(List<Token> tokens, int i) {
-		return (tokens.get(i).getTokenType() != TokenType.HASH);
+		return (tokens.get(i).getTokenType() != TokenType.HASH && tokens.get(i).getTokenType() != TokenType.REGISTER);
 	}
 }

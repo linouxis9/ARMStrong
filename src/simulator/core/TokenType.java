@@ -34,7 +34,7 @@ public enum TokenType {
 	HASHEDASCII("#'.'"),
 	REGISTER("(r|R)[0-9]+"),
 	NUMBER("(?<!r)[0-9]+"),
-	OPERATION("(?<![a-z])(adc|add|and|bic|bl|b|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)((?=(b|h|f))|(?=((b|h|f)(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al))|(?=(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)| )))"),
+	OPERATION("(?<![a-z])(adc|add|and|bic|bl|b|cmn|cmp|eor|ldr|mla|mov|mvn|mul|orr|sdiv|str|swi|sub|svc|swp|teq|tst|udiv)((?=(b|h|f|s))|(?=((b|h|f)(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al))|(?=(eq|ne|cs|cc|mi|pl|vs|vc|hi|ls|ge|lt|gt|le|al)| )))"),
 	LABEL("[a-z]+:"),
 	IDENTIFIER("[a-z]+"),
 	DATAIDENTIFIER("=[a-z]+"),
