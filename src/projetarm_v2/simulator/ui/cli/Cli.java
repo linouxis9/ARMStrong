@@ -67,7 +67,7 @@ public class Cli {
 
 			screen = new TerminalScreen(terminal);
 			screen.startScreen();
-
+			
 			TerminalSize size = screen.getTerminalSize();
 
 			gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
@@ -107,6 +107,7 @@ public class Cli {
 						this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
 					}
 					this.codeEditor.setReadOnly(true);
+					this.simulator.setProgram(this.codeEditor.getText().replaceAll("\n", ";"));
 					this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.GREEN));
 					System.out.println("---");
 				} catch (RuntimeException e) {
@@ -145,8 +146,21 @@ public class Cli {
 				this.codeEditor.setReadOnly(false);
 				this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
 				this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
+				this.simulator.resetRun();
 			}));
 
+			menuPanel.addComponent(new Button("Reset", () -> {
+				this.simulator.interruptExecutionFlow();
+				this.codeEditor.setReadOnly(false);
+				this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
+				this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
+				
+				this.simulator.resetState();
+				this.updateGUI();
+			}));
+
+			menuPanel.addComponent(new Label("|"));
+			
 			menuPanel.addComponent(new Button("Exit", () -> {
 				System.exit(0);
 			}));
@@ -192,17 +206,24 @@ public class Cli {
 
 			this.updateMemory();
 			this.console = new TextBox(new TerminalSize(size.getColumns() / 2, 4));
-			this.console.setReadOnly(true);
-			this.console.setText("PROJECT ARM V2");
-			this.console.addLine("");
+			this.console.setReadOnly(false);
+			this.console.setText("Project #@RMStrong");
 			console.setCaretWarp(true);
 			centerPanel.addComponent(this.console.withBorder(Borders.singleLine("Console")));
+			
 			OutputStream consoleOut = new OutputStream() {
+				private StringBuffer text = new StringBuffer();
+				private int pos = 0;
 				public void write(int b) {
-					console.setText(console.getText() + Character.toString((char) b));
 					if (b == '\n') {
-						console.addLine("");
+						pos++;
+						console.addLine(text.toString());
+						console.setCaretPosition(pos, 0);
+						this.text = new StringBuffer();
+						return;
 					}
+					text.append((char)b);
+
 				}
 			};
 
@@ -217,8 +238,9 @@ public class Cli {
 			System.setOut(new PrintStream(consoleOut, true));
 
 			window = new BasicWindow();
-			window.setComponent(masterPanel.withBorder(Borders.doubleLine("#@rmSim")));
+			window.setComponent(masterPanel.withBorder(Borders.doubleLine("#@RMStrong")));
 			window.setHints(Arrays.asList(Window.Hint.CENTERED, Window.Hint.FIT_TERMINAL_WINDOW));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

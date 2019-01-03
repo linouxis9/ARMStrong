@@ -18,9 +18,9 @@ public class ArmSimulator {
     /**
      * The cpu to execute the prorgam
      */
-	private final Cpu cpu;
+	private Cpu cpu;
 
-	private final Ram ram;
+	private Ram ram;
 
     /**
      * Creates a arm simulator ready to use, with all the needed components (cpu, program, linesMap, interpretor)
@@ -89,9 +89,14 @@ public class ArmSimulator {
      * Resets the execution (clears the current execution point)
      */
 	public void resetRun(){
-		// TODO
+		this.cpu.getRegister(15).setValue(this.cpu.getStartingAddress());
 	}
 
+	public void resetState() {
+		this.ram = new Ram();
+		this.cpu = new Cpu(ram);
+	}
+	
     /**
      * Returns the Negative Flag status
      */
