@@ -130,7 +130,7 @@ public class NativeUtils {
         }
     }
 
-    private static File createTempDirectory(String prefix) throws IOException {
+    public static File createTempDirectory(String prefix) throws IOException {
         String tempDir = System.getProperty("java.io.tmpdir");
         File generatedDir = new File(tempDir, prefix + System.nanoTime());
         

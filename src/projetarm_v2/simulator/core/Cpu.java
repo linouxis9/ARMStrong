@@ -17,10 +17,6 @@ public class Cpu {
 		}
 	}
 
-	public static final byte[] ARM_CODE = { (byte) 0xFC, (byte) 0x00, (byte) 0xA0, (byte) 0xE3, 0x00, 0x00, (byte) 0x80,
-			(byte) 0xE5 }; // mov r0, #0xfc; str r0, [r0]
-	// Si vous voulez changer le code, utilisez http://armconverter.com/
-
 	private final Ram ram;
 	private final Unicorn u;
 	private final Register[] registers;
@@ -29,9 +25,9 @@ public class Cpu {
 	private Register pc;
 	private boolean hasFinished = false;
 
-	public Cpu() {
-		this.ram = new Ram();
-
+	public Cpu(Ram ram) {
+		this.ram = ram;
+		
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
 		this.registers = new Register[16];
@@ -42,15 +38,18 @@ public class Cpu {
 		
 		this.registers[13] = new UnicornRegister(u,ArmConst.UC_ARM_REG_SP);
 		this.registers[14] = new UnicornRegister(u,ArmConst.UC_ARM_REG_LR);
+		
+		// The Unicorn library doesn't provide a way to reliably get the program counter
+		// register as reg_read always returns the initial PC value
+		// As such, we decided to implement an hook which is executed when an
+		// instruction is being interpreted
+		// We set our internal PC's value to the address of the instruction currently
+		// being executed
 		this.registers[15] = new SimpleRegister(STARTING_ADDRESS);
 		this.pc = this.registers[15];
 		
 		u.mem_map(0, 2 * 1024 * 1024, Unicorn.UC_PROT_ALL);
-
-		for (int i = 0; i < ARM_CODE.length; i++) {
-			this.ram.setByte(this.pc.getValue() + i, ARM_CODE[i]);
-		}
-
+		
 		this.cpsr = new Cpsr(u, ArmConst.UC_ARM_REG_CPSR);
 
 		this.synchronizeUnicornRam();
@@ -77,7 +76,7 @@ public class Cpu {
 		this.synchronizeUnicornRam();
 		running = true;
 		hasFinished = false;
-		u.emu_start(this.pc.getValue(), this.pc.getValue() + ARM_CODE.length, 0, 0);
+		u.emu_start(this.pc.getValue(), 0, 0, 0);
 		running = false;
 		hasFinished = true;
 	}
@@ -94,6 +93,10 @@ public class Cpu {
 		return this.hasFinished;
 	}
 	
+	public long getStartingAddress() {
+		return STARTING_ADDRESS;
+	}
+	
 	public void runStep() {
 		this.synchronizeUnicornRam();
 		running = true;
@@ -103,23 +106,6 @@ public class Cpu {
 		running = false;
 	}
 
-	public static void main(String[] args) {
-		Cpu cpu = new Cpu();
-		cpu.runAllAtOnce();
-		
-		System.out.print(">>> Emulation done. Below is the CPU context\n");
-		for (int i = 0; i < 16; i++) {
-			System.out.print(String.format(">>> R%d = 0x%x\n", i,cpu.registers[i].getValue()));
-		}
-		System.out.println(">>> RAM : " + cpu.ram);
-	}
-
-	// The Unicorn library doesn't provide a way to reliably get the program counter
-	// register as reg_read always returns the initial PC value
-	// As such, we decided to implement an hook which is executed when an
-	// instruction is being interpreted
-	// We set our internal PC's value to the address of the instruction currently
-	// being executed
 	private class CPUInstructionHook implements CodeHook {
 		private final Cpu cpu;
 
@@ -129,19 +115,22 @@ public class Cpu {
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
 			this.cpu.pc.setValue(address);
-			System.out.format(">>> Instruction @ 0x%x is being executed\n",this.cpu.pc.getValue());
+			
 
 			int a = 0;
 			byte instruction[] = u.mem_read(address, size);
 			for (int i = 0; i < size; i++) {
 				a += instruction[i];
 			}
-
+			
 			if (a == 0) {
 				u.emu_stop();
 				this.cpu.hasFinished  = true;
 				this.cpu.running = false;
+				return;
 			}
+			
+			System.out.format(">>> Instruction @ 0x%x is being executed\n",this.cpu.pc.getValue());
 
 			// TODO Un petit sleep pour avoir le temps de voir ce qu'il se passe pendant l'exécution pour le débogage
 			try {

@@ -3,8 +3,8 @@ package projetarm_v2.simulator.core;
 import java.util.Arrays;
 
 public class RamChunk {
-	private byte[] bytes;
 	public final long startingAddress;
+	private byte[] bytes;
 	
 	public RamChunk(long startingAddress, int size) {
 		this.startingAddress = startingAddress;

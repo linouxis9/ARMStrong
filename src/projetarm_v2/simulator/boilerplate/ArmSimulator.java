@@ -1,7 +1,9 @@
 package projetarm_v2.simulator.boilerplate;
 
+import projetarm_v2.simulator.core.Assembler;
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.Program;
+import projetarm_v2.simulator.core.Ram;
 
 /**
  * ArmSimulator is class responsible for handling the creation of the main ARM Simulator classes.
@@ -12,20 +14,31 @@ public class ArmSimulator {
      */
 	private final Program program;
 
+	private final Assembler assembler;
     /**
      * The cpu to execute the prorgam
      */
 	private final Cpu cpu;
 
+	private final Ram ram;
 
     /**
      * Creates a arm simulator ready to use, with all the needed components (cpu, program, linesMap, interpretor)
      */
 	public ArmSimulator() {	
-		this.cpu = new Cpu();
+		this.assembler = Assembler.getInstance();
 		this.program = new Program();
+		this.ram = new Ram();
+		this.cpu = new Cpu(ram);
 	}
 
+	public void setProgram(String assembly) {
+		byte[] binary = this.assembler.assemble(assembly);
+		for (int i = 0; i < binary.length; i++) {
+			this.ram.setByte(this.cpu.getStartingAddress()+i, binary[i]);
+		}
+	}
+	
     /**
      * Returns the register value corresponding to the given number
      */
@@ -33,25 +46,29 @@ public class ArmSimulator {
 		return this.cpu.getRegister(registerNumber).getValue();
 	}
 
+	public Ram getRam() {
+		return this.ram;
+	}
+	
     /**
      * Returns a byte(8bits) from the ram corresponding to the given address
      */
 	public byte getRamByte(long address) {
-		return this.cpu.getRam().getByte(address);
+		return this.ram.getByte(address);
 	}
 
     /**
      * Returns a half-word(16bits) from the ram corresponding to the given address
      */
 	public short getRamHWord(long address) {
-		return this.cpu.getRam().getHWord(address);
+		return this.ram.getHWord(address);
 	}
 	
     /**
      * Returns a word(32bits) from the ram corresponding to the given address
      */
 	public int getRamWord(long address) {
-		return this.cpu.getRam().getValue(address);
+		return this.ram.getValue(address);
 	}
 
     /**

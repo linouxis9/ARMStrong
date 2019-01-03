@@ -57,7 +57,7 @@ public class Cli {
 		this.registers = new Label[16];
 		this.simulator = new ArmSimulator();
 		this.memory = new LinkedHashMap<>();
-		this.memoryIndex = 0;
+		this.memoryIndex = 0x1000;
 		this.running = new AtomicBoolean(false);
 
 		try {
@@ -138,7 +138,6 @@ public class Cli {
 				} else {
 					System.out.println("[INFO] No more instructions to run");
 				}
-				this.updateGUI();
 			}));
 
 			menuPanel.addComponent(new Button("Stop", () -> {
