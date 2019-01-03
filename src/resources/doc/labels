@@ -1,4 +1,0 @@
-To use the labels for the B instruction for example you have to put it on the same line than an instruction
-Example:
-
-myLabel: mov R2, R3

@@ -1,7 +1,0 @@
-Valid Syntax:
-
-op r1 r2 r3 ope2 flags cc
-op r1 r2  ope2 flags cc
-op r1 ope2 flags cc
-op ope2 flags cc
-op r1 flags cc
