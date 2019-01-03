@@ -13,7 +13,7 @@ class CpsrTdd {
 	@Test
 	public void testN() {
 		ArmSimulator simulator = new ArmSimulator();
-		simulator.setProgram("mov r0,#-20; mov r1,#15; cmp r0,r1");
+		simulator.setProgram("mov r0,#20; mov r1,#15; cmp r0,r1");
 		simulator.run();
 		assertFalse(simulator.getN());
 	}
