@@ -6,6 +6,8 @@ import cz.adamh.utils.NativeUtils;
 import unicorn.*;
 
 public class Cpu {
+	private static final int STARTING_ADDRESS = 0x1000;
+
 	static {
 		try {
 			NativeUtils.loadLibraryFromJar("/natives/libunicorn_java.so");
@@ -19,13 +21,13 @@ public class Cpu {
 			(byte) 0xE5 }; // mov r0, #0xfc; str r0, [r0]
 	// Si vous voulez changer le code, utilisez http://armconverter.com/
 
-	private long pc = 0x1000;
-
 	private final Ram ram;
 	private final Unicorn u;
 	private final Register[] registers;
 	private boolean running = false;
 	private Cpsr cpsr;
+	private Register pc;
+	private boolean hasFinished = false;
 
 	public Cpu() {
 		this.ram = new Ram();
@@ -34,14 +36,19 @@ public class Cpu {
 
 		this.registers = new Register[16];
 
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i < 13; i++) {
 			this.registers[i] = new UnicornRegister(u, ArmConst.UC_ARM_REG_R0 + i);
 		}
-
+		
+		this.registers[13] = new UnicornRegister(u,ArmConst.UC_ARM_REG_SP);
+		this.registers[14] = new UnicornRegister(u,ArmConst.UC_ARM_REG_LR);
+		this.registers[15] = new SimpleRegister(STARTING_ADDRESS);
+		this.pc = this.registers[15];
+		
 		u.mem_map(0, 2 * 1024 * 1024, Unicorn.UC_PROT_ALL);
 
 		for (int i = 0; i < ARM_CODE.length; i++) {
-			this.ram.setByte(this.pc + i, ARM_CODE[i]);
+			this.ram.setByte(this.pc.getValue() + i, ARM_CODE[i]);
 		}
 
 		this.cpsr = new Cpsr(u, ArmConst.UC_ARM_REG_CPSR);
@@ -69,14 +76,10 @@ public class Cpu {
 	public void runAllAtOnce() {
 		this.synchronizeUnicornRam();
 		running = true;
-		u.emu_start(this.pc, this.pc + ARM_CODE.length, 0, 0);
+		hasFinished = false;
+		u.emu_start(this.pc.getValue(), this.pc.getValue() + ARM_CODE.length, 0, 0);
 		running = false;
-		
-		System.out.print(">>> Emulation done. Below is the CPU context\n");
-		for (int i = 0; i < 16; i++) {
-			System.out.print(String.format(">>> R%d = 0x%x\n", i,registers[i].getValue()));
-		}
-		System.out.println(">>> RAM : " + ram);
+		hasFinished = true;
 	}
 
 	public Register getRegister(int registerNumber) {
@@ -87,22 +90,28 @@ public class Cpu {
 		return this.ram;
 	}
 
+	public boolean hasFinished() {
+		return this.hasFinished;
+	}
+	
 	public void runStep() {
 		this.synchronizeUnicornRam();
 		running = true;
-		u.emu_start(this.pc, this.pc + 4, 0, 0);
-		this.pc += 4;
+		hasFinished = false;
+		u.emu_start(this.pc.getValue(), this.pc.getValue() + 4, 0, 0);
+		this.pc.setValue(this.pc.getValue() + 4);
 		running = false;
-		System.out.print(">>> Emulation done. Below is the CPU context\n");
-		for (int i = 0; i < 16; i++) {
-			System.out.print(String.format(">>> R%d = 0x%x\n", i,registers[i].getValue()));
-		}
-		System.out.println(">>> RAM : " + ram);
 	}
 
 	public static void main(String[] args) {
 		Cpu cpu = new Cpu();
 		cpu.runAllAtOnce();
+		
+		System.out.print(">>> Emulation done. Below is the CPU context\n");
+		for (int i = 0; i < 16; i++) {
+			System.out.print(String.format(">>> R%d = 0x%x\n", i,cpu.registers[i].getValue()));
+		}
+		System.out.println(">>> RAM : " + cpu.ram);
 	}
 
 	// The Unicorn library doesn't provide a way to reliably get the program counter
@@ -119,8 +128,8 @@ public class Cpu {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			this.cpu.pc = address;
-			System.out.format(">>> Instruction @ 0x%x is being executed\n", this.cpu.pc);
+			this.cpu.pc.setValue(address);
+			System.out.format(">>> Instruction @ 0x%x is being executed\n",this.cpu.pc.getValue());
 
 			int a = 0;
 			byte instruction[] = u.mem_read(address, size);
@@ -130,6 +139,7 @@ public class Cpu {
 
 			if (a == 0) {
 				u.emu_stop();
+				this.cpu.hasFinished  = true;
 				this.cpu.running = false;
 			}
 

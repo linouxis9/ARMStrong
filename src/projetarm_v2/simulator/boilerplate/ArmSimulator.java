@@ -106,10 +106,14 @@ public class ArmSimulator {
     /**
      * Returns true if the cpu is halted
      */
-	public boolean isHalted() {
-		return this.cpu.isRunning();
+	public boolean isRunning() {
+		return this.cpu.isRunning() && !this.cpu.hasFinished();
 	}
 
+	public boolean hasFinished() {
+		return this.cpu.hasFinished();
+	}
+	
 	/**
      * Stops the execution
      */
