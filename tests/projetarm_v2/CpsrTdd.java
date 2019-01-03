@@ -17,5 +17,28 @@ class CpsrTdd {
 		simulator.run();
 		assertFalse(simulator.getN());
 	}
+	
+	@Test
+	public void testNnoValue() {
+		ArmSimulator simulator = new ArmSimulator();
+		simulator.run();
+		assertFalse(simulator.getN());
+	}
+	
+	@Test
+	public void testZ() {
+		ArmSimulator simulator = new ArmSimulator();
+		simulator.setProgram("mov r0,#20; mov r1,#20; cmp r0,r1");
+		simulator.run();
+		assertTrue(simulator.getZ());
+	}
+	
+	@Test
+	public void testC() {
+		ArmSimulator simulator = new ArmSimulator();
+		simulator.setProgram("mov r0,#1; mov r1,#1; cmp r0,r1");
+		simulator.run();
+		assertTrue(simulator.getC());
+	}
 
 }

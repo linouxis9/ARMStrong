@@ -124,9 +124,7 @@ public class Cpsr extends UnicornRegister {
 	 * Return the N flag from the CPSR
 	 */
 	public boolean n() {
-		// TODO this.getValue() pour récupérer le CPSR et après tu fais des shifts >> pour récupérer le booléen
 		int res = ((this.getValue()>>31) & 0x00000001);
-		System.out.println(res);
 		return (res == 1);
 	}
 
@@ -144,10 +142,8 @@ public class Cpsr extends UnicornRegister {
 	 * Return the Z flag from the CPSR
 	 */
 	public boolean z() {
-		/*int res = ((this.getValue()>>30) & 0x00000001);
-		System.out.println(res);
-		return res == 1;*/
-		return false;
+		int res = ((this.getValue()>>30) & 0x00000001);
+		return res == 1;
 	}
 
 	/**
@@ -163,8 +159,8 @@ public class Cpsr extends UnicornRegister {
 	 * Return the C flag from the CPSR
 	 */
 	public boolean c() {
-		// TODO
-		return false;
+		int res = ((this.getValue()>>29) & 0x00000001);
+		return (res == 1);
 	}
 
 	/**
@@ -180,8 +176,9 @@ public class Cpsr extends UnicornRegister {
 	 * Return the V flag from the CPSR
 	 */
 	public boolean v() {
-		// TODO
-		return false;
+		int res = ((this.getValue()>>28) & 0x00000001);
+		System.out.println(res);
+		return (res == 1);
 	}
 
 	/**
