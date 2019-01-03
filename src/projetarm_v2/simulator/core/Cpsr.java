@@ -89,28 +89,28 @@ public class Cpsr extends UnicornRegister {
 	 * Signed greater than or equal.
 	 */
 	public boolean ge() {
-		return (this.v() && this.n()) || ((!this.v()) && (!this.n()));
+		return this.v() == this.n();
 	}
 
 	/**
 	 * Signed less than.
 	 */
 	public boolean lt() {
-		return ((!this.v()) && this.n()) || (this.v() && (!this.n()));
+		return this.v() != this.n();
 	}
 
 	/**
 	 * Signed greater than.
 	 */
 	public boolean gt() {
-		return (!this.n() && !this.z() && !this.v()) || (this.n() && !this.z() && this.v());
+		return (this.z() == false) && (this.n() == this.v());
 	}
 
 	/**
 	 * Signed less than or equal.
 	 */
 	public boolean le() {
-		return this.z() || (this.n() && !this.v()) || (!this.n() && this.v());
+		return this.z() || (this.n() != this.v());
 	}
 
 	/**
@@ -175,7 +175,10 @@ public class Cpsr extends UnicornRegister {
 	 * @param c The value (1 or 0)
 	 */
 	public void setC(boolean c) {
-		// TODO
+		int res = c ? 1 : 0;
+		res = ((res<<29) & 0x20000000);
+		int value = this.getValue() & 0xdfffffff;
+		this.setValue(res | value);
 	}
 
 	/**
@@ -192,7 +195,10 @@ public class Cpsr extends UnicornRegister {
 	 * @param v The value (1 or 0)
 	 */
 	public void setV(boolean v) {
-		// TODO
+		int res = v ? 1 : 0;
+		res = ((res<<28) & 0x10000000);
+		int value = this.getValue() & 0xefffffff;
+		this.setValue(res | value);
 	}
 
 	/**
@@ -209,6 +215,9 @@ public class Cpsr extends UnicornRegister {
 	 * @param q The value (1 or 0)
 	 */
 	public void setQ(boolean q) {
-		// TODO
+		int res = q ? 1 : 0;
+		res = ((res<<27) & 0x8000000);
+		int value = this.getValue() & 0x7ffffff;
+		this.setValue(res | value);
 	}
 }
