@@ -192,8 +192,9 @@ public class Cpsr extends UnicornRegister {
 	/**
 	 * Return the Q flag from the CPSR
 	 */
-	public boolean Q() {
+	public boolean q() {
 		int res = ((this.getValue()>>27) & 0x00000001);
+		System.out.println(res);
 		return (res == 1);
 	}
 

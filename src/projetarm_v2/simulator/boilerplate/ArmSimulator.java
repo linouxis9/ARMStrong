@@ -50,6 +50,10 @@ public class ArmSimulator {
 		return this.ram;
 	}
 	
+	public Cpu getCpu() {
+		return this.cpu;
+	}
+	
     /**
      * Returns a byte(8bits) from the ram corresponding to the given address
      */
@@ -123,6 +127,10 @@ public class ArmSimulator {
      */
 	public boolean getV() {
 		return this.cpu.getCPSR().v();
+	}
+	
+	public boolean getQ() {
+		return this.cpu.getCPSR().q();
 	}
 
     /**
