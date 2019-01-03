@@ -177,7 +177,6 @@ public class Cpsr extends UnicornRegister {
 	 */
 	public boolean v() {
 		int res = ((this.getValue()>>28) & 0x00000001);
-		System.out.println(res);
 		return (res == 1);
 	}
 
@@ -194,8 +193,8 @@ public class Cpsr extends UnicornRegister {
 	 * Return the Q flag from the CPSR
 	 */
 	public boolean Q() {
-		// TODO
-		return false;
+		int res = ((this.getValue()>>27) & 0x00000001);
+		return (res == 1);
 	}
 
 	/**
