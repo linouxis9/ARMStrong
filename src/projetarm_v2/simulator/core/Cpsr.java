@@ -75,42 +75,42 @@ public class Cpsr extends UnicornRegister {
 	 * Unsigned higher.
 	 */
 	public boolean hi() {
-		return (this.c() == true) && (this.z() == false);
+		return (this.c()) && (!this.z());
 	}
 
 	/**
 	 * Unsigned lower or same.
 	 */
 	public boolean ls() {
-		return (this.c() == false) || this.z();
+		return (!this.c()) || this.z();
 	}
 
 	/**
 	 * Signed greater than or equal.
 	 */
 	public boolean ge() {
-		return this.v() == this.n();
+		return (this.v() && this.n()) || ((!this.v()) && (!this.n()));
 	}
 
 	/**
 	 * Signed less than.
 	 */
 	public boolean lt() {
-		return this.v() != this.n();
+		return ((!this.v()) && this.n()) || (this.v() && (!this.n()));
 	}
 
 	/**
 	 * Signed greater than.
 	 */
 	public boolean gt() {
-		return (this.z() == false) && (this.n() == this.v());
+		return (!this.n() && !this.z() && !this.v()) || (this.n() && !this.z() && this.v());
 	}
 
 	/**
 	 * Signed less than or equal.
 	 */
 	public boolean le() {
-		return this.z() || (this.n() != this.v());
+		return this.z() || (this.n() && !this.v()) || (!this.n() && this.v());
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class Cpsr extends UnicornRegister {
 	 */
 	public boolean n() {
 		// TODO this.getValue() pour récupérer le CPSR et après tu fais des shifts >> pour récupérer le booléen
-		return false;
+		return true;
 	}
 
 	/**
@@ -135,6 +135,7 @@ public class Cpsr extends UnicornRegister {
 	 */
 	public void setN(boolean n) {
 		// TODO Pareil mais avec this.setValue(value) et << cette fois
+		
 	}
 
 	/**
