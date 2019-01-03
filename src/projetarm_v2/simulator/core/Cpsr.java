@@ -134,7 +134,10 @@ public class Cpsr extends UnicornRegister {
 	 * @param n The value (1 or 0)
 	 */
 	public void setN(boolean n) {
-		// TODO Pareil mais avec this.setValue(value) et << cette fois
+		int res = n ? 1 : 0;
+		res = ((res<<31) & 0x80000000);
+		int value = this.getValue() & 0x7fffffff;
+		this.setValue(res | value);
 		
 	}
 
@@ -152,7 +155,10 @@ public class Cpsr extends UnicornRegister {
 	 * @param z The value (1 or 0)
 	 */
 	public void setZ(boolean z) {
-		// TODO
+		int res = z ? 1 : 0;
+		res = ((res<<30) & 0x40000000);
+		int value = this.getValue() & 0xbfffffff;
+		this.setValue(res | value);
 	}
 
 	/**
@@ -194,7 +200,6 @@ public class Cpsr extends UnicornRegister {
 	 */
 	public boolean q() {
 		int res = ((this.getValue()>>27) & 0x00000001);
-		System.out.println(res);
 		return (res == 1);
 	}
 
