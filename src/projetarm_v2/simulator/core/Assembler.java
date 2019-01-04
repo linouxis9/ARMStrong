@@ -20,45 +20,49 @@ public class Assembler {
 	private File temp;
 	private Pattern pattern;
 	private static Assembler assembler;
+
 	public static Assembler getInstance() {
 		if (Assembler.assembler == null) {
 			Assembler.assembler = new Assembler();
 		}
 		return Assembler.assembler;
 	}
-	
+
 	private Assembler() {
 		try {
 			temporaryDir = NativeUtils.createTempDirectory("projectarm");
 			temp = new File(temporaryDir, "kstool");
+			
 			InputStream is = getClass().getResourceAsStream("/natives/kstool");
 			Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			temp.setExecutable(true);
 			
+			temp.setExecutable(true);
+
 			pattern = Pattern.compile("\\[ (.*) \\]");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public byte[] assemble(String assembly) {
+	public byte[] assemble(String assembly, long startingAddress) {
 		try {
-			Process p = new ProcessBuilder(temp.getAbsolutePath(), "arm", assembly, "0x1000").start();
+			Process p = new ProcessBuilder(temp.getAbsolutePath(), "arm", assembly, Long.toHexString(startingAddress))
+					.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			
+
 			Matcher matcher = pattern.matcher(reader.readLine());
 			matcher.find();
 			String[] output = matcher.group(1).split(" ");
-			
+
 			byte[] bytes = new byte[output.length];
-			
+
 			for (int i = 0; i < output.length; i++) {
-				bytes[i] = (byte)Integer.parseInt(output[i],16);
+				bytes[i] = (byte) Integer.parseInt(output[i], 16);
 			}
-			
+
 			return bytes;
-		} catch (IOException | java.lang.IllegalStateException e) {
-			throw new InvalidAssembly();
+		} catch (IOException | IllegalStateException e) {
+			throw new InvalidAssemblyException();
 		}
 	}
 }

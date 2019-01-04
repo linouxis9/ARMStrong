@@ -134,7 +134,7 @@ public class Cpsr extends UnicornRegister {
 	 * @param n The value (1 or 0)
 	 */
 	public void setN(boolean n) {
-		int res = n ? 1 : 0;
+		int res = booleanToInt(n);
 		res = ((res<<31) & 0x80000000);
 		int value = this.getValue() & 0x7fffffff;
 		this.setValue(res | value);
@@ -155,7 +155,7 @@ public class Cpsr extends UnicornRegister {
 	 * @param z The value (1 or 0)
 	 */
 	public void setZ(boolean z) {
-		int res = z ? 1 : 0;
+		int res = booleanToInt(z);
 		res = ((res<<30) & 0x40000000);
 		int value = this.getValue() & 0xbfffffff;
 		this.setValue(res | value);
@@ -175,7 +175,7 @@ public class Cpsr extends UnicornRegister {
 	 * @param c The value (1 or 0)
 	 */
 	public void setC(boolean c) {
-		int res = c ? 1 : 0;
+		int res = booleanToInt(c);
 		res = ((res<<29) & 0x20000000);
 		int value = this.getValue() & 0xdfffffff;
 		this.setValue(res | value);
@@ -195,7 +195,7 @@ public class Cpsr extends UnicornRegister {
 	 * @param v The value (1 or 0)
 	 */
 	public void setV(boolean v) {
-		int res = v ? 1 : 0;
+		int res = booleanToInt(v);
 		res = ((res<<28) & 0x10000000);
 		int value = this.getValue() & 0xefffffff;
 		this.setValue(res | value);
@@ -215,9 +215,13 @@ public class Cpsr extends UnicornRegister {
 	 * @param q The value (1 or 0)
 	 */
 	public void setQ(boolean q) {
-		int res = q ? 1 : 0;
+		int res = booleanToInt(q);
 		res = ((res<<27) & 0x8000000);
 		int value = this.getValue() & 0x7ffffff;
 		this.setValue(res | value);
+	}
+
+	private int booleanToInt(boolean q) {
+		return q ? 1 : 0;
 	}
 }

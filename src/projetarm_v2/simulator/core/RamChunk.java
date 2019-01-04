@@ -25,6 +25,6 @@ public class RamChunk {
 	
 	@Override
 	public String toString() {
-		return "RamChunk [bytes=" + Arrays.toString(bytes) + ", startingAddress=" + startingAddress + "]";
+		return "RamChunk [startingAddress=0x" + Long.toHexString(startingAddress) +", bytes=" + Arrays.toString(bytes) + "]";
 	}
 }
