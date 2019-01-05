@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:id="memoryViewPane" prefHeight="623.0" prefWidth="279.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to address:" AnchorPane.leftAnchor="13.874992370605469" AnchorPane.topAnchor="14.0" />
+      <TextField fx:id="goToAddressField" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="132.0" promptText="dec, hex or bin" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="button8Bit" layoutX="99.0" layoutY="50.0" mnemonicParsing="false" text="8bit" AnchorPane.leftAnchor="99.0" AnchorPane.topAnchor="50.0" />
+      <Button fx:id="button32Bit" layoutX="214.0" layoutY="50.0" mnemonicParsing="false" text="32bit" AnchorPane.leftAnchor="214.0" AnchorPane.topAnchor="50.0" />
+      <Button fx:id="button16Bit" layoutX="154.0" layoutY="50.0" mnemonicParsing="false" text="16bit" AnchorPane.leftAnchor="154.0" AnchorPane.topAnchor="50.0" />
+      <Text fx:id="viewModeLabel" layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.leftAnchor="13.294647216796875" AnchorPane.topAnchor="54.0" />
+      <ScrollBar fx:id="memoryScrollBar" layoutX="234.0" layoutY="93.0" orientation="VERTICAL" prefHeight="514.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="93.0" />
+      <Text fx:id="addressLabel" layoutX="14.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="115.0" />
+      <Text layoutX="13.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Address" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="86.30000019073486" />
+      <Separator layoutX="88.0" layoutY="85.0" orientation="VERTICAL" prefHeight="531.0" prefWidth="17.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="88.0" AnchorPane.topAnchor="85.0" />
+      <Separator layoutX="13.0" layoutY="106.0" prefHeight="3.0" prefWidth="214.0" AnchorPane.leftAnchor="13.0" AnchorPane.rightAnchor="52.0" AnchorPane.topAnchor="106.0" />
+      <Text fx:id="valueLabel" layoutX="107.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0x00000000" />
+   </children>
+</AnchorPane>
