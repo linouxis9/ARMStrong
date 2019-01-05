@@ -9,15 +9,17 @@ public class Main {
 				"kek: .asciz \"test\"\n" + 
 				".align\n" + 
 				"start: ldr r0,=kek\n" + 
-				"ldrb r0,[r0]");
+				"mov r1,#0xFF04\n" +
+				"blx r1");
+
 		simulator.run();
 		
 		System.out.print(">>> Emulation done. Below is the CPU context\n");
 			
 		for (int i = 0; i < 16; i++) {
-			System.out.print(String.format(">>> R%d = 0x%x\n", i,simulator.getRegisterValue(i)));
+			System.out.print(String.format(">>> R%d = 0x%x%n", i,simulator.getRegisterValue(i)));
 		}
-		
+		System.out.format(">>> Processor Flags : %s%n", simulator.getCpu().getCPSR());
 		System.out.println(simulator.getRam());
 	}
 }

@@ -2,6 +2,7 @@ package projetarm_v2.simulator.core;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import unicorn.ReadHook;
 import unicorn.Unicorn;
@@ -10,7 +11,7 @@ import unicorn.WriteHook;
 public class Ram {
 
 	public static final int CHUNK_SIZE = 32;
-	public final HashMap<Long, RamChunk> memory;
+	public final Map<Long, RamChunk> memory;
 
 	public Ram() {
 		this.memory = new HashMap<>();
@@ -111,10 +112,6 @@ public class Ram {
 		return this.memory.toString();
 	}
 
-	public boolean isSpecialAddress(long myAddress) {
-		return myAddress == 0xFFFFFFF;
-	}
-
 	private class ReadHookRam implements ReadHook {
 
 		private final Ram ram;
@@ -124,16 +121,13 @@ public class Ram {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			System.out.print(String.format(">>> Tracing READ at 0x%x, block size = 0x%x\n", address, size));
+			byte[] value = new byte[size];
 
-			// On intercepte uniquement si c'est une adresse mémoire qui peut se
-			// désynchronisée entre sa valeur dans l'objet Ram et la RAM intégrée à Unicorn.
-			if (isSpecialAddress(address)) {
-				System.out.println("GOTYA!\n");
-				byte[] value = { this.ram.getByte(address), this.ram.getByte(address + 1),
-						this.ram.getByte(address + 2), this.ram.getByte(address + 3) };
-				u.mem_write(address, value);
+			for (int i = 0; i < size; i++) {
+				value[i] = this.ram.getByte(address + i);
 			}
+
+			u.mem_write(address, value);
 		}
 	}
 
@@ -146,8 +140,10 @@ public class Ram {
 		}
 
 		public void hook(Unicorn u, long address, int size, long value, Object user_data) {
-			System.out.print(String.format(">>> Tracing WRITE at 0x%x, block size = 0x%x.. Saving in virtual RAM...\n", address, size));
-			this.ram.setValue(address, Math.toIntExact(value));
+		    for (int i = size-1; i >= 0; i--) {
+		        this.ram.setByte(address+i,(byte)(value & 0xFF));
+		        value >>= 8;
+		    }
 		}
 	}
 }

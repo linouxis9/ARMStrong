@@ -221,6 +221,10 @@ public class Cpsr extends UnicornRegister {
 		this.setValue(res | value);
 	}
 
+	public String toString() {
+		return (this.n() ? "[N" : "[_") + (this.z() ? "Z" : "_") + (this.c() ? "C" : "_") + (this.v() ? "V]" : "_]");
+	}
+	
 	private static int booleanToInt(boolean bool) {
 		return bool ? 1 : 0;
 	}

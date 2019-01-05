@@ -14,5 +14,8 @@
 	<classpathentry exported="true" kind="lib" path="vendor/unicorn.jar"/>
 	<classpathentry exported="true" kind="lib" path="vendor/lanterna-3.0.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry exported="true" kind="lib" path="vendor/jfxrt.jar"/>
+	<classpathentry exported="true" kind="lib" path="vendor/dockfx-0.4-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="vendor/reflections-0.9.12-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
