@@ -221,7 +221,7 @@ public class Cpsr extends UnicornRegister {
 		this.setValue(res | value);
 	}
 
-	private int booleanToInt(boolean q) {
-		return q ? 1 : 0;
+	private static int booleanToInt(boolean bool) {
+		return bool ? 1 : 0;
 	}
 }

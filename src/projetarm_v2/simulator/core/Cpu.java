@@ -25,6 +25,7 @@ public class Cpu {
 	private Register pc;
 	private boolean hasFinished = false;
 	private long startingAddress;
+	private long endAddress;
 
 	public Cpu() {
 		this(new Ram(), Cpu.DEFAULT_STARTING_ADDRESS, 2 * 1024 * 1024);
@@ -33,6 +34,7 @@ public class Cpu {
 	public Cpu(Ram ram, long startingAddress, int ramSize) {
 		this.ram = ram;
 		this.startingAddress = startingAddress;
+		this.endAddress = 0;
 
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
@@ -84,7 +86,7 @@ public class Cpu {
 		running = true;
 		hasFinished = false;
 		
-		u.emu_start(this.pc.getValue(), 0, 0, 0);
+		u.emu_start(this.pc.getValue(), this.endAddress, 0, 0);
 		
 		running = false;
 		hasFinished = true;
@@ -98,6 +100,10 @@ public class Cpu {
 		return this.ram;
 	}
 
+	public void setEndAddress(long endAddress) {
+		this.endAddress = endAddress;
+	}
+	
 	public boolean hasFinished() {
 		return this.hasFinished;
 	}

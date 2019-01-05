@@ -24,6 +24,7 @@ import com.googlecode.lanterna.screen.*;
 import com.googlecode.lanterna.terminal.*;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -67,7 +68,7 @@ public class Cli {
 
 			screen = new TerminalScreen(terminal);
 			screen.startScreen();
-			
+
 			TerminalSize size = screen.getTerminalSize();
 
 			gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.BLUE));
@@ -106,9 +107,15 @@ public class Cli {
 					if (this.codeEditor.isReadOnly()) {
 						this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
 					}
-					this.codeEditor.setReadOnly(true);
-					this.simulator.setProgram(this.codeEditor.getText().replaceAll("\n", ";"));
-					this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.GREEN));
+					try {
+						this.simulator.setProgram(this.codeEditor.getText().replaceAll("\n", ";"));
+					} catch (InvalidInstructionException e) {
+						System.out.println(e.getMessage());
+						this.showCurrentLine(e.getLine());
+						return;
+					}
+					readMode();
+					this.showCurrentLine();
 					System.out.println("---");
 				} catch (RuntimeException e) {
 					System.out.println(e);
@@ -143,24 +150,20 @@ public class Cli {
 
 			menuPanel.addComponent(new Button("Stop", () -> {
 				this.simulator.interruptExecutionFlow();
-				this.codeEditor.setReadOnly(false);
-				this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
-				this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
+				writeMode();
 				this.simulator.resetRun();
 			}));
 
 			menuPanel.addComponent(new Button("Reset", () -> {
 				this.simulator.interruptExecutionFlow();
-				this.codeEditor.setReadOnly(false);
-				this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
-				this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
-				
+				writeMode();
+
 				this.simulator.resetState();
 				this.updateGUI();
 			}));
 
 			menuPanel.addComponent(new Label("|"));
-			
+
 			menuPanel.addComponent(new Button("Exit", () -> {
 				System.exit(0);
 			}));
@@ -210,10 +213,11 @@ public class Cli {
 			this.console.setText("Project #@RMStrong");
 			console.setCaretWarp(true);
 			centerPanel.addComponent(this.console.withBorder(Borders.singleLine("Console")));
-			
+
 			OutputStream consoleOut = new OutputStream() {
 				private StringBuffer text = new StringBuffer();
 				private int pos = 0;
+
 				public void write(int b) {
 					if (b == '\n') {
 						pos++;
@@ -222,7 +226,7 @@ public class Cli {
 						this.text = new StringBuffer();
 						return;
 					}
-					text.append((char)b);
+					text.append((char) b);
 
 				}
 			};
@@ -240,10 +244,20 @@ public class Cli {
 			window = new BasicWindow();
 			window.setComponent(masterPanel.withBorder(Borders.doubleLine("#@RMStrong")));
 			window.setHints(Arrays.asList(Window.Hint.CENTERED, Window.Hint.FIT_TERMINAL_WINDOW));
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void readMode() {
+		this.codeEditor.setReadOnly(true);
+		this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.GREEN));
+	}
+
+	private void writeMode() {
+		this.codeEditor.setReadOnly(false);
+		this.codeEditor.setTheme(new SimpleTheme(TextColor.ANSI.WHITE, TextColor.ANSI.BLUE));
 	}
 
 	public void startUI() {
@@ -271,13 +285,17 @@ public class Cli {
 	}
 
 	private void showCurrentLine() {
-		showCurrentLine(0);
+		int line = this.simulator.getCurrentLine();
+		showCurrentLine(line);
 	}
 
 	private void showCurrentLine(int line) {
+		line -= 1;
 		String code = this.codeEditor.getText().replaceAll("-> ", "");
 		String[] codes = code.split(System.lineSeparator());
-		codes[line] = "-> " + codes[line];
+		if (line != -1) {
+			codes[line] = "-> " + codes[line];
+		}
 		this.codeEditor.setText(String.join(System.lineSeparator(), codes));
 	}
 

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import projetarm_v2.simulator.core.Assembler;
 import projetarm_v2.simulator.core.Cpu;
+import projetarm_v2.simulator.core.InvalidAssemblyException;
 import projetarm_v2.simulator.core.Program;
 import projetarm_v2.simulator.core.Ram;
 import unicorn.UnicornException;
@@ -30,9 +31,9 @@ public class ArmSimulator {
 	private Ram ram;
 
 	private Map<Integer, Integer> asmToLine;
-	
+
 	private final static Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
-	
+
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
 	 * program, linesMap, interpretor)
@@ -45,10 +46,14 @@ public class ArmSimulator {
 		this.asmToLine = new HashMap<>();
 	}
 
-	public void setProgram(String assembly) {
+	public void setProgram(String assembly) throws InvalidInstructionException {
 		assembly = assembly.replace("\n", ";");
-		
-		fillRamWithAssembly(assembly);
+
+		try {
+			fillRamWithAssembly(assembly);
+		} catch (InvalidAssemblyException e) {
+		}
+
 		fillAddressLineMap(assembly);
 	}
 
@@ -61,6 +66,9 @@ public class ArmSimulator {
 		for (int i = 0; i < binary.length; i++) {
 			this.ram.setByte(startingAddress + i, binary[i]);
 		}
+		
+		this.cpu.setEndAddress(startingAddress + binary.length);
+		
 		return assembly;
 	}
 
@@ -79,13 +87,16 @@ public class ArmSimulator {
 		
 		for (String line : assembly.split(";")) {
 			if (line != "") {
-				byte[] lineBytes = (this.assembler.assemble(labels + line.substring(Math.abs(line.indexOf(':') + 1)),
+				byte[] lineBytes;
+				try {
+					lineBytes = (this.assembler.assemble(labels + line.substring(Math.abs(line.indexOf(':') + 1)),
 						currentAddress));
+				} catch (InvalidAssemblyException e) {
+					throw new InvalidInstructionException("[ERROR] " + e.getMessage() + " @ Line " + currentLine, currentLine);
+				}
 				asmToLine.put(currentAddress, currentLine);
 				currentAddress += lineBytes.length - (line.contains("=") ? 1 : 0) * 4;
-				if (lineBytes.length > 0) {
-					currentLine += 1;
-				}
+				currentLine += 1;
 			}
 		}
 	}
@@ -148,8 +159,9 @@ public class ArmSimulator {
 		}
 	}
 
+	// TODO Convert to an exception so it can be handled as wished by the UIs
 	private void handleException(UnicornException e) {
-		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]\n[ERROR] EMULATION ABORTED!\n", e,
+		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]\n[ERROR] EMULATION ABORTED!\n", e.getMessage(),
 				this.getRegisterValue(15), this.getCurrentLine());
 	}
 

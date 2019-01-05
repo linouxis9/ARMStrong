@@ -18,7 +18,8 @@ public class Assembler {
 	 */
 	private File temporaryDir;
 	private File temp;
-	private Pattern pattern;
+	private Pattern pattern = Pattern.compile("\\[ (.*) \\]");
+	private Pattern errorPattern = Pattern.compile("'(.*) \\(.*'");
 	private static Assembler assembler;
 
 	public static Assembler getInstance() {
@@ -37,8 +38,6 @@ public class Assembler {
 			Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			
 			temp.setExecutable(true);
-
-			pattern = Pattern.compile("\\[ (.*) \\]");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -50,10 +49,20 @@ public class Assembler {
 					.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-			Matcher matcher = pattern.matcher(reader.readLine());
-			matcher.find();
-			String[] output = matcher.group(1).split(" ");
+			String result = reader.readLine();
+			
+			Matcher matcher = pattern.matcher(result);
 
+			if (!matcher.find()) {
+				Matcher errorMatcher = errorPattern.matcher(result);
+				if (!errorMatcher.find()) {
+					return new byte[0];
+				}
+				throw new InvalidAssemblyException (errorMatcher.group(1));
+			}
+			
+			String[] output = matcher.group(1).split(" ");
+			
 			byte[] bytes = new byte[output.length];
 
 			for (int i = 0; i < output.length; i++) {
@@ -61,8 +70,8 @@ public class Assembler {
 			}
 
 			return bytes;
-		} catch (IOException | IllegalStateException e) {
-			throw new InvalidAssemblyException();
+		} catch (IOException e) {
+			throw new InvalidAssemblyException(e.toString());
 		}
 	}
 }
