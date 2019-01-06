@@ -33,7 +33,8 @@ public class SimpleRamView {
         dockNode = new DockNode(mainPane, "Simple Ram View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
 
-        TableView<RamTuple> tableView = (TableView<RamTuple>) mainPane.lookup("#simpleMemoryTabView");
+        //With a table view
+        /*TableView<RamTuple> tableView = (TableView<RamTuple>) mainPane.lookup("#simpleMemoryTabView");
 
         TableColumn<RamTuple, String> addressColumn = new TableColumn<RamTuple, String>("address");
         TableColumn<RamTuple, String> contentColumn = new TableColumn<RamTuple, String>("content");
@@ -49,7 +50,10 @@ public class SimpleRamView {
         }
         ObservableList list = FXCollections.observableArrayList(ramDisplayed);
 
-        tableView.setItems(list);
+        tableView.setItems(list);*/
+
+
+
     }
 
 

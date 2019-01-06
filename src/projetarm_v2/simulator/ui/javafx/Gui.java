@@ -65,10 +65,11 @@ public class Gui extends Application {
         RegistersView firstRegistersView = new RegistersView();
         firstRegistersView.getNode().dock(dockPane, DockPos.LEFT);
 
-        SimpleRamView firstRamView = new SimpleRamView();
+        RamView firstRamView = new RamView();
         firstRamView.getNode().dock(dockPane, DockPos.RIGHT);
 
         primaryStage.show();
+
 
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
