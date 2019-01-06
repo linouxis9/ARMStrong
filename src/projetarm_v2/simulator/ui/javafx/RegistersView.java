@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.dockfx.DockNode;
 import org.dockfx.DockPane;
-import org.dockfx.demo.DockFX;
 
 public class RegistersView {
 
@@ -16,7 +15,7 @@ public class RegistersView {
     Image dockImage;
 
     public RegistersView(){
-        dockImage = new Image(DockFX.class.getResource("docknode.png").toExternalForm());
+       // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
 
         mainPane = new TabPane();
         mainPane.getTabs().addAll(new Tab("Hex"), new Tab("sig Dec"), new Tab("unsig Dec"));

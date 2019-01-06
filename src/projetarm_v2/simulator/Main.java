@@ -1,6 +1,8 @@
 package projetarm_v2.simulator;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.ui.cli.Cli;
+import projetarm_v2.simulator.ui.javafx.Gui;
 
 public class Main {
 	public static void main(String[] args) {
@@ -19,7 +21,14 @@ public class Main {
 		for (int i = 0; i < 16; i++) {
 			System.out.print(String.format(">>> R%d = 0x%x%n", i,simulator.getRegisterValue(i)));
 		}
+		
 		System.out.format(">>> Processor Flags : %s%n", simulator.getCpu().getCPSR());
 		System.out.println(simulator.getRam());
+
+		if (args.length != 0) {
+			Gui.main(new String[0]);
+			return;
+		}
+		Cli.main(new String[0]);
 	}
 }

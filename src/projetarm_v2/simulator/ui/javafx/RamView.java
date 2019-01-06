@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
-import org.dockfx.demo.DockFX;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class RamView {
     int paneWidth;
 
     public RamView(){
-        dockImage = new Image(DockFX.class.getResource("docknode.png").toExternalForm());
+        //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/MemoryView.fxml"));
         } catch (IOException e) {

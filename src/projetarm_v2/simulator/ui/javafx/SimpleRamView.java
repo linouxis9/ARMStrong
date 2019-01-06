@@ -12,8 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.dockfx.DockNode;
-import org.dockfx.demo.DockFX;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ public class SimpleRamView {
     private Image dockImage;
 
     public SimpleRamView(){
-        dockImage = new Image(DockFX.class.getResource("docknode.png").toExternalForm());
+        //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
 
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/simpleMemoryView.fxml"));

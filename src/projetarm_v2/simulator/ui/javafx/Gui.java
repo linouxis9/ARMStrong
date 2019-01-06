@@ -11,7 +11,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
-import org.dockfx.demo.DockFX;
 
 import java.util.Random;
 
@@ -34,7 +33,7 @@ public class Gui extends Application {
         Pane editorPane = new Pane();
 
         // load an image to caption the dock nodes
-        Image dockImage = new Image(DockFX.class.getResource("docknode.png").toExternalForm());
+        //Image dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
 
         //MENU
 

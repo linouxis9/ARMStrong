@@ -32,17 +32,17 @@ public class NativeJarGetter {
 	}
 
 	public File getNativeLibrary(String libraryName) throws IOException {
-		return this.getFile(NativeJarGetter.NATIVE_DIR + libraryName + NativeJarGetter.getDynamicLibraryExtension());
+		return this.getFile(libraryName + NativeJarGetter.getDynamicLibraryExtension());
 	}
 
 	public File getNativeExecutable(String executableName) throws IOException {
-		return this.getFile(NativeJarGetter.NATIVE_DIR + executableName + NativeJarGetter.getExecutableExtension());
+		return this.getFile(executableName + NativeJarGetter.getExecutableExtension());
 	}
 
 	public File getFile(String executableName) throws IOException {
-		File temp = new File(temporaryDir, "kstool");
+		File temp = new File(temporaryDir, executableName);
 
-		InputStream is = NativeJarGetter.class.getResourceAsStream(executableName);
+		InputStream is = NativeJarGetter.class.getResourceAsStream(NativeJarGetter.NATIVE_DIR + executableName);
 		Files.copy(is, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
 		temp.setExecutable(true);
