@@ -57,7 +57,7 @@ public class ArmSimulator {
 	}
 
 	public void setProgram(String assembly) throws InvalidInstructionException {
-		assembly = assembly.replace("\n", ";");
+		assembly = assembly.replace(System.lineSeparator(), ";");
 
 		try {
 			fillRamWithAssembly(assembly);

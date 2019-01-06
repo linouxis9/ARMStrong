@@ -32,11 +32,11 @@ public class NativeJarGetter {
 	}
 
 	public File getNativeLibrary(String libraryName) throws IOException {
-		return this.getFile(libraryName + NativeJarGetter.getDynamicLibraryExtension());
+		return this.getFile(libraryName + "-" + System.getProperty("os.arch") +  NativeJarGetter.getDynamicLibraryExtension());
 	}
 
 	public File getNativeExecutable(String executableName) throws IOException {
-		return this.getFile(executableName + NativeJarGetter.getExecutableExtension());
+		return this.getFile(executableName + "-" + System.getProperty("os.arch") + NativeJarGetter.getExecutableExtension());
 	}
 
 	public File getFile(String executableName) throws IOException {

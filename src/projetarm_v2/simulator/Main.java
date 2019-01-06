@@ -7,11 +7,11 @@ import projetarm_v2.simulator.ui.javafx.Gui;
 public class Main {
 	public static void main(String[] args) {
 		ArmSimulator simulator = new ArmSimulator(); // PC is set @ 0x1000, 2 MB of RAM by default
-		simulator.setProgram("b start\n" + 
-				"kek: .asciz \"test\"\n" + 
-				".align\n" + 
-				"start: ldr r0,=kek\n" + 
-				"mov r1,#0xFF04\n" +
+		simulator.setProgram("b start;" + 
+				"kek: .asciz \"test\";" + 
+				".align;" + 
+				"start: ldr r0,=kek;" + 
+				"mov r1,#0xFF04;" +
 				"blx r1");
 
 		simulator.run();
