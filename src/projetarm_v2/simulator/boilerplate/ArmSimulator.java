@@ -1,5 +1,6 @@
 package projetarm_v2.simulator.boilerplate;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -10,6 +11,7 @@ import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
 import projetarm_v2.simulator.core.Program;
 import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.utils.NativeJarGetter;
 import unicorn.UnicornException;
 
 /**
@@ -17,6 +19,14 @@ import unicorn.UnicornException;
  * Simulator classes.
  */
 public class ArmSimulator {
+	
+	static {
+		try {
+			NativeJarGetter.getInstance().loadLibraryFromJar("libunicorn_java");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * The current loaded program
 	 */

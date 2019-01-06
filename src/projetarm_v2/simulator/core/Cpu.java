@@ -1,29 +1,16 @@
 package projetarm_v2.simulator.core;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.reflections.Reflections;
 
-import cz.adamh.utils.NativeUtils;
-import projetarm_v2.simulator.core.routines.CpuConsolePrintChar;
-import projetarm_v2.simulator.core.routines.CpuConsolePrintString;
 import projetarm_v2.simulator.core.routines.CpuRoutine;
 import unicorn.*;
 
 public class Cpu {
 	public static final int DEFAULT_STARTING_ADDRESS = 0x1000;
-
-	static {
-		try {
-			NativeUtils.loadLibraryFromJar("/natives/libunicorn_java.so");
-		} catch (IOException e) {
-			System.out.println("Impossible de charger Unicorn... Utilisez-vous bien le jar adapté à votre OS?");
-			System.exit(-1);
-		}
-	}
 
 	private final Ram ram;
 	private final Unicorn u;
