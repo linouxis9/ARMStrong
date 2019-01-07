@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import projetarm_v2.simulator.utils.NativeJarGetter;
+import projetarm_v2.simulator.utils.OSValidator;
 
 public class Assembler {
 	/**
@@ -36,6 +37,10 @@ public class Assembler {
 
 	public byte[] assemble(String assembly, long startingAddress) {
 		try {
+			if (OSValidator.isWindows()) {
+				assembly = assembly.replaceAll("\"", "\\\\\"");
+			}
+			
 			Process p = new ProcessBuilder(executable.getAbsolutePath(), "arm", assembly, Long.toHexString(startingAddress))
 					.start();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));

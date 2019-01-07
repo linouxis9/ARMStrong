@@ -55,7 +55,7 @@ public class Cli {
 	}
 
 	public Cli() {
-		this.registers = new Label[16];
+		this.registers = new Label[17];
 		this.simulator = new ArmSimulator();
 		this.memory = new LinkedHashMap<>();
 		this.memoryIndex = 0x1000;
@@ -179,7 +179,11 @@ public class Cli {
 				this.registers[n] = new Label("0");
 				leftPanel.addComponent(this.registers[n]);
 			});
-
+			
+			leftPanel.addComponent(new Label("Flags"));
+			this.registers[16] = new Label("[___]");
+			leftPanel.addComponent(this.registers[16]);
+			
 			Panel centerPanel = new Panel();
 			bodyPanel.addComponent(centerPanel);
 			codeEditor = new TextBox(new TerminalSize(size.getColumns() / 2, size.getColumns() / 8));
@@ -187,14 +191,14 @@ public class Cli {
 			codeEditor.setVerticalFocusSwitching(true);
 
 			Panel bottomPanel = new Panel(new GridLayout(2));
-			bottomPanel.addComponent(new Button("⇡ Lo", () -> {
+			bottomPanel.addComponent(new Button("Lowr", () -> {
 				this.memoryIndex--;
 				if (this.memoryIndex < 0) {
 					this.memoryIndex = 0;
 				}
 				this.updateMemory();
 			}));
-			bottomPanel.addComponent(new Button("⇣ Hi", () -> {
+			bottomPanel.addComponent(new Button("Highr", () -> {
 				this.memoryIndex++;
 				this.updateMemory();
 			}));
@@ -274,9 +278,10 @@ public class Cli {
 	}
 
 	private void updateRegisters() {
-		for (int i = 0; i < registers.length; i++) {
+		for (int i = 0; i < registers.length-1; i++) {
 			registers[i].setText(Integer.toString(this.simulator.getRegisterValue(i)));
 		}
+		registers[16].setText(this.simulator.getCpu().getCPSR().toString());
 	}
 
 	private void updateGUI() {
