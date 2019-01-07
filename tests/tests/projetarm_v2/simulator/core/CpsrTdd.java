@@ -1,4 +1,4 @@
-package projetarm_v2;
+package tests.projetarm_v2.simulator.core;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Cpsr;
-import unicorn.Unicorn;
 
 class CpsrTdd {
 	private ArmSimulator simulator;
@@ -16,7 +15,6 @@ class CpsrTdd {
 	@BeforeEach
 	public void Test() {
 		this.simulator = new ArmSimulator();
-		this.simulator.resetState();
 		this.cpsr = this.simulator.getCpu().getCPSR();
 	}
 	
@@ -25,6 +23,12 @@ class CpsrTdd {
 		this.simulator.setProgram("mov r0,#20; mov r1,#15; cmp r0,r1");
 		this.simulator.run();
 		assertFalse(this.simulator.getN());
+		
+		this.simulator.resetState();
+		
+		this.simulator.setProgram("movs r0,#-1;");
+		this.simulator.run();		
+		assertTrue(this.simulator.getN());
 	}
 	
 	@Test
@@ -40,6 +44,12 @@ class CpsrTdd {
 		this.simulator.setProgram("mov r0,#20; mov r1,#20; cmp r0,r1");
 		this.simulator.run();
 		assertTrue(this.simulator.getZ());
+		
+		this.simulator.resetState();
+		
+		this.simulator.setProgram("movs r0,#15;");
+		this.simulator.run();
+		assertFalse(this.simulator.getZ());
 	}
 	
 	@Test
@@ -55,6 +65,12 @@ class CpsrTdd {
 		this.simulator.setProgram("mov r0,#1; mov r1,#1; cmp r0,r1");
 		this.simulator.run();
 		assertTrue(this.simulator.getC());
+		
+		this.simulator.resetState();
+		
+		this.simulator.setProgram("mov r0,#15; adds r0,r0,r0;");
+		this.simulator.run();
+		assertFalse(this.simulator.getC());
 	}
 	
 	@Test
@@ -67,9 +83,15 @@ class CpsrTdd {
 	
 	@Test
 	public void testV() {
-		this.simulator.setProgram("mov r0, #0x80000000; mov  r1, #0x00000001; subs r2, r0, r1");
+		this.simulator.setProgram("mov r0, #0x80000000; mov r1, #1; subs r2, r0, r1");
 		this.simulator.run();
 		assertTrue(this.simulator.getV());
+		
+		this.simulator.resetState();
+		
+		this.simulator.setProgram("mov r0, #5; mov r1, #-15; subs r2, r0, r1;");
+		this.simulator.run();
+		assertFalse(this.simulator.getC());
 	}
 	
 	@Test
@@ -85,6 +107,12 @@ class CpsrTdd {
 		this.simulator.setProgram("mov r2,#0x70000000; qadd r3,r2,r2");
 		this.simulator.run();
 		assertTrue(this.simulator.getQ());
+		
+		this.simulator.resetState();
+		
+		this.simulator.setProgram("mov r0,#0; mov r2,#0x70000000; qadd r3,r2,r0");
+		this.simulator.run();
+		assertFalse(this.simulator.getQ());
 	}
 
 	@Test
