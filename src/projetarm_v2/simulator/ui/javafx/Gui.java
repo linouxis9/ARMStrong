@@ -12,6 +12,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
+
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 
@@ -19,13 +21,24 @@ import java.util.Random;
 
 public class Gui extends Application {
 
+	private static int nbRamView = 1;
+	
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("ARMStrong");
+    	ArmSimulator simulator = new ArmSimulator();
+    	
+    	simulator.setProgram("b start;" + 
+				"kek: .asciz \"test\";" + 
+				".align;" + 
+				"start: ldr r0,=kek;" + 
+				"mov r1,#0xFF04;" +
+				"blx r1");
+    	
+    	primaryStage.setTitle("ARMStrong");
         Image applicationIcon = new Image("file:logo.png");
         primaryStage.getIcons().add(applicationIcon);
 
@@ -59,26 +72,14 @@ public class Gui extends Application {
         windowMenu.getItems().add(newMenu);
         windowMenu.getItems().add(new MenuItem("Preferences"));
         
-        runMenu.getItems().add(new MenuItem("Run"));
+        final MenuItem runMenuItem = new MenuItem("Run");
+        runMenu.getItems().add(runMenuItem);
         runMenu.getItems().add(new MenuItem("Run Step by Step"));
         
         helpMenu.getItems().add(new MenuItem("About"));
         
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, helpMenu);
-
-        newMemoryWindow.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-            	 RamView moreRamView = new RamView();
-            	 moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
-            }
-        });
-        
-        exitMenu.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-            	primaryStage.close();
-            }
-        });
         
         ToolBar toolBar = new ToolBar(
                 new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm()))),
@@ -102,9 +103,36 @@ public class Gui extends Application {
         RamView firstRamView = new RamView();
         firstRamView.getNode().dock(dockPane, DockPos.RIGHT);
 
+        ConsoleView console = new ConsoleView();
+        console.getNode().dock(dockPane, DockPos.BOTTOM);
+        
         primaryStage.show();
-
-
+        
+        newMemoryWindow.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	if(Gui.nbRamView == 1) {
+		    		RamView moreRamView = new RamView();
+		        	moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
+		        	console.getNode().dock(dockPane, DockPos.BOTTOM);
+		        	Gui.nbRamView += 1;
+            	}else {
+            		//TODO display error in the console
+            	}
+            }
+        });
+        
+        exitMenu.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	primaryStage.close();
+            }
+        });
+        
+        runMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+        	public void handle(ActionEvent t) {
+            	simulator.run();
+            }
+        });
+        
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
         // initialize the default styles for the dock pane and undocked nodes using the DockFX
