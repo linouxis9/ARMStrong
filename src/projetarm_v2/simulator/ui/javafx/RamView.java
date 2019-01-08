@@ -1,6 +1,7 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.core.Ram;
+import javafx.scene.control.Button;
 
 import java.awt.*;
 import java.io.IOException;
@@ -57,11 +59,13 @@ public class RamView {
             firstDisplayedAdress = (int) memoryScrollBar.getValue();
             updateContents();
         });
+        
         memoryScrollBar.setOnMouseClicked((MouseEvent mouseEvent) -> {
             firstDisplayedAdress = (int) memoryScrollBar.getValue();
             updateContents();
         });
-
+        
+        
         mainPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             displayLablels();
             updateContents();
@@ -117,9 +121,7 @@ public class RamView {
                     break;
                 default:
                     content = "--------";
-
             }
-            System.out.println(address);
             memoryAdresses.get(labelNumber).setText("00000000".substring(address.length()) + address);
             memoryValues.get(labelNumber).setText(content);
         }
@@ -162,8 +164,32 @@ public class RamView {
             mainPane.getChildren().add(valueLabel);
             nextYpos = nextYpos + valueLabel.getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
             remaningSpace = paneHeight - nextYpos;
-        }
+        }  
+        changeMode();
     }
+    
+    private void changeMode() {
+    	Button button8Bit = (Button) mainPane.lookup("#button8Bit");
+    	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
+    	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
+    	
+    	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
+    		this.memoryDisplayMode = 8;
+            updateContents();
+    	});
+    	
+    	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
+    		this.memoryDisplayMode = 16;
+            updateContents();
+    	});
+    	
+    	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
+    		this.memoryDisplayMode = 32;
+    		updateContents();
+    	});
+    }
+    
+
 
     public DockNode getNode() {
         return dockNode;

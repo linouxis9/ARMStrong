@@ -1,10 +1,13 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -42,10 +45,41 @@ public class Gui extends Application {
         final Menu editMenu = new Menu("Edit");
         final Menu runMenu = new Menu("Run");
         final Menu helpMenu = new Menu("Help");
-
+        
+        fileMenu.getItems().add(new MenuItem("New"));
+        fileMenu.getItems().add(new MenuItem("Open File..."));
+        fileMenu.getItems().add(new MenuItem("Save As..."));
+        final MenuItem exitMenu = new MenuItem("Exit");
+        fileMenu.getItems().add(exitMenu);
+        
+        final Menu newMenu = new Menu("New Window");
+        final MenuItem newMemoryWindow = new MenuItem("Memory");
+        newMenu.getItems().add(newMemoryWindow);
+        
+        windowMenu.getItems().add(newMenu);
+        windowMenu.getItems().add(new MenuItem("Preferences"));
+        
+        runMenu.getItems().add(new MenuItem("Run"));
+        runMenu.getItems().add(new MenuItem("Run Step by Step"));
+        
+        helpMenu.getItems().add(new MenuItem("About"));
+        
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, helpMenu);
 
+        newMemoryWindow.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	 RamView moreRamView = new RamView();
+            	 moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
+            }
+        });
+        
+        exitMenu.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+            	primaryStage.close();
+            }
+        });
+        
         ToolBar toolBar = new ToolBar(
                 new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm()))),
                 new Separator(),
