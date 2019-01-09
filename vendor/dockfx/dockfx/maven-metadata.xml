@@ -3,10 +3,11 @@
   <groupId>dockfx</groupId>
   <artifactId>dockfx</artifactId>
   <versioning>
-    <release>0.5-armstrong</release>
+    <release>0.5.1-valentin</release>
     <versions>
       <version>0.5-armstrong</version>
+      <version>0.5.1-valentin</version>
     </versions>
-    <lastUpdated>20190106190448</lastUpdated>
+    <lastUpdated>20190109191818</lastUpdated>
   </versioning>
 </metadata>
