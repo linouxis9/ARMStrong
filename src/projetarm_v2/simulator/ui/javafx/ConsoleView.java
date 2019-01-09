@@ -8,6 +8,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -21,42 +23,38 @@ import org.dockfx.DockPane;
 
 public class ConsoleView {
 
-    Pane mainPane;
+	ScrollPane mainPane;
     DockNode dockNode;
     Image dockImage;
     TextFlow textArea;
-    ScrollPane consoleScrollPane;
+   
 
     public ConsoleView(){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-        mainPane = new Pane();
+        mainPane = new ScrollPane();
  
         dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
-        dockNode.setPrefSize(1000,1500);      
+        dockNode.setPrefSize(100,150);  
         
         this.textArea = new TextFlow();
         
         this.textArea.setPadding(new Insets(5));
-        
-        this.consoleScrollPane = new ScrollPane();
+        textArea.setStyle("-fx-line-spacing: -0.5em;");
         
         OutputStream output = new OutputStream(){
 	        @Override
 	        public void write(int b) throws IOException {
-	        	Platform.runLater(()->textArea.getChildren().add(new Text(String.valueOf((char) b))));    
+	        	Platform.runLater(()->textArea.getChildren().add(new Text(String.valueOf((char) b))));   
+	        	mainPane.setVvalue(1);
 	        }
         };
         
-        consoleScrollPane.setFitToWidth(true);
-        consoleScrollPane.setFitToHeight(true);
+        mainPane.setFitToWidth(true);
+        mainPane.setFitToHeight(true);
+        mainPane.setContent(this.textArea);    
+        mainPane.setHmin(dockNode.getHeight());
         
-        consoleScrollPane.setContent(this.textArea);    
-        consoleScrollPane.setHmin(dockNode.getHeight());
-        
-        System.setOut(new PrintStream(output));
-        
-        dockNode.getChildren().add(this.consoleScrollPane);
-        
+        System.setOut(new PrintStream(output));     
     }
     
     public DockNode getNode(){
