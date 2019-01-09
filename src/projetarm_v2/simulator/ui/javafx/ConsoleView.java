@@ -31,15 +31,17 @@ public class ConsoleView {
 
     public ConsoleView(){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-        mainPane = new ScrollPane();
+        this.mainPane = new ScrollPane();
  
-        dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
-        dockNode.setPrefSize(100,150);  
+        this.dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
+
+        dockNode.setPrefSize(1000,1500);
+        dockNode.setClosable(false);
         
         this.textArea = new TextFlow();
         
         this.textArea.setPadding(new Insets(5));
-        textArea.setStyle("-fx-line-spacing: -0.5em;");
+        this.textArea.setStyle("-fx-line-spacing: -0.4em;");
         
         OutputStream output = new OutputStream(){
 	        @Override
@@ -49,10 +51,10 @@ public class ConsoleView {
 	        }
         };
         
-        mainPane.setFitToWidth(true);
-        mainPane.setFitToHeight(true);
-        mainPane.setContent(this.textArea);    
-        mainPane.setHmin(dockNode.getHeight());
+        this.mainPane.setFitToWidth(true);
+        this.mainPane.setFitToHeight(true);
+        this.mainPane.setContent(this.textArea);    
+        this.mainPane.setHmin(dockNode.getHeight());
         
         System.setOut(new PrintStream(output));     
     }
