@@ -113,14 +113,9 @@ public class Gui extends Application {
         
         newMemoryWindow.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-            	if(Gui.nbRamView == 1) {
-		    		RamView moreRamView = new RamView();
-		        	moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
-		        	console.getNode().dock(dockPane, DockPos.BOTTOM);
-		        	Gui.nbRamView += 1;
-            	}else {
-            		//TODO display error in the console
-            	}
+	    		RamView moreRamView = new RamView();
+	        	moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
+	        	console.getNode().dock(dockPane, DockPos.BOTTOM);
             }
         });
         
@@ -132,7 +127,8 @@ public class Gui extends Application {
         
         runMenuItem.setOnAction(new EventHandler<ActionEvent>() {
         	public void handle(ActionEvent t) {
-            	simulator.run();
+            	simulator.resetRun();
+        		simulator.run();
             }
         });
         

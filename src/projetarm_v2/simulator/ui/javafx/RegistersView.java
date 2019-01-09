@@ -33,9 +33,7 @@ public class RegistersView {
         sigHexPane.getChildren().add(new Text(10, 10,"test2"));
         decPane.getChildren().add(new Text(10, 10,"test3"));
 
-
         hexTab.setContent(hexPane);
-
 
         dockNode = new DockNode(mainPane, "Register View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
