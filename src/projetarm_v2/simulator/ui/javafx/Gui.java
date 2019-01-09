@@ -73,7 +73,7 @@ public class Gui extends Application {
         console.getNode().dock(dockPane, DockPos.BOTTOM);
         
         primaryStage.show();
-        
+
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
         // initialize the default styles for the dock pane and undocked nodes using the DockFX
