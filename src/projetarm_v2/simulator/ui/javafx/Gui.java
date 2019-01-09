@@ -1,25 +1,23 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import projetarm_v2.simulator.boilerplate.ArmSimulator;
-
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.util.Random;
 
 public class Gui extends Application {
+
+    private Boolean isRunningMode;
 
 	private static int nbRamView = 1;
 	
@@ -30,7 +28,8 @@ public class Gui extends Application {
     @Override
     public void start(Stage primaryStage) {
     	ArmSimulator simulator = new ArmSimulator();
-    	
+    	isRunningMode = false;
+
     	simulator.setProgram("b start;" + 
 				"kek: .asciz \"test\";" + 
 				".align;" + 
@@ -45,17 +44,11 @@ public class Gui extends Application {
         // create a dock pane that will manage our dock nodes and handle the layout
         DockPane dockPane = new DockPane();
 
-        // create a default test node for the center of the dock area
-        Pane editorPane = new Pane();
-
         // load an image to caption the dock nodes
         //Image dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
 
         //MENU
-
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(new ArmMenuBar(simulator, dockPane).getNode(), new ArmToolBar().getNode(), dockPane);
-        VBox.setVgrow(dockPane, Priority.ALWAYS);
 
         primaryStage.setScene(new Scene(vbox, 800, 500));
         primaryStage.sizeToScene();
@@ -71,7 +64,10 @@ public class Gui extends Application {
 
         ConsoleView console = new ConsoleView();
         console.getNode().dock(dockPane, DockPos.BOTTOM);
-        
+
+        vbox.getChildren().addAll(new ArmMenuBar(simulator, dockPane, isRunningMode).getNode(), new ArmToolBar(simulator, codeEditor.getTextArea(), isRunningMode).getNode(), dockPane);
+        VBox.setVgrow(dockPane, Priority.ALWAYS);
+
         primaryStage.show();
 
         // test the look and feel with both Caspian and Modena

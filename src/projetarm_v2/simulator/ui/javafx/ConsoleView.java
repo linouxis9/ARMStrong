@@ -32,7 +32,8 @@ public class ConsoleView {
         mainPane = new Pane();
  
         dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
-        dockNode.setPrefSize(1000,1500);      
+        dockNode.setPrefSize(1000,1500);
+        dockNode.setClosable(false);
         
         this.textArea = new TextFlow();
         

@@ -1,7 +1,7 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.fxml.FXMLLoader;
-
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,14 +10,9 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
-import projetarm_v2.simulator.core.Ram;
-import javafx.scene.control.Button;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 public class RamView {
 
