@@ -10,11 +10,9 @@ import unicorn.Unicorn;
 public abstract class CpuRoutine {
 
 	private Cpu cpu;
-	private final long routineAddress;
 
-	public CpuRoutine(Cpu cpu, long routineAddress) {
+	public CpuRoutine(Cpu cpu) {
 		this.cpu = cpu;
-		this.routineAddress = routineAddress;
 	}
 
 	protected Cpu getCpu() {
@@ -31,8 +29,10 @@ public abstract class CpuRoutine {
 
 	protected abstract void primitive();
 
+	public abstract long getRoutineAddress();
+
 	private void runPrimitive() {
-		if (this.routineAddress != this.getRegister(15).getValue()) {
+		if (this.getRoutineAddress() != this.getRegister(15).getValue()) {
 			return;
 		}
 		

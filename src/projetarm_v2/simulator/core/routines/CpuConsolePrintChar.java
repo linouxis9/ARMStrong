@@ -8,10 +8,16 @@ import projetarm_v2.simulator.core.Cpu;
 
 public class CpuConsolePrintChar extends CpuRoutine {
 
-	public CpuConsolePrintChar(Cpu cpu, long routineAddress) {
-		super(cpu, routineAddress);
+	public final static long ROUTINE_ADDRESS = 0xFF00L;
+	
+	public CpuConsolePrintChar(Cpu cpu) {
+		super(cpu);
 	}
-
+	
+	public long getRoutineAddress() {
+		return ROUTINE_ADDRESS;
+	}
+	
 	@Override
 	protected void primitive() {
 		long address = (long)this.getRegister(0).getValue();

@@ -74,17 +74,16 @@ public class Cpu {
 
 		Set<Class<? extends CpuRoutine>> routines = reflections.getSubTypesOf(CpuRoutine.class);
 		
-		long startRoutinesAddress = 0xFF00;
-		
 		for (Class<? extends CpuRoutine> routine : routines) {
 			try {
-				registerCpuRoutine((CpuRoutine)(routine.getDeclaredConstructor(Cpu.class, long.class).newInstance(this, startRoutinesAddress)), startRoutinesAddress);
-				startRoutinesAddress += 4L;
+				registerCpuRoutine((CpuRoutine)(routine.getDeclaredConstructor(Cpu.class).newInstance(this)));
 			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {}
 		}
 	}
 
-	private void registerCpuRoutine(CpuRoutine routine, Long address) {
+	private void registerCpuRoutine(CpuRoutine routine) {
+		Long address = routine.getRoutineAddress();
+		
 		u.hook_add(routine.getNewHook(), address, address, null);
 		this.routineAddress.add(address);
 
