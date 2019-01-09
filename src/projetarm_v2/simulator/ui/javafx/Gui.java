@@ -100,6 +100,9 @@ public class Gui extends Application {
         RegistersView firstRegistersView = new RegistersView();
         firstRegistersView.getNode().dock(dockPane, DockPos.LEFT);
 
+        CodeEditor codeEditor = new CodeEditor();
+        codeEditor.getNode().dock(dockPane, DockPos.LEFT);
+
         RamView firstRamView = new RamView();
         firstRamView.getNode().dock(dockPane, DockPos.RIGHT);
 
