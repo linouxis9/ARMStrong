@@ -13,8 +13,10 @@ import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 public class ArmMenuBar {
     private MenuBar menuBar;
+    private Boolean isRunningMode;
 
-    public ArmMenuBar(ArmSimulator simulator, DockPane dockPane){
+    public ArmMenuBar(ArmSimulator simulator, DockPane dockPane, Boolean isRunningMode){
+        this.isRunningMode = isRunningMode;
         final Menu fileMenu = new Menu("File");
         final Menu windowMenu = new Menu("Window");
         final Menu editMenu = new Menu("Edit");
@@ -28,8 +30,11 @@ public class ArmMenuBar {
         fileMenu.getItems().add(exitMenu);
 
         final Menu newMenu = new Menu("New Window");
+
         final MenuItem newMemoryWindow = new MenuItem("Memory");
-        newMenu.getItems().add(newMemoryWindow);
+        final MenuItem newRegisterWindow = new MenuItem("Registers");
+
+        newMenu.getItems().addAll(newMemoryWindow, newRegisterWindow);
 
         windowMenu.getItems().add(newMenu);
         windowMenu.getItems().add(new MenuItem("Preferences"));
@@ -45,9 +50,16 @@ public class ArmMenuBar {
 
         newMemoryWindow.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                    RamView moreRamView = new RamView();
-                    moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
-                    //console.getNode().dock(dockPane, DockPos.BOTTOM);
+                RamView ramView = new RamView();
+                ramView.getNode().dock(dockPane, DockPos.RIGHT);
+
+            }
+        });
+
+        newRegisterWindow.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                RegistersView registerView = new RegistersView();
+                registerView.getNode().dock(dockPane, DockPos.CENTER);
             }
         });
 
