@@ -63,7 +63,6 @@ public class ArmToolBar {
         stopButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 armSimulator.interruptExecutionFlow();
-
             }
         });
 
@@ -83,6 +82,18 @@ public class ArmToolBar {
 
     public Button getReloadButton() {
         return reloadButton;
+    }
+
+    public Button getRunButton() {
+        return runButton;
+    }
+
+    public Button getStepByStepButton() {
+        return stepByStepButton;
+    }
+
+    public Button getStopButton() {
+        return stopButton;
     }
 
     public Node getNode(){

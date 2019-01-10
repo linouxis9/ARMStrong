@@ -98,6 +98,7 @@ public class Gui extends Application {
 
     private void setButtonEvents(){
 
+        //the window "items"
         this.armMenuBar.getNewMemoryWindow().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 RamView moreRamView = new RamView();
@@ -105,7 +106,6 @@ public class Gui extends Application {
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
         });
-
         this.armMenuBar.getNewRegistersWindow().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 RegistersView moreRegistersView = new RegistersView(simulator);
@@ -114,6 +114,7 @@ public class Gui extends Application {
             }
         });
 
+        //the "Run" items
         this.armMenuBar.getSwichMode().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 executionMode =!executionMode;
@@ -132,13 +133,38 @@ public class Gui extends Application {
 
             }
         });
-
         this.armMenuBar.getReloadMenuItem().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
 
             }
         });
 
+        //the toolbar buttons
+        this.armToolBar.getSwitchButton().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                armMenuBar.getSwichMode().fire();
+            }
+        });
+        this.armToolBar.getReloadButton().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                armMenuBar.getReloadMenuItem().fire();
+            }
+        });
+        this.armToolBar.getRunButton().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                simulator.run();
+            }
+        });
+        this.armToolBar.getStepByStepButton().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                simulator.runStep();
+            }
+        });
+        this.armToolBar.getStopButton().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                simulator.interruptExecutionFlow();
+            }
+        });
     }
 
 }
