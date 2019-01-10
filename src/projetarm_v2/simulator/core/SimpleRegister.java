@@ -2,7 +2,7 @@ package projetarm_v2.simulator.core;
 
 import java.util.concurrent.atomic.AtomicLong;
 
-public class SimpleRegister implements Register {
+public class SimpleRegister extends Register {
 	private AtomicLong value = new AtomicLong(0);
 	
 	public SimpleRegister() {}
@@ -17,7 +17,7 @@ public class SimpleRegister implements Register {
 	}
 
 	@Override
-	public void setValue(long value) {
+	public void setValue(int value) {
 		this.value.set(value);
 	}
 

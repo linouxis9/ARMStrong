@@ -2,7 +2,7 @@ package projetarm_v2.simulator.core;
 
 import unicorn.Unicorn;
 
-public class UnicornRegister implements Register {
+public class UnicornRegister extends Register {
 	private final Unicorn u;
 	private int register;
 	
@@ -23,7 +23,7 @@ public class UnicornRegister implements Register {
 	 * @see projetarm_v2.Registers#setValue(long)
 	 */
 	@Override
-	public void setValue(long value) {
+	public void setValue(int value) {
 		u.reg_write(this.register, value);
 	}
 }

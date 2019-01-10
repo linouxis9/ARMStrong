@@ -1,6 +1,5 @@
 package projetarm_v2.simulator.core.routines;
 
-import projetarm_v2.simulator.core.Assembler;
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.Ram;
 import projetarm_v2.simulator.core.Register;

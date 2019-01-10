@@ -183,7 +183,7 @@ public class ArmSimulator {
 	 * Resets the execution (clears the current execution point)
 	 */
 	public void resetRun() {
-		this.cpu.getRegister(15).setValue(this.cpu.getStartingAddress());
+		this.cpu.getRegister(15).setValue((int)this.cpu.getStartingAddress());
 	}
 
 	public void resetState() {
