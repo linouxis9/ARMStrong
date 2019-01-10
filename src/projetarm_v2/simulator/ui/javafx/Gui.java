@@ -25,6 +25,8 @@ public class Gui extends Application {
     private ArmMenuBar armMenuBar;
     private ArmToolBar armToolBar;
     private DockPane dockPane;
+    
+    private ArmSimulator simulator;
 
     public static void main(String[] args) {
         launch(args);
@@ -32,7 +34,7 @@ public class Gui extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        ArmSimulator simulator = new ArmSimulator();
+        this.simulator = new ArmSimulator();
 
         primaryStage.setTitle("ARMStrong");
         Image applicationIcon = new Image("file:logo.png");
@@ -48,7 +50,7 @@ public class Gui extends Application {
         this.registersViews = new ArrayList<>();
         this.RamViews = new ArrayList<>();
 
-        this.registersViews.add(new RegistersView());
+        this.registersViews.add(new RegistersView(this.simulator));
         this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
 
         this.codeEditor = new CodeEditor();
@@ -108,7 +110,7 @@ public class Gui extends Application {
 
         this.armMenuBar.getNewRegistersWindow().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                RegistersView moreRegistersView = new RegistersView();
+                RegistersView moreRegistersView = new RegistersView(simulator);
                 moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
                 consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
