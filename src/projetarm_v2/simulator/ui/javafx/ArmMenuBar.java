@@ -24,6 +24,7 @@ public class ArmMenuBar {
 
     private MenuItem newMemoryWindow;
     private MenuItem newRegistersWindow;
+    private MenuItem newLedGameWindow;
 
     private MenuItem swichMode;
     private MenuItem reloadMenuItem;
@@ -54,7 +55,8 @@ public class ArmMenuBar {
 
         this.newMemoryWindow = new MenuItem("Memory");
         this.newRegistersWindow = new MenuItem("Registers");
-        newMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow);
+        this.newLedGameWindow = new MenuItem("Led Game");
+        newMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow);
 
         windowMenu.getItems().addAll(newMenu, preferences);
 
@@ -123,7 +125,11 @@ public class ArmMenuBar {
     public MenuItem getNewRegistersWindow() {
         return newRegistersWindow;
     }
-
+    
+    public MenuItem getNewLedGame() {
+        return newLedGameWindow;
+    }
+    
     public void setExecutionMode(boolean executionMode){
         Iterator<MenuItem> iterator = this.disableInEdition.iterator();
         while (iterator.hasNext()){
