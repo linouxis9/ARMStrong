@@ -46,8 +46,9 @@ public class CodeEditor {
     }
 
     public void setExecutionMode(boolean executionMode){
-        this.textArea.setEditable(executionMode);
-        this.textArea.setVisible(executionMode);
+        this.textArea.setEditable(!executionMode);
+        this.textArea.setVisible(!executionMode);
+        this.toolBar.setVisible(!executionMode);
 
         if(executionMode){
             String[] instructionsAsStrings = this.textArea.getText().split("\\r?\\n");

@@ -25,6 +25,8 @@ public class Gui extends Application {
     private ArmMenuBar armMenuBar;
     private ArmToolBar armToolBar;
     private DockPane dockPane;
+
+    private boolean executionMode;
     
     private ArmSimulator simulator;
 
@@ -35,6 +37,7 @@ public class Gui extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.simulator = new ArmSimulator();
+        this.executionMode = false;
 
         primaryStage.setTitle("ARMStrong");
         Image applicationIcon = new Image("file:logo.png");
@@ -62,7 +65,7 @@ public class Gui extends Application {
         this.consoleView = new ConsoleView();
         this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
-        this.armMenuBar = new ArmMenuBar(simulator, dockPane, codeEditor);
+        this.armMenuBar = new ArmMenuBar(simulator,codeEditor);
         this.armToolBar = new ArmToolBar(simulator,codeEditor);
 
         VBox vbox = new VBox();
@@ -71,13 +74,14 @@ public class Gui extends Application {
 
         setButtonEvents();
 
+        this.codeEditor.setExecutionMode(this.executionMode);
+        this.armMenuBar.setExecutionMode(this.executionMode);
+        this.armToolBar.setExecutionMode(this.executionMode);
+
         primaryStage.setScene(new Scene(vbox, 800, 500));
         primaryStage.sizeToScene();
 
         primaryStage.show();
-
-
-
 
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
@@ -93,18 +97,12 @@ public class Gui extends Application {
     }
 
     private void setButtonEvents(){
-        this.armToolBar.getReloadButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                //
-
-            }
-        });
 
         this.armMenuBar.getNewMemoryWindow().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 RamView moreRamView = new RamView();
                 moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
-                consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+                //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
         });
 
@@ -112,10 +110,34 @@ public class Gui extends Application {
             public void handle(ActionEvent t) {
                 RegistersView moreRegistersView = new RegistersView(simulator);
                 moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
-                consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+                //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
         });
-        //this.armToolBar.getSwitchButton()
+
+        this.armMenuBar.getSwichMode().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                executionMode =!executionMode;
+                if(executionMode){
+                    try {
+                        simulator.setProgram(codeEditor.getProgramAsSting());
+                    } catch (Exception e){
+                        System.out.println(e);
+                        executionMode=!executionMode;
+                    }
+                }
+                codeEditor.setExecutionMode(executionMode);
+                armMenuBar.setExecutionMode(executionMode);
+                armToolBar.setExecutionMode(executionMode);
+
+
+            }
+        });
+
+        this.armMenuBar.getReloadMenuItem().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+
+            }
+        });
 
     }
 

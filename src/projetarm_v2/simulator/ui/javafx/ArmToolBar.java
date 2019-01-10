@@ -3,15 +3,15 @@ package projetarm_v2.simulator.ui.javafx;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class ArmToolBar {
 
@@ -26,6 +26,8 @@ public class ArmToolBar {
     private Button reloadButton;
     private Button stopButton;
 
+    private HashSet<Button> disableInEdition;
+
 
 
     public ArmToolBar(ArmSimulator armSimulator, CodeEditor codeEditor){
@@ -38,6 +40,13 @@ public class ArmToolBar {
         this.reloadButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
         this.stopButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
         this.toolBar = new ToolBar(switchButton, new Separator(), runButton, stepByStepButton, reloadButton, stopButton);
+
+        this.disableInEdition = new HashSet<>();
+        disableInEdition.add(runButton);
+        disableInEdition.add(stepByStepButton);
+        disableInEdition.add(reloadButton);
+        disableInEdition.add(stopButton);
+
 
         runButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -62,7 +71,10 @@ public class ArmToolBar {
     }
 
     public void setExecutionMode(boolean executionMode){
-        //changer les boutons affichés
+        Iterator<Button> iterator = this.disableInEdition.iterator();
+        while (iterator.hasNext()){
+            iterator.next().setDisable(!executionMode);
+        }
     }
 
     public Button getSwitchButton() {
