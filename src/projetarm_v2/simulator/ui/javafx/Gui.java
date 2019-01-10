@@ -1,11 +1,11 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -13,62 +13,69 @@ import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 public class Gui extends Application {
 
-    private Boolean isRunningMode;
+    private ArrayList<RegistersView> registersViews;
+    private ArrayList<RamView> RamViews;
+    private CodeEditor codeEditor;
+    private ConsoleView consoleView;
 
-	private static int nbRamView = 1;
-	
+    private ArmMenuBar armMenuBar;
+    private ArmToolBar armToolBar;
+    private DockPane dockPane;
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-    	ArmSimulator simulator = new ArmSimulator();
-    	isRunningMode = false;
+        ArmSimulator simulator = new ArmSimulator();
 
-    	simulator.setProgram("b start;" + 
-				"kek: .asciz \"test\";" + 
-				".align;" + 
-				"start: ldr r0,=kek;" + 
-				"mov r1,#0xFF04;" +
-				"blx r1");
-    	
-    	primaryStage.setTitle("ARMStrong");
+        primaryStage.setTitle("ARMStrong");
         Image applicationIcon = new Image("file:logo.png");
         primaryStage.getIcons().add(applicationIcon);
 
         // create a dock pane that will manage our dock nodes and handle the layout
-        DockPane dockPane = new DockPane();
+        this.dockPane = new DockPane();
 
         // load an image to caption the dock nodes
         //Image dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
 
-        //MENU
+        //creating the nodes
+        this.registersViews = new ArrayList<>();
+        this.RamViews = new ArrayList<>();
+
+        this.registersViews.add(new RegistersView());
+        this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
+
+        this.codeEditor = new CodeEditor();
+        this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
+
+        this.RamViews.add(new RamView());
+        this.RamViews.get(0).getNode().dock(dockPane, DockPos.RIGHT);
+
+        this.consoleView = new ConsoleView();
+        this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+
+        this.armMenuBar = new ArmMenuBar(simulator, dockPane, codeEditor);
+        this.armToolBar = new ArmToolBar(simulator,codeEditor);
+
         VBox vbox = new VBox();
+        vbox.getChildren().addAll(this.armMenuBar.getNode(), this.armToolBar.getNode(), dockPane);
+        VBox.setVgrow(dockPane, Priority.ALWAYS);
+
+        setButtonEvents();
 
         primaryStage.setScene(new Scene(vbox, 800, 500));
         primaryStage.sizeToScene();
 
-        RegistersView firstRegistersView = new RegistersView();
-        firstRegistersView.getNode().dock(dockPane, DockPos.LEFT);
-
-        CodeEditor codeEditor = new CodeEditor();
-        codeEditor.getNode().dock(dockPane, DockPos.LEFT);
-
-        RamView firstRamView = new RamView();
-        firstRamView.getNode().dock(dockPane, DockPos.RIGHT);
-
-        ConsoleView console = new ConsoleView();
-        console.getNode().dock(dockPane, DockPos.BOTTOM);
-
-        vbox.getChildren().addAll(new ArmMenuBar(simulator, dockPane, isRunningMode).getNode(), new ArmToolBar(simulator, codeEditor.getTextArea(), isRunningMode).getNode(), dockPane);
-        VBox.setVgrow(dockPane, Priority.ALWAYS);
-
         primaryStage.show();
+
+
+
 
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
@@ -83,23 +90,31 @@ public class Gui extends Application {
         // TODO: after this feel free to apply your own global stylesheet using the StyleManager class
     }
 
-    private TreeView<String> generateRandomTree() {
-        // create a demonstration tree view to use as the contents for a dock node
-        TreeItem<String> root = new TreeItem<String>("Root");
-        TreeView<String> treeView = new TreeView<String>(root);
-        treeView.setShowRoot(false);
+    private void setButtonEvents(){
+        this.armToolBar.getReloadButton().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                //
 
-        // populate the prototype tree with some random nodes
-        Random rand = new Random();
-        for (int i = 4 + rand.nextInt(8); i > 0; i--) {
-            TreeItem<String> treeItem = new TreeItem<String>("Item " + i);
-            root.getChildren().add(treeItem);
-            for (int j = 2 + rand.nextInt(4); j > 0; j--) {
-                TreeItem<String> childItem = new TreeItem<String>("Child " + j);
-                treeItem.getChildren().add(childItem);
             }
-        }
+        });
 
-        return treeView;
+        this.armMenuBar.getNewMemoryWindow().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                RamView moreRamView = new RamView();
+                moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
+                consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+            }
+        });
+
+        this.armMenuBar.getNewRegistersWindow().setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                RegistersView moreRegistersView = new RegistersView();
+                moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
+                consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+            }
+        });
+        //this.armToolBar.getSwitchButton()
+
     }
+
 }

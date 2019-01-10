@@ -16,28 +16,28 @@ import projetarm_v2.simulator.boilerplate.ArmSimulator;
 public class ArmToolBar {
 
     private ToolBar toolBar;
-    private Boolean isRunningMode;
+
     private ArmSimulator simulator;
-    private TextArea codeTextArea;
+    private CodeEditor codeEditor;
+
+    private Button switchButton;
+    private Button runButton;
+    private Button stepByStepButton;
+    private Button reloadButton;
+    private Button stopButton;
 
 
-    public ArmToolBar(ArmSimulator armSimulator, TextArea codeTextArea, Boolean isRunningMode){
-        this.isRunningMode = isRunningMode;
+
+    public ArmToolBar(ArmSimulator armSimulator, CodeEditor codeEditor){
+        this.codeEditor = codeEditor;
         this.simulator = armSimulator;
-        this.codeTextArea = codeTextArea;
 
-        Button switchButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm())));
-        Button runButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/run.png").toExternalForm())));
-        Button stepByStepButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/runByStep.png").toExternalForm())));
-        Button reloadButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
-        Button stopButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
+        this.switchButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm())));
+        this.runButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/run.png").toExternalForm())));
+        this.stepByStepButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/runByStep.png").toExternalForm())));
+        this.reloadButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
+        this.stopButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
         this.toolBar = new ToolBar(switchButton, new Separator(), runButton, stepByStepButton, reloadButton, stopButton);
-
-        switchButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                changeState();
-            }
-        });
 
         runButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
@@ -51,13 +51,6 @@ public class ArmToolBar {
             }
         });
 
-        reloadButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                armSimulator.resetState();
-                armSimulator.setProgram(codeTextArea.getText());
-            }
-        });
-
         stopButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 armSimulator.interruptExecutionFlow();
@@ -68,13 +61,16 @@ public class ArmToolBar {
 
     }
 
-    private void changeState() {
-        if(isRunningMode.booleanValue()){
-            //exit
-        }else{
-            simulator.setProgram(this.codeTextArea.getText());
-            isRunningMode = !isRunningMode.booleanValue();
-        }
+    public void setExecutionMode(boolean executionMode){
+        //changer les boutons affichés
+    }
+
+    public Button getSwitchButton() {
+        return switchButton;
+    }
+
+    public Button getReloadButton() {
+        return reloadButton;
     }
 
     public Node getNode(){
