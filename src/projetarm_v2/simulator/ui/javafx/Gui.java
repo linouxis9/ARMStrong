@@ -109,14 +109,14 @@ public class Gui extends Application {
         this.armMenuBar.getNewRegistersWindow().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 RegistersView moreRegistersView = new RegistersView(simulator);
-                moreRegistersView.getNode().dock(dockPane, DockPos.RIGHT);
+                moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
         });
         this.armMenuBar.getNewLedGame().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 LedView moreLedView = new LedView();
-                moreLedView.getNode().dock(dockPane, DockPos.LEFT);
+                moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
         });
