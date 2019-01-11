@@ -3,13 +3,17 @@ package projetarm_v2.simulator.ui.javafx;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
+import simulator.core.Ram;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,11 +28,12 @@ public class RamView {
 
     private ScrollBar memoryScrollBar;
 
-    private ArrayList<Text> memoryAdresses;
+    private ArrayList<Text> memoryAddresses;
     private ArrayList<Text> memoryValues;
 
     private int firstDisplayedAdress = 0;
     private int memoryDisplayMode = 8;
+    private int displayedLines;
 
     public RamView(){
         //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
@@ -41,60 +46,28 @@ public class RamView {
         dockNode = new DockNode(mainPane, "Ram View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
 
-        memoryAdresses = new ArrayList<Text>();
+        memoryAddresses = new ArrayList<Text>();
         memoryValues = new ArrayList<Text>();
 
-        memoryScrollBar = (ScrollBar) mainPane.lookup("#memoryScrollBar");
-        memoryScrollBar.setMin(0);
-        memoryScrollBar.setValue(0);
-        memoryScrollBar.setUnitIncrement(1);
-        memoryScrollBar.setMax(2 *1024*1024);
+        memoryAddresses.add((Text) mainPane.lookup("#addressLabel"));
+        memoryValues.add((Text) mainPane.lookup("#valueLabel"));
 
-        memoryScrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
-            firstDisplayedAdress = (int) memoryScrollBar.getValue();
-            updateContents();
-        });
-        
-        memoryScrollBar.setOnMouseClicked((MouseEvent mouseEvent) -> {
-            firstDisplayedAdress = (int) memoryScrollBar.getValue();
-            updateContents();
-        });
-        
-        
+        loadLabels(100);
+
         mainPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             displayLablels();
-            updateContents();
+            // updateContents();
         });
 
-    }
+        loadButonsEvents();
 
-    private void updateNewFirstAddress(int delta) {
-        int oldAddress = firstDisplayedAdress;
-
-        switch (this.memoryDisplayMode) {
-            case 8:
-                this.firstDisplayedAdress += -delta;
-                break;
-            case 16:
-                this.firstDisplayedAdress += -2 * delta;
-                break;
-            case 32:
-                this.firstDisplayedAdress += -4 * delta;
-                break;
-            default:
-                this.memoryDisplayMode = 8;
-        }
-
-        if (firstDisplayedAdress < 0 || firstDisplayedAdress > 2 * 1024 * 1024) {
-            this.firstDisplayedAdress = oldAddress;
-        }
     }
 
     private void updateContents() {
-        int displayedMemoryRows = memoryAdresses.size();
+        int displayedMemoryRows = memoryAddresses.size();
         int displayedMemoryAddress = firstDisplayedAdress;
         for (int labelNumber = 0; labelNumber < displayedMemoryRows; labelNumber++) {
-            String address = Integer.toHexString(firstDisplayedAdress+labelNumber);
+            String address = Integer.toHexString(displayedMemoryAddress);
             String content;
             switch (this.memoryDisplayMode) {
                 case 8:
@@ -117,74 +90,129 @@ public class RamView {
                 default:
                     content = "--------";
             }
-            memoryAdresses.get(labelNumber).setText("00000000".substring(address.length()) + address);
+            memoryAddresses.get(labelNumber).setText("00000000".substring(address.length()) + address);
             memoryValues.get(labelNumber).setText(content);
         }
     }
 
-    public void displayLablels() { //NOT OPTIMISED
-
-        //adresses
-        for(int i = 1; i<memoryAdresses.size(); i++){
-            mainPane.getChildren().remove(memoryAdresses.get(i));
-        }
-        memoryAdresses.clear();
-        Text firstMemoryLabel = (Text) mainPane.lookup("#addressLabel");
-        memoryAdresses.add(firstMemoryLabel);
-        double paneHeight = mainPane.getHeight();
-        double xpos = memoryAdresses.get(0).getBoundsInParent().getMinX();
-        double nextYpos = memoryAdresses.get(0).getBoundsInParent().getMaxY() + memoryAdresses.get(0).getLayoutBounds().getHeight();
-        double remaningSpace = paneHeight - nextYpos;
-        while(remaningSpace > VERTICAL_SPACE_BETWEEN_TEXT){
-            memoryAdresses.add(new Text(xpos, nextYpos, "0x00000000"));
-            mainPane.getChildren().add(memoryAdresses.get(memoryAdresses.size()-1));
-            nextYpos = nextYpos + memoryAdresses.get(memoryAdresses.size()-1).getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
-            remaningSpace = paneHeight - nextYpos;
+    private void loadLabels(int number){
+        double xAddressPos = this.memoryAddresses.get(0).getBoundsInParent().getMinX();
+        double xValuePos = this.memoryValues.get(0).getBoundsInParent().getMinX();
+        double yPos = this.memoryAddresses.get(0).getBoundsInParent().getMinY();
+        double spaceForLabel = this.memoryAddresses.get(0).getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
+        double nextPos = yPos + spaceForLabel + VERTICAL_SPACE_BETWEEN_TEXT; //add VERTICAL_SPACE_BETWEEN_TEXT
+        for(int i = 1; i<number; i++){
+            this.memoryAddresses.add(new Text(xAddressPos, nextPos, "--------"));
+            this.memoryValues.add(new Text(xValuePos, nextPos, "----------"));
+            nextPos += spaceForLabel;
         }
 
-        //contents
-        for(int i = 1; i<memoryValues.size(); i++){
-            mainPane.getChildren().remove(memoryValues.get(i));
+    }
+
+    public void displayLablels(){
+        double spaceForLabel = this.memoryAddresses.get(0).getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
+        double firstLabelYPos = this.memoryAddresses.get(0).getBoundsInParent().getMinY();
+        //Removing the Texts in the interface
+        for(int i = 0; i< memoryAddresses.size(); i++){
+            try{
+                mainPane.getChildren().remove(memoryAddresses.get(i));
+                mainPane.getChildren().remove(memoryValues.get(i));
+            } catch (Exception e){}
         }
-        memoryValues.clear();
-        Text firstValueLabel = (Text) mainPane.lookup("#valueLabel");
-        memoryValues.add(firstMemoryLabel);
-        paneHeight = mainPane.getHeight(); //already caluclated above
-        xpos = firstValueLabel.getBoundsInParent().getMinX();
-        nextYpos = memoryValues.get(0).getBoundsInParent().getMaxY() + memoryValues.get(0).getLayoutBounds().getHeight();
-        remaningSpace = paneHeight - nextYpos;
-        while(remaningSpace > VERTICAL_SPACE_BETWEEN_TEXT){
-            Text valueLabel = new Text(xpos, nextYpos, "0x00000000");
-            memoryValues.add(valueLabel);
-            mainPane.getChildren().add(valueLabel);
-            nextYpos = nextYpos + valueLabel.getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
-            remaningSpace = paneHeight - nextYpos;
-        }  
-        changeMode();
+        double paneHeight = mainPane.getHeight(); //THE HEIGHT IS NOT UPDATED IN THE MAIN PANE
+
+        int displayableLines = (int)((paneHeight - firstLabelYPos - VERTICAL_SPACE_BETWEEN_TEXT*2)/ spaceForLabel);
+        for(int i = 0; i<displayableLines; i++){
+            mainPane.getChildren().add(this.memoryAddresses.get(i));
+            mainPane.getChildren().add(this.memoryValues.get(i));
+        }
+        this.displayedLines = displayableLines;
     }
     
-    private void changeMode() {
-    	Button button8Bit = (Button) mainPane.lookup("#button8Bit");
+    private void loadButonsEvents() {
+        memoryScrollBar = (ScrollBar) mainPane.lookup("#memoryScrollBar");
+        memoryScrollBar.setMin(0);
+        memoryScrollBar.setValue(0);
+        memoryScrollBar.setUnitIncrement(1);
+        memoryScrollBar.setMax(2 *1024*1024); //TODO: set proper value
+
+        memoryScrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
+            this.firstDisplayedAdress = (int) memoryScrollBar.getValue();
+            updateContents();
+        });
+        memoryScrollBar.setOnMouseClicked((MouseEvent mouseEvent) -> {
+
+        });
+
+        Button button8Bit = (Button) mainPane.lookup("#button8Bit");
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
     	
     	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 8;
+            memoryScrollBar.setUnitIncrement(1);
+            firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
             updateContents();
     	});
     	
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 16;
+            memoryScrollBar.setUnitIncrement(2);
+            firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
             updateContents();
     	});
     	
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 32;
+            memoryScrollBar.setUnitIncrement(4);
+            firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
     		updateContents();
     	});
-    }
-    
 
+        Text memoryViewTitleText = (Text) mainPane.lookup("#goToAddressLabel");
+        TextField goToAddressField = (TextField) this.mainPane.lookup("#goToAddressField");
+        goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                String addressTyped = goToAddressField.getText();
+
+                int newAddress = 0;
+
+                try {
+                    if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
+                        newAddress = Integer.parseInt(addressTyped.substring(2), 16); // parsing a int in base 16, the 2
+                        // first chars of the string are
+                        // removed (0x)
+                    } else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
+                        newAddress = Integer.parseInt(addressTyped.substring(2), 2); // parsing a int in base 2, the 2
+                        // first chars of the string are
+                        // removed (0b)
+                    } else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
+                        newAddress = Integer.parseInt(addressTyped.substring(2)); // parsing a int in base 10, the 2
+                        // first chars of the string are
+                        // removed (0b)
+                    } else {
+                        newAddress = Integer.parseInt(addressTyped);
+                    }
+                } catch (NumberFormatException exeption) {
+                    memoryViewTitleText.setText("invalidAddress");
+                    memoryViewTitleText.setUnderline(true);
+                    return;
+                }
+
+                if (newAddress < 0 || newAddress > Ram.DEFAULT_SIZE - displayedLines) {
+                    memoryViewTitleText.setText("invalidAddress");
+                    memoryViewTitleText.setUnderline(true);
+                    return;
+                }
+                firstDisplayedAdress = newAddress;
+                memoryScrollBar.setValue(firstDisplayedAdress);
+                memoryViewTitleText.setText("goToAddress:");
+                memoryViewTitleText.setUnderline(false);
+                updateContents();
+            }
+        });
+
+    }
 
     public DockNode getNode() {
         return dockNode;

@@ -53,11 +53,11 @@ public class Gui extends Application {
         this.registersViews = new ArrayList<>();
         this.RamViews = new ArrayList<>();
 
-        this.registersViews.add(new RegistersView(this.simulator));
-        this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
-
         this.codeEditor = new CodeEditor();
         this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
+
+        this.registersViews.add(new RegistersView(this.simulator));
+        this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
 
         this.RamViews.add(new RamView());
         this.RamViews.get(0).getNode().dock(dockPane, DockPos.RIGHT);
