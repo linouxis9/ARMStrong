@@ -23,44 +23,50 @@ import org.dockfx.DockPane;
 
 public class ConsoleView {
 
-	ScrollPane mainPane;
-    DockNode dockNode;
-    Image dockImage;
-    TextFlow textArea;
-   
+	private ScrollPane scrollPane;
+	private DockNode dockNode;
+	private Image dockImage;
+	private TextFlow textArea;
 
-    public ConsoleView(){
-       // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-        this.mainPane = new ScrollPane();
- 
-        this.dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
+	public ConsoleView() {
+		this.scrollPane = new ScrollPane();
 
-        dockNode.setPrefSize(1000,1500);
-        dockNode.setClosable(false);
-        
-        this.textArea = new TextFlow();
-        
-        this.textArea.setPadding(new Insets(5));
-        this.textArea.setStyle("-fx-line-spacing: -0.4em;");
-        
-        OutputStream output = new OutputStream(){
-	        @Override
-	        public void write(int b) throws IOException {
-	        	Platform.runLater(()->textArea.getChildren().add(new Text(String.valueOf((char) b))));   
-	        	mainPane.setVvalue(1);
-	        }
-        };
-        
-        this.mainPane.setFitToWidth(true);
-        this.mainPane.setFitToHeight(true);
-        this.mainPane.setContent(this.textArea);    
-        this.mainPane.setHmin(dockNode.getHeight());
-        
-        System.setOut(new PrintStream(output));     
-    }
-    
-    public DockNode getNode(){
-        return dockNode;
-    }
-   
+		this.dockNode = new DockNode(scrollPane, "Console", new ImageView(dockImage));
+
+		dockNode.setPrefSize(1000, 1500);
+		dockNode.setClosable(false);
+
+		this.textArea = new TextFlow();
+
+		this.textArea.setPadding(new Insets(5));
+		this.textArea.setStyle("-fx-line-spacing: -0.4em;");
+
+		this.scrollPane.setFitToWidth(true);
+		this.scrollPane.setFitToHeight(true);
+		this.scrollPane.setContent(this.textArea);
+		this.scrollPane.setHmin(dockNode.getHeight());
+		
+		OutputStream output = new OutputStream() {
+			private StringBuffer currentLine = new StringBuffer();
+			
+			@Override
+			public void write(int b) throws IOException {
+				this.currentLine.append((char)b);
+				if (b == '\n') {
+					Platform.runLater(() -> {
+						textArea.getChildren().add(new Text(currentLine.toString()));
+						this.currentLine.setLength(0);
+						scrollPane.setVvalue(scrollPane.getHmax());
+					});
+				}
+			}
+		};
+
+		System.setOut(new PrintStream(output));
+	}
+
+	public DockNode getNode() {
+		return dockNode;
+	}
+
 }

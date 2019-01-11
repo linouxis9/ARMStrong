@@ -227,7 +227,7 @@ public class Cli {
 						pos++;
 						console.addLine(text.toString());
 						console.setCaretPosition(pos, 0);
-						this.text = new StringBuffer();
+						this.text.setLength(0);
 						return;
 					}
 					text.append((char) b);

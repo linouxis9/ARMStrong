@@ -51,7 +51,7 @@ public class Cpu {
 		// instruction is being interpreted
 		// We set our internal PC's value to the address of the instruction currently
 		// being executed
-		this.registers[15] = new SimpleRegister(startingAddress);
+		this.registers[15] = new SimpleRegister((int)startingAddress);
 		this.pc = this.registers[15];
 
 		u.mem_map(0, ramSize, Unicorn.UC_PROT_ALL);
@@ -135,6 +135,10 @@ public class Cpu {
 		return this.startingAddress;
 	}
 
+	public void setStartingAddress(long startingAddress) {
+		this.startingAddress = startingAddress;
+	}
+	
 	public void runStep() throws UnicornException {
 		this.synchronizeUnicornRam();
 
@@ -164,7 +168,7 @@ public class Cpu {
 			}
 
 			if (this.cpu.ram.getValue(address) == 0) {
-				System.out.format(">>> Instruction @ 0x%x skippedn", this.cpu.pc.getValue());
+				System.out.format(">>> Instruction @ 0x%x skipped\n", this.cpu.pc.getValue());
 				u.emu_stop();
 				this.cpu.hasFinished = true;
 				this.cpu.running = false;

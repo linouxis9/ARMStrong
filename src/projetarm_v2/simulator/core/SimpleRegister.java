@@ -7,7 +7,7 @@ public class SimpleRegister extends Register {
 	
 	public SimpleRegister() {}
 
-	public SimpleRegister(long value) {
+	public SimpleRegister(int value) {
 		this.value.set(value);
 	}
 	

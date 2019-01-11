@@ -28,13 +28,13 @@ public class ArmSimulator {
 		}
 	}
 	/**
-	 * The current loaded program
+	 * The currently loaded program
 	 */
 	private final Program program;
 
 	private final Assembler assembler;
 	/**
-	 * The cpu to execute the prorgam
+	 * The cpu to execute the program
 	 */
 	private Cpu cpu;
 
@@ -44,15 +44,19 @@ public class ArmSimulator {
 
 	private final static Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
 
+	private int startingAddress = Cpu.DEFAULT_STARTING_ADDRESS;
+	
+	private int ramSize = Ram.DEFAULT_RAM_SIZE;
+	
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
-	 * program, linesMap, interpretor)
+	 * program, asmToLine, assembler)
 	 */
 	public ArmSimulator() {
 		this.assembler = Assembler.getInstance();
 		this.program = new Program();
 		this.ram = new Ram();
-		this.cpu = new Cpu(ram, Cpu.DEFAULT_STARTING_ADDRESS, 2 * 1024 * 1024); // 2 MB of RAM
+		this.cpu = new Cpu(ram, startingAddress, ramSize); // 2 MB of RAM
 		this.asmToLine = new HashMap<>();
 	}
 
@@ -188,9 +192,21 @@ public class ArmSimulator {
 
 	public void resetState() {
 		this.ram = new Ram();
-		this.cpu = new Cpu(ram, Cpu.DEFAULT_STARTING_ADDRESS, 2 * 1024 * 1024);
+		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
 	}
 
+	public int getStartingAddress() {
+		return this.startingAddress;
+	}
+	
+	public void setStartingAddress(int startingAddress) {
+		this.cpu.setStartingAddress(startingAddress);
+	}
+	
+	public int getRamSize() {
+		return this.ramSize;
+	}
+	
 	/**
 	 * Returns the Negative Flag status
 	 */
