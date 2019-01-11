@@ -13,6 +13,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import simulator.core.Ram;
 
 import java.io.IOException;
@@ -26,6 +27,8 @@ public class RamView {
     private DockNode dockNode;
     private Image dockImage;
 
+    private ArmSimulator simulator;
+
     private ScrollBar memoryScrollBar;
 
     private ArrayList<Text> memoryAddresses;
@@ -35,13 +38,15 @@ public class RamView {
     private int memoryDisplayMode = 8;
     private int displayedLines;
 
-    public RamView(){
+    public RamView(ArmSimulator simulator){
         //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/MemoryView.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        this.simulator = simulator;
 
         dockNode = new DockNode(mainPane, "Ram View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
@@ -56,8 +61,8 @@ public class RamView {
 
         mainPane.heightProperty().addListener((obs, oldVal, newVal) -> {
             displayLablels();
-            // updateContents();
         });
+        updateContents();
 
         loadButonsEvents();
 
@@ -71,18 +76,18 @@ public class RamView {
             String content;
             switch (this.memoryDisplayMode) {
                 case 8:
-                    content = Integer.toHexString(00);
+                    content = Integer.toHexString(this.simulator.getRamByte(displayedMemoryAddress));
                     content = "00".substring(content.length()) + content;
                     displayedMemoryAddress++;
                     break;
                 case 16:
-                    content = Integer.toHexString(00);
+                    content = Integer.toHexString(this.simulator.getRamHWord(displayedMemoryAddress));
                     content = "0000".substring(content.length()) + content;
                     content = content.subSequence(0, 2) + " " + content.subSequence(2, 4);
                     displayedMemoryAddress += 2;
                     break;
                 case 32:
-                    content = Integer.toHexString(00);
+                    content = Integer.toHexString(this.simulator.getRamWord(displayedMemoryAddress));
                     content = "00000000".substring(content.length()) + content;
                     content = content.subSequence(0, 2) + " " + content.subSequence(2, 4) + " " + content.subSequence(4, 6) + " " + content.subSequence(6, 8);
                     displayedMemoryAddress += 4;
@@ -140,8 +145,14 @@ public class RamView {
             this.firstDisplayedAdress = (int) memoryScrollBar.getValue();
             updateContents();
         });
-        memoryScrollBar.setOnMouseClicked((MouseEvent mouseEvent) -> {
-
+        this.mainPane.setOnScroll((ScrollEvent scrollEvent) -> {
+            if (scrollEvent.getDeltaY() < 0) {
+                updateNewFirstAddress(-1);
+            }
+            else {
+                updateNewFirstAddress(1);
+            }
+            updateContents();
         });
 
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
@@ -154,14 +165,12 @@ public class RamView {
             firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
             updateContents();
     	});
-    	
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 16;
             memoryScrollBar.setUnitIncrement(2);
             firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
             updateContents();
     	});
-    	
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 32;
             memoryScrollBar.setUnitIncrement(4);
@@ -212,6 +221,28 @@ public class RamView {
             }
         });
 
+    }
+
+    private void updateNewFirstAddress(int delta) {
+        int oldAddress = this.firstDisplayedAdress;
+
+        switch (this.memoryDisplayMode) {
+            case 8:
+                this.firstDisplayedAdress += -delta;
+                break;
+            case 16:
+                this.firstDisplayedAdress += -2 * delta;
+                break;
+            case 32:
+                this.firstDisplayedAdress += -4 * delta;
+                break;
+            default:
+                this.memoryDisplayMode = 8;
+        }
+
+        if (firstDisplayedAdress < 0 || firstDisplayedAdress > Ram.DEFAULT_SIZE) {
+            this.firstDisplayedAdress = oldAddress;
+        }
     }
 
     public DockNode getNode() {

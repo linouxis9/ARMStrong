@@ -59,7 +59,7 @@ public class Gui extends Application {
         this.registersViews.add(new RegistersView(this.simulator));
         this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
 
-        this.RamViews.add(new RamView());
+        this.RamViews.add(new RamView(simulator));
         this.RamViews.get(0).getNode().dock(dockPane, DockPos.RIGHT);
 
         this.consoleView = new ConsoleView();
@@ -100,7 +100,7 @@ public class Gui extends Application {
         //the window "items"
         this.armMenuBar.getNewMemoryWindow().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                RamView moreRamView = new RamView();
+                RamView moreRamView = new RamView(simulator);
                 moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
             }
