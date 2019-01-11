@@ -13,4 +13,8 @@ public class IO7Segment {
 	public boolean getSegmentState(int noSegment) {
 		return segments[noSegment].isOn();
 	}
+	
+	public IOSegment getSegment(int noSegment) {
+		return segments[noSegment];
+	}
 }

@@ -11,6 +11,7 @@ import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
 import projetarm_v2.simulator.core.Program;
 import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.core.io.PORTManager;
 import projetarm_v2.simulator.utils.NativeJarGetter;
 import unicorn.UnicornException;
 
@@ -40,6 +41,8 @@ public class ArmSimulator {
 
 	private Ram ram;
 
+	private PORTManager portManager;
+	
 	private Map<Integer, Integer> asmToLine;
 
 	private final static Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
@@ -53,11 +56,12 @@ public class ArmSimulator {
 	 * program, asmToLine, assembler)
 	 */
 	public ArmSimulator() {
-		this.assembler = Assembler.getInstance();
 		this.program = new Program();
-		this.ram = new Ram();
-		this.cpu = new Cpu(ram, startingAddress, ramSize); // 2 MB of RAM
+		
+		this.assembler = Assembler.getInstance();
 		this.asmToLine = new HashMap<>();
+		
+		this.resetState();
 	}
 
 	public void setProgram(String assembly) throws InvalidInstructionException {
@@ -193,6 +197,7 @@ public class ArmSimulator {
 	public void resetState() {
 		this.ram = new Ram();
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
+		this.portManager = new PORTManager(this.ram, PORTManager.DEFAULT_PORT_ADDRESS, PORTManager.DEFAULT_DIR_ADDRESS);
 	}
 
 	public int getStartingAddress() {
@@ -239,6 +244,13 @@ public class ArmSimulator {
 		return this.cpu.getCPSR().q();
 	}
 
+	/**
+	 * /!\ WARNING, A resetState() makes a previously returned portManager invalid
+	 */
+	public PORTManager getPortManager() {
+		return this.portManager;
+	}
+	
 	/**
 	 * Returns true if the cpu is halted
 	 */
