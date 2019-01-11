@@ -82,10 +82,10 @@ public class ArmSimulator {
 		byte[] binary = (this.assembler.assemble(assembly, startingAddress));
 
 		for (int i = 0; i < binary.length; i++) {
-			this.ram.setByte(startingAddress + i, binary[i]);
+			this.ram.setByte((long)startingAddress + i, binary[i]);
 		}
 		
-		this.cpu.setEndAddress(startingAddress + binary.length);
+		this.cpu.setEndAddress((long)startingAddress + binary.length);
 		
 		return assembly;
 	}
@@ -170,6 +170,10 @@ public class ArmSimulator {
 	 * Staring the processor to execute a single instruction
 	 */
 	public void runStep() {
+		if (this.hasFinished()) {
+			System.out.println("[INFO] No more instructions to run");
+		}
+		
 		try {
 			this.cpu.runStep();
 		} catch (UnicornException e) {
@@ -179,7 +183,7 @@ public class ArmSimulator {
 
 	// TODO Convert to an exception so it can be handled as wished by the UIs
 	private void handleException(UnicornException e) {
-		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]\n[ERROR] EMULATION ABORTED!\n", e.getMessage(),
+		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]%n[ERROR] EMULATION ABORTED!%n", e.getMessage(),
 				this.getRegisterValue(15), this.getCurrentLine());
 	}
 

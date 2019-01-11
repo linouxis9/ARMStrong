@@ -1,6 +1,5 @@
 package projetarm_v2.simulator.ui.javafx;
 
-import com.sun.java.accessibility.util.TopLevelWindowListener;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToolBar;
@@ -10,7 +9,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.dockfx.DockNode;
-import org.dockfx.DockPane;
 
 import java.io.IOException;
 import java.util.ArrayList;

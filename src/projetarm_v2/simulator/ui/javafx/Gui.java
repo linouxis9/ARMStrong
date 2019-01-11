@@ -1,7 +1,6 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -11,9 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
-import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.util.ArrayList;
+
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 public class Gui extends Application {
 
@@ -39,7 +39,7 @@ public class Gui extends Application {
         this.simulator = new ArmSimulator();
         this.executionMode = false;
 
-        primaryStage.setTitle("ARMStrong");
+        primaryStage.setTitle("#@RMStrong");
         Image applicationIcon = new Image("file:logo.png");
         primaryStage.getIcons().add(applicationIcon);
 
@@ -85,6 +85,7 @@ public class Gui extends Application {
 
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
+        
         // initialize the default styles for the dock pane and undocked nodes using the DockFX
         // library's internal Default.css stylesheet
         // unlike other custom control libraries this allows the user to override them globally
@@ -92,8 +93,6 @@ public class Gui extends Application {
         // this must be called after the primary stage is shown
         // https://bugs.openjdk.java.net/browse/JDK-8132900
         DockPane.initializeDefaultUserAgentStylesheet();
-
-        // TODO: after this feel free to apply your own global stylesheet using the StyleManager class
     }
 
     private void setButtonEvents(){
@@ -124,12 +123,12 @@ public class Gui extends Application {
         //the "Run" items
         this.armMenuBar.getSwichMode().setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                executionMode =!executionMode;
+                executionMode = !executionMode;
                 if(executionMode){
                     try {
                         simulator.setProgram(codeEditor.getProgramAsSting());
                     } catch (Exception e){
-                        System.out.println(e);
+                        System.out.println(e.getMessage());
                         executionMode=!executionMode;
                     }
                 }

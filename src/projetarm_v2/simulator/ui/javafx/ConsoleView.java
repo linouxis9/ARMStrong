@@ -3,14 +3,8 @@ package projetarm_v2.simulator.ui.javafx;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -19,7 +13,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.dockfx.DockNode;
-import org.dockfx.DockPane;
 
 public class ConsoleView {
 

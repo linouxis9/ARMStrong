@@ -24,7 +24,7 @@ public class CpuConsoleGetString extends CpuRoutine
 		
 		long address = (long) this.getRegister(0).getValue();
 		
-		byte c[] = searchString.getBytes();
+		byte[] c = searchString.getBytes();
 		
 		for(int i = 0; i < c.length ; i++)
 		{

@@ -8,15 +8,9 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.text.TextFlow;
-import org.dockfx.DockNode;
-import org.dockfx.DockPane;
-import org.dockfx.DockPos;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class ArmMenuBar {
 
@@ -131,14 +125,12 @@ public class ArmMenuBar {
     }
     
     public void setExecutionMode(boolean executionMode){
-        Iterator<MenuItem> iterator = this.disableInEdition.iterator();
-        while (iterator.hasNext()){
-            iterator.next().setDisable(!executionMode);
+        for (MenuItem item : this.disableInEdition){
+            item.setDisable(!executionMode);
         }
 
-        iterator = this.disableInExecution.iterator();
-        while (iterator.hasNext()){
-            iterator.next().setDisable(executionMode);
+        for (MenuItem item : this.disableInExecution){
+            item.setDisable(executionMode);
         }
     }
 

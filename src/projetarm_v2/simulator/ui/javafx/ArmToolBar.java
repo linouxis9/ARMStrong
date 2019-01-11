@@ -6,12 +6,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import org.dockfx.DockPane;
-import org.dockfx.DockPos;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class ArmToolBar {
 
@@ -70,9 +67,8 @@ public class ArmToolBar {
     }
 
     public void setExecutionMode(boolean executionMode){
-        Iterator<Button> iterator = this.disableInEdition.iterator();
-        while (iterator.hasNext()){
-            iterator.next().setDisable(!executionMode);
+        for (Button item : this.disableInEdition){
+            item.setDisable(!executionMode);
         }
     }
 

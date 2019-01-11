@@ -7,7 +7,7 @@ import projetarm_v2.simulator.core.RamRegister;
 
 public class IOx {
 
-	private final int REGISTER_SIZE = 8;
+	private final static int REGISTER_SIZE = 8;
 	
 	private RamRegister portX;
 	private RamRegister dirX;

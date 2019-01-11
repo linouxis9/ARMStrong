@@ -1,6 +1,6 @@
 package projetarm_v2.simulator.core;
 
-public class RamRegister extends Register {
+public class RamRegister implements Register {
 
 	private final Ram ram;
 	private final long myAddress;

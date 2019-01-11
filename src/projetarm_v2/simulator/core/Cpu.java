@@ -145,7 +145,7 @@ public class Cpu {
 		running = true;
 		hasFinished = false;
 
-		u.emu_start(this.pc.getValue(), this.pc.getValue() + 4, 0, 0);
+		u.emu_start(this.pc.getValue(), (long)this.pc.getValue() + 4, 0, 0);
 		this.pc.setValue(this.pc.getValue() + 4);
 
 		running = false;
@@ -168,7 +168,7 @@ public class Cpu {
 			}
 
 			if (this.cpu.ram.getValue(address) == 0) {
-				System.out.format(">>> Instruction @ 0x%x skipped\n", this.cpu.pc.getValue());
+				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.pc.getValue());
 				u.emu_stop();
 				this.cpu.hasFinished = true;
 				this.cpu.running = false;

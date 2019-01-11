@@ -2,7 +2,7 @@ package projetarm_v2.simulator.core;
 
 import unicorn.Unicorn;
 
-public class UnicornRegister extends Register {
+public class UnicornRegister implements Register {
 	private final Unicorn u;
 	private int register;
 	
