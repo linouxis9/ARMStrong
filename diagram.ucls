@@ -1,240 +1,685 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.2" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="projetarm_v2.simulator.boilerplate.ArmSimulator" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/boilerplate/ArmSimulator.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="385" width="165" x="689" y="37"/>    
+  <class id="1" language="java" name="projetarm_v2.simulator.Main" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/Main.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1363" y="-53"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="projetarm_v2.simulator.core.Ram.WriteHookRam" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Ram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="209" x="267" y="462"/>    
+  <class id="2" language="java" name="projetarm_v2.simulator.boilerplate.ArmSimulator" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/boilerplate/ArmSimulator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="423" y="482"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="projetarm_v2.simulator.core.Cpu.CPUInstructionHook" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Cpu.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="186" x="715" y="833"/>    
+  <class id="3" language="java" name="projetarm_v2.simulator.ui.cli.Cli" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/cli/Cli.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="879" y="119"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="projetarm_v2.simulator.core.Cpsr" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Cpsr.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1218" y="1065"/>    
+  <class id="4" language="java" name="projetarm_v2.simulator.ui.javafx.Gui" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/Gui.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1773" y="148"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="projetarm_v2.simulator.core.Ram" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Ram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="295" width="223" x="267" y="833"/>    
+  <class id="5" language="java" name="projetarm_v2.simulator.ui.javafx.RegistersView" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/RegistersView.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="313" width="177" x="1096" y="403"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="projetarm_v2.simulator.core.RamChunk" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/RamChunk.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="626" y="1010"/>    
+  <class id="6" language="java" name="projetarm_v2.simulator.ui.javafx.ArmMenuBar" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/ArmMenuBar.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="349" width="221" x="1313" y="403"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="projetarm_v2.simulator.core.Ram.ReadHookRam" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Ram.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="186" x="41" y="462"/>    
+  <class id="7" language="java" name="projetarm_v2.simulator.ui.javafx.ArmToolBar" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/ArmToolBar.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="331" width="212" x="1574" y="403"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="8" language="java" name="projetarm_v2.simulator.core.Register" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Register.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="97" width="125" x="941" y="833"/>    
+  <class id="8" language="java" name="projetarm_v2.simulator.ui.javafx.RamTuple" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/RamTuple.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="169" width="142" x="1826" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="projetarm_v2.simulator.ui.javafx.RamView" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/RamView.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="331" width="229" x="2008" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="projetarm_v2.simulator.ui.javafx.LedView" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/LedView.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="205" width="148" x="2277" y="403"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="projetarm_v2.simulator.ui.javafx.CodeEditor" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/CodeEditor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1906" y="733"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="projetarm_v2.simulator.ui.javafx.ConsoleView" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/ConsoleView.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2530" y="490"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="projetarm_v2.simulator.core.Cpu.CPUInstructionHook" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Cpu.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="135" y="99"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="projetarm_v2.simulator.core.Cpu" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Cpu.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="565" width="209" x="30" y="226"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="projetarm_v2.simulator.core.Ram" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Ram.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="856" y="895"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="projetarm_v2.simulator.core.Ram.WriteHookRam" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Ram.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="724" y="650"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="projetarm_v2.simulator.core.Ram.ReadHookRam" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Ram.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="962" y="650"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="projetarm_v2.simulator.core.RamChunk" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/RamChunk.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="187" width="126" x="1002" y="738"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="projetarm_v2.simulator.core.RamRegister" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/RamRegister.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1067" y="1012"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="20" language="java" name="projetarm_v2.simulator.core.Register" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Register.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="135" y="888"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="9" language="java" name="projetarm_v2.simulator.core.Assembler" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Assembler.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="169" width="142" x="516" y="462"/>    
+  <class id="21" language="java" name="projetarm_v2.simulator.core.SimpleRegister" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/SimpleRegister.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="229" y="1095"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="projetarm_v2.simulator.core.Cpu" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Cpu.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="331" width="172" x="894" y="462"/>    
+  <class id="22" language="java" name="projetarm_v2.simulator.core.UnicornRegister" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/UnicornRegister.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="63" y="1096"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="projetarm_v2.simulator.core.Program" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/Program.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="79" width="125" x="729" y="462"/>    
+  <class id="23" language="java" name="projetarm_v2.simulator.core.Assembler" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Assembler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="421" y="36"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="projetarm_v2.simulator.core.UnicornRegister" project="projetarm_v2" 
-    file="/projetarm_v2/src/projetarm_v2/simulator/core/UnicornRegister.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="151" width="162" x="1106" y="462"/>    
+  <class id="24" language="java" name="projetarm_v2.simulator.core.Cpsr" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/Cpsr.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-102" y="898"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="13">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="14" name="cpu"/>      
-      <multiplicity id="15" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="16">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="17" name="ram"/>      
-      <multiplicity id="18" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="19">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="3"/>  
-  </nesting>  
-  <association id="20">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="21" name="cpu"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="23">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="24" name="memory"/>      
-      <multiplicity id="25" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="26">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="27" name="pc"/>      
-      <multiplicity id="28" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="29">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="2"/>  
-  </nesting>  
-  <generalization id="30">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="12"/>  
-  </generalization>  
-  <association id="31">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="32" name="ram"/>      
-      <multiplicity id="33" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="34">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="35" name="cpsr"/>      
-      <multiplicity id="36" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="37">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="38" name="assembler"/>      
-      <multiplicity id="39" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="40">    
-    <bendpoint x="1104" y="767"/>    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="8"/>  
-  </realization>  
-  <association id="41">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="42" name="ram"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="44">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="7"/>  
-  </nesting>  
-  <association id="45">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="46" name="registers"/>      
-      <multiplicity id="47" minimum="0" maximum="2147483647">        
-        <position height="15" width="21" x="1002" y="810"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="48">    
-    <bendpoint x="698" y="462"/>    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="49" name="ram"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="51">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="52" name="program"/>      
-      <multiplicity id="53" minimum="0" maximum="1"/>    
+  <class id="25" language="java" name="projetarm_v2.simulator.core.routines.CpuRoutine.RoutineHook" 
+    project="simulateurARM" file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuRoutine.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-106" y="545"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="projetarm_v2.simulator.core.routines.CpuRoutine" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuRoutine.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-119" y="354"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="projetarm_v2.simulator.core.routines.CpuConsolePutChar" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuConsolePutChar.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-509" y="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="projetarm_v2.simulator.core.routines.CpuConsoleGetString" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuConsoleGetString.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-320" y="149"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="projetarm_v2.simulator.core.routines.CpuConsolePutString" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuConsolePutString.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-129" y="150"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="projetarm_v2.simulator.core.io.PORTManager" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/PORTManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="487" y="1100"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="projetarm_v2.simulator.core.io.IOx" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IOx.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1353" y="1091"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="projetarm_v2.simulator.core.io.IOSwitch" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IOSwitch.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1612" y="1144"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="projetarm_v2.simulator.core.io.IOComponent" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IOComponent.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1906" y="980"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="projetarm_v2.simulator.core.io.IOLed" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IOLed.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1797" y="1135"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="projetarm_v2.simulator.core.io.IOSegment" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IOSegment.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2181" y="1135"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="projetarm_v2.simulator.core.io.IO7Segment" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IO7Segment.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2178" y="962"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="projetarm_v2.simulator.core.io.IOButton" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/io/IOButton.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1983" y="1135"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="38">    
+    <bendpoint x="1810" y="521"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="39" name="codeEditor"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="54">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="55" name="assembler"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
+  <association id="41">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="42" name="cpsr"/>      
+      <multiplicity id="43" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <end type="SOURCE" refId="23" navigable="false">      
+      <attribute id="45" name="assembler"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="48" name="ram"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="51" name="simulator"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="54" name="simulator"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="57" name="pc"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="59">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="33"/>  
+  </generalization>  
+  <association id="60">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="61" name="cpuRoutine"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="64" name="registersViews"/>      
+      <multiplicity id="65" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="66">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="13"/>  
+  </nesting>  
+  <association id="67">    
+    <end type="SOURCE" refId="19" navigable="false">      
+      <attribute id="68" name="ram"/>      
+      <multiplicity id="69" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="70">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="71" name="dirX"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="73">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <association id="74">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="75" name="cpu"/>      
+      <multiplicity id="76" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="77">    
+    <bendpoint x="308" y="848"/>    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="78" name="ram"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="80">    
+    <end type="SOURCE" refId="35"/>    
+    <end type="TARGET" refId="33"/>  
+  </generalization>  
+  <association id="81">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="82" name="codeEditor"/>      
+      <multiplicity id="83" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="84">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="17"/>  
+  </nesting>  
+  <generalization id="85">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="26"/>  
+  </generalization>  
+  <association id="86">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="87" name="segments"/>      
+      <multiplicity id="88" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="35" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="89">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="33"/>  
+  </generalization>  
+  <association id="90">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="91" name="ram"/>      
+      <multiplicity id="92" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="93">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="94" name="simulator"/>      
+      <multiplicity id="95" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="96">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="97">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="98" name="armToolBar"/>      
+      <multiplicity id="99" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="100">    
+    <end type="SOURCE" refId="26" navigable="false">      
+      <attribute id="101" name="cpu"/>      
+      <multiplicity id="102" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="103">    
+    <bendpoint x="16" y="949"/>    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="22"/>  
+  </generalization>  
+  <realization id="104">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <association id="105">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="106" name="ram"/>      
+      <multiplicity id="107" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="108">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="109" name="simulator"/>      
+      <multiplicity id="110" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="111">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="112" name="assembler"/>      
+      <multiplicity id="113" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="114">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="115" name="cpu"/>      
+      <multiplicity id="116" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="117">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="25"/>  
+  </nesting>  
+  <generalization id="118">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="26"/>  
+  </generalization>  
+  <generalization id="119">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="33"/>  
+  </generalization>  
+  <association id="120">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="121" name="registers"/>      
+      <multiplicity id="122" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="123">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="124" name="armMenuBar"/>      
+      <multiplicity id="125" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="126">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="16"/>  
+  </nesting>  
+  <dependency id="127">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="128">    
+    <bendpoint x="2423" y="347"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="129" name="consoleView"/>      
+      <multiplicity id="130" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="131">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="132" name="RamViews"/>      
+      <multiplicity id="133" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="134">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="135" name="portManager"/>      
+      <multiplicity id="136" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="30" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="137">    
+    <end type="SOURCE" refId="33" navigable="false">      
+      <attribute id="138" name="register"/>      
+      <multiplicity id="139" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="140">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="141" name="components"/>      
+      <multiplicity id="142" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="143">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="144" name="ram"/>      
+      <multiplicity id="145" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="146">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="20"/>  
+  </realization>  
+  <association id="147">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="148" name="memory"/>      
+      <multiplicity id="149" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="150">    
+    <end type="SOURCE" refId="31" navigable="false">      
+      <attribute id="151" name="portX"/>      
+      <multiplicity id="152" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="153">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="26"/>  
+  </generalization>  
+  <association id="154">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="155" name="ports"/>      
+      <multiplicity id="156" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="31" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
