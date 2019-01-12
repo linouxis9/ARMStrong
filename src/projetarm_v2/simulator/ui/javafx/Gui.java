@@ -1,10 +1,13 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import com.sun.javafx.geom.AreaOp;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -72,6 +75,7 @@ public class Gui extends Application {
         vbox.getChildren().addAll(this.armMenuBar.getNode(), this.armToolBar.getNode(), dockPane);
         VBox.setVgrow(dockPane, Priority.ALWAYS);
 
+        primaryStage.show(); //render to avoid node.lookup() to fail
         setButtonEvents();
 
         this.codeEditor.setExecutionMode(this.executionMode);
@@ -170,6 +174,16 @@ public class Gui extends Application {
             public void handle(ActionEvent t) {
                 simulator.interruptExecutionFlow();
             }
+        });
+
+        //the console
+        this.consoleView.getTextField().setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                System.out.println(this.consoleView.getTextField().getText());
+                //simulator.laConsoleAecritUntruc(this.consoleView.getTextField().getText());
+                this.consoleView.getTextField().clear();
+            }
+
         });
     }
 
