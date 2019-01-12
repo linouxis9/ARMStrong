@@ -80,26 +80,18 @@ public class ArmMenuBar {
         disableInEdition.add(stopMenuItem);
         disableInEdition.add(reloadMenuItem);
 
-        exitMenu.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        exitMenu.setOnAction(actionEvent -> {
                 Platform.exit();
-            }
         });
 
-        runMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        runMenuItem.setOnAction(actionEvent -> {
                 simulator.run();
-            }
         });
-        runStepMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        runStepMenuItem.setOnAction(actionEvent -> {
                 simulator.runStep();
-            }
         });
-        stopMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        stopMenuItem.setOnAction(actionEvent -> {
                 simulator.interruptExecutionFlow();
-            }
         });
 
     }

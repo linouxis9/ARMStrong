@@ -57,7 +57,6 @@ public class ConsoleView {
 
 		OutputStream output = new OutputStream() {
 			private StringBuffer currentLine = new StringBuffer();
-			
 			@Override
 			public void write(int b) throws IOException {
 				this.currentLine.append((char)b);

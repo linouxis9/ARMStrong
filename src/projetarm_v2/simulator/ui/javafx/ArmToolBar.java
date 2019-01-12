@@ -45,23 +45,9 @@ public class ArmToolBar {
         disableInEdition.add(stopButton);
 
 
-        runButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                armSimulator.run();
-            }
-        });
-
-        stepByStepButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                armSimulator.runStep();
-            }
-        });
-
-        stopButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                armSimulator.interruptExecutionFlow();
-            }
-        });
+        runButton.setOnAction(actionEvent -> { armSimulator.run(); });
+        stepByStepButton.setOnAction(actionEvent -> { armSimulator.runStep(); });
+        stopButton.setOnAction(actionEvent -> { armSimulator.interruptExecutionFlow(); });
 
 
     }

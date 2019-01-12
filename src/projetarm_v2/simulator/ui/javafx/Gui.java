@@ -102,31 +102,24 @@ public class Gui extends Application {
     private void setButtonEvents(){
 
         //the window "items"
-        this.armMenuBar.getNewMemoryWindow().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armMenuBar.getNewMemoryWindow().setOnAction(actionEvent ->{
                 RamView moreRamView = new RamView(simulator);
                 moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
-            }
         });
-        this.armMenuBar.getNewRegistersWindow().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent ->{
                 RegistersView moreRegistersView = new RegistersView(simulator);
                 moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
-            }
         });
-        this.armMenuBar.getNewLedGame().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armMenuBar.getNewLedGame().setOnAction(actionEvent ->{
                 LedView moreLedView = new LedView();
                 moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
                 //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
-            }
         });
 
         //the "Run" items
-        this.armMenuBar.getSwichMode().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armMenuBar.getSwichMode().setOnAction(actionEvent -> {
                 executionMode = !executionMode;
                 if(executionMode){
                     try {
@@ -139,41 +132,27 @@ public class Gui extends Application {
                 codeEditor.setExecutionMode(executionMode);
                 armMenuBar.setExecutionMode(executionMode);
                 armToolBar.setExecutionMode(executionMode);
-
-
-            }
         });
-        this.armMenuBar.getReloadMenuItem().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armMenuBar.getReloadMenuItem().setOnAction(actionEvent -> {
 
-            }
         });
 
         //the toolbar buttons
-        this.armToolBar.getSwitchButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armToolBar.getSwitchButton().setOnAction(actionEvent -> {
                 armMenuBar.getSwichMode().fire();
-            }
         });
-        this.armToolBar.getReloadButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armToolBar.getReloadButton().setOnAction(actionEvent ->{
                 armMenuBar.getReloadMenuItem().fire();
-            }
         });
-        this.armToolBar.getRunButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armToolBar.getRunButton().setOnAction(actionEvent ->{
                 simulator.run();
-            }
         });
-        this.armToolBar.getStepByStepButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+
+        this.armToolBar.getStepByStepButton().setOnAction(actionEvent ->{
                 simulator.runStep();
-            }
         });
-        this.armToolBar.getStopButton().setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        this.armToolBar.getStopButton().setOnAction(actionEvent ->  {
                 simulator.interruptExecutionFlow();
-            }
         });
 
         //the console
