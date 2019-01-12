@@ -12,6 +12,7 @@ import projetarm_v2.simulator.core.InvalidAssemblyException;
 import projetarm_v2.simulator.core.Program;
 import projetarm_v2.simulator.core.Ram;
 import projetarm_v2.simulator.core.io.PORTManager;
+import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 import projetarm_v2.simulator.utils.NativeJarGetter;
 import unicorn.UnicornException;
 
@@ -51,6 +52,8 @@ public class ArmSimulator {
 	
 	private int ramSize = Ram.DEFAULT_RAM_SIZE;
 	
+	private CpuConsoleGetString guiConsoleToCpu;
+	
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
 	 * program, asmToLine, assembler)
@@ -76,7 +79,7 @@ public class ArmSimulator {
 	}
 
 	public void setConsoleInput(String input){
-		//Nicolas, it's your turn!
+		this.guiConsoleToCpu.add(input);
 	}
 
 	private String fillRamWithAssembly(String assembly) {
@@ -226,6 +229,8 @@ public class ArmSimulator {
 	public void resetState() {
 		this.ram = new Ram();
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
+		this.guiConsoleToCpu = new CpuConsoleGetString(cpu);
+		this.cpu.registerCpuRoutine(guiConsoleToCpu);
 		this.portManager = new PORTManager(this.ram, PORTManager.DEFAULT_PORT_ADDRESS, PORTManager.DEFAULT_DIR_ADDRESS);
 	}
 

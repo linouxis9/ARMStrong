@@ -1,7 +1,6 @@
 package projetarm_v2.simulator.core;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.reflections.Reflections;
@@ -21,7 +20,6 @@ public class Cpu {
 	private boolean hasFinished = false;
 	private long startingAddress;
 	private long endAddress;
-	private Set<Long> routineAddress;
 
 	private static final byte[] binary = Assembler.getInstance().assemble("bx lr", 0L);
 
@@ -33,7 +31,7 @@ public class Cpu {
 		this.ram = ram;
 		this.startingAddress = startingAddress;
 		this.endAddress = 0;
-		this.routineAddress = new HashSet<>();
+
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
 		this.registers = new Register[16];
@@ -76,16 +74,18 @@ public class Cpu {
 		
 		for (Class<? extends CpuRoutine> routine : routines) {
 			try {
+				if ((boolean) routine.getMethod("shouldBeManuallyAdded").invoke(null)) {
+					continue;
+				}
 				registerCpuRoutine((CpuRoutine)(routine.getDeclaredConstructor(Cpu.class).newInstance(this)));
 			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {}
 		}
 	}
 
-	private void registerCpuRoutine(CpuRoutine routine) {
+	public void registerCpuRoutine(CpuRoutine routine) {
 		Long address = routine.getRoutineAddress();
 		
 		u.hook_add(routine.getNewHook(), address, address, null);
-		this.routineAddress.add(address);
 
 		for (int i = 0; i < Cpu.binary.length; i++) {
 			this.ram.setByte(address + i, Cpu.binary[i]);
@@ -150,7 +150,7 @@ public class Cpu {
 
 		running = false;
 	}
-
+	
 	private class CPUInstructionHook implements CodeHook {
 		private final Cpu cpu;
 
@@ -159,13 +159,9 @@ public class Cpu {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			this.cpu.pc.setValue((int)address);
+			this.cpu.pc.setValue((int)address + 8);
 
 			//System.out.format(">>> Instruction @ 0x%x is being executed\n", this.cpu.pc.getValue());
-
-			if (this.cpu.routineAddress.contains(address)) {
-				return;
-			}
 
 			if (this.cpu.ram.getValue(address) == 0) {
 				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.pc.getValue());

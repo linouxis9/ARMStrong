@@ -17,7 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
-import simulator.core.Ram;
+import projetarm_v2.simulator.core.Ram;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -195,7 +195,7 @@ public class RamView {
                     return;
                 }
 
-                if (newAddress < 0 || newAddress > Ram.DEFAULT_SIZE - displayedLines) {
+                if (newAddress < 0 || newAddress > Ram.DEFAULT_RAM_SIZE - displayedLines) {
                     memoryViewTitleText.setText("invalidAddress");
                     memoryViewTitleText.setUnderline(true);
                     return;
@@ -303,7 +303,7 @@ public class RamView {
                 this.memoryDisplayMode = 8;
         }
 
-        if (firstDisplayedAdress < 0 || firstDisplayedAdress > Ram.DEFAULT_SIZE) {
+        if (firstDisplayedAdress < 0 || firstDisplayedAdress > Ram.DEFAULT_RAM_SIZE) {
             this.firstDisplayedAdress = oldAddress;
         }
     }
