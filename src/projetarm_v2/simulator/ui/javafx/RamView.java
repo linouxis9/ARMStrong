@@ -241,16 +241,16 @@ public class RamView {
                                 if(value>256){
                                     errorPopup("Value too big for a byte (change memory view mode to enter bigger numbers");
                                 }
-                                //simulator.setByte(address, value);
+                                simulator.setRamByte(address, (byte)value);
                                 break;
                             case 16:
                                 if(value>512){
                                     errorPopup("Value too big for a HalfWord (change memory view mode to enter bigger numbers");
                                 }
-                                //simulator.setHWord(address, value);
+                                simulator.setRamHWord(address, (short)value);
                                 break;
                             case 32:
-                                //simulator.setWord(address, value);
+                                simulator.setRamWord(address, value);
                                 break;
                         }
                         mainPane.getChildren().remove(textField);

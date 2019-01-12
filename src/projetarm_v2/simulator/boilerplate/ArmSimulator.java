@@ -75,6 +75,10 @@ public class ArmSimulator {
 		fillAddressLineMap(assembly);
 	}
 
+	public void setConsoleInput(String input){
+		//Nicolas, it's your turn!
+	}
+
 	private String fillRamWithAssembly(String assembly) {
 		int startingAddress = (int) this.cpu.getStartingAddress();
 		this.asmToLine.clear();
@@ -153,6 +157,27 @@ public class ArmSimulator {
 	 */
 	public int getRamWord(long address) {
 		return this.ram.getValue(address);
+	}
+
+	/**
+	 * Sets a byte(8bits) in the ram at the given address
+	 */
+	public void setRamByte(long address, byte value) {
+		this.ram.setByte(address, value);
+	}
+
+	/**
+	 * Sets a half-word(16bits) in the ram at the given address
+	 */
+	public void setRamHWord(long address, short value) {
+		this.ram.setHWord(address, value);
+	}
+
+	/**
+	 * Sets a word(32bits) in the ram at the given address
+	 */
+	public void setRamWord(long address, int value) {
+		this.ram.setValue(address, value);
 	}
 
 	/**
