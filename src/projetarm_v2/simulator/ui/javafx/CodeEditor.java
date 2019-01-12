@@ -34,6 +34,7 @@ public class CodeEditor {
 
         dockNode = new DockNode(mainPane, "Editor", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
+        dockNode.setClosable(false);
 
         this.textArea = (TextArea) mainPane.lookup("#codeArea");
         this.textFlow = (TextFlow) mainPane.lookup("#textFlow");

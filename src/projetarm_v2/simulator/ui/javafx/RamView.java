@@ -1,5 +1,7 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollBar;
@@ -10,6 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
@@ -23,7 +26,7 @@ public class RamView {
 
     private static final int VERTICAL_SPACE_BETWEEN_TEXT = 10;
 
-    private Pane mainPane;
+    private AnchorPane mainPane;
     private DockNode dockNode;
     private Image dockImage;
 
@@ -183,25 +186,9 @@ public class RamView {
         goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
             if (ke.getCode().equals(KeyCode.ENTER)) {
                 String addressTyped = goToAddressField.getText();
-
                 int newAddress = 0;
-
                 try {
-                    if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
-                        newAddress = Integer.parseInt(addressTyped.substring(2), 16); // parsing a int in base 16, the 2
-                        // first chars of the string are
-                        // removed (0x)
-                    } else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
-                        newAddress = Integer.parseInt(addressTyped.substring(2), 2); // parsing a int in base 2, the 2
-                        // first chars of the string are
-                        // removed (0b)
-                    } else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
-                        newAddress = Integer.parseInt(addressTyped.substring(2)); // parsing a int in base 10, the 2
-                        // first chars of the string are
-                        // removed (0b)
-                    } else {
-                        newAddress = Integer.parseInt(addressTyped);
-                    }
+                    newAddress = parseUserInput(addressTyped);
                 } catch (NumberFormatException exeption) {
                     memoryViewTitleText.setText("invalidAddress");
                     memoryViewTitleText.setUnderline(true);
@@ -221,6 +208,82 @@ public class RamView {
             }
         });
 
+        for(int i=0; i< memoryValues.size(); i++){
+            memoryValues.get(i).setOnMouseClicked((MouseEvent mouseEvent) -> {
+                Text text = (Text)mouseEvent.getSource();
+                int row = memoryValues.indexOf(text);
+                TextField textField = new TextField(text.getText());
+                mainPane.getChildren().add(textField);
+                this.mainPane.setTopAnchor(textField, text.getBoundsInParent().getMinY());
+                this.mainPane.setLeftAnchor(textField, text.getBoundsInParent().getMinX());
+
+                textField.focusedProperty().addListener((new ChangeListener<Boolean>(){
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+                    {
+                        if (!newPropertyValue){
+                            mainPane.getChildren().remove(textField);
+                        }
+                    }
+                }));
+                textField.setOnKeyPressed((KeyEvent ke) -> {
+                    if (ke.getCode().equals(KeyCode.ENTER)) {
+                        int address = firstDisplayedAdress+row;
+                        int value = 0;
+                        try {
+                            value = parseUserInput(textField.getText());
+                        }catch (Exception e){
+                            errorPopup("Invalid value");
+                            return;
+                        }
+                        switch (memoryDisplayMode){
+                            case 8:
+                                if(value>256){
+                                    errorPopup("Value too big for a byte (change memory view mode to enter bigger numbers");
+                                }
+                                //simulator.setByte(address, value);
+                                break;
+                            case 16:
+                                if(value>512){
+                                    errorPopup("Value too big for a HalfWord (change memory view mode to enter bigger numbers");
+                                }
+                                //simulator.setHWord(address, value);
+                                break;
+                            case 32:
+                                //simulator.setWord(address, value);
+                                break;
+                        }
+                        mainPane.getChildren().remove(textField);
+                    } else if(ke.getCode().equals(KeyCode.ESCAPE)){
+                        mainPane.getChildren().remove(textField);
+                    }
+                    updateContents();
+                });
+
+            });
+        }
+
+    }
+
+    private void errorPopup(String s) {
+        System.out.println(s);
+    }
+
+    static int parseUserInput(String input) throws NumberFormatException{
+        int parsedNumber;
+        if (input.startsWith("0x") || input.startsWith("0X")) {
+            parsedNumber = Integer.parseInt(input.substring(2), 16); // parsing a int in base 16, the 2
+
+        } else if (input.startsWith("0b") || input.startsWith("0B")) {
+            parsedNumber = Integer.parseInt(input.substring(2), 2); // parsing a int in base 2, the 2
+
+        } else if (input.startsWith("0d") || input.startsWith("0D")) {
+            parsedNumber = Integer.parseInt(input.substring(2)); // parsing a int in base 10, the 2
+
+        } else {
+            parsedNumber = Integer.parseInt(input);
+        }
+        return parsedNumber;
     }
 
     private void updateNewFirstAddress(int delta) {
