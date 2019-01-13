@@ -1,68 +1,129 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import org.dockfx.DockNode;
-import org.dockfx.DockPane;
-import org.dockfx.DockPos;
+import javafx.scene.control.SeparatorMenuItem;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
+import java.util.HashSet;
+
 public class ArmMenuBar {
+
     private MenuBar menuBar;
 
-    public ArmMenuBar(ArmSimulator simulator, DockPane dockPane){
+    private MenuItem newMemoryWindow;
+    private MenuItem newRegistersWindow;
+    private MenuItem newLedGameWindow;
+
+    private MenuItem swichMode;
+    private MenuItem reloadMenuItem;
+
+    private HashSet<MenuItem> disableInExecution;
+    private HashSet<MenuItem> disableInEdition;
+
+
+
+    public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor){
         final Menu fileMenu = new Menu("File");
         final Menu windowMenu = new Menu("Window");
         final Menu editMenu = new Menu("Edit");
         final Menu runMenu = new Menu("Run");
         final Menu helpMenu = new Menu("Help");
 
-        fileMenu.getItems().add(new MenuItem("New"));
-        fileMenu.getItems().add(new MenuItem("Open File..."));
-        fileMenu.getItems().add(new MenuItem("Save As..."));
+        //FILE
+        final MenuItem neW = new MenuItem("New");
+        final MenuItem openFile = new MenuItem("Open File...");
+        final MenuItem save = new MenuItem("Save");
+        final MenuItem saveAs = new MenuItem("Save As...");
         final MenuItem exitMenu = new MenuItem("Exit");
-        fileMenu.getItems().add(exitMenu);
+        fileMenu.getItems().addAll(neW, openFile, new SeparatorMenuItem(), save, saveAs,new SeparatorMenuItem(), exitMenu);
 
+        //WINDOW
         final Menu newMenu = new Menu("New Window");
-        final MenuItem newMemoryWindow = new MenuItem("Memory");
-        newMenu.getItems().add(newMemoryWindow);
+        final MenuItem preferences = new MenuItem("Preferences");
 
-        windowMenu.getItems().add(newMenu);
-        windowMenu.getItems().add(new MenuItem("Preferences"));
+        this.newMemoryWindow = new MenuItem("Memory");
+        this.newRegistersWindow = new MenuItem("Registers");
+        this.newLedGameWindow = new MenuItem("Led Game");
+        newMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow);
 
+        windowMenu.getItems().addAll(newMenu, preferences);
+
+        //RUN
+        this.swichMode = new MenuItem("Switch Mode");
         final MenuItem runMenuItem = new MenuItem("Run");
-        runMenu.getItems().add(runMenuItem);
-        runMenu.getItems().add(new MenuItem("Run Step by Step"));
+        final MenuItem runStepMenuItem = new MenuItem("Run Step by Step");
+        final MenuItem stopMenuItem = new MenuItem("Stop");
+        reloadMenuItem = new MenuItem("Reload");
+        runMenu.getItems().addAll(this.swichMode, runMenuItem, runStepMenuItem, stopMenuItem, reloadMenuItem);
 
         helpMenu.getItems().add(new MenuItem("About"));
 
         this.menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, helpMenu);
 
-        newMemoryWindow.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                    RamView moreRamView = new RamView();
-                    moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
-                    //console.getNode().dock(dockPane, DockPos.BOTTOM);
-            }
+        disableInEdition = new HashSet<>();
+        disableInExecution = new HashSet<>();
+
+        disableInExecution.add(neW);
+        disableInExecution.add(openFile);
+        disableInExecution.add(save);
+        disableInExecution.add(saveAs);
+
+        disableInEdition.add(runMenuItem);
+        disableInEdition.add(runStepMenuItem);
+        disableInEdition.add(stopMenuItem);
+        disableInEdition.add(reloadMenuItem);
+
+        exitMenu.setOnAction(actionEvent -> {
+                Platform.exit();
         });
 
-        exitMenu.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                //primaryStage.close();
-            }
-        });
-
-        runMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+        runMenuItem.setOnAction(actionEvent -> {
                 simulator.run();
-            }
+        });
+        runStepMenuItem.setOnAction(actionEvent -> {
+                simulator.runStep();
+        });
+        stopMenuItem.setOnAction(actionEvent -> {
+                simulator.interruptExecutionFlow();
         });
 
+    }
+
+    public MenuItem getReloadMenuItem() {
+        return reloadMenuItem;
+    }
+
+    public MenuItem getSwichMode() {
+        return swichMode;
+    }
+
+    public MenuItem getNewMemoryWindow() {
+        return newMemoryWindow;
+    }
+
+    public MenuItem getNewRegistersWindow() {
+        return newRegistersWindow;
+    }
+    
+    public MenuItem getNewLedGame() {
+        return newLedGameWindow;
+    }
+    
+    public void setExecutionMode(boolean executionMode){
+        for (MenuItem item : this.disableInEdition){
+            item.setDisable(!executionMode);
+        }
+
+        for (MenuItem item : this.disableInExecution){
+            item.setDisable(executionMode);
+        }
     }
 
     public Node getNode(){

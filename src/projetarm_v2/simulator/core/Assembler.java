@@ -24,7 +24,6 @@ public class Assembler {
 			try {
 				Assembler.assembler = new Assembler();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

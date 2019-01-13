@@ -11,6 +11,8 @@ import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
 import projetarm_v2.simulator.core.Program;
 import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.core.io.PORTManager;
+import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 import projetarm_v2.simulator.utils.NativeJarGetter;
 import unicorn.UnicornException;
 
@@ -28,32 +30,41 @@ public class ArmSimulator {
 		}
 	}
 	/**
-	 * The current loaded program
+	 * The currently loaded program
 	 */
 	private final Program program;
 
 	private final Assembler assembler;
 	/**
-	 * The cpu to execute the prorgam
+	 * The cpu to execute the program
 	 */
 	private Cpu cpu;
 
 	private Ram ram;
 
+	private PORTManager portManager;
+	
 	private Map<Integer, Integer> asmToLine;
 
 	private final static Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
 
+	private int startingAddress = Cpu.DEFAULT_STARTING_ADDRESS;
+	
+	private int ramSize = Ram.DEFAULT_RAM_SIZE;
+	
+	private CpuConsoleGetString guiConsoleToCpu;
+	
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
-	 * program, linesMap, interpretor)
+	 * program, asmToLine, assembler)
 	 */
 	public ArmSimulator() {
-		this.assembler = Assembler.getInstance();
 		this.program = new Program();
-		this.ram = new Ram();
-		this.cpu = new Cpu(ram, Cpu.DEFAULT_STARTING_ADDRESS, 2 * 1024 * 1024); // 2 MB of RAM
+		
+		this.assembler = Assembler.getInstance();
 		this.asmToLine = new HashMap<>();
+		
+		this.resetState();
 	}
 
 	public void setProgram(String assembly) throws InvalidInstructionException {
@@ -67,6 +78,10 @@ public class ArmSimulator {
 		fillAddressLineMap(assembly);
 	}
 
+	public void setConsoleInput(String input){
+		this.guiConsoleToCpu.add(input);
+	}
+
 	private String fillRamWithAssembly(String assembly) {
 		int startingAddress = (int) this.cpu.getStartingAddress();
 		this.asmToLine.clear();
@@ -74,10 +89,10 @@ public class ArmSimulator {
 		byte[] binary = (this.assembler.assemble(assembly, startingAddress));
 
 		for (int i = 0; i < binary.length; i++) {
-			this.ram.setByte(startingAddress + i, binary[i]);
+			this.ram.setByte((long)startingAddress + i, binary[i]);
 		}
 		
-		this.cpu.setEndAddress(startingAddress + binary.length);
+		this.cpu.setEndAddress((long)startingAddress + binary.length);
 		
 		return assembly;
 	}
@@ -148,6 +163,27 @@ public class ArmSimulator {
 	}
 
 	/**
+	 * Sets a byte(8bits) in the ram at the given address
+	 */
+	public void setRamByte(long address, byte value) {
+		this.ram.setByte(address, value);
+	}
+
+	/**
+	 * Sets a half-word(16bits) in the ram at the given address
+	 */
+	public void setRamHWord(long address, short value) {
+		this.ram.setHWord(address, value);
+	}
+
+	/**
+	 * Sets a word(32bits) in the ram at the given address
+	 */
+	public void setRamWord(long address, int value) {
+		this.ram.setValue(address, value);
+	}
+
+	/**
 	 * Starting the processor to the next break or to the end
 	 */
 	public void run() {
@@ -162,6 +198,10 @@ public class ArmSimulator {
 	 * Staring the processor to execute a single instruction
 	 */
 	public void runStep() {
+		if (this.hasFinished()) {
+			System.out.println("[INFO] No more instructions to run");
+		}
+		
 		try {
 			this.cpu.runStep();
 		} catch (UnicornException e) {
@@ -171,7 +211,7 @@ public class ArmSimulator {
 
 	// TODO Convert to an exception so it can be handled as wished by the UIs
 	private void handleException(UnicornException e) {
-		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]\n[ERROR] EMULATION ABORTED!\n", e.getMessage(),
+		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]%n[ERROR] EMULATION ABORTED!%n", e.getMessage(),
 				this.getRegisterValue(15), this.getCurrentLine());
 	}
 
@@ -188,9 +228,24 @@ public class ArmSimulator {
 
 	public void resetState() {
 		this.ram = new Ram();
-		this.cpu = new Cpu(ram, Cpu.DEFAULT_STARTING_ADDRESS, 2 * 1024 * 1024);
+		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
+		this.guiConsoleToCpu = new CpuConsoleGetString(cpu);
+		this.cpu.registerCpuRoutine(guiConsoleToCpu);
+		this.portManager = new PORTManager(this.ram, PORTManager.DEFAULT_PORT_ADDRESS, PORTManager.DEFAULT_DIR_ADDRESS);
 	}
 
+	public int getStartingAddress() {
+		return this.startingAddress;
+	}
+	
+	public void setStartingAddress(int startingAddress) {
+		this.cpu.setStartingAddress(startingAddress);
+	}
+	
+	public int getRamSize() {
+		return this.ramSize;
+	}
+	
 	/**
 	 * Returns the Negative Flag status
 	 */
@@ -223,6 +278,13 @@ public class ArmSimulator {
 		return this.cpu.getCPSR().q();
 	}
 
+	/**
+	 * /!\ WARNING, A resetState() makes a previously returned portManager invalid
+	 */
+	public PORTManager getPortManager() {
+		return this.portManager;
+	}
+	
 	/**
 	 * Returns true if the cpu is halted
 	 */

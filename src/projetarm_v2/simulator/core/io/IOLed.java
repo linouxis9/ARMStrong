@@ -1,10 +1,10 @@
 package projetarm_v2.simulator.core.io;
 
-import projetarm_v2.simulator.core.Register;
+import projetarm_v2.simulator.core.RamRegister;
 
 public class IOLed extends IOComponent {
 
-	public IOLed(Register register, int shift) {
+	public IOLed(RamRegister register, int shift) {
 		super(register, shift);
 	}
 }

@@ -1,7 +1,6 @@
 package projetarm_v2.simulator.core;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.reflections.Reflections;
@@ -21,7 +20,6 @@ public class Cpu {
 	private boolean hasFinished = false;
 	private long startingAddress;
 	private long endAddress;
-	private Set<Long> routineAddress;
 
 	private static final byte[] binary = Assembler.getInstance().assemble("bx lr", 0L);
 
@@ -33,7 +31,7 @@ public class Cpu {
 		this.ram = ram;
 		this.startingAddress = startingAddress;
 		this.endAddress = 0;
-		this.routineAddress = new HashSet<>();
+
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
 		this.registers = new Register[16];
@@ -51,7 +49,7 @@ public class Cpu {
 		// instruction is being interpreted
 		// We set our internal PC's value to the address of the instruction currently
 		// being executed
-		this.registers[15] = new SimpleRegister(startingAddress);
+		this.registers[15] = new SimpleRegister((int)startingAddress);
 		this.pc = this.registers[15];
 
 		u.mem_map(0, ramSize, Unicorn.UC_PROT_ALL);
@@ -76,16 +74,18 @@ public class Cpu {
 		
 		for (Class<? extends CpuRoutine> routine : routines) {
 			try {
+				if ((boolean) routine.getMethod("shouldBeManuallyAdded").invoke(null)) {
+					continue;
+				}
 				registerCpuRoutine((CpuRoutine)(routine.getDeclaredConstructor(Cpu.class).newInstance(this)));
 			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {}
 		}
 	}
 
-	private void registerCpuRoutine(CpuRoutine routine) {
+	public void registerCpuRoutine(CpuRoutine routine) {
 		Long address = routine.getRoutineAddress();
 		
 		u.hook_add(routine.getNewHook(), address, address, null);
-		this.routineAddress.add(address);
 
 		for (int i = 0; i < Cpu.binary.length; i++) {
 			this.ram.setByte(address + i, Cpu.binary[i]);
@@ -135,18 +135,22 @@ public class Cpu {
 		return this.startingAddress;
 	}
 
+	public void setStartingAddress(long startingAddress) {
+		this.startingAddress = startingAddress;
+	}
+	
 	public void runStep() throws UnicornException {
 		this.synchronizeUnicornRam();
 
 		running = true;
 		hasFinished = false;
 
-		u.emu_start(this.pc.getValue(), this.pc.getValue() + 4, 0, 0);
+		u.emu_start(this.pc.getValue(), (long)this.pc.getValue() + 4, 0, 0);
 		this.pc.setValue(this.pc.getValue() + 4);
 
 		running = false;
 	}
-
+	
 	private class CPUInstructionHook implements CodeHook {
 		private final Cpu cpu;
 
@@ -155,16 +159,12 @@ public class Cpu {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			this.cpu.pc.setValue((int)address);
+			this.cpu.pc.setValue((int)address + 8);
 
 			//System.out.format(">>> Instruction @ 0x%x is being executed\n", this.cpu.pc.getValue());
 
-			if (this.cpu.routineAddress.contains(address)) {
-				return;
-			}
-
 			if (this.cpu.ram.getValue(address) == 0) {
-				System.out.format(">>> Instruction @ 0x%x skippedn", this.cpu.pc.getValue());
+				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.pc.getValue());
 				u.emu_stop();
 				this.cpu.hasFinished = true;
 				this.cpu.running = false;

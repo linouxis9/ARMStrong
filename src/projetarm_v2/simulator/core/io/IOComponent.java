@@ -1,13 +1,13 @@
 package projetarm_v2.simulator.core.io;
 
-import projetarm_v2.simulator.core.Register;
+import projetarm_v2.simulator.core.RamRegister;
 
 abstract class IOComponent {
 
-	private final Register register;
+	private final RamRegister register;
 	private final int shift;
 	
-	protected IOComponent(Register port, int shift) {
+	protected IOComponent(RamRegister port, int shift) {
 		this.register = port;
 		this.shift = shift;
 	}
@@ -18,5 +18,9 @@ abstract class IOComponent {
 	
 	protected void set(boolean value) {
 		this.register.setBit(shift, value);
+	}
+	
+	public String toString() {
+		return "[Adr:" + this.register.getAddress() + ", Bits N°" + this.shift + "]";
 	}
 }

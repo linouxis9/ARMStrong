@@ -1,81 +1,95 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import com.sun.javafx.geom.AreaOp;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import projetarm_v2.simulator.boilerplate.ArmSimulator;
-
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 
-import java.util.Random;
+import java.util.ArrayList;
+
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 public class Gui extends Application {
 
-	private static int nbRamView = 1;
-	
+    private ArrayList<RegistersView> registersViews;
+    private ArrayList<RamView> RamViews;
+    private CodeEditor codeEditor;
+    private ConsoleView consoleView;
+
+    private ArmMenuBar armMenuBar;
+    private ArmToolBar armToolBar;
+    private DockPane dockPane;
+
+    private boolean executionMode;
+    
+    private ArmSimulator simulator;
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-    	ArmSimulator simulator = new ArmSimulator();
-    	
-    	simulator.setProgram("b start;" + 
-				"kek: .asciz \"test\";" + 
-				".align;" + 
-				"start: ldr r0,=kek;" + 
-				"mov r1,#0xFF04;" +
-				"blx r1");
-    	
-    	primaryStage.setTitle("ARMStrong");
+        this.simulator = new ArmSimulator();
+        this.executionMode = false;
+
+        primaryStage.setTitle("#@RMStrong");
         Image applicationIcon = new Image("file:logo.png");
         primaryStage.getIcons().add(applicationIcon);
 
         // create a dock pane that will manage our dock nodes and handle the layout
-        DockPane dockPane = new DockPane();
-
-        // create a default test node for the center of the dock area
-        Pane editorPane = new Pane();
+        this.dockPane = new DockPane();
 
         // load an image to caption the dock nodes
         //Image dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
 
-        //MENU
+        //creating the nodes
+        this.registersViews = new ArrayList<>();
+        this.RamViews = new ArrayList<>();
+
+        this.codeEditor = new CodeEditor();
+        this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
+
+        this.registersViews.add(new RegistersView(this.simulator));
+        this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
+
+        this.RamViews.add(new RamView(simulator));
+        this.RamViews.get(0).getNode().dock(dockPane, DockPos.RIGHT);
+
+        this.consoleView = new ConsoleView();
+        this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+
+        this.armMenuBar = new ArmMenuBar(simulator,codeEditor);
+        this.armToolBar = new ArmToolBar(simulator,codeEditor);
 
         VBox vbox = new VBox();
-        vbox.getChildren().addAll(new ArmMenuBar(simulator, dockPane).getNode(), new ArmToolBar().getNode(), dockPane);
+        vbox.getChildren().addAll(this.armMenuBar.getNode(), this.armToolBar.getNode(), dockPane);
         VBox.setVgrow(dockPane, Priority.ALWAYS);
+
+        primaryStage.show(); //render to avoid node.lookup() to fail
+        setButtonEvents();
+
+        this.codeEditor.setExecutionMode(this.executionMode);
+        this.armMenuBar.setExecutionMode(this.executionMode);
+        this.armToolBar.setExecutionMode(this.executionMode);
 
         primaryStage.setScene(new Scene(vbox, 800, 500));
         primaryStage.sizeToScene();
 
-        RegistersView firstRegistersView = new RegistersView();
-        firstRegistersView.getNode().dock(dockPane, DockPos.LEFT);
-
-        CodeEditor codeEditor = new CodeEditor();
-        codeEditor.getNode().dock(dockPane, DockPos.LEFT);
-
-        RamView firstRamView = new RamView();
-        firstRamView.getNode().dock(dockPane, DockPos.RIGHT);
-
-        ConsoleView console = new ConsoleView();
-        console.getNode().dock(dockPane, DockPos.BOTTOM);
-        
         primaryStage.show();
 
         // test the look and feel with both Caspian and Modena
         Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
+        
         // initialize the default styles for the dock pane and undocked nodes using the DockFX
         // library's internal Default.css stylesheet
         // unlike other custom control libraries this allows the user to override them globally
@@ -83,27 +97,73 @@ public class Gui extends Application {
         // this must be called after the primary stage is shown
         // https://bugs.openjdk.java.net/browse/JDK-8132900
         DockPane.initializeDefaultUserAgentStylesheet();
-
-        // TODO: after this feel free to apply your own global stylesheet using the StyleManager class
     }
 
-    private TreeView<String> generateRandomTree() {
-        // create a demonstration tree view to use as the contents for a dock node
-        TreeItem<String> root = new TreeItem<String>("Root");
-        TreeView<String> treeView = new TreeView<String>(root);
-        treeView.setShowRoot(false);
+    private void setButtonEvents(){
 
-        // populate the prototype tree with some random nodes
-        Random rand = new Random();
-        for (int i = 4 + rand.nextInt(8); i > 0; i--) {
-            TreeItem<String> treeItem = new TreeItem<String>("Item " + i);
-            root.getChildren().add(treeItem);
-            for (int j = 2 + rand.nextInt(4); j > 0; j--) {
-                TreeItem<String> childItem = new TreeItem<String>("Child " + j);
-                treeItem.getChildren().add(childItem);
+        //the window "items"
+        this.armMenuBar.getNewMemoryWindow().setOnAction(actionEvent ->{
+                RamView moreRamView = new RamView(simulator);
+                moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
+                //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+        });
+        this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent ->{
+                RegistersView moreRegistersView = new RegistersView(simulator);
+                moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
+                //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+        });
+        this.armMenuBar.getNewLedGame().setOnAction(actionEvent ->{
+                LedView moreLedView = new LedView();
+                moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
+                //consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+        });
+
+        //the "Run" items
+        this.armMenuBar.getSwichMode().setOnAction(actionEvent -> {
+                executionMode = !executionMode;
+                if(executionMode){
+                    try {
+                        simulator.setProgram(codeEditor.getProgramAsSting());
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                        executionMode=!executionMode;
+                    }
+                }
+                codeEditor.setExecutionMode(executionMode);
+                armMenuBar.setExecutionMode(executionMode);
+                armToolBar.setExecutionMode(executionMode);
+        });
+        this.armMenuBar.getReloadMenuItem().setOnAction(actionEvent -> {
+
+        });
+
+        //the toolbar buttons
+        this.armToolBar.getSwitchButton().setOnAction(actionEvent -> {
+                armMenuBar.getSwichMode().fire();
+        });
+        this.armToolBar.getReloadButton().setOnAction(actionEvent ->{
+                armMenuBar.getReloadMenuItem().fire();
+        });
+        this.armToolBar.getRunButton().setOnAction(actionEvent ->{
+                simulator.run();
+        });
+
+        this.armToolBar.getStepByStepButton().setOnAction(actionEvent ->{
+                simulator.runStep();
+        });
+        this.armToolBar.getStopButton().setOnAction(actionEvent ->  {
+                simulator.interruptExecutionFlow();
+        });
+
+        //the console
+        this.consoleView.getTextField().setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                System.out.println(this.consoleView.getTextField().getText());
+                //simulator.laConsoleAecritUntruc(this.consoleView.getTextField().getText());
+                this.consoleView.getTextField().clear();
             }
-        }
 
-        return treeView;
+        });
     }
+
 }

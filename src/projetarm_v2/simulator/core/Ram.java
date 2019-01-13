@@ -11,6 +11,7 @@ import unicorn.WriteHook;
 public class Ram {
 
 	public static final int CHUNK_SIZE = 32;
+	public static final int DEFAULT_RAM_SIZE = 2 * 1024 * 1024; // 2 MB
 	public final Map<Long, RamChunk> memory;
 
 	public Ram() {

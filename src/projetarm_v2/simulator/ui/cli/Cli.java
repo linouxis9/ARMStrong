@@ -104,9 +104,7 @@ public class Cli {
 
 			menuPanel.addComponent(new Button("L0ad", () -> {
 				try {
-					if (this.codeEditor.isReadOnly()) {
-						this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
-					}
+					this.codeEditor.setText(this.codeEditor.getText().replaceAll("-> ", ""));
 					try {
 						this.simulator.setProgram(this.codeEditor.getText().replaceAll("\n", ";"));
 					} catch (InvalidInstructionException e) {
@@ -135,16 +133,12 @@ public class Cli {
 			}));
 
 			menuPanel.addComponent(new Button("Run Step", () -> {
-				if (!this.simulator.hasFinished()) {
-					if (!this.running.get() && this.codeEditor.isReadOnly()) {
-						this.running.set(true);
-						this.simulator.runStep();
-						this.showCurrentLine();
-						this.updateGUI();
-						this.running.set(false);
-					}
-				} else {
-					System.out.println("[INFO] No more instructions to run");
+				if (!this.simulator.hasFinished() && !this.running.get() && this.codeEditor.isReadOnly()) {
+					this.running.set(true);
+					this.simulator.runStep();
+					this.showCurrentLine();
+					this.updateGUI();
+					this.running.set(false);
 				}
 			}));
 
@@ -179,11 +173,11 @@ public class Cli {
 				this.registers[n] = new Label("0");
 				leftPanel.addComponent(this.registers[n]);
 			});
-			
+
 			leftPanel.addComponent(new Label("Flags"));
 			this.registers[16] = new Label("[___]");
 			leftPanel.addComponent(this.registers[16]);
-			
+
 			Panel centerPanel = new Panel();
 			bodyPanel.addComponent(centerPanel);
 			codeEditor = new TextBox(new TerminalSize(size.getColumns() / 2, size.getColumns() / 8));
@@ -227,7 +221,7 @@ public class Cli {
 						pos++;
 						console.addLine(text.toString());
 						console.setCaretPosition(pos, 0);
-						this.text = new StringBuffer();
+						this.text.setLength(0);
 						return;
 					}
 					text.append((char) b);
@@ -272,13 +266,13 @@ public class Cli {
 		int i = 0;
 		for (Map.Entry<Label, Label> base : memory.entrySet()) {
 			base.getKey().setText("0x" + Integer.toHexString(memoryIndex + i));
-			base.getValue().setText(Integer.toString(this.simulator.getRamByte(memoryIndex + i)));
+			base.getValue().setText(Integer.toString(this.simulator.getRamByte((long) memoryIndex + i)));
 			i++;
 		}
 	}
 
 	private void updateRegisters() {
-		for (int i = 0; i < registers.length-1; i++) {
+		for (int i = 0; i < registers.length - 1; i++) {
 			registers[i].setText(Integer.toString(this.simulator.getRegisterValue(i)));
 		}
 		registers[16].setText(this.simulator.getCpu().getCPSR().toString());

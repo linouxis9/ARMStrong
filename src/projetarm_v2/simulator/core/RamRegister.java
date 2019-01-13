@@ -1,6 +1,6 @@
 package projetarm_v2.simulator.core;
 
-public class RamRegister extends Register {
+public class RamRegister implements Register {
 
 	private final Ram ram;
 	private final long myAddress;
@@ -18,5 +18,9 @@ public class RamRegister extends Register {
 	@Override
 	public void setValue(int value) {
 		this.ram.setValue(this.myAddress, value);
+	}
+	
+	public long getAddress() {
+		return this.myAddress;
 	}
 }

@@ -6,11 +6,11 @@ import java.util.List;
 
 import projetarm_v2.simulator.core.Cpu;
 
-public class CpuConsolePrintChar extends CpuRoutine {
+public class CpuConsolePutChar extends CpuRoutine {
 
 	public final static long ROUTINE_ADDRESS = 0xFF00L;
 	
-	public CpuConsolePrintChar(Cpu cpu) {
+	public CpuConsolePutChar(Cpu cpu) {
 		super(cpu);
 	}
 	

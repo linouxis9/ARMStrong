@@ -30,18 +30,14 @@ public abstract class CpuRoutine {
 
 	public abstract long getRoutineAddress();
 
-	private void runPrimitive() {
-		if (this.getRoutineAddress() != this.getRegister(15).getValue()) {
-			return;
-		}
-		
-		primitive();
-	}
-
 	public CodeHook getNewHook() {
 		return new RoutineHook(this);
 	}
 
+	public static boolean shouldBeManuallyAdded() {
+		return false;
+	}
+	
 	private class RoutineHook implements CodeHook {
 		private final CpuRoutine cpuRoutine;
 
@@ -50,7 +46,11 @@ public abstract class CpuRoutine {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			this.cpuRoutine.runPrimitive();
+			if (this.cpuRoutine.getRoutineAddress() != address) {
+				return;
+			}
+			
+			this.cpuRoutine.primitive();
 		}
 
 	}
