@@ -2,8 +2,6 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -79,7 +77,7 @@ public class Gui extends Application {
 		vbox.getChildren().addAll(this.armMenuBar.getNode(), this.armToolBar.getNode(), dockPane);
 		VBox.setVgrow(dockPane, Priority.ALWAYS);
 
-		primaryStage.show(); // render to avoid node.lookup() to fail
+		//primaryStage.show(); // render to avoid node.lookup() to fail
 		setButtonEvents();
 
 		this.codeEditor.setExecutionMode(this.executionMode);
@@ -132,7 +130,7 @@ public class Gui extends Application {
 				executionMode = !executionMode;
 				if (executionMode) {
 					try {
-						simulator.setProgram(codeEditor.getProgramAsSting());
+						simulator.setProgram(codeEditor.getProgramAsString());
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 						executionMode = !executionMode;
@@ -146,7 +144,7 @@ public class Gui extends Application {
 		this.armMenuBar.getReloadMenuItem().setOnAction(actionEvent -> {
 			if (!running.get()) {
 				this.simulator.resetState();
-				this.simulator.setProgram(codeEditor.getProgramAsSting());
+				this.simulator.setProgram(codeEditor.getProgramAsString());
 			}
 		});
 
@@ -205,7 +203,6 @@ public class Gui extends Application {
 			for (RamView ramView : this.ramViews) {
 				ramView.updateContents();
 			}
-			
 			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
 	}

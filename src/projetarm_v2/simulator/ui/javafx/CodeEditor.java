@@ -6,6 +6,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.dockfx.DockNode;
@@ -24,6 +25,8 @@ public class CodeEditor {
     private ToolBar toolBar;
     private TextFlow textFlow;
     private List<Text> instructionsAsText;
+
+    private int routineCallLine = -1;
 
     public CodeEditor() {
         try {
@@ -46,6 +49,18 @@ public class CodeEditor {
 
     public void highlightLine(int line) {
     	// Prends bien en compte le cas où on est à line = 0 (quand on est dans une routine ou une instruction modifiée par quelqu'un)
+
+        for (Text anInstructionsAsText : instructionsAsText) {
+            anInstructionsAsText.setFill(Color.BLACK);
+        }
+
+        if(line > 0) {
+            instructionsAsText.get(line - 1).setFill(Color.RED);
+            this.routineCallLine = line-1;
+        }else if (line == 0){
+            instructionsAsText.get(routineCallLine).setFill(Color.BLUE); //je sais pas si c'est pertinant (mise en bleu de la ligne ayant appellé la routine?
+        }
+
     }
     
     public void setExecutionMode(boolean executionMode){
@@ -55,7 +70,7 @@ public class CodeEditor {
 
         if(executionMode){
             String[] instructionsAsStrings = this.textArea.getText().split("\\r?\\n");
-            this.instructionsAsText = new ArrayList<Text>();
+            this.instructionsAsText = new ArrayList<>();
             this.textFlow.getChildren().clear();
             for (int lineNumber = 1; lineNumber <= instructionsAsStrings.length; lineNumber++) {
                 String line = lineNumber + "\t" + instructionsAsStrings[lineNumber-1] + '\n';
@@ -69,7 +84,7 @@ public class CodeEditor {
         return this.dockNode;
     }
 
-    public String getProgramAsSting() {
+    public String getProgramAsString() {
         return textArea.getText();
     }
 }
