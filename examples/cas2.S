@@ -1,0 +1,5 @@
+mov r0,0x3000
+mov r1,#0xFF08
+blx r1
+mov r1,#0xFF04
+blx r1

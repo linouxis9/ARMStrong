@@ -46,7 +46,7 @@ public class ArmSimulator {
 	
 	private Map<Integer, Integer> asmToLine;
 
-	private final static Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
+	private static final Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
 
 	private int startingAddress = Cpu.DEFAULT_STARTING_ADDRESS;
 	
@@ -67,13 +67,12 @@ public class ArmSimulator {
 		this.resetState();
 	}
 
-	public void setProgram(String assembly) throws InvalidInstructionException {
+	public void setProgram(String assembly) {
 		assembly = assembly.replace(System.lineSeparator(), ";");
 
 		try {
 			fillRamWithAssembly(assembly);
-		} catch (InvalidAssemblyException e) {
-		}
+		} catch (InvalidAssemblyException e) {/* This is going to get caught by fillAddressLineMap */}
 
 		fillAddressLineMap(assembly);
 	}
@@ -83,7 +82,6 @@ public class ArmSimulator {
 	}
 
 	private String fillRamWithAssembly(String assembly) {
-		int startingAddress = (int) this.cpu.getStartingAddress();
 		this.asmToLine.clear();
 
 		byte[] binary = (this.assembler.assemble(assembly, startingAddress));

@@ -17,8 +17,6 @@ import java.io.PrintStream;
 
 import org.dockfx.DockNode;
 
-import javax.swing.plaf.synth.SynthUI;
-
 public class ConsoleView {
 
 	private AnchorPane mainPane;

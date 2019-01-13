@@ -1,5 +1,6 @@
 package projetarm_v2.simulator.core;
 
+import unicorn.ArmConst;
 import unicorn.Unicorn;
 
 /**
@@ -11,8 +12,8 @@ import unicorn.Unicorn;
  */
 public class Cpsr extends UnicornRegister {
 
-	public Cpsr(Unicorn u, int register) {
-		super(u, register);
+	public Cpsr(Unicorn u) {
+		super(u, ArmConst.UC_ARM_REG_CPSR);
 	}
 
 	/**

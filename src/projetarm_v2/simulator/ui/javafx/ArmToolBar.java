@@ -43,13 +43,6 @@ public class ArmToolBar {
         disableInEdition.add(stepByStepButton);
         disableInEdition.add(reloadButton);
         disableInEdition.add(stopButton);
-
-
-        runButton.setOnAction(actionEvent -> { armSimulator.run(); });
-        stepByStepButton.setOnAction(actionEvent -> { armSimulator.runStep(); });
-        stopButton.setOnAction(actionEvent -> { armSimulator.interruptExecutionFlow(); });
-
-
     }
 
     public void setExecutionMode(boolean executionMode){

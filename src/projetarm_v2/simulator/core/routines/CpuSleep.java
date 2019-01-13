@@ -6,11 +6,11 @@ import java.util.List;
 
 import projetarm_v2.simulator.core.Cpu;
 
-public class CpuConsolePutChar extends CpuRoutine {
+public class CpuSleep extends CpuRoutine {
 
-	public static final long ROUTINE_ADDRESS = 0xFF00L;
+	public static final long ROUTINE_ADDRESS = 0xFF0CL;
 	
-	public CpuConsolePutChar(Cpu cpu) {
+	public CpuSleep(Cpu cpu) {
 		super(cpu);
 	}
 	
@@ -20,11 +20,11 @@ public class CpuConsolePutChar extends CpuRoutine {
 	
 	@Override
 	protected void primitive() {
-		long address = (long)this.getRegister(0).getValue();
-		
-		byte c = this.getRam().getByte(address);
-
-		System.out.format("[OUTPUT] %s%n",Character.toString((char)c));
+		try {
+			Thread.sleep(this.getRegister(0).getValue());
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 }

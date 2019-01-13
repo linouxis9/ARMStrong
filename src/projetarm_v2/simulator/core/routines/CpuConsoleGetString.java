@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CpuConsoleGetString extends CpuRoutine
 {
-	public final static long ROUTINE_ADDRESS = 0xFF08L;
+	public static final long ROUTINE_ADDRESS = 0xFF08L;
 	private ConcurrentLinkedQueue<String> consoleBuffer;
 	
 	public CpuConsoleGetString(Cpu cpu) {
@@ -25,12 +25,20 @@ public class CpuConsoleGetString extends CpuRoutine
 	}
 	
 	public boolean add(String line) {
-		return this.consoleBuffer.add(line);
+		return this.consoleBuffer.offer(line);
 	}
 	
 	@Override
 	protected void primitive()
 	{
+		while (this.consoleBuffer.peek() == null) {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
+		
 		String searchString = this.consoleBuffer.poll();
 		
 		if (searchString == null) {
