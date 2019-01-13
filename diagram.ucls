@@ -192,7 +192,7 @@
   </class>  
   <class id="22" language="java" name="projetarm_v2.simulator.core.Assembler" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/Assembler.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="421" y="36"/>    
+    <position height="-1" width="-1" x="426" y="-4"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -344,10 +344,10 @@
   <association id="40">    
     <end type="SOURCE" refId="22" navigable="false">      
       <attribute id="41" name="assembler">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="5" y="-40"/>      
       </attribute>      
       <multiplicity id="42" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="5" y="-40"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="22" navigable="true"/>    
@@ -788,10 +788,10 @@
   <association id="150">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="151" name="assembler">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="5" y="-40"/>      
       </attribute>      
       <multiplicity id="152" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+        <position height="0" width="0" x="5" y="-40"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="22" navigable="true"/>    
