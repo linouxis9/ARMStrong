@@ -1,9 +1,9 @@
 package projetarm_v2.simulator.core;
 
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SimpleRegister implements Register {
-	private AtomicLong value = new AtomicLong(0);
+	private AtomicInteger value = new AtomicInteger(0);
 	
 	public SimpleRegister() {}
 
@@ -12,8 +12,7 @@ public class SimpleRegister implements Register {
 	}
 	
 	public int getValue() {
-		Long value = this.value.get();
-		return value.intValue();
+		return this.value.get();
 	}
 
 	@Override

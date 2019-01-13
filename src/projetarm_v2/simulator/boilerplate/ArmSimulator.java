@@ -214,7 +214,7 @@ public class ArmSimulator {
 	}
 
 	public int getCurrentLine() {
-		return this.asmToLine.getOrDefault(this.getRegisterValue(15), 0);
+		return this.asmToLine.getOrDefault((int)this.cpu.getCurrentAddress(), 0);
 	}
 
 	/**

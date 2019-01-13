@@ -58,7 +58,7 @@ public class CodeEditor {
             instructionsAsText.get(line - 1).setFill(Color.RED);
             this.routineCallLine = line-1;
         }else if (line == 0){
-            instructionsAsText.get(routineCallLine).setFill(Color.BLUE); //je sais pas si c'est pertinant (mise en bleu de la ligne ayant appellé la routine?
+           // instructionsAsText.get(routineCallLine).setFill(Color.BLUE); // Active le uniquement en pas à pas
         }
 
     }

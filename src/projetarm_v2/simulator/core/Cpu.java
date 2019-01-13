@@ -55,7 +55,7 @@ public class Cpu {
 		// being executed
 		this.pc = this.registers[15];
 
-		this.currentAddress = new SimpleRegister((int)startingAddress);
+		this.currentAddress = new SimpleRegister((int)startingAddress); // I use a SimpleRegister instead of a simple field because SimpleRegister is Thread-Safe thanks to the AtomicInteger inside it
 
 		
 		u.mem_map(0, ramSize, Unicorn.UC_PROT_ALL);
@@ -152,9 +152,13 @@ public class Cpu {
 		hasFinished = false;
 		this.stepByStepRunning.set(1);
 		
-		u.emu_start(this.currentAddress.getValue(), (long)this.currentAddress.getValue()+4, 0, 0);
+		int startAddress = this.currentAddress.getValue();
 		
-		this.currentAddress.setValue(this.currentAddress.getValue() + 4);
+		u.emu_start(startAddress, (long)startAddress+4, 0, 0);
+		
+		if (startAddress == this.currentAddress.getValue()) {
+			this.currentAddress.setValue(this.currentAddress.getValue() + 4);
+		}
 
 		running = false;
 	}
@@ -180,7 +184,7 @@ public class Cpu {
 			}
 			
 			if (this.cpu.ram.getValue(address) == 0) {
-				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.pc.getValue());
+				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.currentAddress.getValue());
 				u.emu_stop();
 				this.cpu.hasFinished = true;
 				this.cpu.running = false;
@@ -196,4 +200,12 @@ public class Cpu {
 	public Cpsr getCPSR() {
 		return this.cpsr;
 	}
+
+	public long getCurrentAddress() {
+		return this.currentAddress.getValue();
+	}
+	public void setCurrentAddress(long address) {
+		this.currentAddress.setValue((int)address);
+	}
+	
 }

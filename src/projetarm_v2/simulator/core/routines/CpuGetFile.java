@@ -9,11 +9,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CPUGetFile extends CpuRoutine
+public class CpuGetFile extends CpuRoutine
 {
 	public static final long ROUTINE_ADDRESS = 0xFF0CL;
 	
-	public CPUGetFile(Cpu cpu) { super(cpu); }
+	public CpuGetFile(Cpu cpu) { super(cpu); }
 	
 	@Override
 	public long getRoutineAddress() { return ROUTINE_ADDRESS; }

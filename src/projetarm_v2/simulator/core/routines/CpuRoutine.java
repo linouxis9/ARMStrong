@@ -48,7 +48,7 @@ public abstract class CpuRoutine {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			if (this.cpuRoutine.getRoutineAddress() != address) {
+			if (address != this.cpuRoutine.getRoutineAddress()) {
 				return;
 			}
 			
@@ -60,6 +60,8 @@ public abstract class CpuRoutine {
 			{
 				e.printStackTrace();
 			}
+			
+			this.cpuRoutine.getCpu().setCurrentAddress((long)this.cpuRoutine.getCpu().getRegister(14).getValue()-4);
 		}
 
 	}

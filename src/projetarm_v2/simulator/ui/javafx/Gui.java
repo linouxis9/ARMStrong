@@ -110,18 +110,18 @@ public class Gui extends Application {
 		// the window "items"
 		this.armMenuBar.getNewMemoryWindow().setOnAction(actionEvent -> {
 			RamView moreRamView = new RamView(simulator);
+			this.ramViews.add(moreRamView);
 			moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
-			// consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 		});
 		this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent -> {
 			RegistersView moreRegistersView = new RegistersView(simulator);
+			this.registersViews.add(moreRegistersView);
 			moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
-			// consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 		});
 		this.armMenuBar.getNewLedGame().setOnAction(actionEvent -> {
 			LedView moreLedView = new LedView();
+			//this.ledViews.add(moreLedView);
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
-			// consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 		});
 
 		// the "Run" items
@@ -145,6 +145,7 @@ public class Gui extends Application {
 			if (!running.get()) {
 				this.simulator.resetState();
 				this.simulator.setProgram(codeEditor.getProgramAsString());
+				updateUI();
 			}
 		});
 
@@ -203,6 +204,7 @@ public class Gui extends Application {
 			for (RamView ramView : this.ramViews) {
 				ramView.updateContents();
 			}
+			
 			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
 	}
