@@ -37,9 +37,11 @@ public class CpuConsolePutString extends CpuRoutine {
 	        i++;
 	    }
 
-		try {
+		try
+		{
 			System.out.println("[OUTPUT] " + new String(array, "UTF-8"));
-		} catch (UnsupportedEncodingException e) {}
+		}
+		catch (UnsupportedEncodingException e) {}
 		
 		System.out.flush();
 	}

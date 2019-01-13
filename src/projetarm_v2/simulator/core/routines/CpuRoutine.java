@@ -6,6 +6,8 @@ import projetarm_v2.simulator.core.Register;
 import unicorn.CodeHook;
 import unicorn.Unicorn;
 
+import java.io.IOException;
+
 public abstract class CpuRoutine {
 
 	private Cpu cpu;
@@ -26,7 +28,7 @@ public abstract class CpuRoutine {
 		return this.cpu.getRegister(registerId);
 	}
 
-	protected abstract void primitive();
+	protected abstract void primitive() throws IOException;
 
 	public abstract long getRoutineAddress();
 
@@ -50,7 +52,14 @@ public abstract class CpuRoutine {
 				return;
 			}
 			
-			this.cpuRoutine.primitive();
+			try
+			{
+				this.cpuRoutine.primitive();
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 	}
