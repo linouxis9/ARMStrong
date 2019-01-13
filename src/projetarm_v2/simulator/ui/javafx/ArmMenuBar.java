@@ -20,7 +20,7 @@ public class ArmMenuBar {
     private MenuItem newRegistersWindow;
     private MenuItem newLedGameWindow;
 
-    private MenuItem swichMode;
+    private MenuItem switchMode;
     private MenuItem reloadMenuItem;
 
     private HashSet<MenuItem> disableInExecution;
@@ -55,12 +55,12 @@ public class ArmMenuBar {
         windowMenu.getItems().addAll(newMenu, preferences);
 
         //RUN
-        this.swichMode = new MenuItem("Switch Mode");
+        this.switchMode = new MenuItem("Switch Mode");
         final MenuItem runMenuItem = new MenuItem("Run");
         final MenuItem runStepMenuItem = new MenuItem("Run Step by Step");
         final MenuItem stopMenuItem = new MenuItem("Stop");
         reloadMenuItem = new MenuItem("Reload");
-        runMenu.getItems().addAll(this.swichMode, runMenuItem, runStepMenuItem, stopMenuItem, reloadMenuItem);
+        runMenu.getItems().addAll(this.switchMode, runMenuItem, runStepMenuItem, stopMenuItem, reloadMenuItem);
 
         helpMenu.getItems().add(new MenuItem("About"));
 
@@ -80,28 +80,15 @@ public class ArmMenuBar {
         disableInEdition.add(stopMenuItem);
         disableInEdition.add(reloadMenuItem);
 
-        exitMenu.setOnAction(actionEvent -> {
-                Platform.exit();
-        });
-
-        runMenuItem.setOnAction(actionEvent -> {
-                simulator.run();
-        });
-        runStepMenuItem.setOnAction(actionEvent -> {
-                simulator.runStep();
-        });
-        stopMenuItem.setOnAction(actionEvent -> {
-                simulator.interruptExecutionFlow();
-        });
-
+        exitMenu.setOnAction(actionEvent -> Platform.exit());
     }
 
     public MenuItem getReloadMenuItem() {
         return reloadMenuItem;
     }
 
-    public MenuItem getSwichMode() {
-        return swichMode;
+    public MenuItem getSwitchMode() {
+        return switchMode;
     }
 
     public MenuItem getNewMemoryWindow() {

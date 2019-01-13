@@ -2,6 +2,7 @@ package projetarm_v2.simulator.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.reflections.Reflections;
 
@@ -17,10 +18,12 @@ public class Cpu {
 	private boolean running = false;
 	private Cpsr cpsr;
 	private Register pc;
+	private Register currentAddress;
 	private boolean hasFinished = false;
 	private long startingAddress;
 	private long endAddress;
-
+	private AtomicLong stepByStepRunning;
+	
 	private static final byte[] binary = Assembler.getInstance().assemble("bx lr", 0L);
 
 	public Cpu() {
@@ -31,7 +34,8 @@ public class Cpu {
 		this.ram = ram;
 		this.startingAddress = startingAddress;
 		this.endAddress = 0;
-
+		this.stepByStepRunning = new AtomicLong(0);
+		
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
 		this.registers = new Register[16];
@@ -42,19 +46,21 @@ public class Cpu {
 
 		this.registers[13] = new UnicornRegister(u, ArmConst.UC_ARM_REG_SP);
 		this.registers[14] = new UnicornRegister(u, ArmConst.UC_ARM_REG_LR);
-
+		this.registers[15] = new SimpleRegister((int)startingAddress);
 		// The Unicorn library doesn't provide a way to reliably get the program counter
 		// register as reg_read always returns the initial PC value
 		// As such, we decided to implement an hook which is executed when an
 		// instruction is being interpreted
 		// We set our internal PC's value to the address of the instruction currently
 		// being executed
-		this.registers[15] = new SimpleRegister((int)startingAddress);
 		this.pc = this.registers[15];
 
+		this.currentAddress = new SimpleRegister((int)startingAddress);
+
+		
 		u.mem_map(0, ramSize, Unicorn.UC_PROT_ALL);
 
-		this.cpsr = new Cpsr(u, ArmConst.UC_ARM_REG_CPSR);
+		this.cpsr = new Cpsr(u);
 
 		u.hook_add(ram.getNewReadHook(), 1, 0, null);
 
@@ -103,13 +109,13 @@ public class Cpu {
 	}
 
 	// Ou tout d'un coup!
-	public void runAllAtOnce() throws UnicornException {
+	public void runAllAtOnce() {
 		this.synchronizeUnicornRam();
 
 		running = true;
 		hasFinished = false;
 
-		u.emu_start(this.pc.getValue(), this.endAddress, 0, 0);
+		u.emu_start(this.currentAddress.getValue(), this.endAddress, 0, 0);
 
 		running = false;
 		hasFinished = true;
@@ -139,14 +145,16 @@ public class Cpu {
 		this.startingAddress = startingAddress;
 	}
 	
-	public void runStep() throws UnicornException {
+	public void runStep() {
 		this.synchronizeUnicornRam();
 
 		running = true;
 		hasFinished = false;
-
-		u.emu_start(this.pc.getValue(), (long)this.pc.getValue() + 4, 0, 0);
-		this.pc.setValue(this.pc.getValue() + 4);
+		this.stepByStepRunning.set(1);
+		
+		u.emu_start(this.currentAddress.getValue(), (long)this.currentAddress.getValue()+4, 0, 0);
+		
+		this.currentAddress.setValue(this.currentAddress.getValue() + 4);
 
 		running = false;
 	}
@@ -160,9 +168,17 @@ public class Cpu {
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
 			this.cpu.pc.setValue((int)address + 8);
-
+			this.cpu.currentAddress.setValue((int)address);
+			
 			//System.out.format(">>> Instruction @ 0x%x is being executed\n", this.cpu.pc.getValue());
 
+			if (this.cpu.stepByStepRunning.get() == 1) {
+				this.cpu.stepByStepRunning.set(2);
+			} else if (this.cpu.stepByStepRunning.get() == 2) {
+				u.emu_stop();
+				this.cpu.running = false;
+			}
+			
 			if (this.cpu.ram.getValue(address) == 0) {
 				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.pc.getValue());
 				u.emu_stop();

@@ -54,6 +54,8 @@ public class RamView {
         dockNode = new DockNode(mainPane, "Ram View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
 
+        mainPane.setStyle("-fx-line-spacing: -0.4em;"); 
+        
         memoryAddresses = new ArrayList<Text>();
         memoryValues = new ArrayList<Text>();
 
@@ -71,7 +73,7 @@ public class RamView {
 
     }
 
-    private void updateContents() {
+    public void updateContents() {
         int displayedMemoryRows = memoryAddresses.size();
         int displayedMemoryAddress = firstDisplayedAdress;
         for (int labelNumber = 0; labelNumber < displayedMemoryRows; labelNumber++) {
@@ -129,7 +131,7 @@ public class RamView {
         }
         double paneHeight = mainPane.getHeight(); //THE HEIGHT IS NOT UPDATED IN THE MAIN PANE
 
-        int displayableLines = (int)((paneHeight - firstLabelYPos - VERTICAL_SPACE_BETWEEN_TEXT*2)/ spaceForLabel);
+        int displayableLines = 10; //(int)((paneHeight - firstLabelYPos - VERTICAL_SPACE_BETWEEN_TEXT*2)/ spaceForLabel);
         for(int i = 0; i<displayableLines; i++){
             mainPane.getChildren().add(this.memoryAddresses.get(i));
             mainPane.getChildren().add(this.memoryValues.get(i));
@@ -269,7 +271,7 @@ public class RamView {
         System.out.println(s);
     }
 
-    static int parseUserInput(String input) throws NumberFormatException{
+    static int parseUserInput(String input) {
         int parsedNumber;
         if (input.startsWith("0x") || input.startsWith("0X")) {
             parsedNumber = Integer.parseInt(input.substring(2), 16); // parsing a int in base 16, the 2

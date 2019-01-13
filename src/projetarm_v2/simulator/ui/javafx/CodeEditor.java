@@ -44,6 +44,10 @@ public class CodeEditor {
         mainPane.setMaxWidth(Double.MAX_VALUE);
     }
 
+    public void highlightLine(int line) {
+    	// Prends bien en compte le cas où on est à line = 0 (quand on est dans une routine ou une instruction modifiée par quelqu'un)
+    }
+    
     public void setExecutionMode(boolean executionMode){
         this.textArea.setEditable(!executionMode);
         this.textArea.setVisible(!executionMode);
