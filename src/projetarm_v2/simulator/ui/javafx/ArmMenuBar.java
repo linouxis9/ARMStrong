@@ -3,14 +3,30 @@ package projetarm_v2.simulator.ui.javafx;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.util.HashSet;
+
+import org.dockfx.DockPane;
 
 public class ArmMenuBar {
 
@@ -26,9 +42,12 @@ public class ArmMenuBar {
     private HashSet<MenuItem> disableInExecution;
     private HashSet<MenuItem> disableInEdition;
 
+    private Stage primaryStage;
 
-
-    public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor){
+    public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor, Stage stage){
+    	
+    	this.primaryStage = stage;
+    	
         final Menu fileMenu = new Menu("File");
         final Menu windowMenu = new Menu("Window");
         final Menu editMenu = new Menu("Edit");
@@ -62,7 +81,8 @@ public class ArmMenuBar {
         reloadMenuItem = new MenuItem("Reload");
         runMenu.getItems().addAll(this.switchMode, runMenuItem, runStepMenuItem, stopMenuItem, reloadMenuItem);
 
-        helpMenu.getItems().add(new MenuItem("About"));
+        final MenuItem aboutMenu = new MenuItem("About");
+        helpMenu.getItems().add(aboutMenu);
 
         this.menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, helpMenu);
@@ -81,6 +101,36 @@ public class ArmMenuBar {
         disableInEdition.add(reloadMenuItem);
 
         exitMenu.setOnAction(actionEvent -> Platform.exit());
+        
+        aboutMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                final Stage aboutPopUp = new Stage();
+                Image imageIcon = new Image("file:small_logo.png");
+                Text content = new Text("This software has been realised by the team ... durring a project at the IUT of Valence.\n");
+                ImageView icon = new ImageView(imageIcon);
+                VBox aboutVbox = new VBox(10);
+                TextFlow textFlow = new TextFlow();
+                Scene aboutScene;
+                
+                aboutPopUp.initOwner(primaryStage);
+                aboutPopUp.getIcons().add(imageIcon);
+                aboutPopUp.setTitle("About - #@RMStrong");
+                
+                icon.setFitHeight(100);
+                icon.setFitWidth(100);
+                content.setFont(new Font(18)); 
+                
+                textFlow.getChildren().addAll(content, icon);
+                textFlow.setPadding(new Insets(5));
+                textFlow.setTextAlignment(TextAlignment.CENTER);
+                
+                aboutVbox.getChildren().add(textFlow);
+                aboutScene = new Scene(aboutVbox, 400, 200);
+                aboutPopUp.setScene(aboutScene);
+                aboutPopUp.show();
+            }
+        });
     }
 
     public MenuItem getReloadMenuItem() {

@@ -2,6 +2,7 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -9,6 +10,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 
@@ -70,7 +73,7 @@ public class Gui extends Application {
 		this.consoleView = new ConsoleView();
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
-		this.armMenuBar = new ArmMenuBar(simulator, codeEditor);
+		this.armMenuBar = new ArmMenuBar(simulator, codeEditor, primaryStage);
 		this.armToolBar = new ArmToolBar(simulator, codeEditor);
 
 		VBox vbox = new VBox();
@@ -93,6 +96,13 @@ public class Gui extends Application {
 		newUpdateThread(this.running);
 		
 		primaryStage.show();
+		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+            	System.exit(0);
+            }
+        });
 
 		// initialize the default styles for the dock pane and undocked nodes using the
 		// DockFX
