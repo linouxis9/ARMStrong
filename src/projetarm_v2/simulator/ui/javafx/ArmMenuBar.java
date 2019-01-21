@@ -50,9 +50,12 @@ public class ArmMenuBar {
 
     private Stage primaryStage;
 
-    public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor, Stage stage, Application gui){
+    private HostServices services;
+
+    public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor, Stage stage, HostServices services){
     	
     	this.primaryStage = stage;
+    	this.services = services;
     	
         final Menu fileMenu = new Menu("File");
         final Menu windowMenu = new Menu("Window");
@@ -108,9 +111,7 @@ public class ArmMenuBar {
 
         exitMenu.setOnAction(actionEvent -> Platform.exit());
         
-        aboutMenu.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        aboutMenu.setOnAction(actionEvent -> {
             	final Stage aboutPopUp = new Stage();
                 aboutPopUp.setTitle("#@RMStrong");
                 Image applicationIcon = new Image("file:logo.png");
@@ -123,22 +124,16 @@ public class ArmMenuBar {
 					VBox main = FXMLLoader.load(getClass().getResource("/resources/aboutView.fxml"));
 					aboutPopUp.setScene(new Scene(main, 500, 280));
 					Hyperlink gitLink = (Hyperlink)main.lookup("#linkGit");
-					gitLink.setOnAction(new EventHandler<ActionEvent>() {
-
-		                @Override
-		                public void handle(ActionEvent t) {
-		                	HostServices services = gui.getHostServices();
-		                	services.showDocument(gitLink.getText());
-		                }
-		            });
+					gitLink.setOnAction(actionEvent1 -> {
+		                	this.services.showDocument(gitLink.getText());
+					});
 					
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				
                 aboutPopUp.show();
-            }
-        });
+            });
     }
 
     public MenuItem getReloadMenuItem() {

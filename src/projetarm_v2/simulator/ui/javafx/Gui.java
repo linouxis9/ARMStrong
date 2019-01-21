@@ -73,7 +73,7 @@ public class Gui extends Application {
 		this.consoleView = new ConsoleView();
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
-		this.armMenuBar = new ArmMenuBar(simulator, codeEditor, primaryStage, this);
+		this.armMenuBar = new ArmMenuBar(simulator, codeEditor, primaryStage, this.getHostServices());
 		this.armToolBar = new ArmToolBar(simulator, codeEditor);
 
 		VBox vbox = new VBox();
