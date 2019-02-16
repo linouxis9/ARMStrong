@@ -12,15 +12,23 @@ abstract class IOComponent {
 		this.shift = shift;
 	}
 	
-	protected boolean isOn() {
+	public boolean isOn() {
 		return this.register.getBit(shift);
 	}
 	
-	protected void set(boolean value) {
+	public void set(boolean value) {
 		this.register.setBit(shift, value);
 	}
 	
+	public int getShiftValue() {
+		return this.shift;
+	}
+	
+	public long getPortAddress() {
+		return this.register.getAddress();
+	}
+	
 	public String toString() {
-		return "[Adr:" + this.register.getAddress() + ", Bits N°" + this.shift + "]";
+		return "[Adr: 0x" + Long.toHexString(this.register.getAddress()) + ", Bits N°" + this.shift + "]";
 	}
 }

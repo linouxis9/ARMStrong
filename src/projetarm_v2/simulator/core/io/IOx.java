@@ -21,16 +21,18 @@ public class IOx {
 		this.dirX = new RamRegister(ram, dirAddress);
 	}
 
-	public void removeComponent(IOComponent component) {
+	public boolean removeComponent(IOComponent component) {
 		int index = getComponentBit(component);
 		
-		if (index == -1) {
-			throw new RuntimeException("This component is not part of this IO Register or has already been removed.");
+		if (components[index] == null) {
+			return false;
 		}
 		
 		noComponent--;
 		
 		components[index] = null;
+		
+		return true;
 	}
 	
 	public IOLed newIOLed() {

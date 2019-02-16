@@ -21,11 +21,11 @@ public class PORTManager {
 		this.ports.add(new IOx(ram, this.firstPortAddress++, this.firstDirAddress++));
 	}
 
-	public IOx getNextAvailablePort() {
+	private IOx getNextAvailablePort() {
 		return getNextAvailablePort(1);
 	}
 	
-	public IOx getNextAvailablePort(int nbBits) {
+	private IOx getNextAvailablePort(int nbBits) {
 		for (IOx port : ports) {
 			if (port.hasNAvailableSlot(nbBits)) {
 				return port;
@@ -34,6 +34,32 @@ public class PORTManager {
 		
 		IOx newPort = new IOx(ram, firstPortAddress++, firstDirAddress++);
 		return newPort;
+	}
+	
+	public boolean remove(IOComponent component) {
+		boolean flag;
+		
+		for (IOx port : ports) {
+			flag = port.removeComponent(component);
+			if (flag) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean remove(IO7Segment component) {
+		boolean flag;
+		
+		for (int i = 0; i < 7; i++) {
+			flag = this.remove(component.getSegment(i));
+			if (flag) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public IOLed newIOLed() {

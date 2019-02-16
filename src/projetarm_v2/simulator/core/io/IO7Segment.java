@@ -15,4 +15,8 @@ public class IO7Segment {
 	public IOSegment getSegment(int noSegment) {
 		return segments[noSegment];
 	}
+	
+	public void setSegment(int noSegment, boolean value) {
+		this.getSegment(noSegment).set(value);;
+	}
 }
