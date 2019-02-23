@@ -18,6 +18,10 @@ public class Ram {
 		this.memory = new HashMap<>();
 	}
 
+	public void clear() {
+		this.memory.clear();
+	}
+	
 	public byte getByte(long myAddress) {
 		long block = myAddress / CHUNK_SIZE;
 		RamChunk chunk = this.memory.get(block);

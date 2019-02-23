@@ -1,3 +1,5 @@
+
+
 package projetarm_v2.simulator.core.routines;
 
 import projetarm_v2.simulator.core.Cpu;
@@ -19,7 +21,7 @@ public class CpuGetFile extends CpuRoutine
 	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
 	
 	@Override
-	protected void primitive() throws IOException
+	protected void primitive()
 	{
 		long address = (long) this.getRegister(0).getValue();
 		long dest = (long) this.getRegister(1).getValue();
@@ -30,7 +32,13 @@ public class CpuGetFile extends CpuRoutine
 		
 		if(myFile.length() < 256)
 		{
-			byte[] array = Files.readAllBytes(new File(list.toString()).toPath());
+			byte[] array;
+			try {
+				array = Files.readAllBytes(new File(list.toString()).toPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+				return;
+			}
 			
 			for(int i = 0 ; i < array.length ; i++)
 			{
@@ -44,3 +52,4 @@ public class CpuGetFile extends CpuRoutine
 		}
 	}
 }
+

@@ -9,6 +9,7 @@ import projetarm_v2.simulator.ui.javafx.Gui;
 
 public class Main {
 	public static void main(String[] args) {
+		System.out.print(">>> Launching Test sequence\n");
 		ArmSimulator simulator = new ArmSimulator(); // PC is set @ 0x1000, 2 MB of RAM by default
 		simulator.setProgram("b start;" + 
 				"kek: .asciz \"test\";" + 

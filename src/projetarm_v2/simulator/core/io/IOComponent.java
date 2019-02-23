@@ -22,7 +22,11 @@ public abstract class IOComponent {
 		this.register.setBit(shift, value);
 	}
 	
+	public long getPortAddress() {
+		return this.register.getAddress();
+	}
+	
 	public String toString() {
-		return "[Adr:" + this.register.getAddress() + ", Bits N°" + this.shift + "]";
+		return "[Adr: 0x" + Long.toHexString(this.register.getAddress()) + ", Bits N°" + this.shift + "]";
 	}
 }

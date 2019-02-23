@@ -71,6 +71,8 @@ public class Cpu {
 		this.registerCpuRoutines();
 
 		this.synchronizeUnicornRam();
+		
+		this.cpsr.setZ(false); // Unicorn set Z to true when creating the virtual CPU, we purposely set it back to false for educational purposes
 	}
 
 	private void registerCpuRoutines() {
@@ -195,6 +197,7 @@ public class Cpu {
 
 	public void interruptMe() {
 		this.u.emu_stop();
+		this.running = false;
 	}
 
 	public Cpsr getCPSR() {

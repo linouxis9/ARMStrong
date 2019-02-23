@@ -7,6 +7,8 @@ import unicorn.CodeHook;
 import unicorn.Unicorn;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CpuRoutine {
 
@@ -28,10 +30,10 @@ public abstract class CpuRoutine {
 		return this.cpu.getRegister(registerId);
 	}
 
-	protected abstract void primitive() throws IOException;
+	protected abstract void primitive();
 
 	public abstract long getRoutineAddress();
-
+	
 	public CodeHook getNewHook() {
 		return new RoutineHook(this);
 	}
@@ -52,17 +54,11 @@ public abstract class CpuRoutine {
 				return;
 			}
 			
-			try
-			{
-				this.cpuRoutine.primitive();
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
+			this.cpuRoutine.primitive();
 			
 			this.cpuRoutine.getCpu().setCurrentAddress((long)this.cpuRoutine.getCpu().getRegister(14).getValue()-4);
 		}
 
 	}
 }
+

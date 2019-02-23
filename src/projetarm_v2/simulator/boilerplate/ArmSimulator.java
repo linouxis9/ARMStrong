@@ -67,6 +67,8 @@ public class ArmSimulator {
 	public ArmSimulator() {
 		this.save = new Save();
 		
+		this.ram = new Ram();
+		
 		this.assembler = Assembler.getInstance();
 		this.asmToLine = new HashMap<>();
 		
@@ -248,7 +250,7 @@ public class ArmSimulator {
 	}
 
 	public void resetState() {
-		this.ram = new Ram();
+		this.ram.clear();
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
 		this.guiConsoleToCpu = new CpuConsoleGetString(cpu);
 		this.cpu.registerCpuRoutine(guiConsoleToCpu);
