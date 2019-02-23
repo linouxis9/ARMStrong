@@ -10,6 +10,7 @@ import projetarm_v2.simulator.ui.javafx.Gui;
 public class Main {
 	public static void main(String[] args) {
 		System.out.print(">>> Launching Test sequence\n");
+
 		ArmSimulator simulator = new ArmSimulator(); // PC is set @ 0x1000, 2 MB of RAM by default
 		simulator.setProgram("b start;" + 
 				"kek: .asciz \"test\";" + 
@@ -20,7 +21,7 @@ public class Main {
 
 		simulator.run();
 		
-		System.out.print(">>> Emulation done. Below is the CPU context\n");
+		System.out.print(">>> Emulation done. Below is the CPU context%n");
 			
 		for (int i = 0; i < 16; i++) {
 			System.out.print(String.format(">>> R%d = 0x%x%n", i,simulator.getRegisterValue(i)));
@@ -33,6 +34,7 @@ public class Main {
 			Gui.main(new String[0]);
 			return;
 		}
+		
 		Cli.main(new String[0]);
 	}
 }

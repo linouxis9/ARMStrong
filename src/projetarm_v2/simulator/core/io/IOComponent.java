@@ -14,11 +14,11 @@ public abstract class IOComponent {
 		this.portNb = portNb;
 	}
 	
-	protected boolean isOn() {
+	public boolean isOn() {
 		return this.register.getBit(shift);
 	}
 	
-	protected void set(boolean value) {
+	public void set(boolean value) {
 		this.register.setBit(shift, value);
 	}
 	

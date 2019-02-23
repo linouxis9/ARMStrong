@@ -234,7 +234,7 @@ public class ArmSimulator {
 
 	// TODO Convert to an exception so it can be handled as wished by the UIs
 	private void handleException(UnicornException e) {
-		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]%n[ERROR] EMULATION ABORTED!%n", e.getMessage(),
+		System.out.format("[ERROR] %s @ Instruction [Address=0x%x, Line=%d]%n[ERROR] You might have an invalid instruction in RAM at the current address.%n[ERROR] EMULATION ABORTED!%n", e.getMessage(),
 				this.getRegisterValue(15), this.getCurrentLine());
 	}
 
@@ -301,9 +301,6 @@ public class ArmSimulator {
 		return this.cpu.getCPSR().q();
 	}
 
-	/**
-	 * /!\ WARNING, A resetState() makes a previously returned portManager invalid
-	 */
 	public PORTManager getPortManager() {
 		return this.portManager;
 	}

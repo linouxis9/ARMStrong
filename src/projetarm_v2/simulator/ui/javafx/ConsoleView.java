@@ -49,7 +49,6 @@ public class ConsoleView {
 
 		this.textFlow = new TextFlow();
 		this.textFlow.setPadding(new Insets(5));
-		this.textFlow.setStyle("-fx-line-spacing: -0.4em;"); //c'est quoi? je touche pas
 
 		scrollPane.setContent(this.textFlow);
 

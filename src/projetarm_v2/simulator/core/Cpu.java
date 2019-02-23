@@ -24,7 +24,7 @@ public class Cpu {
 	private long endAddress;
 	private AtomicLong stepByStepRunning;
 	
-	private static final byte[] binary = Assembler.getInstance().assemble("bx lr", 0L);
+	private static final byte[] jumpBackInstruction = Assembler.getInstance().assemble("bx lr", 0L);
 
 	public Cpu() {
 		this(new Ram(), Cpu.DEFAULT_STARTING_ADDRESS, 2 * 1024 * 1024);
@@ -95,8 +95,8 @@ public class Cpu {
 		
 		u.hook_add(routine.getNewHook(), address, address, null);
 
-		for (int i = 0; i < Cpu.binary.length; i++) {
-			this.ram.setByte(address + i, Cpu.binary[i]);
+		for (int i = 0; i < Cpu.jumpBackInstruction.length; i++) {
+			this.ram.setByte(address + i, Cpu.jumpBackInstruction[i]);
 		}
 	}
 
