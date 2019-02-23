@@ -3,7 +3,7 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="projetarm_v2.simulator.Main" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/Main.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1363" y="-53"/>    
+    <position height="-1" width="-1" x="1761" y="-106"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="projetarm_v2.simulator.ui.cli.Cli" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/ui/cli/Cli.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="879" y="119"/>    
+    <position height="-1" width="-1" x="1393" y="19"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -75,7 +75,7 @@
   </class>  
   <class id="9" language="java" name="projetarm_v2.simulator.ui.javafx.LedView" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/LedView.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="205" width="148" x="2277" y="403"/>    
+    <position height="-1" width="-1" x="2338" y="500"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -84,7 +84,7 @@
   </class>  
   <class id="10" language="java" name="projetarm_v2.simulator.ui.javafx.CodeEditor" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/ui/javafx/CodeEditor.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1906" y="733"/>    
+    <position height="-1" width="-1" x="1897" y="578"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -147,7 +147,7 @@
   </class>  
   <class id="17" language="java" name="projetarm_v2.simulator.core.RamChunk" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/RamChunk.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="187" width="126" x="1002" y="738"/>    
+    <position height="-1" width="-1" x="1060" y="850"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -156,7 +156,7 @@
   </class>  
   <class id="18" language="java" name="projetarm_v2.simulator.core.RamRegister" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/RamRegister.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1067" y="1012"/>    
+    <position height="-1" width="-1" x="1068" y="1041"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -192,7 +192,7 @@
   </class>  
   <class id="22" language="java" name="projetarm_v2.simulator.core.Assembler" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/Assembler.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="426" y="-4"/>    
+    <position height="-1" width="-1" x="426" y="-65"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -230,7 +230,7 @@
   <class id="26" language="java" name="projetarm_v2.simulator.core.routines.CpuConsolePutChar" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuConsolePutChar.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-509" y="149"/>    
+    <position height="-1" width="-1" x="-245" y="158"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -240,7 +240,7 @@
   <class id="27" language="java" name="projetarm_v2.simulator.core.routines.CpuConsoleGetString" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuConsoleGetString.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-320" y="149"/>    
+    <position height="-1" width="-1" x="-418" y="373"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -250,7 +250,7 @@
   <class id="28" language="java" name="projetarm_v2.simulator.core.routines.CpuConsolePutString" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuConsolePutString.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="-129" y="150"/>    
+    <position height="-1" width="-1" x="-71" y="155"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -259,7 +259,7 @@
   </class>  
   <class id="29" language="java" name="projetarm_v2.simulator.core.io.PORTManager" project="simulateurARM" 
     file="/simulateurARM/src/projetarm_v2/simulator/core/io/PORTManager.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="487" y="1100"/>    
+    <position height="-1" width="-1" x="479" y="1170"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -329,84 +329,107 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="37">    
-    <end type="SOURCE" refId="35" navigable="false">      
-      <attribute id="38" name="segments">        
+  <class id="37" language="java" name="projetarm_v2.simulator.core.save.Save" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/save/Save.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="714" y="50"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="38" language="java" name="projetarm_v2.simulator.core.save.InterfaceAdapterArrayList" 
+    project="simulateurARM" file="/simulateurARM/src/projetarm_v2/simulator/core/save/InterfaceAdapterArrayList.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1063" y="6"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="projetarm_v2.simulator.core.routines.CpuGetFile" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuGetFile.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-448" y="164"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="projetarm_v2.simulator.core.routines.CpuSaveFile" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuSaveFile.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-437" y="544"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="41" language="java" name="projetarm_v2.simulator.core.routines.CpuSleep" project="simulateurARM" 
+    file="/simulateurARM/src/projetarm_v2/simulator/core/routines/CpuSleep.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-434" y="700"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="42">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="43" name="simulator">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="39" minimum="0" maximum="2147483647">        
+      <multiplicity id="44" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="34" navigable="true"/>    
+    <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="40">    
-    <end type="SOURCE" refId="22" navigable="false">      
-      <attribute id="41" name="assembler">        
-        <position height="0" width="0" x="5" y="-40"/>      
+  <association id="45">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="46" name="save"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="37" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="48">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="15"/>  
+  </nesting>  
+  <association id="49">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="50" name="portX">        
+        <position height="0" width="0" x="1" y="29"/>      
       </attribute>      
-      <multiplicity id="42" minimum="0" maximum="1">        
-        <position height="0" width="0" x="5" y="-40"/>      
+      <multiplicity id="51" minimum="0" maximum="1">        
+        <position height="0" width="0" x="1" y="29"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
+    <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="43">    
-    <end type="SOURCE" refId="29" navigable="false">      
-      <attribute id="44" name="ports">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="45" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="30" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="46">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="47" name="ram">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="48" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="49">    
-    <end type="SOURCE" refId="26"/>    
+  <generalization id="52">    
+    <bendpoint x="-279" y="471"/>    
+    <end type="SOURCE" refId="40"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <association id="50">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="51" name="cpsr">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="52" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="23" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association id="53">    
-    <end type="SOURCE" refId="25" navigable="false">      
-      <attribute id="54" name="cpu">        
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="54" name="ramViews">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="55" minimum="0" maximum="1">        
+      <multiplicity id="55" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
+    <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="56">    
-    <end type="SOURCE" refId="16" navigable="false">      
+    <end type="SOURCE" refId="18" navigable="false">      
       <attribute id="57" name="ram">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
@@ -418,385 +441,442 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="59">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="60" name="simulator">        
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="60" name="ports">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="61" minimum="0" maximum="1">        
+      <multiplicity id="61" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="30" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <nesting id="62">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="16"/>  
-  </nesting>  
-  <association id="63">    
-    <bendpoint x="1810" y="521"/>    
+  <association id="62">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="64" name="codeEditor">        
+      <attribute id="63" name="armMenuBar">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="65" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="66">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="67" name="armToolBar">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="68" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="69">    
-    <end type="SOURCE" refId="32" navigable="false">      
-      <attribute id="70" name="register">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="71" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="72">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="73" name="registers">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="74" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="75">    
-    <end type="SOURCE" refId="21"/>    
-    <end type="TARGET" refId="19"/>  
-  </realization>  
-  <association id="76">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="77" name="cpu">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="78" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="79">    
-    <bendpoint x="16" y="949"/>    
-    <end type="SOURCE" refId="23"/>    
-    <end type="TARGET" refId="21"/>  
-  </generalization>  
-  <association id="80">    
-    <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="81" name="codeEditor">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="82" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="83">    
-    <end type="SOURCE" refId="13"/>    
-    <end type="TARGET" refId="12"/>  
-  </nesting>  
-  <association id="84">    
-    <bendpoint x="2423" y="347"/>    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="85" name="consoleView">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="86" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="87">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="88" name="simulator">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="89" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="90">    
-    <end type="SOURCE" refId="27"/>    
-    <end type="TARGET" refId="25"/>  
-  </generalization>  
-  <association id="91">    
-    <end type="SOURCE" refId="30" navigable="false">      
-      <attribute id="92" name="components">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="93" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="32" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="94">    
-    <end type="SOURCE" refId="24" navigable="false">      
-      <attribute id="95" name="cpuRoutine">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="96" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="25" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="97">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="98" name="cpu">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="99" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="100">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="101" name="memory">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="102" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="103">    
-    <end type="SOURCE" refId="30" navigable="false">      
-      <attribute id="104" name="dirX">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="105" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="106">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="107" name="armMenuBar">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="108" minimum="0" maximum="1">        
+      <multiplicity id="64" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="6" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="109">    
-    <end type="SOURCE" refId="33"/>    
-    <end type="TARGET" refId="32"/>  
-  </generalization>  
-  <association id="110">    
-    <end type="SOURCE" refId="30" navigable="false">      
-      <attribute id="111" name="portX">        
+  <association id="65">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="66" name="registers">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="112" minimum="0" maximum="1">        
+      <multiplicity id="67" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="68">    
+    <bendpoint x="308" y="848"/>    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="69" name="ram">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="70" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="71">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="72" name="cpu">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="73" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="74">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="75" name="cpu">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="76" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="77">    
+    <end type="SOURCE" refId="37"/>    
+    <end type="TARGET" refId="38"/>  
+  </dependency>  
+  <association id="78">    
+    <bendpoint x="1810" y="521"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="79" name="codeEditor">        
+        <position height="0" width="0" x="-9" y="-155"/>      
+      </attribute>      
+      <multiplicity id="80" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-9" y="-155"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="81">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="82">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="83" name="simulator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="84" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="85">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <association id="86">    
+    <end type="SOURCE" refId="13" navigable="false">      
+      <attribute id="87" name="cpsr">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="88" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="23" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="89">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <generalization id="90">    
+    <bendpoint x="16" y="949"/>    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="21"/>  
+  </generalization>  
+  <association id="91">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="92" name="dirX">        
+        <position height="0" width="0" x="1" y="29"/>      
+      </attribute>      
+      <multiplicity id="93" minimum="0" maximum="1">        
+        <position height="0" width="0" x="1" y="29"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="18" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="113">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="114" name="simulator">        
+  <association id="94">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="95" name="assembler">        
+        <position height="0" width="0" x="5" y="-101"/>      
+      </attribute>      
+      <multiplicity id="96" minimum="0" maximum="1">        
+        <position height="0" width="0" x="5" y="-101"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="97">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="98" name="ram">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="115" minimum="0" maximum="1">        
+      <multiplicity id="99" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="100">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="25"/>  
+  </generalization>  
+  <association id="101">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="102" name="simulator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="103" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="116">    
+  <nesting id="104">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="16"/>  
+  </nesting>  
+  <nesting id="105">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="12"/>  
+  </nesting>  
+  <association id="106">    
+    <end type="SOURCE" refId="35" navigable="false">      
+      <attribute id="107" name="segments">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="108" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="34" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="109">    
+    <end type="SOURCE" refId="29" navigable="false">      
+      <attribute id="110" name="ram">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="111" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="112">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="113" name="ram">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="114" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="115">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <nesting id="116">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="24"/>  
+  </nesting>  
+  <association id="117">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="118" name="ram">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="119" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="120">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <generalization id="117">    
-    <end type="SOURCE" refId="36"/>    
-    <end type="TARGET" refId="32"/>  
+  <generalization id="121">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="25"/>  
   </generalization>  
-  <association id="118">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="119" name="simulator">        
-        <position height="0" width="0" x="0" y="0"/>      
+  <association id="122">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="123" name="codeEditor">        
+        <position height="0" width="0" x="-9" y="-155"/>      
       </attribute>      
-      <multiplicity id="120" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="124" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-9" y="-155"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
+    <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="121">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="122" name="portManager">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="123" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="29" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="124">    
-    <end type="SOURCE" refId="18"/>    
-    <end type="TARGET" refId="19"/>  
-  </realization>  
   <association id="125">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="126" name="ram">        
+    <bendpoint x="2426" y="361"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="126" name="consoleView">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="127" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
+    <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <realization id="128">    
-    <end type="SOURCE" refId="20"/>    
+    <end type="SOURCE" refId="18"/>    
     <end type="TARGET" refId="19"/>  
   </realization>  
-  <dependency id="129">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="3"/>  
-  </dependency>  
-  <nesting id="130">    
-    <end type="SOURCE" refId="25"/>    
-    <end type="TARGET" refId="24"/>  
-  </nesting>  
-  <generalization id="131">    
-    <end type="SOURCE" refId="34"/>    
-    <end type="TARGET" refId="32"/>  
-  </generalization>  
-  <association id="132">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="133" name="ram">        
-        <position height="0" width="0" x="0" y="0"/>      
+  <association id="129">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="130" name="memory">        
+        <position height="0" width="0" x="-5" y="19"/>      
       </attribute>      
-      <multiplicity id="134" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="131" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="-5" y="19"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="132">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="133" name="portManager">        
+        <position height="0" width="0" x="-8" y="70"/>      
+      </attribute>      
+      <multiplicity id="134" minimum="0" maximum="1">        
+        <position height="0" width="0" x="-8" y="70"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="29" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <association id="135">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="136" name="ramViews">        
+    <end type="SOURCE" refId="37" navigable="false">      
+      <attribute id="136" name="components"/>      
+      <multiplicity id="137" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="32" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="138">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="139" name="register">        
+        <position height="0" width="0" x="1" y="29"/>      
+      </attribute>      
+      <multiplicity id="140" minimum="0" maximum="1">        
+        <position height="0" width="0" x="1" y="29"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="141">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="142" name="cpu">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="137" minimum="0" maximum="2147483647">        
+      <multiplicity id="143" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
+    <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="138">    
-    <end type="SOURCE" refId="28"/>    
+  <association id="144">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="145" name="components">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="146" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="32" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="147">    
+    <end type="SOURCE" refId="39"/>    
     <end type="TARGET" refId="25"/>  
   </generalization>  
-  <association id="139">    
-    <bendpoint x="308" y="848"/>    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="140" name="ram">        
+  <association id="148">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="149" name="assembler">        
+        <position height="0" width="0" x="5" y="-101"/>      
+      </attribute>      
+      <multiplicity id="150" minimum="0" maximum="1">        
+        <position height="0" width="0" x="5" y="-101"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="22" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="151">    
+    <end type="SOURCE" refId="36"/>    
+    <end type="TARGET" refId="32"/>  
+  </generalization>  
+  <realization id="152">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="19"/>  
+  </realization>  
+  <association id="153">    
+    <end type="SOURCE" refId="24" navigable="false">      
+      <attribute id="154" name="cpuRoutine">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="141" minimum="0" maximum="1">        
+      <multiplicity id="155" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
+    <end type="TARGET" refId="25" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="142">    
+  <association id="156">    
+    <bendpoint x="1305" y="378"/>    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="143" name="registersViews">        
+      <attribute id="157" name="registersViews">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="144" minimum="0" maximum="2147483647">        
+      <multiplicity id="158" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="145">    
-    <end type="SOURCE" refId="29" navigable="false">      
-      <attribute id="146" name="ram">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="147" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="148">    
-    <end type="SOURCE" refId="31"/>    
+  <dependency id="159">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <generalization id="160">    
+    <end type="SOURCE" refId="33"/>    
     <end type="TARGET" refId="32"/>  
   </generalization>  
-  <nesting id="149">    
-    <end type="SOURCE" refId="14"/>    
-    <end type="TARGET" refId="15"/>  
-  </nesting>  
-  <association id="150">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="151" name="assembler">        
-        <position height="0" width="0" x="5" y="-40"/>      
+  <association id="161">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="162" name="armToolBar">        
+        <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="152" minimum="0" maximum="1">        
-        <position height="0" width="0" x="5" y="-40"/>      
+      <multiplicity id="163" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association id="164">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="165" name="simulator">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="166" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="167">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="19"/>  
+  </realization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

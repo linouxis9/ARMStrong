@@ -19,7 +19,7 @@
             <Insets bottom="5.0" top="5.0" />
          </VBox.margin>
       </Text>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A software made by the team ARMStrong during a project at the IUT of Valence (France) " textAlignment="CENTER" wrappingWidth="486.27978515625">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A software made by Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Nicolas Gervasi, Hugo Chemarin at the IUT of Valence (France) " textAlignment="CENTER" wrappingWidth="486.27978515625">
          <font>
             <Font size="14.0" />
          </font>
