@@ -1,7 +1,9 @@
 package projetarm_v2.simulator.boilerplate;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,10 +11,16 @@ import java.util.regex.Pattern;
 import projetarm_v2.simulator.core.Assembler;
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
-import projetarm_v2.simulator.core.Program;
 import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.core.io.IO7Segment;
+import projetarm_v2.simulator.core.io.IOButton;
+import projetarm_v2.simulator.core.io.IOComponent;
+import projetarm_v2.simulator.core.io.IOLed;
+import projetarm_v2.simulator.core.io.IOSegment;
+import projetarm_v2.simulator.core.io.IOSwitch;
 import projetarm_v2.simulator.core.io.PORTManager;
 import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
+import projetarm_v2.simulator.core.save.Save;
 import projetarm_v2.simulator.utils.NativeJarGetter;
 import unicorn.UnicornException;
 
@@ -29,10 +37,6 @@ public class ArmSimulator {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * The currently loaded program
-	 */
-	private final Program program;
 
 	private final Assembler assembler;
 	/**
@@ -53,13 +57,15 @@ public class ArmSimulator {
 	private int ramSize = Ram.DEFAULT_RAM_SIZE;
 	
 	private CpuConsoleGetString guiConsoleToCpu;
+
+	private Save save;
 	
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
 	 * program, asmToLine, assembler)
 	 */
 	public ArmSimulator() {
-		this.program = new Program();
+		this.save = new Save();
 		
 		this.assembler = Assembler.getInstance();
 		this.asmToLine = new HashMap<>();
@@ -67,9 +73,26 @@ public class ArmSimulator {
 		this.resetState();
 	}
 
+	public void loadSaveFromFile(String path) throws IOException {
+		this.save = Save.fromPath(path);
+		
+		this.setProgram(this.save.getProgram());
+		
+		this.portManager.generateIOComponents(this.save.getComponentsAndReset());
+		
+		for (IOComponent component : this.portManager.getComponents()) {
+			this.save.addComponent(component);
+		}
+	}
+	
+	public void saveToFile(String path) throws IOException {
+		this.save.saveToFile(path);
+	}
+	
 	public void setProgram(String assembly) {
+		this.save.setProgram(assembly);
 		assembly = assembly.replace(System.lineSeparator(), ";");
-
+		
 		try {
 			fillRamWithAssembly(assembly);
 		} catch (InvalidAssemblyException e) {/* This is going to get caught by fillAddressLineMap */}
@@ -229,7 +252,7 @@ public class ArmSimulator {
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
 		this.guiConsoleToCpu = new CpuConsoleGetString(cpu);
 		this.cpu.registerCpuRoutine(guiConsoleToCpu);
-		this.portManager = new PORTManager(this.ram, PORTManager.DEFAULT_PORT_ADDRESS, PORTManager.DEFAULT_DIR_ADDRESS);
+		this.portManager = new PORTManager(this.ram);
 	}
 
 	public int getStartingAddress() {
@@ -281,6 +304,54 @@ public class ArmSimulator {
 	 */
 	public PORTManager getPortManager() {
 		return this.portManager;
+	}
+	
+	
+	public IOLed newIOLed() {
+		IOLed component = this.portManager.newIOLed();
+		
+		this.save.addComponent(component);
+		
+		return component;
+	}
+
+	public IOButton newIOButton() {
+		IOButton component = this.portManager.newIOButton();
+		
+		this.save.addComponent(component);
+		
+		return component;
+	}
+	
+	public IOSwitch newIOSwitch() {
+		IOSwitch component = this.portManager.newIOSwitch();
+		
+		this.save.addComponent(component);
+		
+		return component;
+	}
+	
+	public IO7Segment newIO7Segment() {
+		IO7Segment segments = this.portManager.newIO7Segment();
+		
+		for (int i = 0; i < 7; i++) {
+			this.save.addComponent(segments.getSegment(i));
+		}
+		
+		return segments;
+	}
+	
+	public void removeIOComponent(IOComponent component) {
+		this.portManager.removeIOComponent(component);
+		this.save.removeComponent(component);
+	}
+	
+	public void removeIOComponent(IO7Segment segments) {
+		for (int i = 0; i < 7; i++) {
+			IOSegment segment = segments.getSegment(i);
+			this.save.removeComponent(segment);
+			this.portManager.removeIOComponent(segment);
+		}
 	}
 	
 	/**

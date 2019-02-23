@@ -2,14 +2,16 @@ package projetarm_v2.simulator.core.io;
 
 import projetarm_v2.simulator.core.RamRegister;
 
-abstract class IOComponent {
+public abstract class IOComponent {
 
 	private final RamRegister register;
-	private final int shift;
+	public final int shift;
+	public final int portNb;
 	
-	protected IOComponent(RamRegister port, int shift) {
+	protected IOComponent(RamRegister port, int shift, int portNb) {
 		this.register = port;
 		this.shift = shift;
+		this.portNb = portNb;
 	}
 	
 	protected boolean isOn() {

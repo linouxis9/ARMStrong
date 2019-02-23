@@ -4,8 +4,8 @@ import projetarm_v2.simulator.core.RamRegister;
 
 public class IOSegment extends IOComponent {
 
-	protected IOSegment(RamRegister port, int shift) {
-		super(port, shift);
+	protected IOSegment(RamRegister port, int shift, int portNb) {
+		super(port, shift, portNb);
 	}
 
 }

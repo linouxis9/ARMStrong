@@ -1,8 +1,10 @@
 package projetarm_v2.simulator.core;
 
-public class RamRegister implements Register {
+import java.io.Serializable;
 
-	private final Ram ram;
+public class RamRegister implements Register, Serializable {
+
+	private final transient Ram ram;
 	private final long myAddress;
 
 	public RamRegister(Ram ram, long address) {

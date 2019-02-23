@@ -1,6 +1,9 @@
 package projetarm_v2.simulator;
 
+import java.io.IOException;
+
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.core.save.Save;
 import projetarm_v2.simulator.ui.cli.Cli;
 import projetarm_v2.simulator.ui.javafx.Gui;
 
