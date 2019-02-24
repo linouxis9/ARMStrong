@@ -3,18 +3,28 @@ package projetarm_v2.simulator.ui.javafx;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -36,6 +46,8 @@ public class Gui extends Application {
 	private ArmSimulator simulator;
 	private AtomicBoolean running;
 
+	private Stage stage;
+
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -45,12 +57,12 @@ public class Gui extends Application {
 		this.simulator = new ArmSimulator();
 		this.executionMode = false;
 		this.running = new AtomicBoolean(false);
+		this.stage = stage;
 
 		primaryStage.setTitle("#@RMStrong");
 		Image applicationIcon = new Image("file:logo.png");
 		primaryStage.getIcons().add(applicationIcon);
 
-		// create a dock pane that will manage our dock nodes and handle the layout
 		this.dockPane = new DockPane();
 
 		// load an image to caption the dock nodes
@@ -104,6 +116,7 @@ public class Gui extends Application {
             }
         });
 
+
 		// initialize the default styles for the dock pane and undocked nodes using the
 		// DockFX
 		// library's internal Default.css stylesheet
@@ -116,8 +129,35 @@ public class Gui extends Application {
 	}
 
 	private void setButtonEvents() {
+		//MENU BAR
+		//file
+		this.armMenuBar.getNeW().setOnAction(actionEvent -> {
+			/*if(!this.codeEditor.getProgramAsString().equals("")){
+				warningPopup("Unsaved work will be lost");
+			}*/
+			this.codeEditor.setProgramAsString("");
+		});
+		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Open Program");
+			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS") );
 
-		// the window "items"
+			File chosenFile = fileChooser.showOpenDialog(this.stage);
+			if (chosenFile != null){
+				try {
+					this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		this.armMenuBar.getSave().setOnAction(actionEvent -> {
+
+		});
+		this.armMenuBar.getSaveAs().setOnAction(actionEvent -> {
+
+		});
+		//window
 		this.armMenuBar.getNewMemoryWindow().setOnAction(actionEvent -> {
 			RamView moreRamView = new RamView(simulator);
 			this.ramViews.add(moreRamView);
@@ -133,8 +173,13 @@ public class Gui extends Application {
 			//this.ledViews.add(moreLedView);
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
 		});
+		this.armMenuBar.getPreferences().setOnAction(actionEvent -> {
+			LedView moreLedView = new LedView();
+			//this.ledViews.add(moreLedView);
+			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
+		});
 
-		// the "Run" items
+		//Run
 		this.armMenuBar.getSwitchMode().setOnAction(actionEvent -> {
 			if (!running.get()) {
 				executionMode = !executionMode;
@@ -151,6 +196,37 @@ public class Gui extends Application {
 				armToolBar.setExecutionMode(executionMode);
 			}
 		});
+		this.armMenuBar.getRunMenuItem().setOnAction(actionEvent -> {
+			if (executionMode && !(running.get())) {
+				new Thread(() -> {
+					this.running.set(true);
+
+					this.simulator.run();
+
+					this.running.set(false);
+
+					updateUI();
+				}).start();
+			}
+		});
+		this.armMenuBar.getRunStepMenuItem().setOnAction(actionEvent -> {
+			if (executionMode && !(running.get())) {
+				new Thread(() -> {
+					this.running.set(true);
+
+					this.simulator.runStep();
+
+					this.running.set(false);
+
+					updateUI();
+				}).start();
+			}
+		});
+		this.armMenuBar.getStopMenuItem().setOnAction(actionEvent -> {
+			simulator.interruptExecutionFlow();
+			updateUI();
+			this.running.set(false);
+		});
 		this.armMenuBar.getReloadMenuItem().setOnAction(actionEvent -> {
 			if (!running.get()) {
 				this.simulator.resetState();
@@ -159,43 +235,13 @@ public class Gui extends Application {
 			}
 		});
 
-		// the toolbar buttons
+
+		//TOOL BAR
 		this.armToolBar.getSwitchButton().setOnAction(actionEvent -> armMenuBar.getSwitchMode().fire());
-		
+		this.armToolBar.getRunButton().setOnAction(actionEvent -> armMenuBar.getRunMenuItem().fire());
+		this.armToolBar.getStepByStepButton().setOnAction(actionEvent -> armMenuBar.getRunStepMenuItem().fire());
 		this.armToolBar.getReloadButton().setOnAction(actionEvent -> armMenuBar.getReloadMenuItem().fire());
-		
-		this.armToolBar.getRunButton().setOnAction(actionEvent -> {
-			if (executionMode && !(running.get())) {
-				new Thread(() -> {
-					this.running.set(true);
-					
-					this.simulator.run();
-					
-					this.running.set(false);
-					
-					updateUI();
-				}).start();
-			}
-		});
-
-		this.armToolBar.getStepByStepButton().setOnAction(actionEvent -> {
-			if (executionMode && !(running.get())) {
-				new Thread(() -> {
-					this.running.set(true);
-
-					this.simulator.runStep();
-
-					this.running.set(false);
-					
-					updateUI();
-				}).start();
-			}
-		});
-		this.armToolBar.getStopButton().setOnAction(actionEvent -> {
-			simulator.interruptExecutionFlow();
-			updateUI();
-			this.running.set(false);
-		});
+		this.armToolBar.getStopButton().setOnAction(actionEvent -> armMenuBar.getStopMenuItem().fire());
 
 		// the console
 		this.consoleView.getTextField().setOnKeyPressed((KeyEvent ke) -> {
@@ -204,15 +250,13 @@ public class Gui extends Application {
 				this.consoleView.getTextField().clear();
 			}
 		});
+
 	}
 
 	private void updateUI() {
 		Platform.runLater(() -> {
 			for (RegistersView registerView : this.registersViews) {
 				registerView.updateRegisters();
-			}
-			for (RamView ramView : this.ramViews) {
-				ramView.updateContents();
 			}
 			
 			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
@@ -236,5 +280,35 @@ public class Gui extends Application {
 			}
 		}).start();
 	}
-	
+
+	private void saveFile(String content, File theFile) {
+		try (FileWriter outputStream = new FileWriter(theFile)) {
+			outputStream.write(content);
+			//stage.setTitle("#@RM - " + theFile.getName());
+		} catch (IOException | NullPointerException e) {
+
+		}
+	}
+
+	/*private void warningPopup(String message){
+		final Stage warningStage = new Stage();
+		warningStage.setTitle("Warning");
+		Image applicationIcon = new Image("file:warning.png");
+		warningStage.getIcons().add(applicationIcon);
+
+		warningStage.initModality(Modality.APPLICATION_MODAL);
+		warningStage.initOwner(this.stage);
+
+		warningStage.getIcons().add(applicationIcon);
+		warningStage.setTitle("About - #@RMStrong");
+		try {
+			Pane main = FXMLLoader.load(getClass().getResource("/resources/warning.fxml"));
+			warningStage.setScene(new Scene(main, 500, 280));
+			Text messageText = (Text) main.lookup("#message");
+			messageText.setText(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		warningStage.show();
+	}*/
 }

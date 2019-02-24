@@ -1,11 +1,8 @@
 package projetarm_v2.simulator.ui.javafx;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -13,14 +10,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class RamView {
 
@@ -33,15 +28,12 @@ public class RamView {
     private ArmSimulator simulator;
 
     private ScrollBar memoryScrollBar;
-
-    private ArrayList<Text> memoryAddresses;
-    private ArrayList<Text> memoryValues;
+    private TableView tableView;
 
     private int firstDisplayedAdress = 0;
     private int memoryDisplayMode = 8;
-    private int displayedLines;
 
-    public RamView(ArmSimulator simulator){
+    public RamView(ArmSimulator simulator) {
         //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/MemoryView.fxml"));
@@ -54,90 +46,15 @@ public class RamView {
         dockNode = new DockNode(mainPane, "Ram View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
 
-        mainPane.setStyle("-fx-line-spacing: -0.4em;"); 
-        
-        memoryAddresses = new ArrayList<Text>();
-        memoryValues = new ArrayList<Text>();
+        mainPane.setStyle("-fx-line-spacing: -0.4em;");
 
-        memoryAddresses.add((Text) mainPane.lookup("#addressLabel"));
-        memoryValues.add((Text) mainPane.lookup("#valueLabel"));
-
-        loadLabels(100);
-
-        mainPane.heightProperty().addListener((obs, oldVal, newVal) -> {
-            displayLablels();
-        });
-        updateContents();
+        this.tableView = (TableView) mainPane.lookup("#tableView");
+        ObservableList UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter();
+        this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
 
         loadButonsEvents();
-
     }
 
-    public void updateContents() {
-        int displayedMemoryRows = memoryAddresses.size();
-        int displayedMemoryAddress = firstDisplayedAdress;
-        for (int labelNumber = 0; labelNumber < displayedMemoryRows; labelNumber++) {
-            String address = Integer.toHexString(displayedMemoryAddress);
-            String content;
-            switch (this.memoryDisplayMode) {
-                case 8:
-                    content = Integer.toHexString(this.simulator.getRamByte(displayedMemoryAddress));
-                    content = "00".substring(content.length()) + content;
-                    displayedMemoryAddress++;
-                    break;
-                case 16:
-                    content = Integer.toHexString(this.simulator.getRamHWord(displayedMemoryAddress));
-                    content = "0000".substring(content.length()) + content;
-                    content = content.subSequence(0, 2) + " " + content.subSequence(2, 4);
-                    displayedMemoryAddress += 2;
-                    break;
-                case 32:
-                    content = Integer.toHexString(this.simulator.getRamWord(displayedMemoryAddress));
-                    content = "00000000".substring(content.length()) + content;
-                    content = content.subSequence(0, 2) + " " + content.subSequence(2, 4) + " " + content.subSequence(4, 6) + " " + content.subSequence(6, 8);
-                    displayedMemoryAddress += 4;
-                    break;
-                default:
-                    content = "--------";
-            }
-            memoryAddresses.get(labelNumber).setText("00000000".substring(address.length()) + address);
-            memoryValues.get(labelNumber).setText(content);
-        }
-    }
-
-    private void loadLabels(int number){
-        double xAddressPos = this.memoryAddresses.get(0).getBoundsInParent().getMinX();
-        double xValuePos = this.memoryValues.get(0).getBoundsInParent().getMinX();
-        double yPos = this.memoryAddresses.get(0).getBoundsInParent().getMinY();
-        double spaceForLabel = this.memoryAddresses.get(0).getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
-        double nextPos = yPos + spaceForLabel + VERTICAL_SPACE_BETWEEN_TEXT; //add VERTICAL_SPACE_BETWEEN_TEXT
-        for(int i = 1; i<number; i++){
-            this.memoryAddresses.add(new Text(xAddressPos, nextPos, "--------"));
-            this.memoryValues.add(new Text(xValuePos, nextPos, "----------"));
-            nextPos += spaceForLabel;
-        }
-
-    }
-
-    public void displayLablels(){
-        double spaceForLabel = this.memoryAddresses.get(0).getLayoutBounds().getHeight() + VERTICAL_SPACE_BETWEEN_TEXT;
-        double firstLabelYPos = this.memoryAddresses.get(0).getBoundsInParent().getMinY();
-        //Removing the Texts in the interface
-        for(int i = 0; i< memoryAddresses.size(); i++){
-            try{
-                mainPane.getChildren().remove(memoryAddresses.get(i));
-                mainPane.getChildren().remove(memoryValues.get(i));
-            } catch (Exception e){}
-        }
-        double paneHeight = mainPane.getHeight(); //THE HEIGHT IS NOT UPDATED IN THE MAIN PANE
-
-        int displayableLines = 10; //(int)((paneHeight - firstLabelYPos - VERTICAL_SPACE_BETWEEN_TEXT*2)/ spaceForLabel);
-        for(int i = 0; i<displayableLines; i++){
-            mainPane.getChildren().add(this.memoryAddresses.get(i));
-            mainPane.getChildren().add(this.memoryValues.get(i));
-        }
-        this.displayedLines = displayableLines;
-    }
     
     private void loadButonsEvents() {
         memoryScrollBar = (ScrollBar) mainPane.lookup("#memoryScrollBar");
@@ -148,7 +65,7 @@ public class RamView {
 
         memoryScrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
             this.firstDisplayedAdress = (int) memoryScrollBar.getValue();
-            updateContents();
+            //updateContents();
         });
         this.mainPane.setOnScroll((ScrollEvent scrollEvent) -> {
             if (scrollEvent.getDeltaY() < 0) {
@@ -157,30 +74,30 @@ public class RamView {
             else {
                 updateNewFirstAddress(1);
             }
-            updateContents();
+            //updateContents();
         });
 
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
-    	
+
     	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 8;
             memoryScrollBar.setUnitIncrement(1);
             firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
-            updateContents();
+            //updateContents();
     	});
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 16;
             memoryScrollBar.setUnitIncrement(2);
             firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
-            updateContents();
+            //updateContents();
     	});
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 32;
             memoryScrollBar.setUnitIncrement(4);
             firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
-    		updateContents();
+    		//updateContents();
     	});
 
         Text memoryViewTitleText = (Text) mainPane.lookup("#goToAddressLabel");
@@ -197,7 +114,7 @@ public class RamView {
                     return;
                 }
 
-                if (newAddress < 0 || newAddress > Ram.DEFAULT_RAM_SIZE - displayedLines) {
+                if (newAddress < 0 || newAddress > Ram.DEFAULT_RAM_SIZE) {
                     memoryViewTitleText.setText("invalidAddress");
                     memoryViewTitleText.setUnderline(true);
                     return;
@@ -206,73 +123,13 @@ public class RamView {
                 memoryScrollBar.setValue(firstDisplayedAdress);
                 memoryViewTitleText.setText("goToAddress:");
                 memoryViewTitleText.setUnderline(false);
-                updateContents();
+                //updateContents();
             }
         });
-
-        for(int i=0; i< memoryValues.size(); i++){
-            memoryValues.get(i).setOnMouseClicked((MouseEvent mouseEvent) -> {
-                Text text = (Text)mouseEvent.getSource();
-                int row = memoryValues.indexOf(text);
-                TextField textField = new TextField(text.getText());
-                mainPane.getChildren().add(textField);
-                this.mainPane.setTopAnchor(textField, text.getBoundsInParent().getMinY());
-                this.mainPane.setLeftAnchor(textField, text.getBoundsInParent().getMinX());
-
-                textField.focusedProperty().addListener((new ChangeListener<Boolean>(){
-                    @Override
-                    public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-                    {
-                        if (!newPropertyValue){
-                            mainPane.getChildren().remove(textField);
-                        }
-                    }
-                }));
-                textField.setOnKeyPressed((KeyEvent ke) -> {
-                    if (ke.getCode().equals(KeyCode.ENTER)) {
-                        int address = firstDisplayedAdress+row;
-                        int value = 0;
-                        try {
-                            value = parseUserInput(textField.getText());
-                        }catch (Exception e){
-                            errorPopup("Invalid value");
-                            return;
-                        }
-                        switch (memoryDisplayMode){
-                            case 8:
-                                if(value>256){
-                                    errorPopup("Value too big for a byte (change memory view mode to enter bigger numbers");
-                                }
-                                simulator.setRamByte(address, (byte)value);
-                                break;
-                            case 16:
-                                if(value>512){
-                                    errorPopup("Value too big for a HalfWord (change memory view mode to enter bigger numbers");
-                                }
-                                simulator.setRamHWord(address, (short)value);
-                                break;
-                            case 32:
-                                simulator.setRamWord(address, value);
-                                break;
-                        }
-                        mainPane.getChildren().remove(textField);
-                    } else if(ke.getCode().equals(KeyCode.ESCAPE)){
-                        mainPane.getChildren().remove(textField);
-                    }
-                    updateContents();
-                });
-
-            });
-        }
-
-    }
-
-    private void errorPopup(String s) {
-        System.out.println(s);
     }
 
     static int parseUserInput(String input) {
-        int parsedNumber;
+        /*int parsedNumber;
         if (input.startsWith("0x") || input.startsWith("0X")) {
             parsedNumber = Integer.parseInt(input.substring(2), 16); // parsing a int in base 16, the 2
 
@@ -285,7 +142,8 @@ public class RamView {
         } else {
             parsedNumber = Integer.parseInt(input);
         }
-        return parsedNumber;
+        return parsedNumber;*/
+        return 0;
     }
 
     private void updateNewFirstAddress(int delta) {

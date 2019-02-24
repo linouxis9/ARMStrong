@@ -87,4 +87,7 @@ public class CodeEditor {
     public String getProgramAsString() {
         return textArea.getText();
     }
+    public void setProgramAsString(String program){
+        this.textArea.setText(program);
+    }
 }

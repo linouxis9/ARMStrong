@@ -45,6 +45,19 @@ public class ArmMenuBar {
     private MenuItem switchMode;
     private MenuItem reloadMenuItem;
 
+    //FILE
+    private MenuItem neW ;
+    private MenuItem openFile;
+    private MenuItem save ;
+    private  MenuItem saveAs ;
+    private  MenuItem exitMenu ;
+
+    private MenuItem runMenuItem ;
+    private MenuItem runStepMenuItem ;
+    private MenuItem stopMenuItem ;
+
+    private MenuItem preferences;
+
     private HashSet<MenuItem> disableInExecution;
     private HashSet<MenuItem> disableInEdition;
 
@@ -57,37 +70,35 @@ public class ArmMenuBar {
     	this.primaryStage = stage;
     	this.services = services;
     	
-        final Menu fileMenu = new Menu("File");
-        final Menu windowMenu = new Menu("Window");
-        final Menu editMenu = new Menu("Edit");
-        final Menu runMenu = new Menu("Run");
-        final Menu helpMenu = new Menu("Help");
+         Menu fileMenu = new Menu("File");
+         Menu windowMenu = new Menu("Window");
+         Menu editMenu = new Menu("Edit");
+         Menu runMenu = new Menu("Run");
+         Menu helpMenu = new Menu("Help");
 
         //FILE
-        final MenuItem neW = new MenuItem("New");
-        final MenuItem openFile = new MenuItem("Open File...");
-        final MenuItem save = new MenuItem("Save");
-        final MenuItem saveAs = new MenuItem("Save As...");
-        final MenuItem exitMenu = new MenuItem("Exit");
+        this.neW = new MenuItem("New");
+        this.openFile = new MenuItem("Open File...");
+        this.save = new MenuItem("Save");
+        this.saveAs = new MenuItem("Save As...");
+        this.exitMenu = new MenuItem("Exit");
         fileMenu.getItems().addAll(neW, openFile, new SeparatorMenuItem(), save, saveAs,new SeparatorMenuItem(), exitMenu);
 
         //WINDOW
-        final Menu newMenu = new Menu("New Window");
-        final MenuItem preferences = new MenuItem("Preferences");
-
+        Menu newMenu = new Menu("New Window");
+        this.preferences = new MenuItem("Preferences");
         this.newMemoryWindow = new MenuItem("Memory");
         this.newRegistersWindow = new MenuItem("Registers");
         this.newLedGameWindow = new MenuItem("Led Game");
         newMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow);
-
         windowMenu.getItems().addAll(newMenu, preferences);
 
         //RUN
         this.switchMode = new MenuItem("Switch Mode");
-        final MenuItem runMenuItem = new MenuItem("Run");
-        final MenuItem runStepMenuItem = new MenuItem("Run Step by Step");
-        final MenuItem stopMenuItem = new MenuItem("Stop");
-        reloadMenuItem = new MenuItem("Reload");
+        this.runMenuItem = new MenuItem("Run");
+        this.runStepMenuItem = new MenuItem("Run Step by Step");
+        this.stopMenuItem = new MenuItem("Stop");
+        this.reloadMenuItem = new MenuItem("Reload");
         runMenu.getItems().addAll(this.switchMode, runMenuItem, runStepMenuItem, stopMenuItem, reloadMenuItem);
 
         final MenuItem aboutMenu = new MenuItem("About");
@@ -155,7 +166,43 @@ public class ArmMenuBar {
     public MenuItem getNewLedGame() {
         return newLedGameWindow;
     }
-    
+
+    public MenuItem getOpenFile() {
+        return openFile;
+    }
+
+    public MenuItem getNeW() {
+        return neW;
+    }
+
+    public MenuItem getSave() {
+        return save;
+    }
+
+    public MenuItem getSaveAs() {
+        return saveAs;
+    }
+
+    public MenuItem getExitMenu() {
+        return exitMenu;
+    }
+
+    public MenuItem getRunMenuItem() {
+        return runMenuItem;
+    }
+
+    public MenuItem getRunStepMenuItem() {
+        return runStepMenuItem;
+    }
+
+    public MenuItem getStopMenuItem() {
+        return stopMenuItem;
+    }
+
+    public MenuItem getPreferences() {
+        return preferences;
+    }
+
     public void setExecutionMode(boolean executionMode){
         for (MenuItem item : this.disableInEdition){
             item.setDisable(!executionMode);
@@ -169,5 +216,6 @@ public class ArmMenuBar {
     public Node getNode(){
         return this.menuBar;
     }
+
 
 }
