@@ -2,6 +2,7 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -46,9 +47,10 @@ public class RegistersView {
 
         this.mainPane = new TabPane();
         this.hexTab = new Tab("Hexa", hexPane);
-        this.sigDecTab = new Tab("Sig Hexa", sigDecPane);
+        this.sigDecTab = new Tab("Sig Dec", sigDecPane);
         this.decTab = new Tab("Decimal", decPane);
         this.mainPane.getTabs().addAll(hexTab, sigDecTab, decTab);
+        this.mainPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
         
         this.dockNode = new DockNode(mainPane, "Register View", new ImageView(dockImage));
         this.dockNode.setPrefSize(300, 100);

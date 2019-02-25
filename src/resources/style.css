@@ -3,10 +3,10 @@
 }
 
 #button8Bit, #button16Bit, #button32Bit{
-    -fx-background-color: #226fbe;
+    -fx-background-color: #34495e;
     -fx-background-radius: 10px;
     
-    -fx-border-color: #226fbe;
+    -fx-border-color: #34495e;
     -fx-border-radius: 10px;
     -fx-border-width: 1.5px;
     
@@ -15,16 +15,71 @@
 
 #button8Bit:hover, #button16Bit:hover, #button32Bit:hover{
     -fx-background-color: white;
-    -fx-text-fill: #226fbe;
-    
+    -fx-text-fill: #34495e;  
 }
 
 .dock-close-button {
-  -fx-background-color: red;
+  -fx-background-color: #d63031;
   -fx-graphic: url(cancel.png);
 }
 
+.dock-close-button:hover {
+  -fx-background-color: #e17055;
+}
+
 .dock-state-button {
-  -fx-background-color: blue;
+  -fx-background-color: #0984e3;
   -fx-graphic: url(detachedWindow.png);
 }
+
+.dock-state-button:hover {
+  -fx-background-color: #74b9ff;
+}
+
+.dock-title-bar {
+  -fx-background-color: #34495e;
+}
+
+.dock-title-label {
+  -fx-text-fill: white;
+}
+
+#goToAddressField, #consoleInput{
+  -fx-background-color: #34495e;
+  -fx-text-fill: white;
+  -fx-prompt-text-fill: #bdc3c7;
+}
+
+#goToAddressField:focused, #consoleInput:focused{
+  -fx-background-color: #34495e;
+}
+
+.text-area .content{
+  -fx-background-color: #34495e;
+}
+
+.text-area {
+  -fx-font-size: 15;
+  -fx-text-fill: white;
+  -fx-display-caret:true;
+}
+
+.text-area:focused .content{
+  -fx-background-color: #34495e;
+}
+
+#iconConsole{
+  -fx-background-color: #34495e;
+}
+
+.buttonToolBar{
+  -fx-background-radius: 10px;
+  -fx-border-radius: 10px;
+  -fx-border-color: #95a5a6; 
+  -fx-background-color: white;
+}
+
+.buttonToolBar:hover{
+  -fx-background-color: #95a5a6;
+}
+

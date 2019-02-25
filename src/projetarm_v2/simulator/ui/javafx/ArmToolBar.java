@@ -25,8 +25,6 @@ public class ArmToolBar {
 
     private HashSet<Button> disableInEdition;
 
-
-
     public ArmToolBar(ArmSimulator armSimulator, CodeEditor codeEditor){
         this.codeEditor = codeEditor;
         this.simulator = armSimulator;
@@ -37,7 +35,12 @@ public class ArmToolBar {
         this.reloadButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
         this.stopButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
         this.toolBar = new ToolBar(switchButton, new Separator(), runButton, stepByStepButton, reloadButton, stopButton);
-
+        this.switchButton.getStyleClass().add("buttonToolBar");
+        this.runButton.getStyleClass().add("buttonToolBar");
+        this.stepByStepButton.getStyleClass().add("buttonToolBar");
+        this.reloadButton.getStyleClass().add("buttonToolBar");
+        this.stopButton.getStyleClass().add("buttonToolBar");
+        
         this.disableInEdition = new HashSet<>();
         disableInEdition.add(runButton);
         disableInEdition.add(stepByStepButton);

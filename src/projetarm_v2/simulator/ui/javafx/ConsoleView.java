@@ -41,6 +41,7 @@ public class ConsoleView {
 		ScrollPane scrollPane = (ScrollPane) mainPane.lookup("#scrollPane");
 
 		this.textField = new TextField();
+		this.textField.setId("consoleInput");
 		this.mainPane.getChildren().add(this.textField);
 		this.mainPane.setBottomAnchor(this.textField, (double)0);
 		this.mainPane.setLeftAnchor(this.textField, (double)23);
