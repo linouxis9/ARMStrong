@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -32,6 +34,8 @@ import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 public class Gui extends Application {
 
+	private Scene scene;
+
 	private ArrayList<RegistersView> registersViews;
 	private ArrayList<RamView> ramViews;
 	private CodeEditor codeEditor;
@@ -39,8 +43,10 @@ public class Gui extends Application {
 
 	private ArmMenuBar armMenuBar;
 	private ArmToolBar armToolBar;
+
 	private DockPane dockPane;
 
+	private File currentProgramPath;
 	private boolean executionMode;
 
 	private ArmSimulator simulator;
@@ -57,7 +63,7 @@ public class Gui extends Application {
 		this.simulator = new ArmSimulator();
 		this.executionMode = false;
 		this.running = new AtomicBoolean(false);
-		this.stage = stage;
+		this.stage = primaryStage;
 
 		primaryStage.setTitle("#@RMStrong");
 		Image applicationIcon = new Image("file:logo.png");
@@ -93,14 +99,13 @@ public class Gui extends Application {
 		VBox.setVgrow(dockPane, Priority.ALWAYS);
 
 		//primaryStage.show(); // render to avoid node.lookup() to fail
-		setButtonEvents();
 
-		this.codeEditor.setExecutionMode(this.executionMode);
-		this.armMenuBar.setExecutionMode(this.executionMode);
-		this.armToolBar.setExecutionMode(this.executionMode);
-
-		primaryStage.setScene(new Scene(vbox, 800, 500));
+		this.scene = new Scene(vbox, 800, 500);
+		primaryStage.setScene(this.scene);
 		primaryStage.sizeToScene();
+
+		setButtonEvents();
+		setExecutionMode();
 
 		// test the look and feel with both Caspian and Modena
 		Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
@@ -128,6 +133,12 @@ public class Gui extends Application {
 		DockPane.initializeDefaultUserAgentStylesheet();
 	}
 
+	private void setExecutionMode() {
+		this.codeEditor.setExecutionMode(this.executionMode);
+		this.armMenuBar.setExecutionMode(this.executionMode);
+		this.armToolBar.setExecutionMode(this.executionMode);
+	}
+
 	private void setButtonEvents() {
 		//MENU BAR
 		//file
@@ -136,6 +147,7 @@ public class Gui extends Application {
 				warningPopup("Unsaved work will be lost");
 			}*/
 			this.codeEditor.setProgramAsString("");
+			this.currentProgramPath = null;
 		});
 		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
 			FileChooser fileChooser = new FileChooser();
@@ -149,13 +161,22 @@ public class Gui extends Application {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				this.currentProgramPath = chosenFile;
 			}
 		});
 		this.armMenuBar.getSave().setOnAction(actionEvent -> {
-
+			if(this.currentProgramPath == null){
+				this.armMenuBar.getSaveAs().fire();
+			}
+			saveFile(codeEditor.getProgramAsString(), currentProgramPath);
 		});
 		this.armMenuBar.getSaveAs().setOnAction(actionEvent -> {
-
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save assembly program");
+			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS") );
+			File chosenFile = fileChooser.showSaveDialog(stage);
+			saveFile(codeEditor.getProgramAsString(), chosenFile);
+			this.currentProgramPath = chosenFile;
 		});
 		//window
 		this.armMenuBar.getNewMemoryWindow().setOnAction(actionEvent -> {
@@ -191,9 +212,7 @@ public class Gui extends Application {
 						executionMode = !executionMode;
 					}
 				}
-				codeEditor.setExecutionMode(executionMode);
-				armMenuBar.setExecutionMode(executionMode);
-				armToolBar.setExecutionMode(executionMode);
+				setExecutionMode();
 			}
 		});
 		this.armMenuBar.getRunMenuItem().setOnAction(actionEvent -> {
@@ -251,6 +270,33 @@ public class Gui extends Application {
 			}
 		});
 
+		//the keyboard shortcuts
+		this.scene.setOnKeyPressed((KeyEvent ke) -> {
+			if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN).match(ke)) {
+				this.armMenuBar.getSave().fire();
+			}
+			if (new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN,KeyCombination.SHIFT_DOWN).match(ke)) {
+				this.armMenuBar.getSaveAs().fire();
+			}
+			if (new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN).match(ke)) {
+				this.armMenuBar.getOpenFile().fire();
+			}
+			if (new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN).match(ke)) {
+				//preferences
+			}
+			if (new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN).match(ke)) {
+				this.armMenuBar.getNeW().fire();
+			}
+			if (new KeyCodeCombination(KeyCode.F5).match(ke)) {
+				this.armMenuBar.getRunMenuItem().fire();
+			}
+			if (new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN).match(ke)) {
+				this.armMenuBar.getSwitchMode().fire();
+			}
+			if (new KeyCodeCombination(KeyCode.F11).match(ke)) {
+				this.armMenuBar.getRunStepMenuItem().fire();
+			}
+		});
 	}
 
 	private void updateUI() {
