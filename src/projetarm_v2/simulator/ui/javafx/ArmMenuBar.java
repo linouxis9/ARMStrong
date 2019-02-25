@@ -133,6 +133,7 @@ public class ArmMenuBar {
                 
 				try {
 					VBox main = FXMLLoader.load(getClass().getResource("/resources/aboutView.fxml"));
+					main.getStylesheets().add("/resources/style.css");
 					aboutPopUp.setScene(new Scene(main, 500, 280));
 					Hyperlink gitLink = (Hyperlink)main.lookup("#linkGit");
 					gitLink.setOnAction(actionEvent1 -> {

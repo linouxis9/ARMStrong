@@ -98,6 +98,7 @@ public class Gui extends Application {
 		vbox.getChildren().addAll(this.armMenuBar.getNode(), this.armToolBar.getNode(), dockPane);
 		VBox.setVgrow(dockPane, Priority.ALWAYS);
 
+		vbox.getStylesheets().add("/resources/style.css");
 		//primaryStage.show(); // render to avoid node.lookup() to fail
 
 		this.scene = new Scene(vbox, 800, 500);

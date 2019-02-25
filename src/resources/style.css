@@ -1,0 +1,30 @@
+.button { 
+	-fx-focus-color: transparent; 	
+}
+
+#button8Bit, #button16Bit, #button32Bit{
+    -fx-background-color: #226fbe;
+    -fx-background-radius: 10px;
+    
+    -fx-border-color: #226fbe;
+    -fx-border-radius: 10px;
+    -fx-border-width: 1.5px;
+    
+    -fx-text-fill: white;
+}
+
+#button8Bit:hover, #button16Bit:hover, #button32Bit:hover{
+    -fx-background-color: white;
+    -fx-text-fill: #226fbe;
+    
+}
+
+.dock-close-button {
+  -fx-background-color: red;
+  -fx-graphic: url(cancel.png);
+}
+
+.dock-state-button {
+  -fx-background-color: blue;
+  -fx-graphic: url(detachedWindow.png);
+}

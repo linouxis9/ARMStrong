@@ -52,24 +52,12 @@ public class PORTManager {
 		return false;
 	}
 	
-	public boolean remove(IOComponent component) {
-		boolean flag;
-		
-		for (IOx port : ports) {
-			flag = port.removeComponent(component);
-			if (flag) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
 	
 	public boolean remove(IO7Segment component) {
 		boolean flag;
 		
 		for (int i = 0; i < 7; i++) {
-			flag = this.remove(component.getSegment(i));
+			flag = this.removeIOComponent(component.getSegment(i));
 			if (flag) {
 				return true;
 			}

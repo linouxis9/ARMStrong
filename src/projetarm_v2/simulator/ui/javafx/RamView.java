@@ -47,6 +47,7 @@ public class RamView {
         dockNode.setPrefSize(300, 100);
 
         mainPane.setStyle("-fx-line-spacing: -0.4em;");
+        this.dockNode.getStylesheets().add("/resources/style.css");
 
         this.tableView = (TableView) mainPane.lookup("#tableView");
         ObservableList UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter();

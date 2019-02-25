@@ -42,7 +42,7 @@ public class CodeEditor {
         this.textArea = (TextArea) mainPane.lookup("#codeArea");
         this.textFlow = (TextFlow) mainPane.lookup("#textFlow");
         this.toolBar = (ToolBar) mainPane.lookup("#toolbar");
-
+        this.dockNode.getStylesheets().add("/resources/style.css");
         mainPane.setMaxHeight(Double.MAX_VALUE);
         mainPane.setMaxWidth(Double.MAX_VALUE);
     }

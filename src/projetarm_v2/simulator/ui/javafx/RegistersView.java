@@ -52,6 +52,7 @@ public class RegistersView {
         
         this.dockNode = new DockNode(mainPane, "Register View", new ImageView(dockImage));
         this.dockNode.setPrefSize(300, 100);
+        this.dockNode.getStylesheets().add("/resources/style.css");
         
         this.registersHex = new ArrayList<Text>();
         this.registersSigDec = new ArrayList<Text>();

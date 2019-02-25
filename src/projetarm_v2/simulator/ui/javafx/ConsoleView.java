@@ -36,8 +36,8 @@ public class ConsoleView {
 		this.dockNode.setPrefSize(1000, 1500);
 		this.dockNode.setClosable(false);
 
-		mainPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
+		this.mainPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		this.dockNode.getStylesheets().add("/resources/style.css");
 		ScrollPane scrollPane = (ScrollPane) mainPane.lookup("#scrollPane");
 
 		this.textField = new TextField();

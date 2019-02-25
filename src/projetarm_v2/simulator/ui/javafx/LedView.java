@@ -44,13 +44,13 @@ public class LedView {
         gridPane.setVgap(40);
         this.dockNode = new DockNode(mainPane, "Led Game", new ImageView(dockImage));
         
-        dockNode.setPrefSize(460,666);
+        this.dockNode.setPrefSize(460,666);
         
         this.mainPane.setContent(gridPane);  
         this.mainPane.setFitToWidth(true);
         this.mainPane.setFitToHeight(true);  
         this.mainPane.setHmin(dockNode.getHeight());
-        
+        this.dockNode.getStylesheets().add("/resources/style.css");
         ImageView led1 = new ImageView();
         led1.setImage(ledOn);
 
