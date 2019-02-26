@@ -57,10 +57,7 @@ public class CodeEditor {
         if(line > 0) {
             instructionsAsText.get(line - 1).setFill(Color.RED);
             this.routineCallLine = line-1;
-        }else if (line == 0){
-           // instructionsAsText.get(routineCallLine).setFill(Color.BLUE); // Active le uniquement en pas à pas
         }
-
     }
     
     public void setExecutionMode(boolean executionMode){
@@ -77,6 +74,7 @@ public class CodeEditor {
                 this.instructionsAsText.add(new Text(line));
                 this.textFlow.getChildren().add(this.instructionsAsText.get(lineNumber-1));
             }
+            highlightLine(1);
         }
     }
 

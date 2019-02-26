@@ -5,7 +5,9 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -145,25 +147,97 @@ public class Gui extends Application {
 		//MENU BAR
 		//file
 		this.armMenuBar.getNeW().setOnAction(actionEvent -> {
-			/*if(!this.codeEditor.getProgramAsString().equals("")){
-				warningPopup("Unsaved work will be lost");
-			}*/
-			this.codeEditor.setProgramAsString("");
-			this.currentProgramPath = null;
-		});
-		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
-			FileChooser fileChooser = new FileChooser();
-			fileChooser.setTitle("Open Program");
-			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS") );
+			if(!this.codeEditor.getProgramAsString().equals("")){
+				final Stage warningStage = new Stage();
+				warningStage.setTitle("Warning");
 
-			File chosenFile = fileChooser.showOpenDialog(this.stage);
-			if (chosenFile != null){
+				warningStage.initModality(Modality.APPLICATION_MODAL);
+				warningStage.initOwner(this.stage);
+
 				try {
-					this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
+					Pane main = FXMLLoader.load(getClass().getResource("/resources/warning.fxml"));
+					warningStage.setScene(new Scene(main, 500, 280));
+
+					Text messageText = (Text) main.lookup("#message");
+					messageText.setText("All unsaved Work will be Lost");
+
+					ImageView image = (ImageView) main.lookup("#image");
+					image.setImage(new Image(getClass().getResource("/resources/warning.png").toExternalForm()));
+
+					Button okButton = (Button) main.lookup("#ok");
+					Button cancelButton = (Button) main.lookup("#cancel");
+					okButton.setOnAction(actionEvent1 -> {
+						this.codeEditor.setProgramAsString("");
+						this.currentProgramPath = null;
+						warningStage.close();
+					});
+					cancelButton.setOnAction(actionEvent1 -> {
+						warningStage.close();
+					});
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				this.currentProgramPath = chosenFile;
+				warningStage.show();
+			}
+		});
+		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
+			if(!this.codeEditor.getProgramAsString().equals("")) {
+				final Stage warningStage = new Stage();
+				warningStage.setTitle("Warning");
+
+				warningStage.initModality(Modality.APPLICATION_MODAL);
+				warningStage.initOwner(this.stage);
+
+				try {
+					Pane main = FXMLLoader.load(getClass().getResource("/resources/warning.fxml"));
+					warningStage.setScene(new Scene(main, 500, 280));
+
+					Text messageText = (Text) main.lookup("#message");
+					messageText.setText("All unsaved Work will be Lost");
+
+					ImageView image = (ImageView) main.lookup("#image");
+					image.setImage(new Image(getClass().getResource("/resources/warning.png").toExternalForm()));
+
+					Button okButton = (Button) main.lookup("#ok");
+					Button cancelButton = (Button) main.lookup("#cancel");
+					okButton.setOnAction(actionEvent1 -> {
+						FileChooser fileChooser = new FileChooser();
+						fileChooser.setTitle("Open Program");
+						fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS"));
+
+						File chosenFile = fileChooser.showOpenDialog(this.stage);
+						if (chosenFile != null) {
+							try {
+								this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							this.currentProgramPath = chosenFile;
+						}
+						warningStage.close();
+					});
+					cancelButton.setOnAction(actionEvent1 -> {
+						warningStage.close();
+					});
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				warningStage.show();
+			}
+			else{
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Open Program");
+				fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS"));
+
+				File chosenFile = fileChooser.showOpenDialog(this.stage);
+				if (chosenFile != null) {
+					try {
+						this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					this.currentProgramPath = chosenFile;
+				}
 			}
 		});
 		this.armMenuBar.getSave().setOnAction(actionEvent -> {
@@ -337,26 +411,4 @@ public class Gui extends Application {
 
 		}
 	}
-
-	/*private void warningPopup(String message){
-		final Stage warningStage = new Stage();
-		warningStage.setTitle("Warning");
-		Image applicationIcon = new Image("file:warning.png");
-		warningStage.getIcons().add(applicationIcon);
-
-		warningStage.initModality(Modality.APPLICATION_MODAL);
-		warningStage.initOwner(this.stage);
-
-		warningStage.getIcons().add(applicationIcon);
-		warningStage.setTitle("About - #@RMStrong");
-		try {
-			Pane main = FXMLLoader.load(getClass().getResource("/resources/warning.fxml"));
-			warningStage.setScene(new Scene(main, 500, 280));
-			Text messageText = (Text) main.lookup("#message");
-			messageText.setText(message);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		warningStage.show();
-	}*/
 }

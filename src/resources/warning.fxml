@@ -26,12 +26,18 @@
       </Text>
       <HBox prefHeight="253.0" prefWidth="490.0">
          <children>
-            <ImageView fitHeight="99.0" fitWidth="143.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="image" fitHeight="147.0" fitWidth="163.0" pickOnBounds="true" preserveRatio="true" />
             <Text fx:id="message" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="289.7294921875">
                <HBox.margin>
                   <Insets top="50.0" />
                </HBox.margin>
             </Text>
+         </children>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="ok" mnemonicParsing="false" text="OK" textAlignment="CENTER" />
+            <Button fx:id="cancel" mnemonicParsing="false" text="Cancel" textAlignment="CENTER" />
          </children>
       </HBox>
    </children>
