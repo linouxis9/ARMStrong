@@ -370,4 +370,8 @@ public class ArmSimulator {
 	public void interruptExecutionFlow() {
 		this.cpu.interruptMe();
 	}
+
+	public Save getSave(){
+		return this.save;
+	}
 }
