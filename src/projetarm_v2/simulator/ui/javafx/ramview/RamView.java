@@ -1,4 +1,4 @@
-package projetarm_v2.simulator.ui.javafx;
+package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.collections.ModifiableObservableListBase;
 import javafx.collections.ObservableList;
@@ -6,6 +6,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.skin.NestedTableColumnHeader;
+import javafx.scene.control.skin.TableColumnHeader;
+import javafx.scene.control.skin.TableHeaderRow;
+import javafx.scene.control.skin.TableViewSkin;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -15,6 +19,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
+
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
 
@@ -82,8 +87,15 @@ public class RamView {
         d.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("d"));
         
+        this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
+        a.setMaxWidth( 1f * Integer.MAX_VALUE * 25 ); // 50% width
+        b.setMaxWidth( 1f * Integer.MAX_VALUE * 25 ); // 30% width
+        c.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
+        d.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
         this.tableView.getColumns().addAll(a, b, c, d);
                 
+
+        
         loadButonsEvents();
     }
 
@@ -104,15 +116,7 @@ public class RamView {
             this.tableView.refresh();
             //updateContents();
         });
-        this.mainPane.setOnScroll((ScrollEvent scrollEvent) -> {
-            if (scrollEvent.getDeltaY() < 0) {
-                updateNewFirstAddress(-1);
-            }
-            else {
-                updateNewFirstAddress(1);
-            }
-            //updateContents();
-        });
+ 
 
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
@@ -121,88 +125,24 @@ public class RamView {
     	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 8;
             memoryScrollBar.setUnitIncrement(1);
-            firstDisplayedAddress = firstDisplayedAddress - firstDisplayedAddress % (memoryDisplayMode/8);
-            //updateContents();
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
+            this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
+            this.tableView.refresh();
     	});
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 16;
             memoryScrollBar.setUnitIncrement(2);
-            firstDisplayedAddress = firstDisplayedAddress - firstDisplayedAddress % (memoryDisplayMode/8);
-            //updateContents();
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
+            this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
+            this.tableView.refresh();
     	});
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 32;
             memoryScrollBar.setUnitIncrement(4);
-            firstDisplayedAddress = firstDisplayedAddress - firstDisplayedAddress % (memoryDisplayMode/8);
-    		//updateContents();
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
+            this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.WORD);
+            this.tableView.refresh();
     	});
-
-        Text memoryViewTitleText = (Text) mainPane.lookup("#goToAddressLabel");
-        TextField goToAddressField = (TextField) this.mainPane.lookup("#goToAddressField");
-        goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
-            if (ke.getCode().equals(KeyCode.ENTER)) {
-                String addressTyped = goToAddressField.getText();
-                int newAddress = 0;
-                try {
-                    newAddress = parseUserInput(addressTyped);
-                } catch (NumberFormatException exeption) {
-                    memoryViewTitleText.setText("invalidAddress");
-                    memoryViewTitleText.setUnderline(true);
-                    return;
-                }
-
-                if (newAddress < 0 || newAddress > Ram.DEFAULT_RAM_SIZE) {
-                    memoryViewTitleText.setText("invalidAddress");
-                    memoryViewTitleText.setUnderline(true);
-                    return;
-                }
-                firstDisplayedAddress = newAddress;
-                memoryScrollBar.setValue(firstDisplayedAddress);
-                memoryViewTitleText.setText("goToAddress:");
-                memoryViewTitleText.setUnderline(false);
-                //updateContents();
-            }
-        });
-    }
-
-    static int parseUserInput(String input) {
-        /*int parsedNumber;
-        if (input.startsWith("0x") || input.startsWith("0X")) {
-            parsedNumber = Integer.parseInt(input.substring(2), 16); // parsing a int in base 16, the 2
-
-        } else if (input.startsWith("0b") || input.startsWith("0B")) {
-            parsedNumber = Integer.parseInt(input.substring(2), 2); // parsing a int in base 2, the 2
-
-        } else if (input.startsWith("0d") || input.startsWith("0D")) {
-            parsedNumber = Integer.parseInt(input.substring(2)); // parsing a int in base 10, the 2
-
-        } else {
-            parsedNumber = Integer.parseInt(input);
-        }
-        return parsedNumber;*/
-        return 0;
-    }
-
-    private void updateNewFirstAddress(int delta) {
-        int oldAddress = this.firstDisplayedAddress;
-
-        switch (this.memoryDisplayMode) {
-            case 8:
-                this.firstDisplayedAddress += -delta;
-                break;
-            case 16:
-                this.firstDisplayedAddress += -2 * delta;
-                break;
-            case 32:
-                this.firstDisplayedAddress += -4 * delta;
-                break;
-            default:
-                this.memoryDisplayMode = 8;
-        }
-
-        if (firstDisplayedAddress < 0 || firstDisplayedAddress > Ram.DEFAULT_RAM_SIZE) {
-            this.firstDisplayedAddress = oldAddress;
-        }
     }
 
     public DockNode getNode() {

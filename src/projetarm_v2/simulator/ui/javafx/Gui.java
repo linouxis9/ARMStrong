@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.save.Save;
+import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 public class Gui extends Application {
 
@@ -248,6 +249,7 @@ public class Gui extends Application {
 				if (executionMode) {
 					try {
 						simulator.setProgram(codeEditor.getProgramAsString());
+						this.updateUI();
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 						executionMode = !executionMode;
@@ -377,9 +379,11 @@ public class Gui extends Application {
 				registerView.updateRegisters();
 			}
 			
-			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
+			for (RamView ramView : this.ramViews) {
+				ramView.refresh();
+			}
 			
-			this.ramViews.get(0).refresh();
+			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
 	}
 	

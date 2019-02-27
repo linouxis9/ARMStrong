@@ -53,7 +53,7 @@ public class Ram {
 	 */
 	public short getHWord(long myAddress) {
 
-		return (short) ((getByte(myAddress + 1) & 0xFF) | (getByte(myAddress) & 0xFF) << 8);
+		return (short) ((getByte(myAddress) & 0xFF) | (getByte(myAddress+1) & 0xFF) << 8);
 	}
 
 	/**
