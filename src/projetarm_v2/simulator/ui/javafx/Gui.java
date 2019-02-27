@@ -378,6 +378,8 @@ public class Gui extends Application {
 			}
 			
 			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
+			
+			this.ramViews.get(0).refresh();
 		});
 	}
 	

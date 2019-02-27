@@ -1,8 +1,11 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import javafx.collections.ModifiableObservableListBase;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -28,11 +31,13 @@ public class RamView {
     private ArmSimulator simulator;
 
     private ScrollBar memoryScrollBar;
-    private TableView tableView;
+    private TableView<LineRam> tableView;
 
-    private int firstDisplayedAdress = 0;
+    private int firstDisplayedAddress = 0x1000;
     private int memoryDisplayMode = 8;
 
+    private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
+    
     public RamView(ArmSimulator simulator) {
         //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         try {
@@ -49,23 +54,54 @@ public class RamView {
         mainPane.setStyle("-fx-line-spacing: -0.4em;");
         this.dockNode.getStylesheets().add("/resources/style.css");
 
-        this.tableView = (TableView) mainPane.lookup("#tableView");
-        ObservableList UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter();
+        this.tableView = (TableView<LineRam>) mainPane.lookup("#tableView");
+        
+        UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter(simulator.getRam());
+        UneSuperImplemFournieParValentinLeBg.setOffset(this.firstDisplayedAddress);
+        
         this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
+        this.tableView.setEditable(true);
+        
+        TableColumn<LineRam,String> a = new TableColumn("a");
+        a.setCellFactory(TextFieldTableCell.forTableColumn());
+        a.setCellValueFactory(
+                new PropertyValueFactory<LineRam, String>("a"));
+ 
+        TableColumn<LineRam,String>  b = new TableColumn("b");
+        b.setCellFactory(TextFieldTableCell.forTableColumn());
+        b.setCellValueFactory(
+                new PropertyValueFactory<LineRam, String>("b"));
+ 
+        TableColumn<LineRam,String>  c = new TableColumn("c");
+        c.setCellFactory(TextFieldTableCell.forTableColumn());
+        c.setCellValueFactory(
+                new PropertyValueFactory<LineRam, String>("c"));
 
+        TableColumn<LineRam,String>  d = new TableColumn("d");
+        d.setCellFactory(TextFieldTableCell.forTableColumn());
+        d.setCellValueFactory(
+                new PropertyValueFactory<LineRam, String>("d"));
+        
+        this.tableView.getColumns().addAll(a, b, c, d);
+                
         loadButonsEvents();
     }
 
+    public void refresh() {
+    	this.tableView.refresh();
+    }
     
     private void loadButonsEvents() {
         memoryScrollBar = (ScrollBar) mainPane.lookup("#memoryScrollBar");
         memoryScrollBar.setMin(0);
-        memoryScrollBar.setValue(0);
+        memoryScrollBar.setValue(this.firstDisplayedAddress);
         memoryScrollBar.setUnitIncrement(1);
         memoryScrollBar.setMax(2 *1024*1024); //TODO: set proper value
 
         memoryScrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
-            this.firstDisplayedAdress = (int) memoryScrollBar.getValue();
+            this.firstDisplayedAddress = (int) memoryScrollBar.getValue();
+            this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+            this.tableView.refresh();
             //updateContents();
         });
         this.mainPane.setOnScroll((ScrollEvent scrollEvent) -> {
@@ -85,19 +121,19 @@ public class RamView {
     	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 8;
             memoryScrollBar.setUnitIncrement(1);
-            firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
+            firstDisplayedAddress = firstDisplayedAddress - firstDisplayedAddress % (memoryDisplayMode/8);
             //updateContents();
     	});
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 16;
             memoryScrollBar.setUnitIncrement(2);
-            firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
+            firstDisplayedAddress = firstDisplayedAddress - firstDisplayedAddress % (memoryDisplayMode/8);
             //updateContents();
     	});
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
     		this.memoryDisplayMode = 32;
             memoryScrollBar.setUnitIncrement(4);
-            firstDisplayedAdress = firstDisplayedAdress - firstDisplayedAdress % (memoryDisplayMode/8);
+            firstDisplayedAddress = firstDisplayedAddress - firstDisplayedAddress % (memoryDisplayMode/8);
     		//updateContents();
     	});
 
@@ -120,8 +156,8 @@ public class RamView {
                     memoryViewTitleText.setUnderline(true);
                     return;
                 }
-                firstDisplayedAdress = newAddress;
-                memoryScrollBar.setValue(firstDisplayedAdress);
+                firstDisplayedAddress = newAddress;
+                memoryScrollBar.setValue(firstDisplayedAddress);
                 memoryViewTitleText.setText("goToAddress:");
                 memoryViewTitleText.setUnderline(false);
                 //updateContents();
@@ -148,24 +184,24 @@ public class RamView {
     }
 
     private void updateNewFirstAddress(int delta) {
-        int oldAddress = this.firstDisplayedAdress;
+        int oldAddress = this.firstDisplayedAddress;
 
         switch (this.memoryDisplayMode) {
             case 8:
-                this.firstDisplayedAdress += -delta;
+                this.firstDisplayedAddress += -delta;
                 break;
             case 16:
-                this.firstDisplayedAdress += -2 * delta;
+                this.firstDisplayedAddress += -2 * delta;
                 break;
             case 32:
-                this.firstDisplayedAdress += -4 * delta;
+                this.firstDisplayedAddress += -4 * delta;
                 break;
             default:
                 this.memoryDisplayMode = 8;
         }
 
-        if (firstDisplayedAdress < 0 || firstDisplayedAdress > Ram.DEFAULT_RAM_SIZE) {
-            this.firstDisplayedAdress = oldAddress;
+        if (firstDisplayedAddress < 0 || firstDisplayedAddress > Ram.DEFAULT_RAM_SIZE) {
+            this.firstDisplayedAddress = oldAddress;
         }
     }
 

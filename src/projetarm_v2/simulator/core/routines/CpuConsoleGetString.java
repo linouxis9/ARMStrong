@@ -31,6 +31,7 @@ public class CpuConsoleGetString extends CpuRoutine
 	@Override
 	protected void primitive()
 	{
+		System.out.println("[INPUT] Waiting for input");
 		while (this.consoleBuffer.peek() == null) {
 			try {
 				Thread.sleep(50);
