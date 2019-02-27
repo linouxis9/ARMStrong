@@ -7,6 +7,7 @@ import unicorn.CodeHook;
 import unicorn.Unicorn;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,28 @@ public abstract class CpuRoutine {
 		return false;
 	}
 	
+	protected String longToString(long address) throws UnsupportedEncodingException
+	{
+		int i= 0;
+		List<Byte> list = new ArrayList<>();
+		byte c = this.getRam().getByte(address++);
+		
+		while (c != 0) {
+			list.add(c);
+			c = this.getRam().getByte(address++);
+		}
+		
+		byte[] array = new byte[list.size()];
+		
+		for (Byte current : list) {
+			array[i] = current;
+			i++;
+		}
+	
+		return new String(array, "UTF-8");
+	
+	}
+	
 	private class RoutineHook implements CodeHook {
 		private final CpuRoutine cpuRoutine;
 
@@ -56,7 +79,7 @@ public abstract class CpuRoutine {
 			
 			this.cpuRoutine.primitive();
 			
-			this.cpuRoutine.getCpu().setCurrentAddress((long)this.cpuRoutine.getCpu().getRegister(14).getValue()-4);
+			this.cpuRoutine.getCpu().setCurrentAddress((long) this.cpuRoutine.getCpu().getRegister(14).getValue()-4);
 		}
 
 	}

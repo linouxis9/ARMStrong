@@ -21,10 +21,9 @@ public class CpuConsolePutChar extends CpuRoutine {
 	@Override
 	protected void primitive() {
 		long address = (long)this.getRegister(0).getValue();
-		
 		byte c = this.getRam().getByte(address);
 
-		System.out.format("[OUTPUT] %s%n",Character.toString((char)c));
+		System.out.format("[OUTPUT] %s%n",Character.toString((char) c));
 	}
 
 }

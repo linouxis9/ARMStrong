@@ -35,6 +35,6 @@ public class Main {
 			return;
 		}
 		
-		Cli.main(new String[0]);
+		Gui.main(new String[0]);
 	}
 }

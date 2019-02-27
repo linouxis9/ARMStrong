@@ -10,38 +10,23 @@ public class CpuConsolePutString extends CpuRoutine {
 
 	public static final long ROUTINE_ADDRESS = 0xFF04L;
 	
-	public CpuConsolePutString(Cpu cpu) {
-		super(cpu);
-	}
+	public CpuConsolePutString(Cpu cpu) { super(cpu); }
 	
-	public long getRoutineAddress() {
-		return ROUTINE_ADDRESS;
-	}
+	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
 
 	@Override
 	protected void primitive() {
-		long address = (long)this.getRegister(0).getValue();
-
-		List<Byte> list = new ArrayList<>();
+		int i = 0;
+		long address = (long) this.getRegister(0).getValue();
 		
-		byte c = this.getRam().getByte(address++);
-		while (c != 0) {
-			list.add(c);
-			c = this.getRam().getByte(address++);
-		}
-		
-	    byte[] array = new byte[list.size()];
-	    int i = 0;
-	    for (Byte current : list) {
-	        array[i] = current;
-	        i++;
-	    }
-
 		try
 		{
-			System.out.println("[OUTPUT] " + new String(array, "UTF-8"));
+			System.out.println("[OUTPUT] " + this.longToString(address));
 		}
-		catch (UnsupportedEncodingException e) {}
+		catch(UnsupportedEncodingException e)
+		{
+			e.printStackTrace();
+		}
 		
 		System.out.flush();
 	}

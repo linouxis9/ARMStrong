@@ -1,5 +1,3 @@
-
-
 package projetarm_v2.simulator.core.routines;
 
 import projetarm_v2.simulator.core.Cpu;
@@ -17,39 +15,24 @@ public class CpuGetFile extends CpuRoutine
 	
 	public CpuGetFile(Cpu cpu) { super(cpu); }
 	
-	@Override
 	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
 	
 	@Override
-	protected void primitive()
-	{
+	protected void primitive() {
+		int i = 0;
 		long address = (long) this.getRegister(0).getValue();
 		long dest = (long) this.getRegister(1).getValue();
 		
-		List<Byte> list = new ArrayList<>();
-		
-		File myFile = new File(list.toString());
-		
-		if(myFile.length() < 256)
+		try
 		{
-			byte[] array;
-			try {
-				array = Files.readAllBytes(new File(list.toString()).toPath());
-			} catch (IOException e) {
-				e.printStackTrace();
-				return;
-			}
-			
-			for(int i = 0 ; i < array.length ; i++)
-			{
-				this.getRam().setByte(dest,array[i]);
-				dest++;
-			}
+			System.out.println("Bonjour " + this.longToString(dest));
 		}
-		else
+		catch(UnsupportedEncodingException e)
 		{
-			System.out.println("Fichier trop volumineux !! N'essaye pas de tester la force de l'équipe ARMStrong !!");
+			e.printStackTrace();
 		}
+		
+		System.out.flush();
 	}
 }
 

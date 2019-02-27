@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class CpuConsoleGetString extends CpuRoutine
-{
+public class CpuConsoleGetString extends CpuRoutine {
+	
 	public static final long ROUTINE_ADDRESS = 0xFF08L;
 	private ConcurrentLinkedQueue<String> consoleBuffer;
 	
@@ -16,22 +16,17 @@ public class CpuConsoleGetString extends CpuRoutine
 		this.consoleBuffer = new ConcurrentLinkedQueue<>();
 	}
 	
-	public long getRoutineAddress() {
-		return ROUTINE_ADDRESS;
-	}
+	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
 	
-	public static boolean shouldBeManuallyAdded() {
-		return true;
-	}
+	public static boolean shouldBeManuallyAdded() {	return true; }
 	
-	public boolean add(String line) {
-		return this.consoleBuffer.offer(line);
-	}
+	public boolean add(String line) { return this.consoleBuffer.offer(line); }
 	
 	@Override
 	protected void primitive()
 	{
 		System.out.println("[INPUT] Waiting for input");
+		
 		while (this.consoleBuffer.peek() == null) {
 			try {
 				Thread.sleep(50);
@@ -42,9 +37,7 @@ public class CpuConsoleGetString extends CpuRoutine
 		
 		String searchString = this.consoleBuffer.poll();
 		
-		if (searchString == null) {
-			return;
-		}
+		if (searchString == null) {	return;	}
 		
 		long address = (long) this.getRegister(0).getValue();
 		
