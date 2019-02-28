@@ -23,16 +23,18 @@ public class CpuGetFile extends CpuRoutine
 		long address = (long) this.getRegister(0).getValue();
 		long dest = (long) this.getRegister(1).getValue();
 		
-		try
-		{
-			System.out.println("Bonjour " + this.longToString(dest));
-		}
-		catch(UnsupportedEncodingException e)
-		{
+		try {
+			File file = new File(this.longToString(dest));
+			FileWriter fileWriter = new FileWriter(file);
+			String str;
+			
+			str = this.longToString(address);
+			fileWriter.write(str);
+			fileWriter.close();
+			
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		System.out.flush();
 	}
 }
 
