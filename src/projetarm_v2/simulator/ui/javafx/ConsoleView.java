@@ -50,6 +50,7 @@ public class ConsoleView {
 
 		this.textFlow = new TextFlow();
 		this.textFlow.setPadding(new Insets(5));
+		this.textFlow.setId("textConsole");
 
 		scrollPane.setContent(this.textFlow);
 

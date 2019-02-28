@@ -1,6 +1,4 @@
-.button { 
-	-fx-focus-color: transparent; 	
-}
+.root { -fx-focus-color: transparent; }
 
 #button8Bit, #button16Bit, #button32Bit{
     -fx-background-color: #34495e;
@@ -36,26 +34,14 @@
   -fx-background-color: #74b9ff;
 }
 
-.dock-title-bar {
-  -fx-background-color: #34495e;
-}
-
 .dock-title-label {
   -fx-text-fill: white;
 }
 
 #goToAddressField, #consoleInput{
-  -fx-background-color: #34495e;
+  -fx-background-color: #2C3E50;
   -fx-text-fill: white;
   -fx-prompt-text-fill: #bdc3c7;
-}
-
-#goToAddressField:focused, #consoleInput:focused{
-  -fx-background-color: #34495e;
-}
-
-.text-area .content{
-  -fx-background-color: #34495e;
 }
 
 .text-area {
@@ -64,12 +50,8 @@
   -fx-display-caret:true;
 }
 
-.text-area:focused .content{
-  -fx-background-color: #34495e;
-}
-
-#iconConsole{
-  -fx-background-color: #34495e;
+.dock-title-bar, .text-area:focused .content, #iconConsole, .text-area .content, #goToAddressField:focused, #consoleInput:focused{
+  -fx-background-color: #2C3E50;
 }
 
 .buttonToolBar{
@@ -85,12 +67,16 @@
 }
 
 .scroll-pane{
-  -fx-background: #576574;
-  -fx-border-color: #34495e;
+  -fx-background: #34495E;
+  -fx-border-color: #2C3E50;
 }
 
 .menu .label{
   -fx-text-fill: white;
+}
+
+#textConsole > Text, .contentTabPane > Text { 
+    -fx-fill: white;
 }
 
 .buttonToolBar:hover, .menu-item:focused,.menu:focused, .context-menu .separator{
@@ -98,13 +84,32 @@
 }
 
 .menu-item, .menu, .menu-bar{
-  -fx-background-color: #34495e;
+  -fx-background-color: #2C3E50;
 }
 
 .tool-bar{
-	-fx-background-color: #576574;
-	-fx-border-color: #34495e;
+	-fx-background-color: #34495E;
+	-fx-border-color: #2C3E50;
 }
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: #636e72;
+}
+
+.tab{
+  -fx-background-radius: 5px 5px 0px 0px;
+  -fx-border-radius: 5px 5px 0px 0px;
+  -fx-background-color: white;
+  -fx-text-fill: #34495e;   
+}
+
+.tab-pane, .tab-pane .tab:selected .tab-label, .tab-pane .tab:selected{
+	-fx-background-color: #34495E;
+	-fx-text-fill: white;
+}
+
+
+
 
 .table-row-cell:empty {
     -fx-background: #f4f4f4;

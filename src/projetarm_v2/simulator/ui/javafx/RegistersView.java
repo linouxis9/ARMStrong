@@ -41,6 +41,10 @@ public class RegistersView {
         this.hexPane = new Pane();
         this.sigDecPane = new Pane();
         this.decPane = new Pane();
+        
+        this.hexPane.getStyleClass().add("contentTabPane");
+        this.sigDecPane.getStyleClass().add("contentTabPane");
+        this.decPane.getStyleClass().add("contentTabPane");
 
         this.mainPane = new TabPane();
         this.hexTab = new Tab("Hexa", hexPane);
