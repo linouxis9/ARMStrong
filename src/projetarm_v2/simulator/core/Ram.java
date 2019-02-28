@@ -53,7 +53,7 @@ public class Ram {
 	 */
 	public short getHWord(long myAddress) {
 
-		return (short) ((getByte(myAddress) & 0xFF) | (getByte(myAddress+1) & 0xFF) << 8);
+		return (short) ((getByte(myAddress) & 0xFF) | (getByte(myAddress + 1) & 0xFF) << 8);
 	}
 
 	/**
@@ -69,15 +69,15 @@ public class Ram {
 		bytes[0] = (byte) (myHWord & 0xff);
 		bytes[1] = (byte) ((myHWord >> 8) & 0xff);
 
-		this.setByte(myAddress, bytes[1]);
-		this.setByte(myAddress + 1, bytes[0]);
+		this.setByte(myAddress + 1, bytes[1]);
+		this.setByte(myAddress, bytes[0]);
 
 	}
 
 	public int getValue(long myAddress) {
 
-		return ((getByte(myAddress + 3) & 0xFF) | (getByte(myAddress + 2) & 0xFF) << 8
-				| (getByte(myAddress + 1) & 0xFF) << 16 | (getByte(myAddress) & 0xFF) << 24);
+		return ((getByte(myAddress) & 0xFF) | (getByte(myAddress + 1) & 0xFF) << 8
+				| (getByte(myAddress + 2) & 0xFF) << 16 | (getByte(myAddress + 3) & 0xFF) << 24);
 
 	}
 
@@ -94,10 +94,10 @@ public class Ram {
 		bytes[2] = (byte) (myWord >> 16);
 		bytes[3] = (byte) (myWord >> 24);
 
-		this.setByte(myAddress, bytes[3]);
-		this.setByte(myAddress + 1, bytes[2]);
-		this.setByte(myAddress + 2, bytes[1]);
-		this.setByte(myAddress + 3, bytes[0]);
+		this.setByte(myAddress + 3, bytes[3]);
+		this.setByte(myAddress + 2, bytes[2]);
+		this.setByte(myAddress + 1, bytes[1]);
+		this.setByte(myAddress, bytes[0]);
 
 	}
 

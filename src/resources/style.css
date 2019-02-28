@@ -75,11 +75,36 @@
 .buttonToolBar{
   -fx-background-radius: 10px;
   -fx-border-radius: 10px;
-  -fx-border-color: #95a5a6; 
+  -fx-border-color: white; 
   -fx-background-color: white;
 }
 
 .buttonToolBar:hover{
   -fx-background-color: #95a5a6;
+  -fx-border-color: #95a5a6; 
 }
+
+.scroll-pane{
+  -fx-background: #576574;
+  -fx-border-color: #34495e;
+}
+
+.menu .label{
+  -fx-text-fill: white;
+}
+
+.buttonToolBar:hover, .menu-item:focused,.menu:focused, .context-menu .separator{
+  -fx-background-color: #95a5a6;
+}
+
+.menu-item, .menu, .menu-bar{
+  -fx-background-color: #34495e;
+}
+
+.tool-bar{
+	-fx-background-color: #576574;
+	-fx-border-color: #34495e;
+}
+
+
 
