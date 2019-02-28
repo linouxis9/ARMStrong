@@ -369,7 +369,12 @@ public class ArmSimulator {
 		this.cpu.interruptMe();
 	}
 
-	public Save getSave(){
-		return this.save;
+	public String getProgramSavefromPath(String absolutePath) {
+		try {
+			return this.save.fromPath(absolutePath).getProgram();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
 }

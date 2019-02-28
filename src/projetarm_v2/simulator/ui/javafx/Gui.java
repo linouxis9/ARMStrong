@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
-import projetarm_v2.simulator.core.save.Save;
 import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 public class Gui extends Application {
@@ -58,8 +57,6 @@ public class Gui extends Application {
 
 	private Stage stage;
 
-	private Save save;
-
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -68,7 +65,6 @@ public class Gui extends Application {
 	public void start(Stage primaryStage) {
 		this.simulator = new ArmSimulator();
 		this.executionMode = false;
-		this.save = this.simulator.getSave();
 		this.running = new AtomicBoolean(false);
 		this.stage = primaryStage;
 
@@ -165,7 +161,7 @@ public class Gui extends Application {
 					if (chosenFile != null) {
 						try {
 							if (chosenFile.getAbsolutePath().endsWith(".ARMS")){
-								this.codeEditor.setProgramAsString(Save.fromPath(chosenFile.getAbsolutePath()).getProgram());
+								this.codeEditor.setProgramAsString(new String(simulator.getProgramSavefromPath(chosenFile.getAbsolutePath())));
 							}
 							else{
 								this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
@@ -186,7 +182,7 @@ public class Gui extends Application {
 				if (chosenFile != null) {
 					try {
 						if (chosenFile.getAbsolutePath().endsWith(".ARMS")) {
-							this.codeEditor.setProgramAsString(Save.fromPath(chosenFile.getAbsolutePath()).getProgram());
+							this.codeEditor.setProgramAsString(new String(simulator.getProgramSavefromPath(chosenFile.getAbsolutePath())));
 						} else {
 							this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
 						}
@@ -200,19 +196,22 @@ public class Gui extends Application {
 		this.armMenuBar.getSave().setOnAction(actionEvent -> {
 			if(this.currentProgramPath == null){
 				this.armMenuBar.getSaveAs().fire();
+			} else {
+				saveFile(codeEditor.getProgramAsString(), currentProgramPath);
 			}
-			saveFile(codeEditor.getProgramAsString(), currentProgramPath);
 		});
 		this.armMenuBar.getSaveAs().setOnAction(actionEvent -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Save assembly program");
 			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS") );
 			File chosenFile = fileChooser.showSaveDialog(stage);
-			if(chosenFile.getAbsolutePath().endsWith(".ARMS") || chosenFile.getAbsolutePath().endsWith(".S")){
-				saveFile(codeEditor.getProgramAsString(), chosenFile);
-				this.currentProgramPath = chosenFile;
-			} else {
-				warningPopup("Please choose a valid extension (*.S or *.ARMS)", EventHandler -> this.armMenuBar.getSaveAs().fire());
+			if (chosenFile != null) {
+				if (chosenFile.getAbsolutePath().endsWith(".ARMS") || chosenFile.getAbsolutePath().endsWith(".S")) {
+					saveFile(codeEditor.getProgramAsString(), chosenFile);
+					this.currentProgramPath = chosenFile;
+				} else {
+					warningPopup("Please choose a valid extension (*.S or *.ARMS)", EventHandler -> this.armMenuBar.getSaveAs().fire());
+				}
 			}
 
 		});
@@ -400,9 +399,10 @@ public class Gui extends Application {
 
 	private void saveFile(String content, File theFile) {
 		if (theFile.getAbsolutePath().endsWith(".ARMS")){
+			this.simulator.setProgram(this.codeEditor.getProgramAsString());
+
 			try {
-				this.save.setProgram(this.codeEditor.getProgramAsString());
-				this.save.saveToFile(theFile.getAbsolutePath());
+				this.simulator.saveToFile(theFile.getAbsolutePath());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
