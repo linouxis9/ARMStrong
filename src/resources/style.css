@@ -106,5 +106,17 @@
 	-fx-border-color: #34495e;
 }
 
+.table-row-cell:empty {
+    -fx-background: #f4f4f4;
+    -fx-border-color: #f4f4f4;
+}
 
+.table-view {
+	-fx-background-color: transparent, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+    -fx-padding: 1;
+}
 
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}

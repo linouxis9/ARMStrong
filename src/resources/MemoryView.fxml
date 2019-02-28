@@ -26,19 +26,8 @@
       <ScrollBar fx:id="memoryScrollBar" layoutX="234.0" layoutY="93.0" orientation="VERTICAL" prefHeight="514.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="93.0" />
       <AnchorPane layoutX="26.0" layoutY="93.0" prefHeight="507.0" prefWidth="195.0" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="58.0" AnchorPane.topAnchor="93.0">
          <children>
-            <TableView fx:id="tableView" prefHeight="507.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <Pane prefHeight="507.0" prefWidth="200.0" style="-fx-background-color: rgba(0, 0, 0, 0.0);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <TableView fx:id="tableView" editable="true" prefHeight="507.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
-      <Button layoutX="213.0" layoutY="93.0" mnemonicParsing="false" prefHeight="507.0" prefWidth="16.0" text="&gt;" AnchorPane.bottomAnchor="23.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="93.0">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Button>
-      <Button layoutX="13.0" layoutY="93.0" mnemonicParsing="false" prefHeight="507.0" prefWidth="16.0" text="&gt;" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="93.0">
-         <font>
-            <Font size="7.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>

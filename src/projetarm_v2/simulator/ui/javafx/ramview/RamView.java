@@ -1,5 +1,7 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -31,6 +33,7 @@ public class RamView {
     private TableColumn<LineRam,String> b;
     private TableColumn<LineRam,String> d;
 
+    private boolean shouldRefresh = true;
     
     private int firstDisplayedAddress = 0x1000;
 
@@ -60,6 +63,16 @@ public class RamView {
         this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
         this.tableView.setEditable(true);
         
+        this.tableView.setOnKeyPressed(event -> {
+            TablePosition<LineRam, ?> pos = this.tableView.getFocusModel().getFocusedCell() ;
+            if (pos != null && (event.getCode().isDigitKey() || event.getCode().isLetterKey())) {
+                this.tableView.edit(pos.getRow(), pos.getTableColumn());
+            }
+        });
+
+        // single cell selection mode
+        tableView.getSelectionModel().setCellSelectionEnabled(true);
+
         a = new TableColumn<LineRam, String>("a");
         a.setCellFactory(TextFieldTableCell.forTableColumn());
         a.setCellValueFactory(
@@ -117,7 +130,7 @@ public class RamView {
     		Aaddress = this.firstDisplayedAddress;
     		Baddress = this.firstDisplayedAddress+4;
     		Caddress = this.firstDisplayedAddress+8;
-    		Daddress = this.firstDisplayedAddress+16;
+    		Daddress = this.firstDisplayedAddress+12;
     	}
     	a.setText("0x" + Integer.toHexString(Aaddress));
     	b.setText("0x" + Integer.toHexString(Baddress));
@@ -133,14 +146,25 @@ public class RamView {
         memoryScrollBar.setValue(this.firstDisplayedAddress);
         memoryScrollBar.setUnitIncrement(1);
         memoryScrollBar.setMax(2 *1024*1024); //TODO: set proper value
-
-        memoryScrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
+        
+        memoryScrollBar.valueProperty().addListener((ObservableValue<? extends Number> ov, 
+                Number old_val, Number new_val) -> {
+                    this.firstDisplayedAddress = new_val.intValue();
+                    this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+                    this.refresh();
+        });
+        
+        tableView.setOnScroll((ScrollEvent event) -> {
+        	if (event.getDeltaY() < 0) {
+        		memoryScrollBar.setValue(this.firstDisplayedAddress + 1);
+        	} else {
+        		memoryScrollBar.setValue(this.firstDisplayedAddress - 1);
+        	}
             this.firstDisplayedAddress = (int) memoryScrollBar.getValue();
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
             this.refresh();
         });
- 
-
+        
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
