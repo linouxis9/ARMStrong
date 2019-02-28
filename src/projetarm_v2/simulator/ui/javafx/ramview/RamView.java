@@ -1,6 +1,5 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -8,12 +7,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import org.dockfx.DockNode;
-
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.ui.javafx.Gui;
 
 import java.io.IOException;
 
@@ -73,25 +74,25 @@ public class RamView {
         // single cell selection mode
         tableView.getSelectionModel().setCellSelectionEnabled(true);
 
-        a = new TableColumn<LineRam, String>("a");
+        a = new TableColumn<>("a");
         a.setCellFactory(TextFieldTableCell.forTableColumn());
         a.setCellValueFactory(
-                new PropertyValueFactory<LineRam, String>("a"));
+                new PropertyValueFactory<>("a"));
  
-        b = new TableColumn<LineRam, String>("b");
+        b = new TableColumn<>("b");
         b.setCellFactory(TextFieldTableCell.forTableColumn());
         b.setCellValueFactory(
-                new PropertyValueFactory<LineRam, String>("b"));
+                new PropertyValueFactory<>("b"));
  
-        c = new TableColumn<LineRam, String>("c");
+        c = new TableColumn<>("c");
         c.setCellFactory(TextFieldTableCell.forTableColumn());
         c.setCellValueFactory(
-                new PropertyValueFactory<LineRam, String>("c"));
+                new PropertyValueFactory<>("c"));
 
-        d = new TableColumn<LineRam, String>("d");
+        d = new TableColumn<>("d");
         d.setCellFactory(TextFieldTableCell.forTableColumn());
         d.setCellValueFactory(
-                new PropertyValueFactory<LineRam, String>("d"));
+                new PropertyValueFactory<>("d"));
 
         this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
         a.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
@@ -156,11 +157,11 @@ public class RamView {
         
         tableView.setOnScroll((ScrollEvent event) -> {
         	if (event.getDeltaY() < 0) {
-        		memoryScrollBar.setValue(this.firstDisplayedAddress + 1);
+        		this.firstDisplayedAddress=+ 1;
         	} else {
-        		memoryScrollBar.setValue(this.firstDisplayedAddress - 1);
+                this.firstDisplayedAddress=- 1;
         	}
-            this.firstDisplayedAddress = (int) memoryScrollBar.getValue();
+            memoryScrollBar.setValue(this.firstDisplayedAddress);
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
             this.refresh();
         });
@@ -169,39 +170,69 @@ public class RamView {
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
 
-    	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
+    	button8Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(1);
-            
-            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
-            
             this.refresh();
     	});
-    	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
+    	button16Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(2);
-            firstDisplayedAddress -= firstDisplayedAddress % 2;
-            memoryScrollBar.setValue(firstDisplayedAddress);
-            
-            UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
-            
-            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
-            
             this.refresh();
     	});
-    	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
+    	button32Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(4);
-            
-            firstDisplayedAddress -= firstDisplayedAddress % 4;
-            memoryScrollBar.setValue(firstDisplayedAddress);
-            
-            UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
-            
-            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.WORD);
-            
             this.refresh();
     	});
+
+        Button buttonHex = (Button) mainPane.lookup("#buttonHex");
+        Button buttonDec = (Button) mainPane.lookup("#buttonDec");
+
+        buttonHex.setOnAction(ActionEvent -> {
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
+            this.refresh();
+        });
+        buttonDec.setOnAction(ActionEvent -> {
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.NORMAL);
+            this.refresh();
+        });
+
+
+        TextField goToAddressField = (TextField) mainPane.lookup("#goToAddressField");
+        goToAddressField.setOnKeyPressed((KeyEvent ke) -> {
+            if (ke.getCode().equals(KeyCode.ENTER)) {
+                String addressTyped = goToAddressField.getText();
+
+                int newAddress = 0;
+
+                try {
+                    if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
+                        newAddress = Integer.parseInt(addressTyped.substring(2), 16); // parsing a int in base 16, the 2
+                        // first chars of the string are
+                        // removed (0x)
+                    } else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
+                        newAddress = Integer.parseInt(addressTyped.substring(2), 2);
+                    } else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
+                        newAddress = Integer.parseInt(addressTyped.substring(2));
+                    } else {
+                        newAddress = Integer.parseInt(addressTyped);
+                    }
+                } catch (NumberFormatException exeption) {
+                    Gui.warningPopup("Error in the number format\ntry with 0x1a35, 0b100101 or 0d300", ActionEvent -> {});
+                    return;
+                }
+
+                if (newAddress < 0 || newAddress > Ram.DEFAULT_RAM_SIZE - 4) { //TODO: 4 is the number of columns
+                    Gui.warningPopup("The address provided is too big\nPlease stay between 0 and" + Ram.DEFAULT_RAM_SIZE, ActionEvent -> {});
+                    return;
+                }
+                this.firstDisplayedAddress = newAddress;
+                memoryScrollBar.setValue(this.firstDisplayedAddress);
+                this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+                this.refresh();
+            }
+        });
     }
 
     public DockNode getNode() {

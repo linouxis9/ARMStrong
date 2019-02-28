@@ -2,7 +2,6 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -22,7 +21,6 @@ public class CodeEditor {
     private Image dockImage;
 
     private TextArea textArea;
-    private ToolBar toolBar;
     private TextFlow textFlow;
     private List<Text> instructionsAsText;
 
@@ -39,7 +37,6 @@ public class CodeEditor {
 
         this.textArea = (TextArea) mainPane.lookup("#codeArea");
         this.textFlow = (TextFlow) mainPane.lookup("#textFlow");
-        this.toolBar = (ToolBar) mainPane.lookup("#toolbar");
         this.dockNode.getStylesheets().add("/resources/style.css");
         mainPane.setMaxHeight(Double.MAX_VALUE);
         mainPane.setMaxWidth(Double.MAX_VALUE);
@@ -60,7 +57,6 @@ public class CodeEditor {
     public void setExecutionMode(boolean executionMode){
         this.textArea.setEditable(!executionMode);
         this.textArea.setVisible(!executionMode);
-        this.toolBar.setVisible(!executionMode);
 
         if(executionMode){
             String[] instructionsAsStrings = this.textArea.getText().split("\\r?\\n");

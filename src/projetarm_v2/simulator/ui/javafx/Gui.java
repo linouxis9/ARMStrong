@@ -150,12 +150,12 @@ public class Gui extends Application {
 		//file
 		this.armMenuBar.getNeW().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")){
-				warningPopup("All unsaved work will be lost", (EventHandler<ActionEvent>) eventHandler -> this.codeEditor.setProgramAsString(""));
+				warningPopup("All unsaved work will be lost", eventHandler -> this.codeEditor.setProgramAsString(""));
 			}
 		});
 		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")) {
-				warningPopup("All unsaved work will be lost", (EventHandler<ActionEvent>) eventHandler -> {
+				warningPopup("All unsaved work will be lost", eventHandler -> {
 
 					FileChooser fileChooser = new FileChooser();
 					fileChooser.setTitle("Open Program");
@@ -258,9 +258,7 @@ public class Gui extends Application {
 			if (executionMode && !(running.get())) {
 				new Thread(() -> {
 					this.running.set(true);
-
 					this.simulator.run();
-
 					this.running.set(false);
 
 					updateUI();
@@ -338,22 +336,21 @@ public class Gui extends Application {
 		});
 	}
 
-	private void warningPopup(String message, EventHandler<ActionEvent> okEvent) {
+	public static void warningPopup(String message, EventHandler<ActionEvent> okEvent) {
 		final Stage warningStage = new Stage();
 		warningStage.setTitle("Warning");
 
 		warningStage.initModality(Modality.APPLICATION_MODAL);
-		warningStage.initOwner(this.stage);
 
 		try {
-			Pane main = FXMLLoader.load(getClass().getResource("/resources/warning.fxml"));
+			Pane main = FXMLLoader.load(Gui.class.getResource("/resources/warning.fxml"));
 			warningStage.setScene(new Scene(main, 500, 280));
 
 			Text messageText = (Text) main.lookup("#message");
 			messageText.setText(message);
 
 			ImageView image = (ImageView) main.lookup("#image");
-			image.setImage(new Image(getClass().getResource("/resources/warning.png").toExternalForm()));
+			image.setImage(new Image(Gui.class.getResource("/resources/warning.png").toExternalForm()));
 
 			Button okButton = (Button) main.lookup("#ok");
 			Button cancelButton = (Button) main.lookup("#cancel");
