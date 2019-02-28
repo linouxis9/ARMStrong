@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -50,6 +51,8 @@ public class ArmMenuBar {
 
     private HostServices services;
 
+	private MenuItem newInterpreterWindow;
+
     public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor, Stage stage, HostServices services){
     	
     	this.primaryStage = stage;
@@ -89,8 +92,12 @@ public class ArmMenuBar {
         final MenuItem aboutMenu = new MenuItem("About");
         helpMenu.getItems().add(aboutMenu);
 
+        Menu interpreter = new Menu("Interpreter");
+        this.newInterpreterWindow = new MenuItem("Launch");
+        interpreter.getItems().add(newInterpreterWindow);
+        
         this.menuBar = new MenuBar();
-        menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, helpMenu);
+        menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, interpreter, helpMenu);
 
         disableInEdition = new HashSet<>();
         disableInExecution = new HashSet<>();
@@ -189,6 +196,10 @@ public class ArmMenuBar {
         return preferences;
     }
 
+	public MenuItem getNewInterpreterWindow() {
+		return newInterpreterWindow;
+	}
+    
     public void setExecutionMode(boolean executionMode){
         for (MenuItem item : this.disableInEdition){
             item.setDisable(!executionMode);
@@ -202,6 +213,4 @@ public class ArmMenuBar {
     public Node getNode(){
         return this.menuBar;
     }
-
-
 }

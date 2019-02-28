@@ -219,10 +219,6 @@ public class ArmSimulator {
 	 * Staring the processor to execute a single instruction
 	 */
 	public void runStep() {
-		if (this.hasFinished()) {
-			System.out.println("[INFO] No more instructions to run");
-		}
-		
 		try {
 			this.cpu.runStep();
 		} catch (UnicornException e) {

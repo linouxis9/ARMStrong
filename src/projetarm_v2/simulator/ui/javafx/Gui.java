@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
 import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 public class Gui extends Application {
@@ -57,6 +58,10 @@ public class Gui extends Application {
 
 	private Stage stage;
 
+	private Interpreter interpreter;
+	
+	private boolean isInterpreterMode;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -94,6 +99,11 @@ public class Gui extends Application {
 		this.consoleView = new ConsoleView();
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
+		this.consoleView.redirectToConsole();
+		
+		this.interpreter = new Interpreter();
+		this.isInterpreterMode = false;
+		
 		this.armMenuBar = new ArmMenuBar(simulator, codeEditor, primaryStage, this.getHostServices());
 		this.armToolBar = new ArmToolBar(simulator, codeEditor);
 
@@ -220,6 +230,62 @@ public class Gui extends Application {
 			RamView moreRamView = new RamView(simulator);
 			this.ramViews.add(moreRamView);
 			moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
+		});
+		this.armMenuBar.getNewInterpreterWindow().setOnAction(actionEvent -> {
+			if (!this.isInterpreterMode) {
+				this.isInterpreterMode = true;
+				this.interpreter.getNode().dock(dockPane, DockPos.BOTTOM);
+				this.interpreter.redirectToInterpreter();
+				
+				System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
+				
+				this.consoleView.getNode().undock();
+				
+				this.interpreter.getNode().getDockTitleBar().getCloseButton().setOnAction(_event -> {
+					this.interpreter.getNode().undock();
+					this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+					this.consoleView.redirectToConsole();
+					this.armMenuBar.getSwitchMode().setDisable(false);
+					this.armToolBar.getSwitchButton().setDisable(false);
+					this.simulator.resetState();
+					this.running.set(false);
+					this.consoleView.getNode().setVisible(true);
+					this.isInterpreterMode = false;
+				});
+				
+				this.running.set(true);
+				
+				this.interpreter.getTextField().setOnKeyPressed((KeyEvent ke) -> {
+					if (ke.getCode().equals(KeyCode.ENTER)) {
+						String instruction = this.interpreter.getTextField().getText();
+						if (instruction.contentEquals(".reset")) {
+							simulator.resetState();
+							System.out.println("The CPU has been reset.");
+							this.interpreter.getTextField().clear();
+							return;
+						}
+						simulator.setConsoleInput(instruction);
+						this.interpreter.add(instruction);
+						try {
+							System.out.println("[EXEC] " + instruction);
+							simulator.setProgram(String.join(";", this.interpreter.getAsm()));
+							simulator.runStep();
+							this.interpreter.getTextField().clear();
+						} catch (InvalidInstructionException e) {
+							this.interpreter.pop();
+							System.out.println(e.getMessage());
+						}
+	
+	
+					}
+				});
+				
+				this.armMenuBar.setExecutionMode(false);
+				this.armToolBar.setExecutionMode(false);
+				this.armMenuBar.getSwitchMode().setDisable(true);
+				this.armToolBar.getSwitchButton().setDisable(true);
+				this.simulator.resetState();
+			}
 		});
 		this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent -> {
 			RegistersView moreRegistersView = new RegistersView(simulator);
@@ -375,7 +441,9 @@ public class Gui extends Application {
 				ramView.refresh();
 			}
 			
-			this.codeEditor.highlightLine(this.simulator.getCurrentLine());
+			
+			if (!this.isInterpreterMode)
+				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
 	}
 	

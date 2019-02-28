@@ -18,7 +18,7 @@ public class Main {
 
 		simulator.run();
 
-		System.out.print(">>> Emulation done. Below is the CPU context%n");
+		System.out.print(">>> Emulation done. Below is the CPU context\n");
 			
 		for (int i = 0; i < 16; i++) {
 			System.out.print(String.format(">>> R%d = 0x%x%n", i,simulator.getRegisterValue(i)));
@@ -27,7 +27,7 @@ public class Main {
 		System.out.format(">>> Processor Flags : %s%n", simulator.getCpu().getCPSR());
 		System.out.println(simulator.getRam());
 
-		if (args.length > 0) {
+		if (args.length >= 0) {
 			Gui.main(new String[0]);
 			return;
 		}

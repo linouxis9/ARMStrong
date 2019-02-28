@@ -158,7 +158,7 @@ public class Cpu {
 		
 		u.emu_start(startAddress, (long)startAddress+4, 0, 0);
 		
-		if (startAddress == this.currentAddress.getValue()) {
+		if (startAddress == this.currentAddress.getValue() && !hasFinished) {
 			this.currentAddress.setValue(this.currentAddress.getValue() + 4);
 		}
 

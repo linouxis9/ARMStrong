@@ -14,10 +14,13 @@ import javafx.scene.text.TextFlow;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.dockfx.DockNode;
 
-public class ConsoleView {
+public class Interpreter {
 
 	private AnchorPane mainPane;
 	private DockNode dockNode;
@@ -25,18 +28,20 @@ public class ConsoleView {
 	private TextFlow textFlow;
 	private TextField textField;
 
+	private List<String> asm;
+	
 	OutputStream output;
 	
-	public ConsoleView() {
+	public Interpreter() {
 		try {
 			mainPane = FXMLLoader.load(getClass().getResource("/resources/ConsoleView.fxml"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		this.dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
-		this.dockNode.setPrefSize(1000, 1500);
-		this.dockNode.setClosable(false);
+		this.asm = new ArrayList<>();
+		
+		this.dockNode = new DockNode(mainPane, "Interpreter", new ImageView(dockImage));
 
 		this.mainPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.dockNode.getStylesheets().add("/resources/style.css");
@@ -70,17 +75,29 @@ public class ConsoleView {
 				}
 			}
 		};
-		
 	}
 
-	public void redirectToConsole() {
+	public void add(String asm) {
+		if (!asm.isBlank())
+			this.asm.add(asm);
+	}
+	
+	public List<String> getAsm() {
+		return Collections.unmodifiableList(this.asm);
+	}
+	
+	public void pop() {
+		this.asm.remove(this.asm.size() - 1);
+	}
+	
+	public void redirectToInterpreter() {
 		System.setOut(new PrintStream(output));
 	}
 	
 	public DockNode getNode() {
 		return dockNode;
 	}
-
+	
 	public TextField getTextField() {
 		return (this.textField);
 	}
