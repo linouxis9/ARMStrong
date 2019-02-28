@@ -3,7 +3,6 @@ package projetarm_v2.simulator.ui.javafx;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -11,10 +10,8 @@ import javafx.scene.text.Text;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.dockfx.DockNode;
-import org.dockfx.DockPane;
 
 public class RegistersView {
 
@@ -56,9 +53,9 @@ public class RegistersView {
         this.dockNode.setPrefSize(300, 100);
         this.dockNode.getStylesheets().add("/resources/style.css");
         
-        this.registersHex = new ArrayList<Text>();
-        this.registersSigDec = new ArrayList<Text>();
-        this.registersDec = new ArrayList<Text>();
+        this.registersHex = new ArrayList<>();
+        this.registersSigDec = new ArrayList<>();
+        this.registersDec = new ArrayList<>();
         
         for (int i = 0; i < 16; i++) {
     		String space = (i < 10) ? "  " : "";

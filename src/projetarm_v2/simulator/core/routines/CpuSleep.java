@@ -1,8 +1,5 @@
 package projetarm_v2.simulator.core.routines;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 import projetarm_v2.simulator.core.Cpu;
 

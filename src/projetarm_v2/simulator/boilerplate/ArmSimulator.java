@@ -1,9 +1,7 @@
 package projetarm_v2.simulator.boilerplate;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

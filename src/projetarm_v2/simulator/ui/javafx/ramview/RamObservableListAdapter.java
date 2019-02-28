@@ -1,7 +1,6 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.collections.ModifiableObservableListBase;
-import javafx.collections.ObservableListBase;
 import projetarm_v2.simulator.core.Ram;
 
 public class RamObservableListAdapter extends ModifiableObservableListBase<LineRam> {

@@ -1,9 +1,6 @@
 package projetarm_v2.simulator;
 
-import java.io.IOException;
-
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
-import projetarm_v2.simulator.core.save.Save;
 import projetarm_v2.simulator.ui.cli.Cli;
 import projetarm_v2.simulator.ui.javafx.Gui;
 
@@ -20,7 +17,7 @@ public class Main {
 				"blx r1");
 
 		simulator.run();
-		
+
 		System.out.print(">>> Emulation done. Below is the CPU context%n");
 			
 		for (int i = 0; i < 16; i++) {
@@ -35,6 +32,6 @@ public class Main {
 			return;
 		}
 		
-		Gui.main(new String[0]);
+		Cli.main(new String[0]);
 	}
 }

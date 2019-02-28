@@ -2,9 +2,6 @@ package projetarm_v2.simulator.core.routines;
 
 import projetarm_v2.simulator.core.Cpu;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 

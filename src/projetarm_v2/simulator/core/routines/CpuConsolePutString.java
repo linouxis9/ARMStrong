@@ -1,8 +1,6 @@
 package projetarm_v2.simulator.core.routines;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 import projetarm_v2.simulator.core.Cpu;
 
@@ -16,7 +14,6 @@ public class CpuConsolePutString extends CpuRoutine {
 
 	@Override
 	protected void primitive() {
-		int i = 0;
 		long address = (long) this.getRegister(0).getValue();
 		
 		try

@@ -43,9 +43,9 @@ public class ConsoleView {
 		this.textField = new TextField();
 		this.textField.setId("consoleInput");
 		this.mainPane.getChildren().add(this.textField);
-		this.mainPane.setBottomAnchor(this.textField, (double)0);
-		this.mainPane.setLeftAnchor(this.textField, (double)23);
-		this.mainPane.setRightAnchor(this.textField, (double)0);
+		AnchorPane.setBottomAnchor(this.textField, (double)0);
+		AnchorPane.setLeftAnchor(this.textField, (double)23);
+		AnchorPane.setRightAnchor(this.textField, (double)0);
 
 
 		this.textFlow = new TextFlow();

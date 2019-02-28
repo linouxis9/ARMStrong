@@ -116,10 +116,6 @@ public class IOx {
 		
 		return segment;
 	}
-	
-	private void addComponent(int bit, IOButton button) {
-		this.components[bit] = button;
-	}
 
 	private int getComponentBit(IOComponent component) {
 		return Arrays.asList(components).indexOf(component);

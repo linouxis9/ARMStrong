@@ -3,7 +3,7 @@ package projetarm_v2.simulator.core;
 import java.io.Serializable;
 
 public class RamRegister implements Register, Serializable {
-
+	private static final long serialVersionUID = -7962046527990859276L;
 	private final transient Ram ram;
 	private final long myAddress;
 

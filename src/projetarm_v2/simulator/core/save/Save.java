@@ -13,10 +13,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import projetarm_v2.simulator.core.io.IOButton;
 import projetarm_v2.simulator.core.io.IOComponent;
 
 public class Save implements Serializable {
+	private static final long serialVersionUID = -7923487851230607241L;
 	private double version = 1.0;
 	private String copyright = "(C) 2019 Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Hugo Chemarin, Nicolas Gervasi";
 	private String program;

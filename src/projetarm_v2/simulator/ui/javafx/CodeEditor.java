@@ -26,8 +26,6 @@ public class CodeEditor {
     private TextFlow textFlow;
     private List<Text> instructionsAsText;
 
-    private int routineCallLine = -1;
-
     public CodeEditor() {
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/EditorView.fxml"));
@@ -56,7 +54,6 @@ public class CodeEditor {
 
         if(line > 0) {
             instructionsAsText.get(line - 1).setFill(Color.RED);
-            this.routineCallLine = line-1;
         }
     }
     

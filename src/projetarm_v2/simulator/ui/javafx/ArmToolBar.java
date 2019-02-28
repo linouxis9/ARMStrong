@@ -1,7 +1,5 @@
 package projetarm_v2.simulator.ui.javafx;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;

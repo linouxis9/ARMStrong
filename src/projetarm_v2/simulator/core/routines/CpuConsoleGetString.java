@@ -2,8 +2,6 @@ package projetarm_v2.simulator.core.routines;
 
 import projetarm_v2.simulator.core.Cpu;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CpuConsoleGetString extends CpuRoutine {

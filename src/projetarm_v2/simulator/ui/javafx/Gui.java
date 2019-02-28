@@ -26,7 +26,6 @@ import org.dockfx.DockPane;
 import org.dockfx.DockPos;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -122,12 +121,9 @@ public class Gui extends Application {
 		
 		primaryStage.show();
 		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
+		primaryStage.setOnCloseRequest((WindowEvent event) -> {
             	System.exit(0);
-            }
-        });
+            });
 
 
 		// initialize the default styles for the dock pane and undocked nodes using the
@@ -154,12 +150,12 @@ public class Gui extends Application {
 		//file
 		this.armMenuBar.getNeW().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")){
-				warningPopup("All unsaved work will be lost", (EventHandler) eventHandler -> this.codeEditor.setProgramAsString(""));
+				warningPopup("All unsaved work will be lost", (EventHandler<ActionEvent>) eventHandler -> this.codeEditor.setProgramAsString(""));
 			}
 		});
 		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")) {
-				warningPopup("All unsaved work will be lost", (EventHandler) eventHandler -> {
+				warningPopup("All unsaved work will be lost", (EventHandler<ActionEvent>) eventHandler -> {
 
 					FileChooser fileChooser = new FileChooser();
 					fileChooser.setTitle("Open Program");
@@ -169,7 +165,7 @@ public class Gui extends Application {
 					if (chosenFile != null) {
 						try {
 							if (chosenFile.getAbsolutePath().endsWith(".ARMS")){
-								this.codeEditor.setProgramAsString(save.fromPath(chosenFile.getAbsolutePath()).getProgram());
+								this.codeEditor.setProgramAsString(Save.fromPath(chosenFile.getAbsolutePath()).getProgram());
 							}
 							else{
 								this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
@@ -190,7 +186,7 @@ public class Gui extends Application {
 				if (chosenFile != null) {
 					try {
 						if (chosenFile.getAbsolutePath().endsWith(".ARMS")) {
-							this.codeEditor.setProgramAsString(save.fromPath(chosenFile.getAbsolutePath()).getProgram());
+							this.codeEditor.setProgramAsString(Save.fromPath(chosenFile.getAbsolutePath()).getProgram());
 						} else {
 							this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
 						}
@@ -342,7 +338,7 @@ public class Gui extends Application {
 		});
 	}
 
-	private void warningPopup(String message, EventHandler okEvent) {
+	private void warningPopup(String message, EventHandler<ActionEvent> okEvent) {
 		final Stage warningStage = new Stage();
 		warningStage.setTitle("Warning");
 

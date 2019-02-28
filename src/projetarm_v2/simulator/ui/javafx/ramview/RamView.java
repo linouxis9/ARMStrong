@@ -1,33 +1,21 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
-import javafx.collections.ModifiableObservableListBase;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.control.skin.NestedTableColumnHeader;
-import javafx.scene.control.skin.TableColumnHeader;
-import javafx.scene.control.skin.TableHeaderRow;
-import javafx.scene.control.skin.TableViewSkin;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import org.dockfx.DockNode;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
-import projetarm_v2.simulator.core.Ram;
 
 import java.io.IOException;
 
 public class RamView {
-
-    private static final int VERTICAL_SPACE_BETWEEN_TEXT = 10;
 
     private AnchorPane mainPane;
     private DockNode dockNode;
@@ -39,7 +27,6 @@ public class RamView {
     private TableView<LineRam> tableView;
 
     private int firstDisplayedAddress = 0x1000;
-    private int memoryDisplayMode = 8;
 
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
     
@@ -67,22 +54,22 @@ public class RamView {
         this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
         this.tableView.setEditable(true);
         
-        TableColumn<LineRam,String> a = new TableColumn("a");
+        TableColumn<LineRam,String> a = new TableColumn<LineRam, String>("a");
         a.setCellFactory(TextFieldTableCell.forTableColumn());
         a.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("a"));
  
-        TableColumn<LineRam,String>  b = new TableColumn("b");
+        TableColumn<LineRam,String>  b = new TableColumn<LineRam, String>("b");
         b.setCellFactory(TextFieldTableCell.forTableColumn());
         b.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("b"));
  
-        TableColumn<LineRam,String>  c = new TableColumn("c");
+        TableColumn<LineRam,String>  c = new TableColumn<LineRam, String>("c");
         c.setCellFactory(TextFieldTableCell.forTableColumn());
         c.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("c"));
 
-        TableColumn<LineRam,String>  d = new TableColumn("d");
+        TableColumn<LineRam,String>  d = new TableColumn<LineRam, String>("d");
         d.setCellFactory(TextFieldTableCell.forTableColumn());
         d.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("d"));
@@ -123,21 +110,18 @@ public class RamView {
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
 
     	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
-    		this.memoryDisplayMode = 8;
             memoryScrollBar.setUnitIncrement(1);
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
             this.tableView.refresh();
     	});
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
-    		this.memoryDisplayMode = 16;
             memoryScrollBar.setUnitIncrement(2);
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
             this.tableView.refresh();
     	});
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
-    		this.memoryDisplayMode = 32;
             memoryScrollBar.setUnitIncrement(4);
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.WORD);

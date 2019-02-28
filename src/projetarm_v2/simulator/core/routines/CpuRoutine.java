@@ -6,7 +6,6 @@ import projetarm_v2.simulator.core.Register;
 import unicorn.CodeHook;
 import unicorn.Unicorn;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
