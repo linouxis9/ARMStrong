@@ -2,39 +2,42 @@ package projetarm_v2.simulator.core.routines;
 
 import projetarm_v2.simulator.core.Cpu;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CpuGetFile extends CpuRoutine
 {
-	public static final long ROUTINE_ADDRESS = 0xFF0CL;
+	public static final long ROUTINE_ADDRESS = 0xFF10L;
 	
-	public CpuGetFile(Cpu cpu) { super(cpu); }
-	
-	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
+	public CpuGetFile(Cpu cpu) {
+		super(cpu);
+	}
 	
 	@Override
-	protected void primitive() {
-		int i = 0;
+	public long getRoutineAddress() {
+		return ROUTINE_ADDRESS;
+	}
+	
+	@Override
+	protected void primitive()
+	{
 		long address = (long) this.getRegister(0).getValue();
 		long dest = (long) this.getRegister(1).getValue();
 		
 		try {
-			File file = new File(this.longToString(dest));
-			FileWriter fileWriter = new FileWriter(file);
-			String str;
 			
-			str = this.longToString(address);
-			fileWriter.write(str);
-			fileWriter.close();
+			byte[] array = Files.readAllBytes(Path.of(this.longToString(dest)));
+			for(byte myByte: array)
+			{
+				this.getRam().setByte(address,myByte);
+				address++;
+			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 }
-
