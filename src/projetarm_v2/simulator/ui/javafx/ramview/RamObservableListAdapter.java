@@ -26,8 +26,8 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<LineR
 				index = i*4 + offset;
 		        return new LineRamByte(this.ram.getByte(index),this.ram.getByte(index+1), this.ram.getByte(index+2), this.ram.getByte(index+3), outputType);
 			case HALFWORD:
-				index = i*10 + offset;
-				return new LineRamHWord(this.ram.getHWord(index),this.ram.getHWord(index+2), this.ram.getHWord(index+4), this.ram.getHWord(index+8), outputType);
+				index = i*8 + offset;
+				return new LineRamHWord(this.ram.getHWord(index),this.ram.getHWord(index+2), this.ram.getHWord(index+4), this.ram.getHWord(index+6), outputType);
 			case WORD:
 				index = i*16 + offset;
 				return new LineRamWord(this.ram.getValue(index),this.ram.getValue(index+4), this.ram.getValue(index+8), this.ram.getValue(index+12), outputType);
@@ -67,5 +67,9 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<LineR
 	
 	public void setShowType(ShowType type) {
 		this.showType = type;
+	}
+	
+	public ShowType getShowType() {
+		return this.showType;
 	}
 }

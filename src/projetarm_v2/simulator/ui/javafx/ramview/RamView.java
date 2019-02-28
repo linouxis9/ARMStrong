@@ -25,7 +25,13 @@ public class RamView {
 
     private ScrollBar memoryScrollBar;
     private TableView<LineRam> tableView;
+    
+    private TableColumn<LineRam,String> a;
+    private TableColumn<LineRam,String> c;
+    private TableColumn<LineRam,String> b;
+    private TableColumn<LineRam,String> d;
 
+    
     private int firstDisplayedAddress = 0x1000;
 
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
@@ -39,7 +45,7 @@ public class RamView {
         }
 
         this.simulator = simulator;
-
+        
         dockNode = new DockNode(mainPane, "Ram View", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
 
@@ -54,39 +60,70 @@ public class RamView {
         this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
         this.tableView.setEditable(true);
         
-        TableColumn<LineRam,String> a = new TableColumn<LineRam, String>("a");
+        a = new TableColumn<LineRam, String>("a");
         a.setCellFactory(TextFieldTableCell.forTableColumn());
         a.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("a"));
  
-        TableColumn<LineRam,String>  b = new TableColumn<LineRam, String>("b");
+        b = new TableColumn<LineRam, String>("b");
         b.setCellFactory(TextFieldTableCell.forTableColumn());
         b.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("b"));
  
-        TableColumn<LineRam,String>  c = new TableColumn<LineRam, String>("c");
+        c = new TableColumn<LineRam, String>("c");
         c.setCellFactory(TextFieldTableCell.forTableColumn());
         c.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("c"));
 
-        TableColumn<LineRam,String>  d = new TableColumn<LineRam, String>("d");
+        d = new TableColumn<LineRam, String>("d");
         d.setCellFactory(TextFieldTableCell.forTableColumn());
         d.setCellValueFactory(
                 new PropertyValueFactory<LineRam, String>("d"));
-        
+
         this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
-        a.setMaxWidth( 1f * Integer.MAX_VALUE * 25 ); // 50% width
-        b.setMaxWidth( 1f * Integer.MAX_VALUE * 25 ); // 30% width
+        a.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
+        b.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
         c.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
         d.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
         this.tableView.getColumns().addAll(a, b, c, d);
                 
-
         
         loadButonsEvents();
+        
+        this.refresh();
     }
 
     public void refresh() {
+    	int Aaddress;
+    	int Baddress;
+    	int Caddress;
+    	int Daddress;
+    	
+    	switch(this.UneSuperImplemFournieParValentinLeBg.getShowType()) {
+    	default:
+    	case BYTE:
+    		Aaddress = this.firstDisplayedAddress;
+    		Baddress = this.firstDisplayedAddress+1;
+    		Caddress = this.firstDisplayedAddress+2;
+    		Daddress = this.firstDisplayedAddress+3;
+    		break;
+    	case HALFWORD:
+    		Aaddress = this.firstDisplayedAddress;
+    		Baddress = this.firstDisplayedAddress+2;
+    		Caddress = this.firstDisplayedAddress+4;
+    		Daddress = this.firstDisplayedAddress+6;
+    		break;
+    	case WORD:
+    		Aaddress = this.firstDisplayedAddress;
+    		Baddress = this.firstDisplayedAddress+4;
+    		Caddress = this.firstDisplayedAddress+8;
+    		Daddress = this.firstDisplayedAddress+16;
+    	}
+    	a.setText("0x" + Integer.toHexString(Aaddress));
+    	b.setText("0x" + Integer.toHexString(Baddress));
+    	c.setText("0x" + Integer.toHexString(Caddress));
+    	d.setText("0x" + Integer.toHexString(Daddress));
+    	
     	this.tableView.refresh();
     }
     
@@ -100,8 +137,7 @@ public class RamView {
         memoryScrollBar.setOnScroll((ScrollEvent scrollEvent) -> {
             this.firstDisplayedAddress = (int) memoryScrollBar.getValue();
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
-            this.tableView.refresh();
-            //updateContents();
+            this.refresh();
         });
  
 
@@ -111,21 +147,36 @@ public class RamView {
 
     	button8Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
             memoryScrollBar.setUnitIncrement(1);
+            
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
-            this.tableView.refresh();
+            
+            this.refresh();
     	});
     	button16Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
             memoryScrollBar.setUnitIncrement(2);
+            firstDisplayedAddress -= firstDisplayedAddress % 2;
+            memoryScrollBar.setValue(firstDisplayedAddress);
+            
+            UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+            
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
-            this.tableView.refresh();
+            
+            this.refresh();
     	});
     	button32Bit.setOnMouseClicked((MouseEvent mouseEvent) -> {
             memoryScrollBar.setUnitIncrement(4);
+            
+            firstDisplayedAddress -= firstDisplayedAddress % 4;
+            memoryScrollBar.setValue(firstDisplayedAddress);
+            
+            UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+            
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.WORD);
-            this.tableView.refresh();
+            
+            this.refresh();
     	});
     }
 

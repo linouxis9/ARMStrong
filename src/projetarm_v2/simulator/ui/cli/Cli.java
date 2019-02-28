@@ -62,11 +62,8 @@ public class Cli {
 		this.running = new AtomicBoolean(false);
 
 		try {
-			Terminal terminal;
-			Screen screen = null;
-			terminal = new DefaultTerminalFactory().createTerminal();
-
-			screen = new TerminalScreen(terminal);
+			Terminal terminal = new DefaultTerminalFactory().createTerminal();
+			Screen screen = new TerminalScreen(terminal);
 			screen.startScreen();
 
 			TerminalSize size = screen.getTerminalSize();
@@ -170,7 +167,7 @@ public class Cli {
 			bodyPanel.addComponent(leftPanel.withBorder(Borders.singleLine("Registers")));
 			IntStream.range(0, 16).forEachOrdered(n -> {
 				leftPanel.addComponent(new Label("r" + n));
-				this.registers[n] = new Label("0");
+				this.registers[n] = new Label("0x0");
 				leftPanel.addComponent(this.registers[n]);
 			});
 
@@ -266,14 +263,14 @@ public class Cli {
 		int i = 0;
 		for (Map.Entry<Label, Label> base : memory.entrySet()) {
 			base.getKey().setText("0x" + Integer.toHexString(memoryIndex + i));
-			base.getValue().setText(Integer.toString(this.simulator.getRamByte((long) memoryIndex + i)));
+			base.getValue().setText("0x" + Integer.toHexString(((int)this.simulator.getRamByte((long) memoryIndex + i)) & 0xFF));
 			i++;
 		}
 	}
 
 	private void updateRegisters() {
 		for (int i = 0; i < registers.length - 1; i++) {
-			registers[i].setText(Integer.toString(this.simulator.getRegisterValue(i)));
+			registers[i].setText("0x" + Integer.toHexString(this.simulator.getRegisterValue(i)));
 		}
 		registers[16].setText(this.simulator.getCpu().getCPSR().toString());
 	}

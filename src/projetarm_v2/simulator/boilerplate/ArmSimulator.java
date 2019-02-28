@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import projetarm_v2.simulator.core.Assembler;
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
+import projetarm_v2.simulator.core.Preprocessor;
 import projetarm_v2.simulator.core.Ram;
 import projetarm_v2.simulator.core.io.IO7Segment;
 import projetarm_v2.simulator.core.io.IOButton;
@@ -91,8 +92,7 @@ public class ArmSimulator {
 	
 	public void setProgram(String assembly) {
 		this.save.setProgram(assembly);
-		assembly = assembly.replace(System.lineSeparator(), ";");
-		
+		assembly = Preprocessor.pass1(assembly);
 		try {
 			fillRamWithAssembly(assembly);
 		} catch (InvalidAssemblyException e) {/* This is going to get caught by fillAddressLineMap */}
