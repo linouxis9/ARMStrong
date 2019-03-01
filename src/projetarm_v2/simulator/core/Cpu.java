@@ -2,6 +2,7 @@ package projetarm_v2.simulator.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.reflections.Reflections;
@@ -15,7 +16,7 @@ public class Cpu {
 	private final Ram ram;
 	private final Unicorn u;
 	private final Register[] registers;
-	private boolean running = false;
+	private AtomicBoolean running;
 	private Cpsr cpsr;
 	private Register pc;
 	private Register currentAddress;
@@ -35,7 +36,7 @@ public class Cpu {
 		this.startingAddress = startingAddress;
 		this.endAddress = 0;
 		this.stepByStepRunning = new AtomicLong(0);
-		
+		this.running = new AtomicBoolean(false); 
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
 		this.registers = new Register[16];
@@ -107,19 +108,23 @@ public class Cpu {
 	}
 
 	public boolean isRunning() {
-		return this.running;
+		return this.running.get();
 	}
 
 	// Ou tout d'un coup!
 	public void runAllAtOnce() {
 		this.synchronizeUnicornRam();
 
-		running = true;
+		running.set(true);
 		hasFinished = false;
 
-		u.emu_start(this.currentAddress.getValue(), this.endAddress, 0, 0);
+		u.emu_start(this.currentAddress.getValue(), this.endAddress+4, 0, 0);
 
-		running = false;
+		if (!hasFinished) {
+			this.currentAddress.setValue(this.currentAddress.getValue() + 4);
+		}
+		
+		running.set(false);
 		hasFinished = true;
 	}
 
@@ -150,7 +155,7 @@ public class Cpu {
 	public void runStep() {
 		this.synchronizeUnicornRam();
 
-		running = true;
+		running.set(true);
 		hasFinished = false;
 		this.stepByStepRunning.set(1);
 		
@@ -162,7 +167,7 @@ public class Cpu {
 			this.currentAddress.setValue(this.currentAddress.getValue() + 4);
 		}
 
-		running = false;
+		running.set(false);
 	}
 	
 	private class CPUInstructionHook implements CodeHook {
@@ -182,14 +187,14 @@ public class Cpu {
 				this.cpu.stepByStepRunning.set(2);
 			} else if (this.cpu.stepByStepRunning.get() == 2) {
 				u.emu_stop();
-				this.cpu.running = false;
+				running.set(false);
 			}
 			
 			if (this.cpu.ram.getValue(address) == 0) {
 				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.currentAddress.getValue());
 				u.emu_stop();
 				this.cpu.hasFinished = true;
-				this.cpu.running = false;
+				running.set(false);
 			}
 		}
 
@@ -197,7 +202,7 @@ public class Cpu {
 
 	public void interruptMe() {
 		this.u.emu_stop();
-		this.running = false;
+		running.set(false);
 	}
 
 	public Cpsr getCPSR() {

@@ -94,6 +94,7 @@ public class Interpreter {
 	
 	public void stopInterpreter() {
 		this.simulator.getCpu().setCurrentAddress(this.pc);
+		this.simulator.setStartingAddress(0x1000);
 	}
 	
 	public DockNode getNode() {

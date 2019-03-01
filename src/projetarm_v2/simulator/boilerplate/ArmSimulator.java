@@ -212,11 +212,23 @@ public class ArmSimulator {
 	 * Starting the processor to the next break or to the end
 	 */
 	public void run() {
+		long address = this.cpu.getCurrentAddress();
 		try {
 			this.cpu.runAllAtOnce();
 		} catch (UnicornException e) {
 			this.handleException(e);
 		}
+		
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		
+		if (address == this.cpu.getCurrentAddress() && this.cpu.hasFinished()) {
+			System.out.println("[INFO] Nothing happened, maybe you forgot to reload?");
+		}
+		
 	}
 
 	/**
