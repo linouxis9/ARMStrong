@@ -47,6 +47,8 @@ public class RegistersView {
         this.decPane.getStyleClass().add("contentTabPane");
 
         this.mainPane = new TabPane();
+        this.mainPane.setMinWidth(175);
+        
         this.hexTab = new Tab("Hexa", hexPane);
         this.sigDecTab = new Tab("Sig Dec", sigDecPane);
         this.decTab = new Tab("Decimal", decPane);

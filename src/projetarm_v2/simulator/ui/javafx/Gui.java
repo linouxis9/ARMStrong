@@ -240,8 +240,9 @@ public class Gui extends Application {
 				this.interpreter.redirectToInterpreter();
 				
 				System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
-				
-				this.consoleView.getNode().undock();
+				if (this.consoleView.getNode().isDocked())
+					this.consoleView.getNode().undock();
+				this.consoleView.getNode().setVisible(false);
 				
 				this.interpreter.getNode().getDockTitleBar().getCloseButton().setOnAction(_event -> {
 					if (this.interpreter.getNode().isDocked())
