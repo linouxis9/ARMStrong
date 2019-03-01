@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -27,19 +29,21 @@ public class Interpreter {
 	private Image dockImage;
 	private TextFlow textFlow;
 	private TextField textField;
-
-	private List<String> asm;
 	
 	OutputStream output;
 	
-	public Interpreter() {
+	private long pc;
+	
+	private ArmSimulator simulator;
+	
+	public Interpreter(ArmSimulator simulator) {
 		try {
 			mainPane = FXMLLoader.load(getClass().getResource("/resources/ConsoleView.fxml"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		this.asm = new ArrayList<>();
+		this.simulator = simulator;
 		
 		this.dockNode = new DockNode(mainPane, "Interpreter", new ImageView(dockImage));
 
@@ -76,23 +80,20 @@ public class Interpreter {
 			}
 		};
 	}
-
-	public void add(String asm) {
-		if (!asm.isBlank())
-			this.asm.add(asm);
+	
+	public void initialize() {
+		this.redirectToInterpreter();
+		this.pc = this.simulator.getCpu().getCurrentAddress();
+		this.simulator.setStartingAddress(0);
+		System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
 	}
 	
-	public List<String> getAsm() {
-		return Collections.unmodifiableList(this.asm);
-	}
-	
-	public void pop() {
-		this.asm.remove(this.asm.size() - 1);
-	}
-	
-	public void initInterpreter() {
-		this.asm.clear();
+	public void redirectToInterpreter() {	
 		System.setOut(new PrintStream(output));
+	}
+	
+	public void stopInterpreter() {
+		this.simulator.getCpu().setCurrentAddress(this.pc);
 	}
 	
 	public DockNode getNode() {
@@ -101,5 +102,25 @@ public class Interpreter {
 	
 	public TextField getTextField() {
 		return (this.textField);
+	}
+
+	public void run() {
+		String instruction = this.getTextField().getText();
+		if (instruction.contentEquals(".reset")) {
+			simulator.resetState();
+			System.out.println("The CPU has been reset.");
+			this.redirectToInterpreter();
+			return;
+		}
+		simulator.setConsoleInput(instruction);
+		try {
+			simulator.setProgram(instruction);
+			System.out.println("[EXEC] " + instruction + " [" + Integer.toHexString(this.simulator.getRamWord(0)) + "]");
+			this.simulator.getCpu().setCurrentAddress(0);
+			simulator.runStep();
+			this.getTextField().clear();
+		} catch (InvalidInstructionException e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }

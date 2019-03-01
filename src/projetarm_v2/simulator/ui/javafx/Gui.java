@@ -102,7 +102,7 @@ public class Gui extends Application {
 
 		this.consoleView.initConsole();
 		
-		this.interpreter = new Interpreter();
+		this.interpreter = new Interpreter(this.simulator);
 		this.isInterpreterMode = false;
 		
 		this.armMenuBar = new ArmMenuBar(simulator, codeEditor, primaryStage, this.getHostServices());
@@ -203,9 +203,8 @@ public class Gui extends Application {
 				this.isInterpreterMode = true;
 				this.interpreter.getNode().dock(dockPane, DockPos.BOTTOM);
 				this.interpreter.getNode().setVisible(true);
-				this.interpreter.initInterpreter();
+				this.interpreter.initialize();
 				
-				System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
 				if (this.consoleView.getNode().isDocked())
 					this.consoleView.getNode().undock();
 				this.consoleView.getNode().setVisible(false);
@@ -215,10 +214,12 @@ public class Gui extends Application {
 						this.interpreter.getNode().undock();
 					this.interpreter.getNode().setVisible(false);
 					this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
+					this.interpreter.stopInterpreter();
 					this.consoleView.initConsole();
+					this.armMenuBar.setExecutionMode(executionMode);
+					this.armToolBar.setExecutionMode(executionMode);
 					this.armMenuBar.getSwitchMode().setDisable(false);
 					this.armToolBar.getSwitchButton().setDisable(false);
-					this.simulator.resetState();
 					this.running.set(false);
 					this.consoleView.getNode().setVisible(true);
 					this.isInterpreterMode = false;
@@ -228,26 +229,7 @@ public class Gui extends Application {
 				
 				this.interpreter.getTextField().setOnKeyPressed((KeyEvent ke) -> {
 					if (ke.getCode().equals(KeyCode.ENTER)) {
-						String instruction = this.interpreter.getTextField().getText();
-						if (instruction.contentEquals(".reset")) {
-							simulator.resetState();
-							System.out.println("The CPU has been reset.");
-							this.interpreter.getTextField().clear();
-							return;
-						}
-						simulator.setConsoleInput(instruction);
-						this.interpreter.add(instruction);
-						try {
-							System.out.println("[EXEC] " + instruction);
-							simulator.setProgram(String.join(";", this.interpreter.getAsm()));
-							simulator.runStep();
-							this.interpreter.getTextField().clear();
-						} catch (InvalidInstructionException e) {
-							this.interpreter.pop();
-							System.out.println(e.getMessage());
-						}
-	
-	
+						this.interpreter.run();
 					}
 				});
 				
@@ -255,7 +237,6 @@ public class Gui extends Application {
 				this.armToolBar.setExecutionMode(false);
 				this.armMenuBar.getSwitchMode().setDisable(true);
 				this.armToolBar.getSwitchButton().setDisable(true);
-				this.simulator.resetState();
 			}
 		});
 		this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent -> {

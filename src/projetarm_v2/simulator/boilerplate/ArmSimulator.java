@@ -261,6 +261,7 @@ public class ArmSimulator {
 	
 	public void setStartingAddress(int startingAddress) {
 		this.cpu.setStartingAddress(startingAddress);
+		this.startingAddress = startingAddress;
 	}
 	
 	public int getRamSize() {
