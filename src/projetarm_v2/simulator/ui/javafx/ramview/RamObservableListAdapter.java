@@ -10,11 +10,14 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<LineR
 	private OutputType outputType;
 	private ShowType showType;
 	
-    public RamObservableListAdapter(Ram ram) {
+	private RamView ramView;
+	
+    public RamObservableListAdapter(Ram ram, RamView ramView) {
 		this.ram = ram;
 		this.offset = 0;
 		this.outputType = OutputType.NORMAL;
 		this.showType = ShowType.BYTE;
+		this.ramView = ramView;
 	}
 
 	@Override
@@ -36,7 +39,7 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<LineR
 
     @Override
     public int size() {
-        return 10;
+        return (int) (ramView.getTableView().getHeight() / 25);
     }
 
 	@Override

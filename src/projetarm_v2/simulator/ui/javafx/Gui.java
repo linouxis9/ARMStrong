@@ -16,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -76,7 +77,7 @@ public class Gui extends Application {
 		primaryStage.setTitle("#@RMStrong");
 		Image applicationIcon = new Image("file:logo.png");
 		primaryStage.getIcons().add(applicationIcon);
-
+		
 		this.dockPane = new DockPane();
 
 		// load an image to caption the dock nodes
@@ -235,6 +236,7 @@ public class Gui extends Application {
 			if (!this.isInterpreterMode) {
 				this.isInterpreterMode = true;
 				this.interpreter.getNode().dock(dockPane, DockPos.BOTTOM);
+				this.interpreter.getNode().setVisible(true);
 				this.interpreter.redirectToInterpreter();
 				
 				System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
@@ -242,7 +244,9 @@ public class Gui extends Application {
 				this.consoleView.getNode().undock();
 				
 				this.interpreter.getNode().getDockTitleBar().getCloseButton().setOnAction(_event -> {
-					this.interpreter.getNode().undock();
+					if (this.interpreter.getNode().isDocked())
+						this.interpreter.getNode().undock();
+					this.interpreter.getNode().setVisible(false);
 					this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 					this.consoleView.redirectToConsole();
 					this.armMenuBar.getSwitchMode().setDisable(false);
@@ -467,8 +471,6 @@ public class Gui extends Application {
 
 	private void saveFile(String content, File theFile) {
 		if (theFile.getAbsolutePath().endsWith(".ARMS")){
-			this.simulator.setProgram(this.codeEditor.getProgramAsString());
-
 			try {
 				this.simulator.saveToFile(theFile.getAbsolutePath());
 			} catch (IOException e) {

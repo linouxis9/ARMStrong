@@ -27,7 +27,7 @@ public class Main {
 		System.out.format(">>> Processor Flags : %s%n", simulator.getCpu().getCPSR());
 		System.out.println(simulator.getRam());
 
-		if (args.length >= 0) {
+		if (args.length > 0) {
 			Gui.main(new String[0]);
 			return;
 		}

@@ -58,12 +58,12 @@ public class RamView {
 
         this.tableView = (TableView<LineRam>) mainPane.lookup("#tableView");
         
-        UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter(simulator.getRam());
+        UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter(simulator.getRam(), this);
         UneSuperImplemFournieParValentinLeBg.setOffset(this.firstDisplayedAddress);
         
         this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
         this.tableView.setEditable(true);
-        
+        this.tableView.setSortPolicy(null);
         this.tableView.setOnKeyPressed(event -> {
             TablePosition<LineRam, ?> pos = this.tableView.getFocusModel().getFocusedCell() ;
             if (pos != null && (event.getCode().isDigitKey() || event.getCode().isLetterKey())) {
@@ -157,9 +157,9 @@ public class RamView {
         
         tableView.setOnScroll((ScrollEvent event) -> {
         	if (event.getDeltaY() < 0) {
-        		this.firstDisplayedAddress=+ 1;
+        		this.firstDisplayedAddress += 1;
         	} else {
-                this.firstDisplayedAddress=- 1;
+                this.firstDisplayedAddress -= 1;
         	}
             memoryScrollBar.setValue(this.firstDisplayedAddress);
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
@@ -235,6 +235,10 @@ public class RamView {
         });
     }
 
+    public TableView getTableView() {
+    	return this.tableView;
+    }
+    
     public DockNode getNode() {
         return dockNode;
     }
