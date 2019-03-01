@@ -150,20 +150,18 @@ public class RamView {
         
         memoryScrollBar.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
             this.firstDisplayedAddress = new_val.intValue();
-            alignMemory();
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
             this.refresh();
         });
         
         tableView.setOnScroll((ScrollEvent event) -> {
         	if (event.getDeltaY() < 0) {
-        		this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8*this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8;
+        		this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         	} else {
-                this.firstDisplayedAddress -= this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8*this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8;
+                this.firstDisplayedAddress -= this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         	}
             memoryScrollBar.setValue(this.firstDisplayedAddress);
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
-            alignMemory();
             this.refresh();
         });
         
@@ -174,7 +172,6 @@ public class RamView {
     	button8Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(1);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
-            alignMemory();
             this.refresh();
     	});
     	button16Bit.setOnAction(ActionEvent -> {
@@ -251,6 +248,7 @@ public class RamView {
     }
 
     private void alignMemory(){
-        this.firstDisplayedAddress -= this.firstDisplayedAddress%(this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8);
+        this.firstDisplayedAddress -= this.firstDisplayedAddress % this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
+        memoryScrollBar.setValue(this.firstDisplayedAddress);
     }
 }

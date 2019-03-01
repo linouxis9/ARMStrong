@@ -76,12 +76,7 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<LineR
 		return this.showType;
 	}
 
-	public int getShowTypeValue() {
-    	switch (this.showType){
-			case BYTE:return 8;
-			case HALFWORD: return 16;
-			case WORD: return 32;
-			default: return 8;
-		}
+	public ShowType getShowTypeValue() {
+    	return this.showType;
 	}
 }
