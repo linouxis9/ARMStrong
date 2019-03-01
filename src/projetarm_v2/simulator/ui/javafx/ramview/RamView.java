@@ -148,21 +148,22 @@ public class RamView {
         memoryScrollBar.setUnitIncrement(1);
         memoryScrollBar.setMax(2 *1024*1024); //TODO: set proper value
         
-        memoryScrollBar.valueProperty().addListener((ObservableValue<? extends Number> ov, 
-                Number old_val, Number new_val) -> {
-                    this.firstDisplayedAddress = new_val.intValue();
-                    this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
-                    this.refresh();
+        memoryScrollBar.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+            this.firstDisplayedAddress = new_val.intValue();
+            alignMemory();
+            this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+            this.refresh();
         });
         
         tableView.setOnScroll((ScrollEvent event) -> {
         	if (event.getDeltaY() < 0) {
-        		this.firstDisplayedAddress += 1;
+        		this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8*this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8;
         	} else {
-                this.firstDisplayedAddress -= 1;
+                this.firstDisplayedAddress -= this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8*this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8;
         	}
             memoryScrollBar.setValue(this.firstDisplayedAddress);
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
+            alignMemory();
             this.refresh();
         });
         
@@ -173,16 +174,19 @@ public class RamView {
     	button8Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(1);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
+            alignMemory();
             this.refresh();
     	});
     	button16Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(2);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
+            alignMemory();
             this.refresh();
     	});
     	button32Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(4);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.WORD);
+            alignMemory();
             this.refresh();
     	});
 
@@ -191,10 +195,12 @@ public class RamView {
 
         buttonHex.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
+            alignMemory();
             this.refresh();
         });
         buttonDec.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.NORMAL);
+            alignMemory();
             this.refresh();
         });
 
@@ -228,6 +234,7 @@ public class RamView {
                     return;
                 }
                 this.firstDisplayedAddress = newAddress;
+                alignMemory();
                 memoryScrollBar.setValue(this.firstDisplayedAddress);
                 this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
                 this.refresh();
@@ -241,5 +248,9 @@ public class RamView {
     
     public DockNode getNode() {
         return dockNode;
+    }
+
+    private void alignMemory(){
+        this.firstDisplayedAddress -= this.firstDisplayedAddress%(this.UneSuperImplemFournieParValentinLeBg.getShowTypeValue()/8);
     }
 }
