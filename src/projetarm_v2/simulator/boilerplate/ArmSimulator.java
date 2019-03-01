@@ -77,13 +77,17 @@ public class ArmSimulator {
 	public void loadSaveFromFile(String path) throws IOException {
 		this.save = Save.fromPath(path);
 		
-		this.setProgram(this.save.getProgram());
-		
 		this.portManager.generateIOComponents(this.save.getComponentsAndReset());
 		
 		for (IOComponent component : this.portManager.getComponents()) {
 			this.save.addComponent(component);
 		}
+		
+		this.setProgram(this.save.getProgram());
+	}
+	
+	public String getProgramFromSave() {
+		return this.save.getProgram();
 	}
 	
 	public void saveToFile(String path) throws IOException {
@@ -363,14 +367,5 @@ public class ArmSimulator {
 	 */
 	public void interruptExecutionFlow() {
 		this.cpu.interruptMe();
-	}
-
-	public String getProgramSavefromPath(String absolutePath) {
-		try {
-			return this.save.fromPath(absolutePath).getProgram();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return "";
-		}
 	}
 }

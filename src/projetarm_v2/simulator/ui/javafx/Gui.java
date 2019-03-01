@@ -100,7 +100,7 @@ public class Gui extends Application {
 		this.consoleView = new ConsoleView();
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
-		this.consoleView.redirectToConsole();
+		this.consoleView.initConsole();
 		
 		this.interpreter = new Interpreter();
 		this.isInterpreterMode = false;
@@ -163,45 +163,11 @@ public class Gui extends Application {
 		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")) {
 				warningPopup("All unsaved work will be lost", eventHandler -> {
-
-					FileChooser fileChooser = new FileChooser();
-					fileChooser.setTitle("Open Program");
-					fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files (*.S)", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files (*.ARMS)", "*.ARMS"));
-
-					File chosenFile = fileChooser.showOpenDialog(this.stage);
-					if (chosenFile != null) {
-						try {
-							if (chosenFile.getAbsolutePath().endsWith(".ARMS")){
-								this.codeEditor.setProgramAsString(new String(simulator.getProgramSavefromPath(chosenFile.getAbsolutePath())));
-							}
-							else{
-								this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						this.currentProgramPath = chosenFile;
-					}
+					openProgram();
 				});
 			}
 			else {
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.setTitle("Open Program");
-				fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files (*.S)", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files (*.ARMS)", "*.ARMS"));
-
-				File chosenFile = fileChooser.showOpenDialog(this.stage);
-				if (chosenFile != null) {
-					try {
-						if (chosenFile.getAbsolutePath().endsWith(".ARMS")) {
-							this.codeEditor.setProgramAsString(new String(simulator.getProgramSavefromPath(chosenFile.getAbsolutePath())));
-						} else {
-							this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
-						}
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					this.currentProgramPath = chosenFile;
-				}
+				openProgram();
 			}
 		});
 		this.armMenuBar.getSave().setOnAction(actionEvent -> {
@@ -214,7 +180,7 @@ public class Gui extends Application {
 		this.armMenuBar.getSaveAs().setOnAction(actionEvent -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Save assembly program");
-			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Assembly Files", "*.S"), new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS") );
+			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS"), new FileChooser.ExtensionFilter("Assembly Files", "*.S"));
 			File chosenFile = fileChooser.showSaveDialog(stage);
 			if (chosenFile != null) {
 				if (chosenFile.getAbsolutePath().endsWith(".ARMS") || chosenFile.getAbsolutePath().endsWith(".S")) {
@@ -237,7 +203,7 @@ public class Gui extends Application {
 				this.isInterpreterMode = true;
 				this.interpreter.getNode().dock(dockPane, DockPos.BOTTOM);
 				this.interpreter.getNode().setVisible(true);
-				this.interpreter.redirectToInterpreter();
+				this.interpreter.initInterpreter();
 				
 				System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
 				if (this.consoleView.getNode().isDocked())
@@ -249,7 +215,7 @@ public class Gui extends Application {
 						this.interpreter.getNode().undock();
 					this.interpreter.getNode().setVisible(false);
 					this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
-					this.consoleView.redirectToConsole();
+					this.consoleView.initConsole();
 					this.armMenuBar.getSwitchMode().setDisable(false);
 					this.armToolBar.getSwitchButton().setDisable(false);
 					this.simulator.resetState();
@@ -406,6 +372,32 @@ public class Gui extends Application {
 		});
 	}
 
+	private void openProgram() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Program");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong Files (*.ARMS)", "*.ARMS"), new FileChooser.ExtensionFilter("Assembly Files (*.S)", "*.S"));
+
+		File chosenFile = fileChooser.showOpenDialog(this.stage);
+		if (chosenFile != null) {
+			try {
+				if (chosenFile.getAbsolutePath().endsWith(".ARMS")){
+					try {
+						simulator.loadSaveFromFile(chosenFile.getAbsolutePath());
+						this.codeEditor.setProgramAsString(simulator.getProgramFromSave());
+					} catch (InvalidInstructionException e) {
+						warningPopup("You are opening a file containing syntax errors.", (_event) -> this.codeEditor.setProgramAsString(simulator.getProgramFromSave()));								
+					}
+				}
+				else{
+					this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			this.currentProgramPath = chosenFile;
+		}
+	}
+
 	public static void warningPopup(String message, EventHandler<ActionEvent> okEvent) {
 		final Stage warningStage = new Stage();
 		warningStage.setTitle("Warning");
@@ -473,9 +465,16 @@ public class Gui extends Application {
 	private void saveFile(String content, File theFile) {
 		if (theFile.getAbsolutePath().endsWith(".ARMS")){
 			try {
+				this.simulator.setProgram(this.codeEditor.getProgramAsString());
 				this.simulator.saveToFile(theFile.getAbsolutePath());
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (InvalidInstructionException e) {
+				warningPopup("You are saving a file containing syntax errors.", (_event) -> {try {
+					simulator.saveToFile(theFile.getAbsolutePath());
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}});
 			}
 		} else {
 			try {

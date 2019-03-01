@@ -73,7 +73,7 @@ public class ConsoleView {
 		
 	}
 
-	public void redirectToConsole() {
+	public void initConsole() {
 		System.setOut(new PrintStream(output));
 	}
 	

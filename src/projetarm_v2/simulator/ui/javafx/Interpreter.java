@@ -90,7 +90,8 @@ public class Interpreter {
 		this.asm.remove(this.asm.size() - 1);
 	}
 	
-	public void redirectToInterpreter() {
+	public void initInterpreter() {
+		this.asm.clear();
 		System.setOut(new PrintStream(output));
 	}
 	
