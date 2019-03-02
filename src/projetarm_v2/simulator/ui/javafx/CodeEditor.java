@@ -76,6 +76,7 @@ public class CodeEditor {
     }
 
     public String getProgramAsString() {
+    	this.textArea.setText(this.textArea.getText().replaceAll(";", System.lineSeparator()));
         return textArea.getText();
     }
     public void setProgramAsString(String program){

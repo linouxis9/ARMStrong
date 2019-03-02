@@ -39,7 +39,7 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<LineR
 
     @Override
     public int size() {
-        return (int) (ramView.getTableView().getHeight() / 25);
+        return (int) Math.ceil(ramView.getTableView().getHeight() / 30);
     }
 
 	@Override

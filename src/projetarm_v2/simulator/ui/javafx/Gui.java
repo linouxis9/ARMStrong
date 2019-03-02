@@ -16,7 +16,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -100,7 +99,7 @@ public class Gui extends Application {
 		this.consoleView = new ConsoleView();
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
-		this.consoleView.initConsole();
+		this.consoleView.redirectToConsole();
 		
 		this.interpreter = new Interpreter(this.simulator);
 		this.isInterpreterMode = false;
@@ -215,7 +214,7 @@ public class Gui extends Application {
 					this.interpreter.getNode().setVisible(false);
 					this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 					this.interpreter.stopInterpreter();
-					this.consoleView.initConsole();
+					this.consoleView.redirectToConsole();
 					this.armMenuBar.setExecutionMode(executionMode);
 					this.armToolBar.setExecutionMode(executionMode);
 					this.armMenuBar.getSwitchMode().setDisable(false);
@@ -433,7 +432,7 @@ public class Gui extends Application {
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
-				
+
 				if (!runningFlag.get()) {
 					continue;
 				}

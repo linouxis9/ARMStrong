@@ -24,8 +24,6 @@ public class RamView {
     private DockNode dockNode;
     private Image dockImage;
 
-    private ArmSimulator simulator;
-
     private ScrollBar memoryScrollBar;
     private TableView<LineRam> tableView;
     
@@ -33,8 +31,6 @@ public class RamView {
     private TableColumn<LineRam,String> c;
     private TableColumn<LineRam,String> b;
     private TableColumn<LineRam,String> d;
-
-    private boolean shouldRefresh = true;
     
     private int firstDisplayedAddress = 0x1000;
 
@@ -47,10 +43,8 @@ public class RamView {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        this.simulator = simulator;
         
-        dockNode = new DockNode(mainPane, "Ram View", new ImageView(dockImage));
+        dockNode = new DockNode(mainPane, "Ram View", new ImageView());
         dockNode.setPrefSize(300, 100);
 
         mainPane.setStyle("-fx-line-spacing: -0.4em;");
@@ -163,6 +157,7 @@ public class RamView {
             memoryScrollBar.setValue(this.firstDisplayedAddress);
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
             this.refresh();
+            this.tableView.autosize();
         });
         
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
@@ -239,7 +234,7 @@ public class RamView {
         });
     }
 
-    public TableView getTableView() {
+    public TableView<LineRam> getTableView() {
     	return this.tableView;
     }
     

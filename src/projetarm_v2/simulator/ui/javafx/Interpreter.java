@@ -16,9 +16,6 @@ import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import org.dockfx.DockNode;
 
