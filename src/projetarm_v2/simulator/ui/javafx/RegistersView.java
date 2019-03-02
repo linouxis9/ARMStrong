@@ -33,6 +33,9 @@ public class RegistersView {
     private Text flagSigDec;
     
     private Text flagDec;
+	private Text currentAddressHex;
+	private Text currentAddressSigDec;
+	private Text currentAddressDec;
     
     public RegistersView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
@@ -80,9 +83,18 @@ public class RegistersView {
         this.flagSigDec = new Text(10,20*(17), String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
         this.flagDec = new Text(10,20*(17), String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
 
+        this.currentAddressHex = new Text(10,20*(18), String.format("[nextInstructionAdr] : 0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressSigDec = new Text(10,20*(18), String.format("[nextInstructionAdr] : %s", Long.toString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressDec =  new Text(10,20*(18), String.format("[nextInstructionAdr] : %s", Long.toUnsignedString(simulator.getCpu().getCurrentAddress())));
+
         this.registersHex.add(flagHex);
         this.registersSigDec.add(flagSigDec);
         this.registersDec.add(flagDec);
+        
+        this.registersHex.add(currentAddressHex);
+        this.registersSigDec.add(currentAddressSigDec);
+        this.registersDec.add(currentAddressDec);
+        
         
         this.hexPane.getChildren().addAll(this.registersHex);
         this.sigDecPane.getChildren().addAll(this.registersSigDec);
@@ -106,6 +118,9 @@ public class RegistersView {
     	 this.flagDec.setText(String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
     	 this.flagSigDec.setText(String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
 
+         this.currentAddressHex.setText(String.format("[nextInstructionAdr] : 0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
+         this.currentAddressDec.setText(String.format("[nextInstructionAdr] : %s", Long.toString(simulator.getCpu().getCurrentAddress())));
+         this.currentAddressSigDec.setText(String.format("[nextInstructionAdr] : %s", Long.toUnsignedString(simulator.getCpu().getCurrentAddress())));
     }
 
     DockNode getNode(){

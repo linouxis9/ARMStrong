@@ -25,7 +25,7 @@ public class LineRamByte implements LineRam {
 			case NORMAL:
 				return Integer.toString(((int)a2) & 0xFF);
 			case HEX:
-				return String.format("%x", a2);
+				return String.format("0x%x", a2);
 		}
 	}
 

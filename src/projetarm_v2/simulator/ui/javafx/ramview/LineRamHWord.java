@@ -25,7 +25,7 @@ public class LineRamHWord implements LineRam {
 			case NORMAL:
 				return Integer.toString(((int)a2) & 0xFFFF);
 			case HEX:
-				return String.format("%x", a2);
+				return String.format("0x%x", a2);
 		}
 	}
 

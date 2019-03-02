@@ -11,7 +11,10 @@ public class Preprocessor {
 
 	
 	public static String pass1(String assembly) {
-		assembly = assembly.replaceAll("\r?\n", ";").replaceAll(".breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS);
+		assembly = assembly
+				.replaceAll("\r?\n", ";")
+				.replaceAll(".breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
+				.replaceAll("@.*", "");
 		Matcher matcher = labelPattern.matcher(assembly);
 		
 		while (matcher.find()) {
