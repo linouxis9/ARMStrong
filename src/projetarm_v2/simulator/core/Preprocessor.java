@@ -14,7 +14,7 @@ public class Preprocessor {
 		assembly = assembly
 				.replaceAll("\r?\n", ";")
 				.replaceAll(".breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
-				.replaceAll("@.*", "");
+				.replaceAll("@.*$", "");
 		Matcher matcher = labelPattern.matcher(assembly);
 		
 		while (matcher.find()) {

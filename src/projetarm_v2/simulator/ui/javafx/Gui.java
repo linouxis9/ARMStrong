@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
+import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 public class Gui extends Application {
@@ -129,7 +130,7 @@ public class Gui extends Application {
 		
 		primaryStage.setOnCloseRequest((WindowEvent event) -> {
             	System.exit(0);
-            });
+        });
 
 
 		// initialize the default styles for the dock pane and undocked nodes using the
@@ -143,6 +144,10 @@ public class Gui extends Application {
 		DockPane.initializeDefaultUserAgentStylesheet();
 		
 		vbox.getStylesheets().add("/resources/style.css");
+		
+		System.out.println("Welcome to #@RMStrong Simulator made proudly at the Institute of Technology of Valence in 2018-2019 by fellow students under the guidance of Dr. Philippe Objois!");
+		System.out.println("Licensed under the MIT License");
+		System.out.println("Copyright (c) 2018-2019 Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Hugo Chemarin, Nicolas Gervasi");
 	}
 
 	private void setExecutionMode() {
@@ -318,7 +323,13 @@ public class Gui extends Application {
 		// the console
 		this.consoleView.getTextField().setOnKeyPressed((KeyEvent ke) -> {
 			if (ke.getCode().equals(KeyCode.ENTER)) {
-				simulator.setConsoleInput(this.consoleView.getTextField().getText());
+				if (simulator.isWaitingForInput()) {
+					simulator.setConsoleInput(this.consoleView.getTextField().getText());
+					System.out.println("[INFO] Input [" + this.consoleView.getTextField().getText() + "] added to Input queue");
+				} else {
+					System.out.println("[INFO] Input discarded (The CPU was not waiting for INPUT)");
+					System.out.println("[INFO] Maybe you wanted to use CpuRoutineGetString @ 0x" + Long.toHexString(CpuConsoleGetString.ROUTINE_ADDRESS) + " in your assembly?");
+				}
 				this.consoleView.getTextField().clear();
 			}
 		});

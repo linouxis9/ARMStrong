@@ -25,12 +25,13 @@ public class CpuGetFile extends CpuRoutine
 		long dest = (long) this.getRegister(1).getValue();
 		
 		try {
-			
-			byte[] array = Files.readAllBytes(Path.of(this.longToString(dest)));
+			String path = this.longToString(address);
+			System.out.println("[INFO] Reading " + path + " to 0x" + Long.toHexString(dest));
+			byte[] array = Files.readAllBytes(Path.of(path));
 			for(byte myByte: array)
 			{
-				this.getRam().setByte(address,myByte);
-				address++;
+				this.getRam().setByte(dest,myByte);
+				dest++;
 			}
 			
 		} catch(Exception e) {

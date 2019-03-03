@@ -27,7 +27,7 @@
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </VBox.margin>
       </Text>
-      <Hyperlink fx:id="linkGit" alignment="CENTER" prefHeight="34.0" prefWidth="490.0" text="https://gitlab.iut-valence.fr/demmanuv/projet_s2" />
+      <Hyperlink fx:id="linkGit" alignment="CENTER" prefHeight="34.0" prefWidth="490.0" text="https://github.com/linouxis9/ProjectARM" />
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
          <VBox.margin>
             <Insets left="165.0" />

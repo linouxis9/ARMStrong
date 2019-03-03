@@ -18,11 +18,13 @@ public class CpuPutFile extends CpuRoutine
 		long dest = (long) this.getRegister(1).getValue();
 		
 		try {
-			File file = new File(this.longToString(dest));
+			String fileName = this.longToString(address);
+			File file = new File(fileName);
 			FileWriter fileWriter = new FileWriter(file);
-			String str;
-			
-			str = this.longToString(address);
+
+			System.out.println("[INFO] Writing " + fileName + " from 0x" + Long.toHexString(dest));
+
+			String str = this.longToString(dest);
 			fileWriter.write(str);
 			fileWriter.close();
 			

@@ -7,11 +7,13 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
+import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -82,7 +84,7 @@ public class Interpreter {
 		this.redirectToInterpreter();
 		this.pc = this.simulator.getCpu().getCurrentAddress();
 		this.simulator.setStartingAddress(0);
-		System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.");
+		System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.\n [WARNING] You cannot use label branching in Interpreter mode");
 	}
 	
 	public void redirectToInterpreter() {	
@@ -104,18 +106,26 @@ public class Interpreter {
 
 	public void run() {
 		String instruction = this.getTextField().getText();
+
+		if (simulator.isWaitingForInput()) {
+			simulator.setConsoleInput(instruction);
+			System.out.println("[INFO] Input [" + instruction + "] added to Input queue");
+			this.getTextField().clear();
+			return;
+		}
+		
 		if (instruction.contentEquals(".reset")) {
 			simulator.resetState();
 			System.out.println("The CPU has been reset.");
 			this.redirectToInterpreter();
 			return;
 		}
-		simulator.setConsoleInput(instruction);
+
 		try {
 			simulator.setProgram(instruction);
 			System.out.println("[EXEC] " + instruction + " [" + Integer.toHexString(this.simulator.getRamWord(0)) + "]");
 			this.simulator.getCpu().setCurrentAddress(0);
-			simulator.runStep();
+			new Thread(() -> simulator.runStep()).start();;
 			this.getTextField().clear();
 		} catch (InvalidInstructionException e) {
 			System.out.println(e.getMessage());

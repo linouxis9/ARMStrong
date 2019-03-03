@@ -364,6 +364,10 @@ public class ArmSimulator {
 		}
 	}
 	
+	public boolean isWaitingForInput() {
+		return this.guiConsoleToCpu.isWaitingForInput();
+	}
+	
 	/**
 	 * Returns true if the cpu is halted
 	 */

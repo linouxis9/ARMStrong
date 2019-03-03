@@ -3,14 +3,18 @@ package projetarm_v2.simulator.core.routines;
 import projetarm_v2.simulator.core.Cpu;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CpuConsoleGetString extends CpuRoutine {
 	
 	public static final long ROUTINE_ADDRESS = 0xFF08L;
 	private ConcurrentLinkedQueue<String> consoleBuffer;
 	
+	private AtomicBoolean waitingForInput;
+	
 	public CpuConsoleGetString(Cpu cpu) {
 		super(cpu);
+		this.waitingForInput = new AtomicBoolean(false);
 		this.consoleBuffer = new ConcurrentLinkedQueue<>();
 	}
 	
@@ -24,7 +28,7 @@ public class CpuConsoleGetString extends CpuRoutine {
 	protected void primitive()
 	{
 		System.out.println("[INPUT] Waiting for input");
-		
+		this.waitingForInput.set(true);
 		while (this.consoleBuffer.peek() == null) {
 			try {
 				Thread.sleep(50);
@@ -32,7 +36,8 @@ public class CpuConsoleGetString extends CpuRoutine {
 				Thread.currentThread().interrupt();
 			}
 		}
-		
+		this.waitingForInput.set(false);
+
 		String searchString = this.consoleBuffer.poll();
 		
 		if (searchString == null) {	return;	}
@@ -46,5 +51,9 @@ public class CpuConsoleGetString extends CpuRoutine {
 			this.getRam().setByte(address,c[i]);
 			address++;
 		}
+	}
+	
+	public boolean isWaitingForInput() {
+		return this.waitingForInput.get();
 	}
 }
