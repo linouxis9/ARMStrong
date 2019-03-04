@@ -1,7 +1,6 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import org.dockfx.DockNode;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -12,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.core.io.IOLed;
 
 public class LedView {
 
@@ -22,8 +23,9 @@ public class LedView {
     AnchorPane anchorPane;
     VBox ledContainer;
     
+    private ArmSimulator simulator;
     
-    public LedView(){
+    public LedView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         
         
@@ -40,17 +42,24 @@ public class LedView {
         
         moreLedButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
+            	IOLed led = simulator.newIOLed();
+            	
                 AnchorPane newLedAddress = new AnchorPane();
-                ImageView newLed = new ImageView();
-                newLed.setImage(ledOn);
-                newLed.setLayoutX(0);
-                newLed.setLayoutY(0);
+                ImageView newLedImage = new ImageView();
+                if(led.isOn() == true) {
+                	newLedImage.setImage(ledOn);
+                }else {
+                	newLedImage.setImage(ledOff);
+                }
+                
+                newLedImage.setLayoutX(0);
+                newLedImage.setLayoutY(0);
                 Text newAddress = new Text();
-                newAddress.setText("Address : ");
+                newAddress.setText("Address : 0x" + led.getPortAddress());
                 newAddress.setLayoutX(150);
                 newAddress.setLayoutY(55);
                 
-                newLedAddress.getChildren().addAll(newLed, newAddress);
+                newLedAddress.getChildren().addAll(newLedImage, newAddress);
                 ledContainer.getChildren().add(newLedAddress);
             }
         });
@@ -76,21 +85,8 @@ public class LedView {
         
         buttonAnchor.getChildren().addAll(moreLedButton, lessLedButton);
         
-        /* This anchor pane stand for one line <led image> -> <address> */
-        AnchorPane addressLine = new AnchorPane();
-        ImageView led = new ImageView();
-        led.setImage(ledOn);
-        led.setLayoutX(0);
-        led.setLayoutY(0);
-        Text address = new Text();
-        address.setText("Address : ");
-        address.setLayoutX(150);
-        address.setLayoutY(55);
-        
-        addressLine.getChildren().addAll(led, address);
-        
-        
-        ledContainer = new VBox(buttonAnchor, addressLine);
+
+        ledContainer = new VBox(buttonAnchor);
         
         this.dockNode = new DockNode(mainPane, "Led Game", new ImageView(dockImage));
         
@@ -102,6 +98,9 @@ public class LedView {
         this.mainPane.setHmin(dockNode.getHeight());
     }
     
+    public void refresh() {
+    	return;
+    }
     
     public DockNode getNode(){
         return dockNode;
