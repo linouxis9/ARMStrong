@@ -1,75 +1,115 @@
 package projetarm_v2.simulator.ui.javafx;
 
-import javafx.geometry.Insets;
+import org.dockfx.DockNode;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-
-
-import org.dockfx.DockNode;
 
 public class LedView {
 
-	ScrollPane mainPane;
+    ScrollPane mainPane;
     DockNode dockNode;
     Image dockImage;
     TextFlow textArea;
     AnchorPane anchorPane;
-    GridPane gridPane;
+    VBox ledContainer;
+    
     
     public LedView(){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-    	Image ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
-        Image ledOn = new Image(getClass().getResource("/resources/ledOn.png").toExternalForm());
+        
+        
         this.mainPane = new ScrollPane();
-        gridPane = new GridPane();
-        gridPane.setPadding(new Insets(5));
-        gridPane.setHgap(10);
-        gridPane.setVgap(40);
+        
+        Image ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
+        Image ledOn = new Image(getClass().getResource("/resources/ledOn.png").toExternalForm());
+        
+        
+        
+        /* The first element in the VBox is one anchorPane containing 2 buttons : more led and less led */
+        Button moreLedButton = new Button();
+        moreLedButton.setText("More Led");
+        moreLedButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                AnchorPane newAddressLine = new AnchorPane();
+                ImageView newLed = new ImageView();
+                newLed.setImage(ledOn);
+                newLed.setLayoutX(0);
+                newLed.setLayoutY(0);
+                Text newAddress = new Text();
+                newAddress.setText("Address : ");
+                newAddress.setLayoutX(150);
+                newAddress.setLayoutY(55);
+                
+                newAddressLine.getChildren().addAll(newLed, newAddress);
+                ledContainer.getChildren().add(newAddressLine);
+            }
+        });
+        
+        Button lessLedButton = new Button();
+        lessLedButton.setText("Less Led");
+        lessLedButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("Less led !");
+            }
+        });
+          
+        AnchorPane buttonAnchor = new AnchorPane();
+        
+        moreLedButton.setLayoutX(20);
+        moreLedButton.setLayoutY(20);
+        
+        lessLedButton.setLayoutX(200);
+        lessLedButton.setLayoutY(20);
+        
+        buttonAnchor.getChildren().addAll(moreLedButton, lessLedButton);
+        
+        /* This anchor pane stand for one line <led image> -> <address> */
+        AnchorPane addressLine = new AnchorPane();
+        ImageView led = new ImageView();
+        led.setImage(ledOn);
+        led.setLayoutX(0);
+        led.setLayoutY(0);
+        Text address = new Text();
+        address.setText("Address : ");
+        address.setLayoutX(150);
+        address.setLayoutY(55);
+        
+        addressLine.getChildren().addAll(led, address);
+        
+        
+        VBox ledContainer = new VBox(buttonAnchor, addressLine);
+        
         this.dockNode = new DockNode(mainPane, "Led Game", new ImageView(dockImage));
         
-        this.dockNode.setPrefSize(460,666);
+        dockNode.setPrefSize(460,666);
         
-        this.mainPane.setContent(gridPane);  
+        this.mainPane.setContent(ledContainer);  
         this.mainPane.setFitToWidth(true);
         this.mainPane.setFitToHeight(true);  
         this.mainPane.setHmin(dockNode.getHeight());
-        this.dockNode.getStylesheets().add("/resources/style.css");
-        ImageView led1 = new ImageView();
-        led1.setImage(ledOn);
-
-        ImageView led2 = new ImageView();
-        led2.setImage(ledOn);
-
-        ImageView led3 = new ImageView();
-        led3.setImage(ledOn);
-
-        ImageView led4 = new ImageView();
-        led4.setImage(ledOn);
-
-        ImageView led5 = new ImageView();
-        led5.setImage(ledOn);
-
-        ImageView led6 = new ImageView();
-        led6.setImage(ledOff);
-
-
-        gridPane.add(led1, 1, 0);
-        gridPane.add(led2, 1, 1);
-        gridPane.add(led3, 1, 2);
-        gridPane.add(led4, 1, 3);
-        gridPane.add(led5, 1, 4);
-        gridPane.add(led6, 1, 5);
         
-        //anchorPane.getChildren().add(gridPane); 
+        
+
+
     }
+    
     
     public DockNode getNode(){
         return dockNode;
     }
    
 }
+
+
 
