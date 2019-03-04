@@ -37,10 +37,10 @@ public class LedView {
         /* The first element in the VBox is one anchorPane containing 2 buttons : more led and less led */
         Button moreLedButton = new Button();
         moreLedButton.setText("More Led");
+        
         moreLedButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent event) {
-                AnchorPane newAddressLine = new AnchorPane();
+                AnchorPane newLedAddress = new AnchorPane();
                 ImageView newLed = new ImageView();
                 newLed.setImage(ledOn);
                 newLed.setLayoutX(0);
@@ -50,17 +50,19 @@ public class LedView {
                 newAddress.setLayoutX(150);
                 newAddress.setLayoutY(55);
                 
-                newAddressLine.getChildren().addAll(newLed, newAddress);
-                ledContainer.getChildren().add(newAddressLine);
+                newLedAddress.getChildren().addAll(newLed, newAddress);
+                ledContainer.getChildren().add(newLedAddress);
             }
         });
         
         Button lessLedButton = new Button();
         lessLedButton.setText("Less Led");
         lessLedButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent event) {
-                System.out.println("Less led !");
+            	if(ledContainer.getChildren().size()-1 != 0) {
+            		ledContainer.getChildren().remove(ledContainer.getChildren().size()-1);	
+            	}
+            	
             }
         });
           
@@ -88,7 +90,7 @@ public class LedView {
         addressLine.getChildren().addAll(led, address);
         
         
-        VBox ledContainer = new VBox(buttonAnchor, addressLine);
+        ledContainer = new VBox(buttonAnchor, addressLine);
         
         this.dockNode = new DockNode(mainPane, "Led Game", new ImageView(dockImage));
         
@@ -98,10 +100,6 @@ public class LedView {
         this.mainPane.setFitToWidth(true);
         this.mainPane.setFitToHeight(true);  
         this.mainPane.setHmin(dockNode.getHeight());
-        
-        
-
-
     }
     
     
