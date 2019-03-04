@@ -55,7 +55,7 @@ public class LedView {
                 newLedImage.setLayoutX(0);
                 newLedImage.setLayoutY(0);
                 Text newAddress = new Text();
-                newAddress.setText("Address : 0x" + led.getPortAddress());
+                newAddress.setText("Address : 0x" + led.getPortAddress() + " Bit N°" + led.shift);
                 newAddress.setLayoutX(150);
                 newAddress.setLayoutY(55);
                 
@@ -80,7 +80,7 @@ public class LedView {
         moreLedButton.setLayoutX(20);
         moreLedButton.setLayoutY(20);
         
-        lessLedButton.setLayoutX(200);
+        lessLedButton.setLayoutX(100);
         lessLedButton.setLayoutY(20);
         
         buttonAnchor.getChildren().addAll(moreLedButton, lessLedButton);
