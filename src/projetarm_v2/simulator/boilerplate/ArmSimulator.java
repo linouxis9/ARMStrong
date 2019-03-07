@@ -157,6 +157,10 @@ public class ArmSimulator {
 	public int getRegisterValue(int registerNumber) {
 		return this.cpu.getRegister(registerNumber).getValue();
 	}
+	
+	public void setRegisterValue(int registerNumber, int myValue) {
+		this.cpu.getRegister(registerNumber).setValue(myValue);
+	}
 
 	public Ram getRam() {
 		return this.ram;

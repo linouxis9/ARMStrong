@@ -1,15 +1,20 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
-
-import java.util.ArrayList;
 
 import org.dockfx.DockNode;
 
@@ -18,9 +23,9 @@ public class RegistersView {
     private TabPane mainPane;
     private DockNode dockNode;
     private Image dockImage;
-    private ArrayList<Text> registersHex;
-    private ArrayList<Text> registersSigDec;
-    private ArrayList<Text> registersDec;
+    private ObservableList<RegisterObjectView> registersHex;
+    private ObservableList<RegisterObjectView> registersSigDec;
+    private ObservableList<RegisterObjectView> registersDec;
     private ArmSimulator simulator;
     private Pane hexPane;
     private Pane sigDecPane;
@@ -29,15 +34,27 @@ public class RegistersView {
     private Tab sigDecTab;
     private Tab decTab;
     
-    private Text flagHex;
-    private Text flagSigDec;
+    private RegisterObjectView flagHex;
+    private RegisterObjectView flagSigDec;
     
-    private Text flagDec;
-	private Text currentAddressHex;
-	private Text currentAddressSigDec;
-	private Text currentAddressDec;
-    
-    public RegistersView(ArmSimulator simulator){
+    private RegisterObjectView flagDec;
+	private RegisterObjectView currentAddressHex;
+	private RegisterObjectView currentAddressSigDec;
+	private RegisterObjectView currentAddressDec;
+	
+	private TableView<RegisterObjectView> tableHex;
+	private TableView<RegisterObjectView> tableSigDec;
+	private TableView<RegisterObjectView> tableDec;
+	
+	private TableColumn<RegisterObjectView, String> nameHexCol;
+	private TableColumn<RegisterObjectView, String> valueHexCol;
+	private TableColumn<RegisterObjectView, String> nameSigDecCol;
+	private TableColumn<RegisterObjectView, String> valueSigDecCol;
+	private TableColumn<RegisterObjectView, String> nameDecCol;
+	private TableColumn<RegisterObjectView, String> valueDecCol;
+	
+    @SuppressWarnings("unchecked")
+	public RegistersView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
     	this.simulator = simulator;
     	
@@ -48,7 +65,85 @@ public class RegistersView {
         this.hexPane.getStyleClass().add("contentTabPane");
         this.sigDecPane.getStyleClass().add("contentTabPane");
         this.decPane.getStyleClass().add("contentTabPane");
-
+ 
+        this.tableHex = new TableView<RegisterObjectView>();
+        this.tableSigDec = new TableView<RegisterObjectView>();
+        this.tableDec = new TableView<RegisterObjectView>();
+        
+        this.hexPane.getChildren().add(this.tableHex);
+        this.sigDecPane.getChildren().add(this.tableSigDec);
+        this.decPane.getChildren().add(this.tableDec);
+        
+    	this.nameHexCol = new TableColumn<RegisterObjectView, String>();
+    	this.valueHexCol = new TableColumn<RegisterObjectView, String>();
+    	this.nameSigDecCol = new TableColumn<RegisterObjectView, String>();
+    	this.valueSigDecCol = new TableColumn<RegisterObjectView, String>();
+    	this.nameDecCol = new TableColumn<RegisterObjectView, String>();
+    	this.valueDecCol = new TableColumn<RegisterObjectView, String>(); 
+    	
+    	this.tableHex.setEditable(true);
+        this.tableSigDec.setEditable(true);
+        this.tableDec.setEditable(true);
+    	
+    	this.nameHexCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("nameRegister"));
+    	this.valueHexCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("valueRegister"));
+    	this.nameSigDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("nameRegister"));
+    	this.valueSigDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("valueRegister"));
+    	this.nameDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("nameRegister"));
+    	this.valueDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("valueRegister"));
+    	
+    	this.valueHexCol.setCellFactory(TextFieldTableCell.forTableColumn());
+    	this.valueSigDecCol.setCellFactory(TextFieldTableCell.forTableColumn());
+    	this.valueDecCol.setCellFactory(TextFieldTableCell.forTableColumn());
+    	
+    	this.valueHexCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<RegisterObjectView, String>>() {
+                @Override
+                public void handle(CellEditEvent<RegisterObjectView, String> t) {
+                	String newValue = t.getNewValue();
+                	((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
+                	String[] hex = newValue.split("x");
+                    int value = Integer.parseInt(hex[1], 16);  
+                	simulator.setRegisterValue(((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).getRegister(), value);
+                	updateRegisters();                
+                }
+            }
+        );
+    	
+    	this.valueSigDecCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<RegisterObjectView, String>>() {
+                @Override
+                public void handle(CellEditEvent<RegisterObjectView, String> t) {
+                	String newValue = t.getNewValue();
+                	((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
+                	simulator.setRegisterValue(((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).getRegister(), Integer.parseInt(newValue));
+                	updateRegisters();
+                }
+            }
+        );
+    	
+    	this.valueDecCol.setOnEditCommit(
+            new EventHandler<CellEditEvent<RegisterObjectView, String>>() {
+                @Override
+                public void handle(CellEditEvent<RegisterObjectView, String> t) {
+                	String newValue = t.getNewValue();
+                	((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
+                	simulator.setRegisterValue(((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).getRegister(), Integer.parseInt(newValue));
+                	updateRegisters();
+                }
+            }
+        );   	
+    	
+    	this.tableHex.getColumns().addAll(this.nameHexCol, this.valueHexCol);
+        this.tableSigDec.getColumns().addAll(this.nameSigDecCol, this.valueSigDecCol);
+        this.tableDec.getColumns().addAll(this.nameDecCol, this.valueDecCol);
+        
         this.mainPane = new TabPane();
         this.mainPane.setMinWidth(175);
         
@@ -62,30 +157,30 @@ public class RegistersView {
         this.dockNode.setPrefSize(300, 100);
         this.dockNode.getStylesheets().add("/resources/style.css");
         
-        this.registersHex = new ArrayList<>();
-        this.registersSigDec = new ArrayList<>();
-        this.registersDec = new ArrayList<>();
+        this.registersHex = FXCollections.observableArrayList();
+        this.registersSigDec = FXCollections.observableArrayList();
+        this.registersDec = FXCollections.observableArrayList();
         
         for (int i = 0; i < 16; i++) {
-    		String space = (i < 10) ? "  " : "";
-
-        	Text registerHex = new Text(10,20*(i+1), String.format("R%d"+ space +" : 0x%x", i,simulator.getRegisterValue(i)));
-  		   	this.registersHex.add(registerHex);
+        	String nameRegister = "R" + i;
+        	
+        	String registerHex = String.format("0x%x", simulator.getRegisterValue(i));	
+  		   	this.registersHex.add(new RegisterObjectView(i, nameRegister, registerHex));
   		   	
-		   	Text registerDec = new Text(10,20*(i+1), String.format("R%d"+ space +" : %s", i, Integer.toUnsignedString(simulator.getRegisterValue(i))));
-  		   	this.registersDec.add(registerDec);
+		   	String registerDec = String.format("%s", Integer.toUnsignedString(simulator.getRegisterValue(i)));
+  		   	this.registersDec.add(new RegisterObjectView(i, nameRegister, registerDec));
   		   	
-  		   	Text registerSigDec = new Text(10,20*(i+1), String.format("R%d"+ space +" : %d", i, simulator.getRegisterValue(i)));
-		  	this.registersSigDec.add(registerSigDec);
+  		   	String registerSigDec = String.format("%d", simulator.getRegisterValue(i));
+		  	this.registersSigDec.add(new RegisterObjectView(i, nameRegister, registerSigDec));
   		}
         
-        this.flagHex = new Text(10,20*(17), String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
-        this.flagSigDec = new Text(10,20*(17), String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
-        this.flagDec = new Text(10,20*(17), String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
+        this.flagHex = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
+        this.flagSigDec = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
+        this.flagDec = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
 
-        this.currentAddressHex = new Text(10,20*(18), String.format("[nextInstructionAdr] : 0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
-        this.currentAddressSigDec = new Text(10,20*(18), String.format("[nextInstructionAdr] : %s", Long.toString(simulator.getCpu().getCurrentAddress())));
-        this.currentAddressDec =  new Text(10,20*(18), String.format("[nextInstructionAdr] : %s", Long.toUnsignedString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressHex = new RegisterObjectView(0, "[nextInstructionAdr]", String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressSigDec = new RegisterObjectView(0, "[nextInstructionAdr]", Long.toString(simulator.getCpu().getCurrentAddress()));
+        this.currentAddressDec =  new RegisterObjectView(0, "[nextInstructionAdr]", Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
 
         this.registersHex.add(flagHex);
         this.registersSigDec.add(flagSigDec);
@@ -95,34 +190,46 @@ public class RegistersView {
         this.registersSigDec.add(currentAddressSigDec);
         this.registersDec.add(currentAddressDec);
         
-        
-        this.hexPane.getChildren().addAll(this.registersHex);
-        this.sigDecPane.getChildren().addAll(this.registersSigDec);
-        this.decPane.getChildren().addAll(this.registersDec);
+ 
+    	this.tableHex.setItems(this.registersHex);
+        this.tableSigDec.setItems(this.registersSigDec);
+        this.tableDec.setItems(this.registersDec);
         
         this.hexTab.setContent(this.hexPane);
         this.sigDecTab.setContent(this.sigDecPane);
         this.decTab.setContent(this.decPane);
+
     }
     
     public void updateRegisters(){
 
     	for (int i = 0; i < 16; i++) {
-    		String space = (i < 10) ? "  " : "";
-    		this.registersHex.get(i).setText(String.format("R%d"+ space +" : 0x%x", i,simulator.getRegisterValue(i)));
-  		   	this.registersDec.get(i).setText(String.format("R%d"+ space +" : %s", i, Integer.toUnsignedString(simulator.getRegisterValue(i))));
-  		   	this.registersSigDec.get(i).setText(String.format("R%d"+ space +" : %d", i, simulator.getRegisterValue(i)));
-  		}
+    		this.registersHex.get(i).setValueRegister(String.format("0x%x", simulator.getRegisterValue(i)));
+    		this.registersDec.get(i).setValueRegister(String.format("%s", Integer.toUnsignedString(simulator.getRegisterValue(i))));
+    		this.registersSigDec.get(i).setValueRegister(String.format("%d", simulator.getRegisterValue(i)));
+    	}
          
-    	 this.flagHex.setText(String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
-    	 this.flagDec.setText(String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
-    	 this.flagSigDec.setText(String.format("[FLAGS] : %s", simulator.getCpu().getCPSR().toString()));
+    	this.flagHex.setValueRegister(simulator.getCpu().getCPSR().toString());
+        this.flagSigDec.setValueRegister(simulator.getCpu().getCPSR().toString());
+        this.flagDec.setValueRegister(simulator.getCpu().getCPSR().toString());
 
-         this.currentAddressHex.setText(String.format("[nextInstructionAdr] : 0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
-         this.currentAddressDec.setText(String.format("[nextInstructionAdr] : %s", Long.toString(simulator.getCpu().getCurrentAddress())));
-         this.currentAddressSigDec.setText(String.format("[nextInstructionAdr] : %s", Long.toUnsignedString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressHex.setValueRegister(String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressSigDec.setValueRegister(Long.toString(simulator.getCpu().getCurrentAddress()));
+        this.currentAddressDec.setValueRegister(Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
+    
+        refreshColumnData();
     }
 
+    public void refreshColumnData() {
+    	this.tableHex.getColumns().get(1).setVisible(false);
+        this.tableSigDec.getColumns().get(1).setVisible(false);
+        this.tableDec.getColumns().get(1).setVisible(false);
+        
+        this.tableHex.getColumns().get(1).setVisible(true);
+        this.tableSigDec.getColumns().get(1).setVisible(true);
+        this.tableDec.getColumns().get(1).setVisible(true);  
+    }
+    
     DockNode getNode(){
         return dockNode;
     }
