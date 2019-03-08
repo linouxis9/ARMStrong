@@ -1,5 +1,7 @@
 package projetarm_v2.simulator.ui.javafx;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -36,7 +38,6 @@ public class RegistersView {
     
     private RegisterObjectView flagHex;
     private RegisterObjectView flagSigDec;
-    
     private RegisterObjectView flagDec;
 	private RegisterObjectView currentAddressHex;
 	private RegisterObjectView currentAddressSigDec;
@@ -70,6 +71,10 @@ public class RegistersView {
         this.tableSigDec = new TableView<RegisterObjectView>();
         this.tableDec = new TableView<RegisterObjectView>();
         
+        this.tableHex.getStyleClass().add("registersTable");
+        this.tableSigDec.getStyleClass().add("registersTable");
+        this.tableDec.getStyleClass().add("registersTable");
+        
         this.hexPane.getChildren().add(this.tableHex);
         this.sigDecPane.getChildren().add(this.tableSigDec);
         this.decPane.getChildren().add(this.tableDec);
@@ -80,6 +85,66 @@ public class RegistersView {
     	this.valueSigDecCol = new TableColumn<RegisterObjectView, String>();
     	this.nameDecCol = new TableColumn<RegisterObjectView, String>();
     	this.valueDecCol = new TableColumn<RegisterObjectView, String>(); 
+    	
+    	this.nameHexCol.setSortable(false);
+    	this.valueHexCol.setSortable(false);
+    	this.nameSigDecCol.setSortable(false);
+    	this.valueSigDecCol.setSortable(false);
+    	this.nameDecCol.setSortable(false);
+    	this.valueDecCol.setSortable(false);	
+    	
+    	this.nameHexCol.prefWidthProperty().bind(this.hexPane.widthProperty().multiply(0.458));
+    	this.valueHexCol.prefWidthProperty().bind(this.hexPane.widthProperty().multiply(0.5));
+    	this.nameSigDecCol.prefWidthProperty().bind(this.sigDecPane.widthProperty().multiply(0.458));
+    	this.valueSigDecCol.prefWidthProperty().bind(this.sigDecPane.widthProperty().multiply(0.5));
+    	this.nameDecCol.prefWidthProperty().bind(this.decPane.widthProperty().multiply(0.458));
+    	this.valueDecCol.prefWidthProperty().bind(this.decPane.widthProperty().multiply(0.5));    	
+    	
+    	this.tableHex.prefHeightProperty().bind(this.hexPane.heightProperty());
+    	this.tableHex.prefWidthProperty().bind(this.hexPane.widthProperty());
+    	this.tableSigDec.prefHeightProperty().bind(this.sigDecPane.heightProperty());
+    	this.tableSigDec.prefWidthProperty().bind(this.sigDecPane.widthProperty());
+    	this.tableDec.prefHeightProperty().bind(this.decPane.heightProperty());
+    	this.tableDec.prefWidthProperty().bind(this.decPane.widthProperty());
+    	
+    	this.tableHex.widthProperty().addListener(new ChangeListener<Number>() {
+    	    @Override
+    	    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
+    	        Pane header = (Pane) tableHex.lookup("TableHeaderRow");
+    	        if (header.isVisible()){
+    	            header.setMaxHeight(0);
+    	            header.setMinHeight(0);
+    	            header.setPrefHeight(0);
+    	            header.setVisible(false);
+    	        }
+    	    }
+    	});
+    	
+    	this.tableSigDec.widthProperty().addListener(new ChangeListener<Number>() {
+    	    @Override
+    	    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
+    	        Pane header = (Pane) tableSigDec.lookup("TableHeaderRow");
+    	        if (header.isVisible()){
+    	            header.setMaxHeight(0);
+    	            header.setMinHeight(0);
+    	            header.setPrefHeight(0);
+    	            header.setVisible(false);
+    	        }
+    	    }
+    	});
+    	
+    	this.tableDec.widthProperty().addListener(new ChangeListener<Number>() {
+    	    @Override
+    	    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
+    	        Pane header = (Pane) tableDec.lookup("TableHeaderRow");
+    	        if (header.isVisible()){
+    	            header.setMaxHeight(0);
+    	            header.setMinHeight(0);
+    	            header.setPrefHeight(0);
+    	            header.setVisible(false);
+    	        }
+    	    }
+    	});
     	
     	this.tableHex.setEditable(true);
         this.tableSigDec.setEditable(true);
@@ -164,6 +229,17 @@ public class RegistersView {
         for (int i = 0; i < 16; i++) {
         	String nameRegister = "R" + i;
         	
+        	switch(i){
+        		case 13:
+        			nameRegister += " (SP)";
+        			break;
+        		case 14:
+        			nameRegister += " (LR)";
+        			break;
+        		case 15:
+        			nameRegister += " (PC)";
+        	}
+        	
         	String registerHex = String.format("0x%x", simulator.getRegisterValue(i));	
   		   	this.registersHex.add(new RegisterObjectView(i, nameRegister, registerHex));
   		   	
@@ -178,19 +254,19 @@ public class RegistersView {
         this.flagSigDec = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
         this.flagDec = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
 
-        this.currentAddressHex = new RegisterObjectView(0, "[nextInstructionAdr]", String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
-        this.currentAddressSigDec = new RegisterObjectView(0, "[nextInstructionAdr]", Long.toString(simulator.getCpu().getCurrentAddress()));
-        this.currentAddressDec =  new RegisterObjectView(0, "[nextInstructionAdr]", Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
-
         this.registersHex.add(flagHex);
         this.registersSigDec.add(flagSigDec);
-        this.registersDec.add(flagDec);
+        this.registersDec.add(flagDec);       
+        
+        
+        this.currentAddressHex = new RegisterObjectView(0, "nextAddress", String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressSigDec = new RegisterObjectView(0, "nextAddress", Long.toString(simulator.getCpu().getCurrentAddress()));
+        this.currentAddressDec =  new RegisterObjectView(0, "nextAddress", Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
         
         this.registersHex.add(currentAddressHex);
         this.registersSigDec.add(currentAddressSigDec);
         this.registersDec.add(currentAddressDec);
         
- 
     	this.tableHex.setItems(this.registersHex);
         this.tableSigDec.setItems(this.registersSigDec);
         this.tableDec.setItems(this.registersDec);
@@ -212,11 +288,11 @@ public class RegistersView {
     	this.flagHex.setValueRegister(simulator.getCpu().getCPSR().toString());
         this.flagSigDec.setValueRegister(simulator.getCpu().getCPSR().toString());
         this.flagDec.setValueRegister(simulator.getCpu().getCPSR().toString());
-
+        
         this.currentAddressHex.setValueRegister(String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
         this.currentAddressSigDec.setValueRegister(Long.toString(simulator.getCpu().getCurrentAddress()));
         this.currentAddressDec.setValueRegister(Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
-    
+
         refreshColumnData();
     }
 

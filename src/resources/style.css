@@ -93,7 +93,15 @@
 }
 
 .tab-pane > .tab-header-area > .tab-header-background {
-    -fx-background-color: #636e72;
+    -fx-background-color:transparent;
+}
+
+.tab-header-area{
+    -fx-padding: 0;
+}
+
+.registersTable .table-row-cell {
+  -fx-cell-size: 23px;
 }
 
 .tab{
