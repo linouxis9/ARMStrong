@@ -21,7 +21,7 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
 	}
 
 	@Override
-    public LineRam get(int i) {
+    public NewLineRam get(int i) {
 		return new NewLineRam(ram,offset+i*this.showType.toOffset()*getColumns(),showType,outputType);
     }
 
@@ -39,19 +39,19 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
     }
 
 	@Override
-	protected void doAdd(int index, LineRam element) {
+	protected void doAdd(int index, NewLineRam element) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	protected LineRam doSet(int index, LineRam element) {
+	protected NewLineRam doSet(int index, NewLineRam element) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected LineRam doRemove(int index) {
+	protected NewLineRam doRemove(int index) {
 		// TODO Auto-generated method stub
 		return null;
 	}
