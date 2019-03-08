@@ -325,8 +325,8 @@ public class Gui extends Application {
 					simulator.setConsoleInput(this.consoleView.getTextField().getText());
 					System.out.println("[INFO] Input [" + this.consoleView.getTextField().getText() + "] added to Input queue");
 				} else {
-					System.out.println("[INFO] Input discarded (The CPU was not waiting for INPUT)");
-					System.out.println("[INFO] Maybe you wanted to use CpuRoutineGetString @ 0x" + Long.toHexString(CpuConsoleGetString.ROUTINE_ADDRESS) + " in your assembly?");
+					System.out.println("[INFO] Input discarded (The CPU was not waiting for INPUT and you aren't in Interpreter mode)");
+					System.out.println("[INFO] Maybe you wanted to use CpuRoutineGetStringFromConsole @ 0x" + Long.toHexString(CpuConsoleGetString.ROUTINE_ADDRESS) + " in your assembly?");
 				}
 				this.consoleView.getTextField().clear();
 			}

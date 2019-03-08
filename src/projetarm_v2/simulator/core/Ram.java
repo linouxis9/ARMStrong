@@ -32,7 +32,7 @@ public class Ram {
 		long block = myAddress / CHUNK_SIZE;
 		RamChunk chunk = this.memory.get(block);
 
-		if (chunk == null) {
+		if (chunk == null || myAddress < 0) {
 			return randomPattern;
 		}
 
@@ -151,10 +151,7 @@ public class Ram {
 		}
 
 		public void hook(Unicorn u, long address, int size, long value, Object user_data) {
-		    for (int i = size-1; i >= 0; i--) {
-		        this.ram.setByte(address+i,(byte)(value & 0xFF));
-		        value >>= 8;
-		    }
+		    this.ram.setValue(address, (int)value);
 		}
 	}
 }
