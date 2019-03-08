@@ -25,15 +25,10 @@ public class RamView {
     private Image dockImage;
 
     private ScrollBar memoryScrollBar;
-    private TableView<LineRam> tableView;
-    
-    private TableColumn<LineRam,String> a;
-    private TableColumn<LineRam,String> c;
-    private TableColumn<LineRam,String> b;
-    private TableColumn<LineRam,String> d;
+    private TableView<NewLineRam> tableView;
     
     private int firstDisplayedAddress = 0x1000;
-
+    
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
     
     public RamView(ArmSimulator simulator) {
@@ -50,7 +45,7 @@ public class RamView {
         mainPane.setStyle("-fx-line-spacing: -0.4em;");
         this.dockNode.getStylesheets().add("/resources/style.css");
 
-        this.tableView = (TableView<LineRam>) mainPane.lookup("#tableView");
+        this.tableView = (TableView<NewLineRam>) mainPane.lookup("#tableView");
         
         UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter(simulator.getRam(), this);
         UneSuperImplemFournieParValentinLeBg.setOffset(this.firstDisplayedAddress);
@@ -59,7 +54,7 @@ public class RamView {
         this.tableView.setEditable(true);
         this.tableView.setSortPolicy(null);
         this.tableView.setOnKeyPressed(event -> {
-            TablePosition<LineRam, ?> pos = this.tableView.getFocusModel().getFocusedCell() ;
+            TablePosition<NewLineRam, ?> pos = this.tableView.getFocusModel().getFocusedCell() ;
             if (pos != null && (event.getCode().isDigitKey() || event.getCode().isLetterKey())) {
                 this.tableView.edit(pos.getRow(), pos.getTableColumn());
             }
@@ -68,32 +63,24 @@ public class RamView {
         // single cell selection mode
         tableView.getSelectionModel().setCellSelectionEnabled(true);
 
-        a = new TableColumn<>("a");
-        a.setCellFactory(TextFieldTableCell.forTableColumn());
-        a.setCellValueFactory(
-                new PropertyValueFactory<>("a"));
- 
-        b = new TableColumn<>("b");
-        b.setCellFactory(TextFieldTableCell.forTableColumn());
-        b.setCellValueFactory(
-                new PropertyValueFactory<>("b"));
- 
-        c = new TableColumn<>("c");
-        c.setCellFactory(TextFieldTableCell.forTableColumn());
-        c.setCellValueFactory(
-                new PropertyValueFactory<>("c"));
-
-        d = new TableColumn<>("d");
-        d.setCellFactory(TextFieldTableCell.forTableColumn());
-        d.setCellValueFactory(
-                new PropertyValueFactory<>("d"));
-
+        TableColumn<NewLineRam,String> line = new TableColumn<>("Address");
+        line.setCellFactory(TextFieldTableCell.forTableColumn());
+        line.setCellValueFactory(
+                new PropertyValueFactory<>("line"));
+        
         this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
-        a.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
-        b.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
-        c.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
-        d.setMaxWidth( 1f * Integer.MAX_VALUE * 25 );
-        this.tableView.getColumns().addAll(a, b, c, d);
+        line.setMaxWidth( 1f * Integer.MAX_VALUE * 12 );
+        this.tableView.getColumns().add(line);
+        
+        for (int i = 0; i < UneSuperImplemFournieParValentinLeBg.getColumns(); i++) {
+	        TableColumn<NewLineRam,String> a = new TableColumn<>();
+	        a.setCellFactory(TextFieldTableCell.forTableColumn());
+	        a.setCellValueFactory(
+	                new PropertyValueFactory<>(Character.toString('a'+i)));
+	        a.setMaxWidth( 1f * Integer.MAX_VALUE * 11 );
+	        this.tableView.getColumns().add(a);
+        }
+
                 
         
         loadButonsEvents();
@@ -102,35 +89,18 @@ public class RamView {
     }
 
     public void refresh() {
-    	int Aaddress;
-    	int Baddress;
-    	int Caddress;
-    	int Daddress;
+    	for (int i = this.tableView.getColumns().size()+1; i> UneSuperImplemFournieParValentinLeBg.getColumns()+2; i--) {
+	        this.tableView.getColumns().remove(i-2);
+        }
     	
-    	switch(this.UneSuperImplemFournieParValentinLeBg.getShowType()) {
-    	default:
-    	case BYTE:
-    		Aaddress = this.firstDisplayedAddress;
-    		Baddress = this.firstDisplayedAddress+1;
-    		Caddress = this.firstDisplayedAddress+2;
-    		Daddress = this.firstDisplayedAddress+3;
-    		break;
-    	case HALFWORD:
-    		Aaddress = this.firstDisplayedAddress;
-    		Baddress = this.firstDisplayedAddress+2;
-    		Caddress = this.firstDisplayedAddress+4;
-    		Daddress = this.firstDisplayedAddress+6;
-    		break;
-    	case WORD:
-    		Aaddress = this.firstDisplayedAddress;
-    		Baddress = this.firstDisplayedAddress+4;
-    		Caddress = this.firstDisplayedAddress+8;
-    		Daddress = this.firstDisplayedAddress+12;
-    	}
-    	a.setText("0x" + Integer.toHexString(Aaddress));
-    	b.setText("0x" + Integer.toHexString(Baddress));
-    	c.setText("0x" + Integer.toHexString(Caddress));
-    	d.setText("0x" + Integer.toHexString(Daddress));
+        for (int i = this.tableView.getColumns().size(); i <= UneSuperImplemFournieParValentinLeBg.getColumns(); i++) {
+	        TableColumn<NewLineRam,String> a = new TableColumn<>();
+	        a.setCellFactory(TextFieldTableCell.forTableColumn());
+	        a.setCellValueFactory(
+	                new PropertyValueFactory<>(Character.toString('a'+i-1)));
+	        a.setMaxWidth( 1f * Integer.MAX_VALUE * 11 );
+	        this.tableView.getColumns().add(a);
+        }
     	
     	this.tableView.refresh();
     }
@@ -234,7 +204,7 @@ public class RamView {
         });
     }
 
-    public TableView<LineRam> getTableView() {
+    public TableView<NewLineRam> getTableView() {
     	return this.tableView;
     }
     

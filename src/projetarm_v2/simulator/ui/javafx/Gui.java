@@ -423,11 +423,6 @@ public class Gui extends Application {
 				registerView.updateRegisters();
 			}
 			
-			for (RamView ramView : this.ramViews) {
-				ramView.refresh();
-			}
-			
-			
 			if (!this.isInterpreterMode)
 				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
@@ -441,7 +436,13 @@ public class Gui extends Application {
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
+				Platform.runLater(() -> {
+					for (RamView ramView : this.ramViews) {
+						ramView.refresh();
+					}
+				});
 
+				
 				if (!runningFlag.get()) {
 					continue;
 				}
