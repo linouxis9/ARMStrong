@@ -30,6 +30,10 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
 		
 		if (kek > 8) { kek = 8; }
 		
+		if (this.showType == ShowType.WORD) {
+			kek -= 2;
+		}
+		
 		return kek;
 	}
 	

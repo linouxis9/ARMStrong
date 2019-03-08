@@ -343,8 +343,8 @@ public class Gui extends Application {
 			if (new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN).match(ke)) {
 				this.armMenuBar.getOpenFile().fire();
 			}
-			if (new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN).match(ke)) {
-				//preferences
+			if (new KeyCodeCombination(KeyCode.R, KeyCombination.CONTROL_DOWN).match(ke)) {
+				this.armMenuBar.getReloadMenuItem().fire();
 			}
 			if (new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN).match(ke)) {
 				this.armMenuBar.getNeW().fire();
@@ -364,7 +364,7 @@ public class Gui extends Application {
 	private void openProgram() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Program");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong Files (*.ARMS)", "*.ARMS"), new FileChooser.ExtensionFilter("Assembly Files (*.S)", "*.S"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong, Assembly Files (*.ARMS, *.S)", "*.ARMS", "*.S"));
 
 		File chosenFile = fileChooser.showOpenDialog(this.stage);
 		if (chosenFile != null) {
@@ -423,6 +423,10 @@ public class Gui extends Application {
 				registerView.updateRegisters();
 			}
 			
+			for (RamView ramView : this.ramViews) {
+				ramView.refresh();
+			}
+			
 			if (!this.isInterpreterMode)
 				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
@@ -436,12 +440,6 @@ public class Gui extends Application {
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
-				Platform.runLater(() -> {
-					for (RamView ramView : this.ramViews) {
-						ramView.refresh();
-					}
-				});
-
 				
 				if (!runningFlag.get()) {
 					continue;

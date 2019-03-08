@@ -28,11 +28,23 @@ public class ArmToolBar {
         this.simulator = armSimulator;
 
         this.switchButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm())));
+        this.switchButton.setTooltip(new Tooltip("Switch between editor and simulation mode [CTRL-E]"));
+        
         this.runButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/run.png").toExternalForm())));
+        this.runButton.setTooltip(new Tooltip("Run all at once [F5]"));
+
         this.stepByStepButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/runByStep.png").toExternalForm())));
+        this.stepByStepButton.setTooltip(new Tooltip("Run a single instruction [F11]"));
+        
         this.reloadButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
+        this.reloadButton.setTooltip(new Tooltip("Reset CPU [CTRL-R]"));
+   
         this.stopButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/stop.png").toExternalForm())));
+        this.stopButton.setTooltip(new Tooltip("Stop simulation"));
+
+        
         this.toolBar = new ToolBar(switchButton, new Separator(), runButton, stepByStepButton, reloadButton, stopButton);
+        
         this.switchButton.getStyleClass().add("buttonToolBar");
         this.runButton.getStyleClass().add("buttonToolBar");
         this.stepByStepButton.getStyleClass().add("buttonToolBar");

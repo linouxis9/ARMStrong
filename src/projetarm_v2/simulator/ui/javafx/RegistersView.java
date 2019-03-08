@@ -18,6 +18,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
+import java.text.DecimalFormat;
+
 import org.dockfx.DockNode;
 
 public class RegistersView {
@@ -54,10 +56,14 @@ public class RegistersView {
 	private TableColumn<RegisterObjectView, String> nameDecCol;
 	private TableColumn<RegisterObjectView, String> valueDecCol;
 	
+	private DecimalFormat fmt;
+	
     @SuppressWarnings("unchecked")
 	public RegistersView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
     	this.simulator = simulator;
+    	
+    	fmt = new DecimalFormat("+#;-#");
     	
         this.hexPane = new Pane();
         this.sigDecPane = new Pane();
@@ -240,13 +246,13 @@ public class RegistersView {
         			nameRegister += " (PC)";
         	}
         	
-        	String registerHex = String.format("0x%x", simulator.getRegisterValue(i));	
+        	String registerHex = String.format("0x%08x", simulator.getRegisterValue(i));	
   		   	this.registersHex.add(new RegisterObjectView(i, nameRegister, registerHex));
   		   	
 		   	String registerDec = String.format("%s", Integer.toUnsignedString(simulator.getRegisterValue(i)));
   		   	this.registersDec.add(new RegisterObjectView(i, nameRegister, registerDec));
   		   	
-  		   	String registerSigDec = String.format("%d", simulator.getRegisterValue(i));
+  		   	String registerSigDec = fmt.format(simulator.getRegisterValue(i));
 		  	this.registersSigDec.add(new RegisterObjectView(i, nameRegister, registerSigDec));
   		}
         
@@ -280,9 +286,9 @@ public class RegistersView {
     public void updateRegisters(){
 
     	for (int i = 0; i < 16; i++) {
-    		this.registersHex.get(i).setValueRegister(String.format("0x%x", simulator.getRegisterValue(i)));
+    		this.registersHex.get(i).setValueRegister(String.format("0x%08x", simulator.getRegisterValue(i)));
     		this.registersDec.get(i).setValueRegister(String.format("%s", Integer.toUnsignedString(simulator.getRegisterValue(i))));
-    		this.registersSigDec.get(i).setValueRegister(String.format("%d", simulator.getRegisterValue(i)));
+    		this.registersSigDec.get(i).setValueRegister(fmt.format(simulator.getRegisterValue(i)));
     	}
          
     	this.flagHex.setValueRegister(simulator.getCpu().getCPSR().toString());

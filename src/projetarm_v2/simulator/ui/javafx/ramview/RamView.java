@@ -88,6 +88,9 @@ public class RamView {
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
                 // Get the table header
+            	
+            	refresh();
+            	
                 Pane header = (Pane)tableView.lookup("TableHeaderRow");
                 if(header!=null && header.isVisible()) {
                   header.setMaxHeight(0);
