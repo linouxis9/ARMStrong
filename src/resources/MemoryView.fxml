@@ -26,4 +26,5 @@
               AnchorPane.topAnchor="89.0"/>
    <Button fx:id="buttonHex" layoutX="275.0" layoutY="50.0" mnemonicParsing="false" text="Hex"/>
    <Button fx:id="buttonDec" layoutX="328.0" layoutY="50.0" mnemonicParsing="false" text="Dec"/>
+   <Button fx:id="buttonRdm" layoutX="381.0" layoutY="50.0" mnemonicParsing="false" text="Rdm"/>
 </AnchorPane>

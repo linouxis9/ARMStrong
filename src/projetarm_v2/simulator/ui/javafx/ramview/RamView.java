@@ -1,5 +1,6 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -11,6 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
@@ -81,7 +84,25 @@ public class RamView {
 	        this.tableView.getColumns().add(a);
         }
 
-                
+        tableView.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
+                // Get the table header
+                Pane header = (Pane)tableView.lookup("TableHeaderRow");
+                if(header!=null && header.isVisible()) {
+                  header.setMaxHeight(0);
+                  header.setMinHeight(0);
+                  header.setPrefHeight(0);
+                  header.setVisible(false);
+                  header.setManaged(false);
+                }
+            }
+        });
+    	Button buttonRdm = (Button) mainPane.lookup("#buttonRdm");
+    	buttonRdm.setOnAction(ActionEvent -> {
+            simulator.setRandomPattern();
+            this.refresh();
+    	});
         
         loadButonsEvents();
         
@@ -152,6 +173,7 @@ public class RamView {
             this.refresh();
     	});
 
+    	
         Button buttonHex = (Button) mainPane.lookup("#buttonHex");
         Button buttonDec = (Button) mainPane.lookup("#buttonDec");
 

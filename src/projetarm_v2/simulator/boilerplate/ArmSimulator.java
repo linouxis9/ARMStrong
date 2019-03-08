@@ -3,6 +3,7 @@ package projetarm_v2.simulator.boilerplate;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,6 +60,8 @@ public class ArmSimulator {
 
 	private Save save;
 	
+	private Random random;
+	
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
 	 * program, asmToLine, assembler)
@@ -70,6 +73,8 @@ public class ArmSimulator {
 		
 		this.assembler = Assembler.getInstance();
 		this.asmToLine = new HashMap<>();
+		
+		this.random = new Random();
 		
 		this.resetState();
 	}
@@ -151,6 +156,10 @@ public class ArmSimulator {
 		}
 	}
 
+	public void setRandomPattern() {
+		this.ram.setRandomPattern((byte)random.nextInt());
+	}
+	
 	/**
 	 * Returns the register value corresponding to the given number
 	 */

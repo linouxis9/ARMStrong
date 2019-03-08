@@ -3,6 +3,7 @@ package projetarm_v2.simulator.ui.javafx;
 import org.dockfx.DockNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -23,6 +24,9 @@ public class LedView {
     AnchorPane anchorPane;
     VBox ledContainer;
     
+    Image ledOff;
+    Image ledOn;
+    
     private ArmSimulator simulator;
     
     public LedView(ArmSimulator simulator){
@@ -31,8 +35,8 @@ public class LedView {
         
         this.mainPane = new ScrollPane();
         
-        Image ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
-        Image ledOn = new Image(getClass().getResource("/resources/ledOn.png").toExternalForm());
+        ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
+        ledOn = new Image(getClass().getResource("/resources/ledOn.png").toExternalForm());
         
         
         
@@ -46,7 +50,7 @@ public class LedView {
             	
                 AnchorPane newLedAddress = new AnchorPane();
                 ImageView newLedImage = new ImageView();
-                if(led.isOn() == true) {
+                if(led.isOn()) {
                 	newLedImage.setImage(ledOn);
                 }else {
                 	newLedImage.setImage(ledOff);
@@ -55,7 +59,7 @@ public class LedView {
                 newLedImage.setLayoutX(0);
                 newLedImage.setLayoutY(0);
                 Text newAddress = new Text();
-                newAddress.setText("Address : 0x" + led.getPortAddress() + " Bit N°" + led.shift);
+                newAddress.setText("Address : 0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
                 newAddress.setLayoutX(150);
                 newAddress.setLayoutY(55);
                 
@@ -99,7 +103,17 @@ public class LedView {
     }
     
     public void refresh() {
-    	return;
+    	for (Node _pane : ledContainer.getChildren()) {
+    		AnchorPane pane = (AnchorPane)_pane;
+    		
+    		ImageView ledImage = (ImageView)pane.getChildren().get(0);
+    		
+           /* if (led.isOn()) {
+            	ledImage.setImage(ledOn);
+            }else {
+            	ledImage.setImage(ledOff);
+            } Comment on fait pour mettre à jour Hugo si tu gardes pas l'objet de la led quelque part pour connaître son état ? */
+    	}
     }
     
     public DockNode getNode(){

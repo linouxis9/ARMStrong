@@ -14,6 +14,8 @@ public class Ram {
 	public static final int DEFAULT_RAM_SIZE = 2 * 1024 * 1024; // 2 MB
 	public final Map<Long, RamChunk> memory;
 
+	public byte randomPattern = 0;
+	
 	public Ram() {
 		this.memory = new HashMap<>();
 	}
@@ -22,12 +24,16 @@ public class Ram {
 		this.memory.clear();
 	}
 	
+	public void setRandomPattern(byte pattern) {
+		this.randomPattern = pattern;
+	}
+	
 	public byte getByte(long myAddress) {
 		long block = myAddress / CHUNK_SIZE;
 		RamChunk chunk = this.memory.get(block);
 
 		if (chunk == null) {
-			return 0;
+			return randomPattern;
 		}
 
 		return chunk.getByte((int) (myAddress % CHUNK_SIZE));
