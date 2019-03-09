@@ -324,6 +324,23 @@ public class ArmSimulator {
 	public boolean getQ() {
 		return this.cpu.getCPSR().q();
 	}
+	
+	
+	public void setN(boolean n) {
+		this.cpu.getCPSR().setN(n);
+	}
+
+	public void setZ(boolean z) {
+		this.cpu.getCPSR().setZ(z);
+	}
+
+	public void setC(boolean c) {
+		this.cpu.getCPSR().setC(c);
+	}
+	
+	public void setV(boolean v) {
+		this.cpu.getCPSR().setV(v);
+	}
 
 	public PORTManager getPortManager() {
 		return this.portManager;

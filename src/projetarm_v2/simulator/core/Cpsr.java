@@ -223,7 +223,7 @@ public class Cpsr extends UnicornRegister {
 	}
 
 	public String toString() {
-		return (this.n() ? "[N" : "[n") + (this.z() ? "Z" : "z") + (this.c() ? "C" : "c") + (this.v() ? "V]" : "v]");
+		return (this.n() ? "N" : "n") + (this.z() ? "Z" : "z") + (this.c() ? "C" : "c") + (this.v() ? "V" : "v");
 	}
 	
 	private static int booleanToInt(boolean bool) {

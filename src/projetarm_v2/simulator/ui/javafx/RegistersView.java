@@ -172,12 +172,21 @@ public class RegistersView {
                 @Override
                 public void handle(CellEditEvent<RegisterObjectView, String> t) {
                 	String newValue = t.getNewValue();
+                	int registerValue = ((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).getRegister();
+                	
+                	if(registerValue == 17) {
+                		editFlags(newValue);
+                	}else{
+                		if(newValue.contains("x")){
+                			String[] hex = newValue.split("x");
+                            int value = Integer.parseInt(hex[1], 16);  
+                        	simulator.setRegisterValue(registerValue, value);
+                		}
+                	}
+                	
                 	((RegisterObjectView) t.getTableView().getItems()
                     		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
-                	String[] hex = newValue.split("x");
-                    int value = Integer.parseInt(hex[1], 16);  
-                	simulator.setRegisterValue(((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).getRegister(), value);
                 	updateRegisters();                
                 }
             }
@@ -188,11 +197,18 @@ public class RegistersView {
                 @Override
                 public void handle(CellEditEvent<RegisterObjectView, String> t) {
                 	String newValue = t.getNewValue();
+                	int registerValue = ((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).getRegister();
+                	if(registerValue == 17) {
+                		editFlags(newValue);
+                	}else{
+                		if(isNumeric(newValue)) {
+                			simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
+                		}
+                	}
                 	((RegisterObjectView) t.getTableView().getItems()
                     		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
-                	simulator.setRegisterValue(((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).getRegister(), Integer.parseInt(newValue));
-                	updateRegisters();
+                	updateRegisters();    
                 }
             }
         );
@@ -202,11 +218,18 @@ public class RegistersView {
                 @Override
                 public void handle(CellEditEvent<RegisterObjectView, String> t) {
                 	String newValue = t.getNewValue();
+                	int registerValue = ((RegisterObjectView) t.getTableView().getItems()
+                    		.get(t.getTablePosition().getRow())).getRegister();
+                	if(registerValue == 17) {
+                		editFlags(newValue);
+                	}else{
+                		if(isNumeric(newValue)) {
+                			simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
+                		}
+                	}
                 	((RegisterObjectView) t.getTableView().getItems()
                     		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
-                	simulator.setRegisterValue(((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).getRegister(), Integer.parseInt(newValue));
-                	updateRegisters();
+                	updateRegisters();  
                 }
             }
         );   	
@@ -256,18 +279,18 @@ public class RegistersView {
 		  	this.registersSigDec.add(new RegisterObjectView(i, nameRegister, registerSigDec));
   		}
         
-        this.flagHex = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
-        this.flagSigDec = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
-        this.flagDec = new RegisterObjectView(0, "[FLAGS]",simulator.getCpu().getCPSR().toString());
+        this.flagHex = new RegisterObjectView(17, "[FLAGS]",simulator.getCpu().getCPSR().toString());
+        this.flagSigDec = new RegisterObjectView(17, "[FLAGS]",simulator.getCpu().getCPSR().toString());
+        this.flagDec = new RegisterObjectView(17, "[FLAGS]",simulator.getCpu().getCPSR().toString());
 
         this.registersHex.add(flagHex);
         this.registersSigDec.add(flagSigDec);
         this.registersDec.add(flagDec);       
         
         
-        this.currentAddressHex = new RegisterObjectView(0, "nextAddress", String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
-        this.currentAddressSigDec = new RegisterObjectView(0, "nextAddress", Long.toString(simulator.getCpu().getCurrentAddress()));
-        this.currentAddressDec =  new RegisterObjectView(0, "nextAddress", Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
+        this.currentAddressHex = new RegisterObjectView(18, "nextAddress", String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
+        this.currentAddressSigDec = new RegisterObjectView(18, "nextAddress", Long.toString(simulator.getCpu().getCurrentAddress()));
+        this.currentAddressDec =  new RegisterObjectView(18, "nextAddress", Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
         
         this.registersHex.add(currentAddressHex);
         this.registersSigDec.add(currentAddressSigDec);
@@ -282,6 +305,39 @@ public class RegistersView {
         this.decTab.setContent(this.decPane);
 
     }
+    
+    private void editFlags(String newValue) {
+		char[] myCaracters = newValue.toCharArray();
+		
+		for(char c: myCaracters) {
+			System.out.print(c);
+			switch(c) {
+				case 'N':
+					this.simulator.setN(true);
+					break;
+				case 'n':
+					this.simulator.setN(false);
+					break;
+				case 'Z':
+					this.simulator.setZ(true);
+					break;
+				case 'z':
+					this.simulator.setZ(false);
+					break;
+				case 'C':
+					this.simulator.setC(true);
+					break;
+				case 'c':
+					this.simulator.setC(false);
+					break;
+				case 'V':
+					this.simulator.setV(true);
+					break;
+				case 'v':
+					this.simulator.setV(false);		
+			}
+		}
+	}
     
     public void updateRegisters(){
 
@@ -311,6 +367,15 @@ public class RegistersView {
         this.tableSigDec.getColumns().get(1).setVisible(true);
         this.tableDec.getColumns().get(1).setVisible(true);  
     }
+    
+    private boolean isNumeric(String str) { 
+	  try {  
+	    Double.parseDouble(str);  
+	    return true;
+	  } catch(NumberFormatException e){  
+	    return false;  
+	  }  
+	}
     
     DockNode getNode(){
         return dockNode;
