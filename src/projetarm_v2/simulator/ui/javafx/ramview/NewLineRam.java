@@ -31,7 +31,7 @@ public class NewLineRam {
 			case NORMAL:
 				return Integer.toString(a2);
 			case HEX:
-				return Integer.toHexString(a2);
+				return String.format("0x%x",a2);
 		}
 	}
 

@@ -64,11 +64,9 @@ public class RamView {
 
         this.tableView.setSortPolicy(null);
 
-        // single cell selection mode
-        //tableView.getSelectionModel().setCellSelectionEnabled(true);
+        tableView.getSelectionModel().setCellSelectionEnabled(true);
 
         TableColumn<NewLineRam,String> line = new TableColumn<>("Address");
-        line.setCellFactory(TextFieldTableCell.forTableColumn());
         line.setCellValueFactory(new PropertyValueFactory<>("line"));
         
         this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
@@ -77,7 +75,7 @@ public class RamView {
 
         for (int i = 0; i < UneSuperImplemFournieParValentinLeBg.getColumns(); i++) { //TODO: Le code dans ce for ne s'execute jamais, ou de maniere random getColumns() retourne 0 les premeires fois parce que ramView.getTableView().getWidth() retourne 0 au debut
 	        TableColumn<NewLineRam,String> a = new TableColumn<>();
-	        a.setCellFactory(TextFieldTableCell.forTableColumn());
+	        a.setCellFactory(TextFieldTableCellFixed.forTableColumn());
 	        a.setCellValueFactory(new PropertyValueFactory<>(Character.toString('a'+i)));
 	        a.setMaxWidth( 1f * Integer.MAX_VALUE * 11 );
 
@@ -116,7 +114,7 @@ public class RamView {
     	
         for (int i = this.tableView.getColumns().size(); i <= UneSuperImplemFournieParValentinLeBg.getColumns(); i++) {
 	        TableColumn<NewLineRam,String> a = new TableColumn<>();
-	        a.setCellFactory(TextFieldTableCell.forTableColumn());
+	        a.setCellFactory(TextFieldTableCellFixed.forTableColumn());
 	        a.setCellValueFactory(
 	                new PropertyValueFactory<>(Character.toString('a'+i-1)));
 	        a.setMaxWidth( 1f * Integer.MAX_VALUE * 11 );

@@ -29,8 +29,6 @@ public class Preprocessor {
 			assembly = assembly.replaceAll(matcher.group(1), escapeDigit(matcher.group(1)));
 		}
 		
-		System.out.println(assembly);
-		
 		return assembly.replaceAll("\r?\n",";");
 	}
 

@@ -104,6 +104,6 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
 			case WORD:
 				ram.setValue(address, newVal);
 		}
-		System.out.println(newVal + " was written at address " + Integer.toHexString(address));
+		System.out.println("[INFO] " + newVal + " was written at address 0x" + Integer.toHexString(address));
     }
 }
