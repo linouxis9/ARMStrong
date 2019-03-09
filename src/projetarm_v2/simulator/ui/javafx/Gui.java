@@ -114,7 +114,7 @@ public class Gui extends Application {
 
 		//primaryStage.show(); // render to avoid node.lookup() to fail
 
-		this.scene = new Scene(vbox, 800, 500);
+		this.scene = new Scene(vbox, 1000, 1000);
 		primaryStage.setScene(this.scene);
 		primaryStage.sizeToScene();
 
@@ -128,9 +128,7 @@ public class Gui extends Application {
 		
 		primaryStage.show();
 		
-		primaryStage.setOnCloseRequest((WindowEvent event) -> {
-            	System.exit(0);
-        });
+		primaryStage.setOnCloseRequest((WindowEvent event) -> System.exit(0));
 
 
 		// initialize the default styles for the dock pane and undocked nodes using the
@@ -166,9 +164,7 @@ public class Gui extends Application {
 		});
 		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")) {
-				warningPopup("All unsaved work will be lost", eventHandler -> {
-					openProgram();
-				});
+				warningPopup("All unsaved work will be lost", eventHandler -> openProgram());
 			}
 			else {
 				openProgram();
@@ -472,5 +468,27 @@ public class Gui extends Application {
 			}
 		}
 
+	}
+
+	public static int parseUserAdress(String input) throws FormatExeption {
+		int address = 0;
+
+		try {
+			if (input.startsWith("0x") || input.startsWith("0X")) {
+				address = Integer.parseInt(input.substring(2), 16); // parsing a int in base 16, the 2
+				// first chars of the string are
+				// removed (0x)
+			} else if (input.startsWith("0b") || input.startsWith("0B")) {
+				address = Integer.parseInt(input.substring(2), 2);
+			} else if (input.startsWith("0d") || input.startsWith("0D")) {
+				address = Integer.parseInt(input.substring(2));
+			} else {
+				address = Integer.parseInt(input);
+			}
+		} catch (NumberFormatException exeption) {
+			Gui.warningPopup("Error in the number format\ntry with 0x1a35, 0b100101 or 0d300", ActionEvent -> {});
+			throw new FormatExeption();
+		}
+		return address;
 	}
 }

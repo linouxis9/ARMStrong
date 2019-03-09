@@ -2,6 +2,7 @@ package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,7 +18,9 @@ import javafx.scene.layout.Pane;
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.ui.javafx.FormatExeption;
 import projetarm_v2.simulator.ui.javafx.Gui;
+import projetarm_v2.simulator.ui.javafx.RegisterObjectView;
 
 import java.io.IOException;
 
@@ -27,6 +30,8 @@ public class RamView {
     private DockNode dockNode;
     private Image dockImage;
 
+    private ArmSimulator simulator;
+
     private ScrollBar memoryScrollBar;
     private TableView<NewLineRam> tableView;
     
@@ -35,6 +40,8 @@ public class RamView {
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
     
     public RamView(ArmSimulator simulator) {
+
+        this.simulator=simulator;
         //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/MemoryView.fxml"));
@@ -52,53 +59,43 @@ public class RamView {
         
         UneSuperImplemFournieParValentinLeBg = new RamObservableListAdapter(simulator.getRam(), this);
         UneSuperImplemFournieParValentinLeBg.setOffset(this.firstDisplayedAddress);
-        
+
         this.tableView.setItems(UneSuperImplemFournieParValentinLeBg);
-        this.tableView.setEditable(true);
+
         this.tableView.setSortPolicy(null);
-        this.tableView.setOnKeyPressed(event -> {
-            TablePosition<NewLineRam, ?> pos = this.tableView.getFocusModel().getFocusedCell() ;
-            if (pos != null && (event.getCode().isDigitKey() || event.getCode().isLetterKey())) {
-                this.tableView.edit(pos.getRow(), pos.getTableColumn());
-            }
-        });
 
         // single cell selection mode
-        tableView.getSelectionModel().setCellSelectionEnabled(true);
+        //tableView.getSelectionModel().setCellSelectionEnabled(true);
 
         TableColumn<NewLineRam,String> line = new TableColumn<>("Address");
         line.setCellFactory(TextFieldTableCell.forTableColumn());
-        line.setCellValueFactory(
-                new PropertyValueFactory<>("line"));
+        line.setCellValueFactory(new PropertyValueFactory<>("line"));
         
         this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
         line.setMaxWidth( 1f * Integer.MAX_VALUE * 12 );
         this.tableView.getColumns().add(line);
-        
-        for (int i = 0; i < UneSuperImplemFournieParValentinLeBg.getColumns(); i++) {
+
+        for (int i = 0; i < UneSuperImplemFournieParValentinLeBg.getColumns(); i++) { //TODO: Le code dans ce for ne s'execute jamais, ou de maniere random getColumns() retourne 0 les premeires fois parce que ramView.getTableView().getWidth() retourne 0 au debut
 	        TableColumn<NewLineRam,String> a = new TableColumn<>();
 	        a.setCellFactory(TextFieldTableCell.forTableColumn());
-	        a.setCellValueFactory(
-	                new PropertyValueFactory<>(Character.toString('a'+i)));
+	        a.setCellValueFactory(new PropertyValueFactory<>(Character.toString('a'+i)));
 	        a.setMaxWidth( 1f * Integer.MAX_VALUE * 11 );
+
 	        this.tableView.getColumns().add(a);
         }
 
-        tableView.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number t, Number t1) {
-                // Get the table header
-            	
-            	refresh();
-            	
-                Pane header = (Pane)tableView.lookup("TableHeaderRow");
-                if(header!=null && header.isVisible()) {
-                  header.setMaxHeight(0);
-                  header.setMinHeight(0);
-                  header.setPrefHeight(0);
-                  header.setVisible(false);
-                  header.setManaged(false);
-                }
+        tableView.widthProperty().addListener((ov, t, t1) -> {
+            // Get the table header
+
+            refresh();
+
+            Pane header = (Pane)tableView.lookup("TableHeaderRow");
+            if(header!=null && header.isVisible()) {
+              header.setMaxHeight(0);
+              header.setMinHeight(0);
+              header.setPrefHeight(0);
+              header.setVisible(false);
+              header.setManaged(false);
             }
         });
     	Button buttonRdm = (Button) mainPane.lookup("#buttonRdm");
@@ -124,6 +121,9 @@ public class RamView {
 	                new PropertyValueFactory<>(Character.toString('a'+i-1)));
 	        a.setMaxWidth( 1f * Integer.MAX_VALUE * 11 );
 	        this.tableView.getColumns().add(a);
+
+            a.setOnEditCommit(t -> UneSuperImplemFournieParValentinLeBg.setValue(t.getTablePosition().getColumn(), t.getTablePosition().getRow(), t.getNewValue()));
+
         }
     	
     	this.tableView.refresh();
@@ -198,21 +198,9 @@ public class RamView {
                 String addressTyped = goToAddressField.getText();
 
                 int newAddress = 0;
-
                 try {
-                    if (addressTyped.startsWith("0x") || addressTyped.startsWith("0X")) {
-                        newAddress = Integer.parseInt(addressTyped.substring(2), 16); // parsing a int in base 16, the 2
-                        // first chars of the string are
-                        // removed (0x)
-                    } else if (addressTyped.startsWith("0b") || addressTyped.startsWith("0B")) {
-                        newAddress = Integer.parseInt(addressTyped.substring(2), 2);
-                    } else if (addressTyped.startsWith("0d") || addressTyped.startsWith("0D")) {
-                        newAddress = Integer.parseInt(addressTyped.substring(2));
-                    } else {
-                        newAddress = Integer.parseInt(addressTyped);
-                    }
-                } catch (NumberFormatException exeption) {
-                    Gui.warningPopup("Error in the number format\ntry with 0x1a35, 0b100101 or 0d300", ActionEvent -> {});
+                    newAddress = Gui.parseUserAdress(addressTyped);
+                } catch (FormatExeption formatExeption) {
                     return;
                 }
 

@@ -2,6 +2,8 @@ package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.collections.ModifiableObservableListBase;
 import projetarm_v2.simulator.core.Ram;
+import projetarm_v2.simulator.ui.javafx.FormatExeption;
+import projetarm_v2.simulator.ui.javafx.Gui;
 
 public class RamObservableListAdapter extends ModifiableObservableListBase<NewLineRam> {
 
@@ -22,7 +24,7 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
 
 	@Override
     public NewLineRam get(int i) {
-		return new NewLineRam(ram,offset+i*this.showType.toOffset()*getColumns(),showType,outputType);
+    	return new NewLineRam(ram,offset+i*this.showType.toOffset()*getColumns(),showType,outputType);
     }
 
 	public int getColumns() {
@@ -33,7 +35,6 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
 		if (this.showType == ShowType.WORD) {
 			kek -= 2;
 		}
-		
 		return kek;
 	}
 	
@@ -79,4 +80,30 @@ public class RamObservableListAdapter extends ModifiableObservableListBase<NewLi
 	public ShowType getShowTypeValue() {
     	return this.showType;
 	}
+
+	public void setValue(int column, int row, String value) {
+    	column--;
+		int address =  offset+row*this.showType.toOffset()*getColumns()+column*showType.toOffset();
+		int newVal = 0;
+		try {
+			newVal = Gui.parseUserAdress(value);
+		} catch (FormatExeption formatExeption) {}
+		switch (showType){
+			case BYTE:
+				if (newVal>256){
+					Gui.warningPopup("maximum byte value exceeded", a -> {});
+				}
+				ram.setByte(address, (byte) newVal);
+				break;
+			case HALFWORD:
+				if (newVal>65536){
+					Gui.warningPopup("maximum halfword value exceeded", a -> {});
+				}
+				ram.setHWord(address, (short) newVal);
+				break;
+			case WORD:
+				ram.setValue(address, newVal);
+		}
+		System.out.println(newVal + " was written at address " + Integer.toHexString(address));
+    }
 }
