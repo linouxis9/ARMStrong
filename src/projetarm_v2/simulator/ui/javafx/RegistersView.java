@@ -177,12 +177,10 @@ public class RegistersView {
                 	
                 	if(registerValue == 17) {
                 		editFlags(newValue);
-                	}else{
-                		if(newValue.contains("x")){
-                			String[] hex = newValue.split("x");
-                            int value = Integer.parseInt(hex[1], 16);  
-                        	simulator.setRegisterValue(registerValue, value);
-                		}
+                	} else if (registerValue <= 15) {
+                		String[] hex = newValue.split("x");
+                        int value = Integer.parseInt(hex[hex.length-1], 16);  
+                        simulator.setRegisterValue(registerValue, value);
                 	}
                 	
                 	((RegisterObjectView) t.getTableView().getItems()
@@ -201,7 +199,7 @@ public class RegistersView {
                     		.get(t.getTablePosition().getRow())).getRegister();
                 	if(registerValue == 17) {
                 		editFlags(newValue);
-                	}else{
+                	} else if (registerValue <= 15) {
                 		if(isNumeric(newValue)) {
                 			simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
                 		}
@@ -222,9 +220,13 @@ public class RegistersView {
                     		.get(t.getTablePosition().getRow())).getRegister();
                 	if(registerValue == 17) {
                 		editFlags(newValue);
-                	}else{
+                	} else if (registerValue <= 15) {
                 		if(isNumeric(newValue)) {
-                			simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
+                			try {
+                				simulator.setRegisterValue(registerValue, Integer.parseUnsignedInt(newValue));
+                			} catch (NumberFormatException e) {
+                				Gui.warningPopup(e.getMessage(), (_e)->{});
+                			}
                 		}
                 	}
                 	((RegisterObjectView) t.getTableView().getItems()
@@ -370,7 +372,7 @@ public class RegistersView {
     
     private boolean isNumeric(String str) { 
 	  try {  
-	    Double.parseDouble(str);  
+	    Integer.parseInt(str);  
 	    return true;
 	  } catch(NumberFormatException e){  
 	    return false;  
