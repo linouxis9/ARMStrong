@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
+import java.lang.invoke.LambdaMetafactory;
 import java.text.DecimalFormat;
 
 import org.dockfx.DockNode;
@@ -73,9 +74,9 @@ public class RegistersView {
         this.sigDecPane.getStyleClass().add("contentTabPane");
         this.decPane.getStyleClass().add("contentTabPane");
  
-        this.tableHex = new TableView<RegisterObjectView>();
-        this.tableSigDec = new TableView<RegisterObjectView>();
-        this.tableDec = new TableView<RegisterObjectView>();
+        this.tableHex = new TableView<>();
+        this.tableSigDec = new TableView<>();
+        this.tableDec = new TableView<>();
         
         this.tableHex.getStyleClass().add("registersTable");
         this.tableSigDec.getStyleClass().add("registersTable");
@@ -85,12 +86,12 @@ public class RegistersView {
         this.sigDecPane.getChildren().add(this.tableSigDec);
         this.decPane.getChildren().add(this.tableDec);
         
-    	this.nameHexCol = new TableColumn<RegisterObjectView, String>();
-    	this.valueHexCol = new TableColumn<RegisterObjectView, String>();
-    	this.nameSigDecCol = new TableColumn<RegisterObjectView, String>();
-    	this.valueSigDecCol = new TableColumn<RegisterObjectView, String>();
-    	this.nameDecCol = new TableColumn<RegisterObjectView, String>();
-    	this.valueDecCol = new TableColumn<RegisterObjectView, String>(); 
+    	this.nameHexCol = new TableColumn<>();
+    	this.valueHexCol = new TableColumn<>();
+    	this.nameSigDecCol = new TableColumn<>();
+    	this.valueSigDecCol = new TableColumn<>();
+    	this.nameDecCol = new TableColumn<>();
+    	this.valueDecCol = new TableColumn<>();
     	
     	this.nameHexCol.setSortable(false);
     	this.valueHexCol.setSortable(false);
@@ -112,129 +113,88 @@ public class RegistersView {
     	this.tableSigDec.prefWidthProperty().bind(this.sigDecPane.widthProperty());
     	this.tableDec.prefHeightProperty().bind(this.decPane.heightProperty());
     	this.tableDec.prefWidthProperty().bind(this.decPane.widthProperty());
-    	
-    	this.tableHex.widthProperty().addListener(new ChangeListener<Number>() {
-    	    @Override
-    	    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
-    	        Pane header = (Pane) tableHex.lookup("TableHeaderRow");
-    	        if (header.isVisible()){
-    	            header.setMaxHeight(0);
-    	            header.setMinHeight(0);
-    	            header.setPrefHeight(0);
-    	            header.setVisible(false);
-    	        }
-    	    }
-    	});
-    	
-    	this.tableSigDec.widthProperty().addListener(new ChangeListener<Number>() {
-    	    @Override
-    	    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
-    	        Pane header = (Pane) tableSigDec.lookup("TableHeaderRow");
-    	        if (header.isVisible()){
-    	            header.setMaxHeight(0);
-    	            header.setMinHeight(0);
-    	            header.setPrefHeight(0);
-    	            header.setVisible(false);
-    	        }
-    	    }
-    	});
-    	
-    	this.tableDec.widthProperty().addListener(new ChangeListener<Number>() {
-    	    @Override
-    	    public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth) {
-    	        Pane header = (Pane) tableDec.lookup("TableHeaderRow");
-    	        if (header.isVisible()){
-    	            header.setMaxHeight(0);
-    	            header.setMinHeight(0);
-    	            header.setPrefHeight(0);
-    	            header.setVisible(false);
-    	        }
-    	    }
-    	});
+
+		ChangeListener widthListner = (ChangeListener<Number>) (source, oldWidth, newWidth) -> {
+			Pane header = (Pane) tableDec.lookup("TableHeaderRow");
+			if (header.isVisible()){
+				header.setMaxHeight(0);
+				header.setMinHeight(0);
+				header.setPrefHeight(0);
+				header.setVisible(false);
+			}
+		};
+
+		this.tableHex.widthProperty().addListener(widthListner);
+    	this.tableSigDec.widthProperty().addListener(widthListner);
+    	this.tableDec.widthProperty().addListener(widthListner);
     	
     	this.tableHex.setEditable(true);
         this.tableSigDec.setEditable(true);
         this.tableDec.setEditable(true);
     	
-    	this.nameHexCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("nameRegister"));
-    	this.valueHexCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("valueRegister"));
-    	this.nameSigDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("nameRegister"));
-    	this.valueSigDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("valueRegister"));
-    	this.nameDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("nameRegister"));
-    	this.valueDecCol.setCellValueFactory(new PropertyValueFactory<RegisterObjectView, String>("valueRegister"));
+    	this.nameHexCol.setCellValueFactory(new PropertyValueFactory<>("nameRegister"));
+    	this.valueHexCol.setCellValueFactory(new PropertyValueFactory<>("valueRegister"));
+    	this.nameSigDecCol.setCellValueFactory(new PropertyValueFactory<>("nameRegister"));
+    	this.valueSigDecCol.setCellValueFactory(new PropertyValueFactory<>("valueRegister"));
+    	this.nameDecCol.setCellValueFactory(new PropertyValueFactory<>("nameRegister"));
+    	this.valueDecCol.setCellValueFactory(new PropertyValueFactory<>("valueRegister"));
     	
     	this.valueHexCol.setCellFactory(TextFieldTableCell.forTableColumn());
     	this.valueSigDecCol.setCellFactory(TextFieldTableCell.forTableColumn());
     	this.valueDecCol.setCellFactory(TextFieldTableCell.forTableColumn());
+
+    	this.valueHexCol.setOnEditCommit(t -> {
+					String newValue = t.getNewValue();
+					int registerValue = t.getTableView().getItems().get(t.getTablePosition().getRow()).getRegister();
+
+					if(registerValue == 17) {
+						editFlags(newValue);
+					} else if (registerValue <= 15) {
+						String[] hex = newValue.split("x");
+						int value = Integer.parseInt(hex[hex.length-1], 16);
+						simulator.setRegisterValue(registerValue, value);
+					}
+
+					t.getTableView().getItems().get(t.getTablePosition().getRow()).setValueRegister(newValue);
+					updateRegisters();
+				}
+		);
     	
-    	this.valueHexCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<RegisterObjectView, String>>() {
-                @Override
-                public void handle(CellEditEvent<RegisterObjectView, String> t) {
-                	String newValue = t.getNewValue();
-                	int registerValue = ((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).getRegister();
-                	
-                	if(registerValue == 17) {
-                		editFlags(newValue);
-                	} else if (registerValue <= 15) {
-                		String[] hex = newValue.split("x");
-                        int value = Integer.parseInt(hex[hex.length-1], 16);  
-                        simulator.setRegisterValue(registerValue, value);
-                	}
-                	
-                	((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
-                	updateRegisters();                
-                }
-            }
-        );
-    	
-    	this.valueSigDecCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<RegisterObjectView, String>>() {
-                @Override
-                public void handle(CellEditEvent<RegisterObjectView, String> t) {
-                	String newValue = t.getNewValue();
-                	int registerValue = ((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).getRegister();
-                	if(registerValue == 17) {
-                		editFlags(newValue);
-                	} else if (registerValue <= 15) {
-                		if(isNumeric(newValue)) {
-                			simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
-                		}
-                	}
-                	((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
-                	updateRegisters();    
-                }
-            }
-        );
-    	
-    	this.valueDecCol.setOnEditCommit(
-            new EventHandler<CellEditEvent<RegisterObjectView, String>>() {
-                @Override
-                public void handle(CellEditEvent<RegisterObjectView, String> t) {
-                	String newValue = t.getNewValue();
-                	int registerValue = ((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).getRegister();
-                	if(registerValue == 17) {
-                		editFlags(newValue);
-                	} else if (registerValue <= 15) {
-                		if(isNumeric(newValue)) {
-                			try {
-                				simulator.setRegisterValue(registerValue, Integer.parseUnsignedInt(newValue));
-                			} catch (NumberFormatException e) {
-                				Gui.warningPopup(e.getMessage(), (_e)->{});
-                			}
-                		}
-                	}
-                	((RegisterObjectView) t.getTableView().getItems()
-                    		.get(t.getTablePosition().getRow())).setValueRegister(newValue);
-                	updateRegisters();  
-                }
-            }
-        );   	
+    	this.valueSigDecCol.setOnEditCommit(t -> {
+					String newValue = t.getNewValue();
+					int registerValue = t.getTableView().getItems().get(t.getTablePosition().getRow()).getRegister();
+
+					if(registerValue == 17) {
+						editFlags(newValue);
+					} else if (registerValue <= 15) {
+						if(isNumeric(newValue)) {
+							simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
+						}
+					}
+					t.getTableView().getItems().get(t.getTablePosition().getRow()).setValueRegister(newValue);
+					updateRegisters();
+				}
+		);
+
+    	this.valueDecCol.setOnEditCommit(t -> {
+					String newValue = t.getNewValue();
+					int registerValue = t.getTableView().getItems().get(t.getTablePosition().getRow()).getRegister();
+
+					if(registerValue == 17) {
+						editFlags(newValue);
+					} else if (registerValue <= 15) {
+						if(isNumeric(newValue)) {
+							try {
+								simulator.setRegisterValue(registerValue, Integer.parseUnsignedInt(newValue));
+							} catch (NumberFormatException e) {
+								Gui.warningPopup(e.getMessage(), (_e)->{});
+							}
+						}
+					}
+					t.getTableView().getItems().get(t.getTablePosition().getRow()).setValueRegister(newValue);
+					updateRegisters();
+				}
+		);
     	
     	this.tableHex.getColumns().addAll(this.nameHexCol, this.valueHexCol);
         this.tableSigDec.getColumns().addAll(this.nameSigDecCol, this.valueSigDecCol);
