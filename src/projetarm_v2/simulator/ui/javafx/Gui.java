@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2018-2019 Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Hugo Chemarin, Nicolas Gervasi
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.application.Application;
@@ -144,7 +152,7 @@ public class Gui extends Application {
 		vbox.getStylesheets().add("/resources/style.css");
 		
 		System.out.println("Welcome to #@RMStrong Simulator made proudly at the Institute of Technology of Valence in 2018-2019 by fellow students under the guidance of Dr. Philippe Objois!");
-		System.out.println("Licensed under the MIT License");
+		System.out.println("Licensed under the MPL 2.0 License");
 		System.out.println("Copyright (c) 2018-2019 Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Hugo Chemarin, Nicolas Gervasi");
 	}
 
