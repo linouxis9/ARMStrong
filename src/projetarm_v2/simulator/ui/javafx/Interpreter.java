@@ -84,7 +84,7 @@ public class Interpreter {
 		this.redirectToInterpreter();
 		this.pc = this.simulator.getCpu().getCurrentAddress();
 		this.simulator.setStartingAddress(0);
-		System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.\n [WARNING] You cannot use label branching in Interpreter mode");
+		System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.\n [WARNING] You cannot use directives in Interpreter mode");
 	}
 	
 	public void redirectToInterpreter() {	

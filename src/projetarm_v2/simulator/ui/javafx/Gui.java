@@ -183,12 +183,11 @@ public class Gui extends Application {
 			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong Files", "*.ARMS"), new FileChooser.ExtensionFilter("Assembly Files", "*.S"));
 			File chosenFile = fileChooser.showSaveDialog(stage);
 			if (chosenFile != null) {
-				if (chosenFile.getAbsolutePath().endsWith(".ARMS") || chosenFile.getAbsolutePath().endsWith(".S")) {
-					saveFile(codeEditor.getProgramAsString(), chosenFile);
-					this.currentProgramPath = chosenFile;
-				} else {
-					warningPopup("Please choose a valid extension (*.S or *.ARMS)", EventHandler -> this.armMenuBar.getSaveAs().fire());
+				if (!chosenFile.getAbsolutePath().endsWith(".ARMS") && !chosenFile.getAbsolutePath().endsWith(".S")) {
+					chosenFile = new File(chosenFile.getAbsolutePath() + ".ARMS");
 				}
+				saveFile(codeEditor.getProgramAsString(), chosenFile);
+				this.currentProgramPath = chosenFile;
 			}
 
 		});

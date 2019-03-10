@@ -70,7 +70,7 @@ public class RamView {
         line.setCellValueFactory(new PropertyValueFactory<>("line"));
         
         this.tableView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
-        line.setMaxWidth( 1f * Integer.MAX_VALUE * 12 );
+        line.setMaxWidth( 1f * Integer.MAX_VALUE * 13 );
         this.tableView.getColumns().add(line);
 
         for (int i = 0; i < UneSuperImplemFournieParValentinLeBg.getColumns(); i++) { //TODO: Le code dans ce for ne s'execute jamais, ou de maniere random getColumns() retourne 0 les premeires fois parce que ramView.getTableView().getWidth() retourne 0 au debut

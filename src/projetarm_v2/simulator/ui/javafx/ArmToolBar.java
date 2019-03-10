@@ -34,7 +34,7 @@ public class ArmToolBar {
         this.runButton.setTooltip(new Tooltip("Run all at once [F5]"));
 
         this.stepByStepButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/runByStep.png").toExternalForm())));
-        this.stepByStepButton.setTooltip(new Tooltip("Run a single instruction [F11]"));
+        this.stepByStepButton.setTooltip(new Tooltip("Execute the highlighted instruction [F11]"));
         
         this.reloadButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/reload.png").toExternalForm())));
         this.reloadButton.setTooltip(new Tooltip("Reset CPU [CTRL-R]"));
