@@ -9,27 +9,23 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
-import java.lang.invoke.LambdaMetafactory;
 import java.text.DecimalFormat;
-
-import org.dockfx.DockNode;
+import java.util.ArrayList;
 
 public class RegistersView {
 
@@ -64,6 +60,7 @@ public class RegistersView {
 	private TableColumn<RegisterObjectView, String> valueSigDecCol;
 	private TableColumn<RegisterObjectView, String> nameDecCol;
 	private TableColumn<RegisterObjectView, String> valueDecCol;
+
 	
 	private DecimalFormat fmt;
 	
@@ -122,19 +119,24 @@ public class RegistersView {
     	this.tableDec.prefHeightProperty().bind(this.decPane.heightProperty());
     	this.tableDec.prefWidthProperty().bind(this.decPane.widthProperty());
 
-		ChangeListener<Number> widthListner = (ChangeListener<Number>) (source, oldWidth, newWidth) -> {
-			Pane header = (Pane) tableDec.lookup("TableHeaderRow");
-			if (header.isVisible()){
-				header.setMaxHeight(0);
-				header.setMinHeight(0);
-				header.setPrefHeight(0);
-				header.setVisible(false);
-			}
+		ChangeListener<Number> widthListener = (source, oldWidth, newWidth) -> {
+            ArrayList<Pane> panes = new ArrayList<>();
+            panes.add((Pane) tableDec.lookup("TableHeaderRow"));
+            panes.add((Pane) tableHex.lookup("TableHeaderRow"));
+            panes.add((Pane) tableSigDec.lookup("TableHeaderRow"));
+            for(Pane header : panes){
+                if (header.isVisible()){
+                    header.setMaxHeight(0);
+                    header.setMinHeight(0);
+                    header.setPrefHeight(0);
+                    header.setVisible(false);
+                }
+            }
 		};
 
-		this.tableHex.widthProperty().addListener(widthListner);
-    	this.tableSigDec.widthProperty().addListener(widthListner);
-    	this.tableDec.widthProperty().addListener(widthListner);
+		this.tableHex.widthProperty().addListener(widthListener);
+    	this.tableSigDec.widthProperty().addListener(widthListener);
+    	this.tableDec.widthProperty().addListener(widthListener);
     	
     	this.tableHex.setEditable(true);
         this.tableSigDec.setEditable(true);

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<AnchorPane fx:id="memoryViewPane" prefHeight="623.0" prefWidth="390.0" xmlns="http://javafx.com/javafx/8"
+<AnchorPane fx:id="memoryViewPane" prefHeight="623.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/8"
             xmlns:fx="http://javafx.com/fxml/1">
    <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0"
          text="Go to address:" AnchorPane.leftAnchor="13.874992370605469" AnchorPane.topAnchor="14.0"/>
@@ -18,13 +18,16 @@
            AnchorPane.leftAnchor="154.0" AnchorPane.topAnchor="50.0"/>
    <Text fx:id="viewModeLabel" layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0"
          text="View mode:" AnchorPane.leftAnchor="13.294647216796875" AnchorPane.topAnchor="54.0"/>
-   <ScrollBar fx:id="memoryScrollBar" layoutX="246.0" layoutY="89.0" orientation="VERTICAL" prefHeight="518.0"
+   <ScrollBar fx:id="memoryScrollBar" layoutX="246.0" layoutY="115.0" orientation="VERTICAL" prefHeight="492.0"
               prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="16.0"
-              AnchorPane.topAnchor="89.0"/>
-   <TableView fx:id="tableView" editable="true" layoutX="15.0" layoutY="89.0" prefHeight="518.0" prefWidth="328.0"
+              AnchorPane.topAnchor="115.0"/>
+   <TableView fx:id="tableView" editable="true" layoutX="15.0" layoutY="115.0" prefHeight="492.0" prefWidth="377.0"
               AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="47.0"
-              AnchorPane.topAnchor="89.0"/>
-   <Button fx:id="buttonHex" layoutX="275.0" layoutY="50.0" mnemonicParsing="false" text="Hex"/>
-   <Button fx:id="buttonDec" layoutX="328.0" layoutY="50.0" mnemonicParsing="false" text="Dec"/>
-   <Button fx:id="buttonRdm" layoutX="381.0" layoutY="50.0" mnemonicParsing="false" text="Rdm"/>
+              AnchorPane.topAnchor="115.0"/>
+   <Button fx:id="buttonHex" layoutX="155.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0"
+           text="Hex" AnchorPane.topAnchor="81.0"/>
+   <Button fx:id="buttonDec" layoutX="99.0" layoutY="82.0" mnemonicParsing="false" text="Dec"
+           AnchorPane.leftAnchor="99.0" AnchorPane.topAnchor="82.0"/>
+   <Button fx:id="buttonRdm" layoutX="276.0" layoutY="50.0" mnemonicParsing="false" text="Random"
+           AnchorPane.leftAnchor="276.0" AnchorPane.topAnchor="50.0"/>
 </AnchorPane>

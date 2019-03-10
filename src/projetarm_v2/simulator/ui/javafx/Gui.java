@@ -123,6 +123,9 @@ public class Gui extends Application {
 		//primaryStage.show(); // render to avoid node.lookup() to fail
 
 		this.scene = new Scene(vbox, 1000, 1000);
+		this.stage.setMaximized(true);
+		this.stage.setResizable(true);
+
 		primaryStage.setScene(this.scene);
 		primaryStage.sizeToScene();
 
@@ -255,9 +258,7 @@ public class Gui extends Application {
 			LedView moreLedView = new LedView(this.simulator);
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
 		});
-		this.armMenuBar.getPreferences().setOnAction(actionEvent -> {
-			new Preferences(simulator);
-		});
+		this.armMenuBar.getPreferences().setOnAction(actionEvent -> new Preferences(simulator));
 
 		//Run
 		this.armMenuBar.getSwitchMode().setOnAction(actionEvent -> {
@@ -394,6 +395,7 @@ public class Gui extends Application {
 		warningStage.setTitle("Warning");
 
 		warningStage.initModality(Modality.APPLICATION_MODAL);
+		warningStage.setResizable(false);
 
 		try {
 			Pane main = FXMLLoader.load(Gui.class.getResource("/resources/warning.fxml"));

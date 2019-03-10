@@ -35,6 +35,7 @@ public class Preferences {
         try {
             Pane main = FXMLLoader.load(Gui.class.getResource("/resources/preferences.fxml"));
             preferencesStage.setScene(new Scene(main, 500, 280));
+            preferencesStage.setResizable(false);
 
             TextField programAt = (TextField) main.lookup("#programAt");
             programAt.setText(String.format("0x%x",simulator.getStartingAddress()));

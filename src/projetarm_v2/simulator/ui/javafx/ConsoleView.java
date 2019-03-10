@@ -45,6 +45,7 @@ public class ConsoleView {
 		this.dockNode = new DockNode(mainPane, "Console", new ImageView(dockImage));
 		this.dockNode.setPrefSize(1000, 1500);
 		this.dockNode.setClosable(false);
+		dockNode.setMaxHeight(300); //mmm
 
 		this.mainPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.dockNode.getStylesheets().add("/resources/style.css");
