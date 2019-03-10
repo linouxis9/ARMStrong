@@ -60,7 +60,6 @@ public class ArmMenuBar {
     	
          Menu fileMenu = new Menu("File");
          Menu windowMenu = new Menu("Window");
-         Menu editMenu = new Menu("Edit");
          Menu runMenu = new Menu("Run");
          Menu helpMenu = new Menu("Help");
 
@@ -69,17 +68,15 @@ public class ArmMenuBar {
         this.openFile = new MenuItem("Open File...");
         this.save = new MenuItem("Save");
         this.saveAs = new MenuItem("Save As...");
+        this.preferences = new MenuItem("Preferences");
         this.exitMenu = new MenuItem("Exit");
-        fileMenu.getItems().addAll(neW, openFile, new SeparatorMenuItem(), save, saveAs,new SeparatorMenuItem(), exitMenu);
+        fileMenu.getItems().addAll(neW, openFile, new SeparatorMenuItem(), save, saveAs,new SeparatorMenuItem(), preferences, new SeparatorMenuItem(), exitMenu);
 
         //WINDOW
-        Menu newMenu = new Menu("New Window");
-        this.preferences = new MenuItem("Preferences");
-        this.newMemoryWindow = new MenuItem("Memory");
-        this.newRegistersWindow = new MenuItem("Registers");
-        this.newLedGameWindow = new MenuItem("Led Game");
-        newMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow);
-        windowMenu.getItems().addAll(newMenu, preferences);
+        this.newMemoryWindow = new MenuItem("new Memory");
+        this.newRegistersWindow = new MenuItem("new Registers");
+        this.newLedGameWindow = new MenuItem("new Led Game");
+        windowMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow);
 
         //RUN
         this.switchMode = new MenuItem("Switch Mode");
@@ -97,7 +94,7 @@ public class ArmMenuBar {
         interpreter.getItems().add(newInterpreterWindow);
         
         this.menuBar = new MenuBar();
-        menuBar.getMenus().addAll(fileMenu, windowMenu, editMenu, runMenu, interpreter, helpMenu);
+        menuBar.getMenus().addAll(fileMenu, windowMenu, runMenu, interpreter, helpMenu);
 
         disableInEdition = new HashSet<>();
         disableInExecution = new HashSet<>();
@@ -128,9 +125,7 @@ public class ArmMenuBar {
 					main.getStylesheets().add("/resources/style.css");
 					aboutPopUp.setScene(new Scene(main, 500, 280));
 					Hyperlink gitLink = (Hyperlink)main.lookup("#linkGit");
-					gitLink.setOnAction(actionEvent1 -> {
-		                	this.services.showDocument(gitLink.getText());
-					});
+					gitLink.setOnAction(actionEvent1 -> this.services.showDocument(gitLink.getText()));
 					
 				} catch (IOException e) {
 					e.printStackTrace();

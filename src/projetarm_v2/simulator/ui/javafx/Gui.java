@@ -249,8 +249,7 @@ public class Gui extends Application {
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
 		});
 		this.armMenuBar.getPreferences().setOnAction(actionEvent -> {
-			LedView moreLedView = new LedView(this.simulator);
-			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
+			new Preferences(simulator);
 		});
 
 		//Run
