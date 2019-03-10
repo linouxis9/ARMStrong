@@ -114,7 +114,7 @@ public class RegistersView {
     	this.tableDec.prefHeightProperty().bind(this.decPane.heightProperty());
     	this.tableDec.prefWidthProperty().bind(this.decPane.widthProperty());
 
-		ChangeListener widthListner = (ChangeListener<Number>) (source, oldWidth, newWidth) -> {
+		ChangeListener<Number> widthListner = (ChangeListener<Number>) (source, oldWidth, newWidth) -> {
 			Pane header = (Pane) tableDec.lookup("TableHeaderRow");
 			if (header.isVisible()){
 				header.setMaxHeight(0);
@@ -149,12 +149,20 @@ public class RegistersView {
 
 					if(registerValue == 17) {
 						editFlags(newValue);
-					} else if (registerValue <= 15) {
-						String[] hex = newValue.split("x");
-						int value = Integer.parseInt(hex[hex.length-1], 16);
-						simulator.setRegisterValue(registerValue, value);
+					} else {
+						try {
+							String[] hex = newValue.split("x");
+							int value = Integer.parseInt(hex[hex.length-1], 16);
+							if (registerValue < 16) {
+								simulator.setRegisterValue(registerValue, value);
+							} else if (registerValue == 18) {
+								simulator.getCpu().setCurrentAddress(value - value % 4);
+							}
+						} catch (NumberFormatException e) {
+							Gui.warningPopup(e.getMessage(), (_e)->{});
+						}
 					}
-
+					
 					t.getTableView().getItems().get(t.getTablePosition().getRow()).setValueRegister(newValue);
 					updateRegisters();
 				}
@@ -166,11 +174,19 @@ public class RegistersView {
 
 					if(registerValue == 17) {
 						editFlags(newValue);
-					} else if (registerValue <= 15) {
-						if(isNumeric(newValue)) {
-							simulator.setRegisterValue(registerValue, Integer.parseInt(newValue));
+					} else if (isNumeric(newValue)) {
+						try {
+							int value = Integer.parseInt(newValue);
+							if (registerValue < 16) {
+								simulator.setRegisterValue(registerValue, value);
+							} else if (registerValue == 18) {
+								simulator.getCpu().setCurrentAddress(value - value % 4);
+							}
+						} catch (NumberFormatException e) {
+							Gui.warningPopup(e.getMessage(), (_e)->{});
 						}
 					}
+					
 					t.getTableView().getItems().get(t.getTablePosition().getRow()).setValueRegister(newValue);
 					updateRegisters();
 				}
@@ -182,15 +198,19 @@ public class RegistersView {
 
 					if(registerValue == 17) {
 						editFlags(newValue);
-					} else if (registerValue <= 15) {
-						if(isNumeric(newValue)) {
-							try {
-								simulator.setRegisterValue(registerValue, Integer.parseUnsignedInt(newValue));
-							} catch (NumberFormatException e) {
-								Gui.warningPopup(e.getMessage(), (_e)->{});
+					} else if (isNumeric(newValue)) {
+						try {
+							int value = Integer.parseUnsignedInt(newValue);
+							if (registerValue < 16) {
+								simulator.setRegisterValue(registerValue, value);
+							} else if (registerValue == 18) {
+								simulator.getCpu().setCurrentAddress(value - value % 4);
 							}
+						} catch (NumberFormatException e) {
+							Gui.warningPopup(e.getMessage(), (_e)->{});
 						}
 					}
+					
 					t.getTableView().getItems().get(t.getTablePosition().getRow()).setValueRegister(newValue);
 					updateRegisters();
 				}
@@ -272,7 +292,6 @@ public class RegistersView {
 		char[] myCaracters = newValue.toCharArray();
 		
 		for(char c: myCaracters) {
-			System.out.print(c);
 			switch(c) {
 				case 'N':
 					this.simulator.setN(true);

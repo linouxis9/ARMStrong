@@ -35,7 +35,7 @@ public class CpuGetFile extends CpuRoutine
 			}
 			
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("[ERROR] Reading " + e.getMessage());
 		}
 	}
 }

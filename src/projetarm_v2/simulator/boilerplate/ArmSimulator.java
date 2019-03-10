@@ -161,6 +161,10 @@ public class ArmSimulator {
 	}
 	public void setRandomPattern(byte value) { this.ram.setRandomPattern(value); }
 	
+	public byte getRandomPattern() {
+		return this.ram.getRandomPattern();
+	}
+	
 	/**
 	 * Returns the register value corresponding to the given number
 	 */

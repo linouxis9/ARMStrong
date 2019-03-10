@@ -29,7 +29,7 @@ public class CpuPutFile extends CpuRoutine
 			fileWriter.close();
 			
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.out.println("[ERROR] Writing" + e.getMessage());
 		}
 	}
 }

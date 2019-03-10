@@ -372,7 +372,7 @@ public class Gui extends Application {
 					}
 				}
 				else{
-					this.codeEditor.setProgramAsString(new String(Files.readAllBytes(Paths.get(chosenFile.getAbsolutePath())), "UTF-8"));
+					this.codeEditor.setProgramAsString(Files.readString(Paths.get(chosenFile.getAbsolutePath())));
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

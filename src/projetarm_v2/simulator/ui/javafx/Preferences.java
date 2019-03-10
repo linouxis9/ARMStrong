@@ -14,14 +14,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Preferences {
-
+	
+	private Stage preferencesStage;
+	
     public Preferences(ArmSimulator simulator){
-
-        AtomicInteger programStartAddress = new AtomicInteger(simulator.getStartingAddress());
-        AtomicInteger initRamValue = new AtomicInteger();
-        AtomicBoolean initRamValueChanged = new AtomicBoolean(false);
-
-        final Stage preferencesStage = new Stage();
+    	preferencesStage = new Stage();
+    	
         preferencesStage.setTitle("Preferences");
 
         preferencesStage.initModality(Modality.APPLICATION_MODAL);
@@ -31,41 +29,35 @@ public class Preferences {
             preferencesStage.setScene(new Scene(main, 500, 280));
 
             TextField programAt = (TextField) main.lookup("#programAt");
-            programAt.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-                if (!newPropertyValue)
-                    try {
-                        programStartAddress.set(Gui.parseUserAdress(programAt.getText()));
-                    } catch (FormatExeption formatExeption) {
-                        return;
-                    }
-                });
-
+            programAt.setText(String.format("0x%x",simulator.getStartingAddress()));
+            
             TextField randomRam = (TextField) main.lookup("#randomRam");
-            randomRam.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
-                if (!newPropertyValue)
-                    try {
-                        initRamValue.set(Gui.parseUserAdress(programAt.getText()));
-                        if (initRamValue.get()>128){
-                            Gui.warningPopup("ram can only be filled by bytes\ntry a value between 0x00 and 0xff", a->{});
-                            return;
-                        }
-                        initRamValueChanged.set(true);
-                    } catch (FormatExeption formatExeption) {
-                        return;
-                    }
-            });
+            randomRam.setText(String.format("0x%x",simulator.getRandomPattern()));
 
 
             Button applyAndCloseButton = (Button) main.lookup("#applyAndCloseButton");
             applyAndCloseButton.setOnAction(e -> {
-                simulator.setStartingAddress(programStartAddress.get());
-                if (initRamValueChanged.get()) simulator.setRandomPattern((byte)initRamValue.get());
-                preferencesStage.close();
+            	try {
+	            	int startingAddress = Gui.parseUserAdress(programAt.getText());
+	            	if ((startingAddress % 4) != 0) {
+	            		Gui.warningPopup("The startingAddress should be aligned on a word bound.", (_e) -> {});
+	            		return;
+	            	}
+	                simulator.setStartingAddress(startingAddress);
+	                
+	            	int bytePattern = Gui.parseUserAdress(randomRam.getText());
+	            	if (bytePattern > 0xFF) {
+	            		Gui.warningPopup("A byte should be less than 0x100.", (_e) -> {});
+	            		return;
+	            	}
+	                simulator.setStartingAddress(startingAddress);
+	                simulator.setRandomPattern((byte)bytePattern);
+	                preferencesStage.close();
+            	} catch (FormatExeption exception) {}
             });
-
+            preferencesStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        preferencesStage.show();
     }
 }

@@ -32,6 +32,7 @@ public class Interpreter {
 	OutputStream output;
 	
 	private long pc;
+	private int startingAddress;
 	
 	private ArmSimulator simulator;
 	
@@ -83,6 +84,7 @@ public class Interpreter {
 	public void initialize() {
 		this.redirectToInterpreter();
 		this.pc = this.simulator.getCpu().getCurrentAddress();
+		this.startingAddress = this.simulator.getStartingAddress();
 		this.simulator.setStartingAddress(0);
 		System.out.println("Welcome to the ARMStrong Interpreter!\n .reset To reset the interpreter\n Close the interpreter to get back to the usual simulation mode.\n [WARNING] You cannot use directives in Interpreter mode");
 	}
@@ -93,7 +95,7 @@ public class Interpreter {
 	
 	public void stopInterpreter() {
 		this.simulator.getCpu().setCurrentAddress(this.pc);
-		this.simulator.setStartingAddress(0x1000);
+		this.simulator.setStartingAddress(this.startingAddress);
 	}
 	
 	public DockNode getNode() {

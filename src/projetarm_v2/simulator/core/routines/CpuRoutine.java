@@ -76,6 +76,9 @@ public abstract class CpuRoutine {
 				return;
 			}
 			
+			System.out.println("[INFO] System call " + this.cpuRoutine.getClass().getSimpleName()
+					+ " @ 0x" + Long.toHexString(this.cpuRoutine.getRoutineAddress()));
+			
 			this.cpuRoutine.primitive();
 			
 			this.cpuRoutine.getCpu().setCurrentAddress((long) this.cpuRoutine.getCpu().getRegister(14).getValue()-4);
