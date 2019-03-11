@@ -8,6 +8,9 @@
 
 package projetarm_v2.simulator.ui.javafx;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dockfx.DockNode;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -39,7 +42,7 @@ public class LedView {
     
     public LedView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-        
+        List<IOLed> ledArray = new ArrayList<IOLed>();
         
         this.mainPane = new ScrollPane();
         
@@ -54,7 +57,9 @@ public class LedView {
         
         moreLedButton.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
+            	
             	IOLed led = simulator.newIOLed();
+            	ledArray.add(led);
             	
                 AnchorPane newLedAddress = new AnchorPane();
                 ImageView newLedImage = new ImageView();
@@ -78,13 +83,12 @@ public class LedView {
         
         Button lessLedButton = new Button();
         lessLedButton.setText("Less Led");
-        lessLedButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
+        lessLedButton.setOnAction((ActionEvent event) -> {
             	if(ledContainer.getChildren().size()-1 != 0) {
+            		IOLed led = ledArray.remove(ledArray.size()-1);
+            		simulator.removeIOComponent(led);
             		ledContainer.getChildren().remove(ledContainer.getChildren().size()-1);	
             	}
-            	
-            }
         });
           
         AnchorPane buttonAnchor = new AnchorPane();
@@ -120,7 +124,7 @@ public class LedView {
             	ledImage.setImage(ledOn);
             }else {
             	ledImage.setImage(ledOff);
-            } Comment on fait pour mettre à jour Hugo si tu gardes pas l'objet de la led quelque part pour connaître son état ? */
+            }*/
     	}
     }
     
