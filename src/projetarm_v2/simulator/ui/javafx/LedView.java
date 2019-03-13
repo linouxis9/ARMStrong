@@ -38,11 +38,14 @@ public class LedView {
     Image ledOff;
     Image ledOn;
     
+    List<IOLed> ledArray = new ArrayList<IOLed>();
+    List<ImageView> imageArrayList = new ArrayList<ImageView>();
+    
     private ArmSimulator simulator;
     
     public LedView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-        List<IOLed> ledArray = new ArrayList<IOLed>();
+        
         
         this.mainPane = new ScrollPane();
         
@@ -59,10 +62,13 @@ public class LedView {
             public void handle(ActionEvent event) {
             	
             	IOLed led = simulator.newIOLed();
-            	ledArray.add(led);
             	
                 AnchorPane newLedAddress = new AnchorPane();
                 ImageView newLedImage = new ImageView();
+                
+                ledArray.add(led);
+            	imageArrayList.add(newLedImage);
+            	
                 if(led.isOn()) {
                 	newLedImage.setImage(ledOn);
                 }else {
@@ -75,7 +81,7 @@ public class LedView {
                 newAddress.setText("Address : 0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
                 newAddress.setLayoutX(150);
                 newAddress.setLayoutY(55);
-                
+                System.out.println(ledArray.size());
                 newLedAddress.getChildren().addAll(newLedImage, newAddress);
                 ledContainer.getChildren().add(newLedAddress);
             }
@@ -84,9 +90,12 @@ public class LedView {
         Button lessLedButton = new Button();
         lessLedButton.setText("Less Led");
         lessLedButton.setOnAction((ActionEvent event) -> {
-            	if(ledContainer.getChildren().size()-1 != 0) {
+            	if(ledContainer.getChildren().size()-1 > 0) {
+            		
             		IOLed led = ledArray.remove(ledArray.size()-1);
+            		//imageArrayList.remove(imageArrayList.size()-1);
             		simulator.removeIOComponent(led);
+            		System.out.println(ledArray.size());
             		ledContainer.getChildren().remove(ledContainer.getChildren().size()-1);	
             	}
         });
@@ -120,11 +129,14 @@ public class LedView {
     		
     		ImageView ledImage = (ImageView)pane.getChildren().get(0);
     		
-           /* if (led.isOn()) {
-            	ledImage.setImage(ledOn);
-            }else {
-            	ledImage.setImage(ledOff);
-            }*/
+    		for (int i = 0; i < ledArray.size(); i++)	{
+    			if (ledArray.get(i).isOn()) {
+    				imageArrayList.get(i).setImage(ledOn);
+                }else {
+                	imageArrayList.get(i).setImage(ledOff);
+                }
+    		}
+           
     	}
     }
     
