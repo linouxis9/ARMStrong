@@ -83,7 +83,7 @@ public class Gui extends Application {
 		this.stage = primaryStage;
 
 		primaryStage.setTitle("#@RMStrong");
-		Image applicationIcon = new Image("file:logo.png");
+		Image applicationIcon = new Image(Gui.class.getResource("/resources/logo.png").toExternalForm());
 		primaryStage.getIcons().add(applicationIcon);
 		
 		this.dockPane = new DockPane();
