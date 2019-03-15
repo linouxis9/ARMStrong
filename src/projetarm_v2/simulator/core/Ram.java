@@ -164,7 +164,7 @@ public class Ram {
 
 		public void hook(Unicorn u, long address, int size, long value, Object user_data) {
 			for (int i = 0; i < size; i++) {
-				this.ram.setByte(address+i, (byte)(value >> i & 0xFF));
+				this.ram.setByte(address+i, (byte)((value >> i*2) & 0xFF));
 			}
 		}
 	}

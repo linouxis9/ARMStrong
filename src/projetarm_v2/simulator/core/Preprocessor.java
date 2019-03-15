@@ -15,6 +15,7 @@ import projetarm_v2.simulator.core.routines.CpuBreakpoint;
 
 public class Preprocessor {
 
+	private static String maybeLabel = "^((([a-zA-Z]|[0-9])*):)?";
 	private static final Pattern labelPattern = Pattern.compile("(([a-zA-Z]|[0-9])*):");
 	private static final Pattern equPattern = Pattern.compile(".equ +(.*),(.*)");
 	
@@ -28,6 +29,7 @@ public class Preprocessor {
 		assembly = assembly
 				.replaceAll(".breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
 				.replaceAll("@.*", "")
+				.replaceAll(".stop", ".word 0")
 				.replaceAll(".equ +.*", "");
 
 		
@@ -36,7 +38,7 @@ public class Preprocessor {
 		while (matcher.find()) {
 			assembly = assembly.replaceAll(matcher.group(1), escapeDigit(matcher.group(1)));
 		}
-		
+
 		return assembly.replaceAll("\r?\n",";");
 	}
 
