@@ -1,4 +1,13 @@
-.root { -fx-focus-color: transparent; }
+@font-face {
+    src: url("Anonymous_Pro_B.ttf"),
+    /*src: url("1 Minecraft-Regular.otf"),*/
+}
+
+.root {
+    -fx-focus-color: transparent;
+    -fx-font-family: "Anonymous Pro Bold";
+    -fx-font-size: 1.2em;
+}
 
 #button8Bit, #button16Bit, #button32Bit{
     -fx-background-color: #34495e;
@@ -48,6 +57,11 @@
   -fx-font-size: 15;
   -fx-text-fill: white;
   -fx-display-caret:true;
+  -fx-font-family: "Arial";
+}
+
+#textFlow{
+  -fx-font-family: "Arial";
 }
 
 .dock-title-bar, .text-area:focused .content, #iconConsole, .text-area .content, #goToAddressField:focused, #consoleInput:focused{
