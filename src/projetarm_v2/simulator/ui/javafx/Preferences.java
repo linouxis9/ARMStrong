@@ -43,6 +43,11 @@ public class Preferences {
             TextField randomRam = (TextField) main.lookup("#randomRam");
             randomRam.setText(String.format("0x%x",simulator.getRandomPattern()));
 
+            Button buttonRdm = (Button) main.lookup("#buttonRdm");
+            buttonRdm.setOnAction(ActionEvent -> {
+                simulator.setRandomPattern();
+                randomRam.setText(String.format("0x%x",simulator.getRandomPattern()));
+            });
 
             Button applyAndCloseButton = (Button) main.lookup("#applyAndCloseButton");
             applyAndCloseButton.setOnAction(e -> {

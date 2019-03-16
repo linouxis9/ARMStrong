@@ -172,6 +172,7 @@ public class Gui extends Application {
 			if(!this.codeEditor.getProgramAsString().equals("")){
 				warningPopup("All unsaved work will be lost", eventHandler -> this.codeEditor.setProgramAsString(""));
 			}
+			this.stage.setTitle("#@RMStrong");
 		});
 		this.armMenuBar.getOpenFile().setOnAction(actionEvent -> {
 			if(!this.codeEditor.getProgramAsString().equals("")) {
@@ -366,8 +367,11 @@ public class Gui extends Application {
 
 	private void openProgram() {
 		FileChooser fileChooser = new FileChooser();
+		if(this.currentProgramPath != null){
+			fileChooser.setInitialDirectory(currentProgramPath.getParentFile());
+		}
 		fileChooser.setTitle("Open Program");
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong, Assembly Files (*.ARMS, *.S)", "*.ARMS", "*.S"));
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("ARMStrong, Assembly Files (*.ARMS, *.S)", "*.ARMS", "*.S", "*.s"));
 
 		File chosenFile = fileChooser.showOpenDialog(this.stage);
 		if (chosenFile != null) {
@@ -387,6 +391,7 @@ public class Gui extends Application {
 				e.printStackTrace();
 			}
 			this.currentProgramPath = chosenFile;
+			this.stage.setTitle("#@RMStrong - " + currentProgramPath.getAbsolutePath());
 		}
 	}
 

@@ -39,7 +39,13 @@ public class NewLineRam {
 			case NORMAL:
 				return Integer.toString(a2);
 			case HEX:
-				return String.format("0x%x",a2);
+				switch (this.showType){
+					default:
+					case BYTE: return String.format("0x%02x",a2);
+					case HALFWORD: return String.format("0x%04x",a2);
+					case WORD: return String.format("0x%08x",a2);
+				}
+
 		}
 	}
 

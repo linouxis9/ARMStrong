@@ -104,11 +104,6 @@ public class RamView {
               header.setManaged(false);
             }
         });
-    	Button buttonRdm = (Button) mainPane.lookup("#buttonRdm");
-    	buttonRdm.setOnAction(ActionEvent -> {
-            simulator.setRandomPattern();
-            this.refresh();
-    	});
         
         loadButonsEvents();
         
@@ -168,18 +163,30 @@ public class RamView {
             memoryScrollBar.setUnitIncrement(1);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
             this.refresh();
+
+            button8Bit.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
+            button16Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            button32Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
     	});
     	button16Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(2);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
             alignMemory();
             this.refresh();
+
+            button16Bit.setStyle("-fx-background-color: white; -fx-text-fill: #2C3E50;");
+            button8Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            button32Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
     	});
     	button32Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(4);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.WORD);
             alignMemory();
             this.refresh();
+
+            button32Bit.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
+            button16Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            button8Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
     	});
 
     	

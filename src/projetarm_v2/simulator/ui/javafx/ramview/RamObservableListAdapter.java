@@ -62,7 +62,11 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
 	public void setOutputType(OutputType type) {
 		this.outputType = type;
 	}
-	
+
+	public OutputType getOutputType() {
+		return outputType;
+	}
+
 	public void setShowType(ShowType type) {
 		this.showType = type;
 	}
