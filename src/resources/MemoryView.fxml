@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
+
 <AnchorPane fx:id="memoryViewPane" prefHeight="623.0" prefWidth="359.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to address:" AnchorPane.leftAnchor="13.874992370605469" AnchorPane.topAnchor="14.0" />
@@ -13,8 +16,9 @@
       <Text fx:id="viewModeLabel" layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.leftAnchor="13.294647216796875" AnchorPane.topAnchor="54.0" />
       <ScrollBar fx:id="memoryScrollBar" layoutX="246.0" layoutY="115.0" orientation="VERTICAL" prefHeight="492.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="115.0" />
       <TableView fx:id="tableView" editable="true" layoutX="15.0" layoutY="115.0" prefHeight="492.0" prefWidth="377.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="115.0" />
-      <Button fx:id="buttonHex" layoutX="241.0" layoutY="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" text="Hexadecimal" AnchorPane.topAnchor="80.0" />
+      <Button fx:id="buttonHex" layoutX="241.0" layoutY="81.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" text="Hexadecimal" AnchorPane.leftAnchor="241.0" AnchorPane.topAnchor="81.0" />
       <Button fx:id="buttonDec" layoutX="14.0" layoutY="81.0" mnemonicParsing="false" text="Sig Decimal" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="81.0" />
-      <Button fx:id="buttonDecSig" layoutX="119.0" layoutY="81.0" mnemonicParsing="false" text="Unsig Decimal" />
+      <Button fx:id="buttonDecUnSig" layoutX="120.0" layoutY="81.0" mnemonicParsing="false" text="Unsig Decimal" AnchorPane.leftAnchor="120.0" AnchorPane.topAnchor="81.0" />
+      <Button fx:id="buttonAscii" layoutX="292.0" layoutY="49.0" mnemonicParsing="false" text="ASCII" AnchorPane.leftAnchor="292.0" AnchorPane.topAnchor="49.0" />
    </children>
 </AnchorPane>

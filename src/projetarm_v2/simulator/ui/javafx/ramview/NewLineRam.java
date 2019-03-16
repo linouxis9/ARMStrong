@@ -36,16 +36,28 @@ public class NewLineRam {
 	private String asString(int a2) {
 		switch (this.type) {
 			default:
-			case NORMAL:
+			case SIG_DEC:
 				return Integer.toString(a2);
-			case HEX:
+            case UNSIG_DEC:
+                return Integer.toUnsignedString(a2);
+            case ASCII:
+                if(this.showType == ShowType.BYTE){
+                    try {
+                        return String.format("%c", (byte) a2);
+                    }catch (Exception e){
+                        return "";
+                    }
+                }
+                else {
+                    this.type = OutputType.HEX; //TODO: notify the gui to "color the right button?
+                }
+            case HEX:
 				switch (this.showType){
 					default:
 					case BYTE: return String.format("0x%02x",a2);
 					case HALFWORD: return String.format("0x%04x",a2);
 					case WORD: return String.format("0x%08x",a2);
 				}
-
 		}
 	}
 

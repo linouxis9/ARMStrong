@@ -8,13 +8,10 @@
 
 package projetarm_v2.simulator.ui.javafx.ramview;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -28,8 +25,8 @@ import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
 import projetarm_v2.simulator.ui.javafx.FormatExeption;
 import projetarm_v2.simulator.ui.javafx.Gui;
-import projetarm_v2.simulator.ui.javafx.RegisterObjectView;
 
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class RamView {
@@ -192,6 +189,8 @@ public class RamView {
     	
         Button buttonHex = (Button) mainPane.lookup("#buttonHex");
         Button buttonDec = (Button) mainPane.lookup("#buttonDec");
+        Button buttonUnsigDec = (Button) mainPane.lookup("#buttonDecUnSig");
+        Button buttonAscii = (Button) mainPane.lookup("#buttonAscii");
 
         buttonHex.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
@@ -199,11 +198,22 @@ public class RamView {
             this.refresh();
         });
         buttonDec.setOnAction(ActionEvent -> {
-            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.NORMAL);
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.SIG_DEC);
             alignMemory();
             this.refresh();
         });
 
+        buttonUnsigDec.setOnAction(ActionEvent -> {
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.UNSIG_DEC);
+            alignMemory();
+            this.refresh();
+        });
+        buttonAscii.setOnAction(ActionEvent -> {
+            button8Bit.fire();
+            this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.ASCII);
+            alignMemory();
+            this.refresh();
+        });
 
         TextField goToAddressField = (TextField) mainPane.lookup("#goToAddressField");
         goToAddressField.setOnKeyPressed((KeyEvent ke) -> {

@@ -10,5 +10,7 @@ package projetarm_v2.simulator.ui.javafx.ramview;
 
 public enum OutputType {
 	HEX,
-	NORMAL;
+	SIG_DEC,
+	UNSIG_DEC,
+	ASCII;
 }

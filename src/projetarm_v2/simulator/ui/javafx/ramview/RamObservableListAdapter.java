@@ -25,7 +25,7 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
     public RamObservableListAdapter(Ram ram, RamView ramView) {
 		this.ram = ram;
 		this.offset = 0;
-		this.outputType = OutputType.NORMAL;
+		this.outputType = OutputType.SIG_DEC;
 		this.showType = ShowType.BYTE;
 		this.ramView = ramView;
 	}
