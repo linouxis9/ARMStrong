@@ -46,9 +46,6 @@ public class RegistersView {
     private RegisterObjectView flagHex;
     private RegisterObjectView flagSigDec;
     private RegisterObjectView flagDec;
-	private RegisterObjectView currentAddressHex;
-	private RegisterObjectView currentAddressSigDec;
-	private RegisterObjectView currentAddressDec;
 	
 	private TableView<RegisterObjectView> tableHex;
 	private TableView<RegisterObjectView> tableSigDec;
@@ -165,8 +162,9 @@ public class RegistersView {
 							int value = Integer.parseInt(hex[hex.length-1], 16);
 							if (registerValue < 16) {
 								simulator.setRegisterValue(registerValue, value);
-							} else if (registerValue == 18) {
-								simulator.getCpu().setCurrentAddress(value - value % 4);
+								if (registerValue == 15) {
+									simulator.getCpu().setCurrentAddress(value);
+								}
 							}
 						} catch (NumberFormatException e) {
 							Gui.warningPopup(e.getMessage(), (_e)->{});
@@ -189,8 +187,9 @@ public class RegistersView {
 							int value = Integer.parseInt(newValue);
 							if (registerValue < 16) {
 								simulator.setRegisterValue(registerValue, value);
-							} else if (registerValue == 18) {
-								simulator.getCpu().setCurrentAddress(value - value % 4);
+								if (registerValue == 15) {
+									simulator.getCpu().setCurrentAddress(value);
+								}
 							}
 						} catch (NumberFormatException e) {
 							Gui.warningPopup(e.getMessage(), (_e)->{});
@@ -213,8 +212,9 @@ public class RegistersView {
 							int value = Integer.parseUnsignedInt(newValue);
 							if (registerValue < 16) {
 								simulator.setRegisterValue(registerValue, value);
-							} else if (registerValue == 18) {
-								simulator.getCpu().setCurrentAddress(value - value % 4);
+								if (registerValue == 15) {
+									simulator.getCpu().setCurrentAddress(value);
+								}
 							}
 						} catch (NumberFormatException e) {
 							Gui.warningPopup(e.getMessage(), (_e)->{});
@@ -279,15 +279,6 @@ public class RegistersView {
         this.registersSigDec.add(flagSigDec);
         this.registersDec.add(flagDec);       
         
-        
-        this.currentAddressHex = new RegisterObjectView(18, "nextAddress", String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
-        this.currentAddressSigDec = new RegisterObjectView(18, "nextAddress", Long.toString(simulator.getCpu().getCurrentAddress()));
-        this.currentAddressDec =  new RegisterObjectView(18, "nextAddress", Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
-        
-        this.registersHex.add(currentAddressHex);
-        this.registersSigDec.add(currentAddressSigDec);
-        this.registersDec.add(currentAddressDec);
-        
     	this.tableHex.setItems(this.registersHex);
         this.tableSigDec.setItems(this.registersSigDec);
         this.tableDec.setItems(this.registersDec);
@@ -296,6 +287,12 @@ public class RegistersView {
         this.sigDecTab.setContent(this.sigDecPane);
         this.decTab.setContent(this.decPane);
 
+    }
+    
+    public void setEditable(boolean editable) {
+    	this.tableDec.setEditable(editable);
+    	this.tableSigDec.setEditable(editable);
+    	this.tableHex.setEditable(editable);
     }
     
     private void editFlags(String newValue) {
@@ -341,10 +338,6 @@ public class RegistersView {
     	this.flagHex.setValueRegister(simulator.getCpu().getCPSR().toString());
         this.flagSigDec.setValueRegister(simulator.getCpu().getCPSR().toString());
         this.flagDec.setValueRegister(simulator.getCpu().getCPSR().toString());
-        
-        this.currentAddressHex.setValueRegister(String.format("0x%s", Long.toHexString(simulator.getCpu().getCurrentAddress())));
-        this.currentAddressSigDec.setValueRegister(Long.toString(simulator.getCpu().getCurrentAddress()));
-        this.currentAddressDec.setValueRegister(Long.toUnsignedString(simulator.getCpu().getCurrentAddress()));
 
         refreshColumnData();
     }

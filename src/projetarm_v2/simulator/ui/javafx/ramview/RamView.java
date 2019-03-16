@@ -21,6 +21,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 import org.dockfx.DockNode;
+
+import projetarm_v2.gpl.TextFieldTableCellFixed;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
 import projetarm_v2.simulator.ui.javafx.FormatExeption;
@@ -126,6 +128,10 @@ public class RamView {
     	
     	this.tableView.refresh();
     }
+
+    public void setEditable(boolean editable) {
+    	this.tableView.setEditable(editable);
+    }
     
     private void loadButonsEvents() {
         memoryScrollBar = (ScrollBar) mainPane.lookup("#memoryScrollBar");
@@ -146,10 +152,10 @@ public class RamView {
         	} else {
                 this.firstDisplayedAddress -= this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         	}
-            memoryScrollBar.setValue(this.firstDisplayedAddress);
+
+        	memoryScrollBar.setValue(this.firstDisplayedAddress);
             this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
             this.refresh();
-            this.tableView.autosize();
         });
         
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");

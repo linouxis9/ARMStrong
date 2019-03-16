@@ -1,4 +1,4 @@
-package projetarm_v2.simulator.ui.javafx.ramview;
+package projetarm_v2.gpl;
 
 /*
  * Copyright (c) 2012, 2017, Oracle and/or its affiliates. All rights reserved.

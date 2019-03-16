@@ -51,6 +51,8 @@ public class Gui extends Application {
 
 	private ArrayList<RegistersView> registersViews;
 	private ArrayList<RamView> ramViews;
+	private ArrayList<LedView> ledViews;
+
 	private CodeEditor codeEditor;
 	private ConsoleView consoleView;
 
@@ -95,7 +97,8 @@ public class Gui extends Application {
 		// creating the nodes
 		this.registersViews = new ArrayList<>();
 		this.ramViews = new ArrayList<>();
-
+		this.ledViews = new ArrayList<>();
+		
 		this.codeEditor = new CodeEditor();
 		this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
 
@@ -160,6 +163,13 @@ public class Gui extends Application {
 	}
 
 	private void setExecutionMode() {
+		for (RegistersView registerView : this.registersViews) {
+			registerView.setEditable(this.executionMode);
+		}
+		for (RamView ramView : this.ramViews) {
+			ramView.setEditable(this.executionMode);
+		}
+		
 		this.codeEditor.setExecutionMode(this.executionMode);
 		this.armMenuBar.setExecutionMode(this.executionMode);
 		this.armToolBar.setExecutionMode(this.executionMode);
@@ -257,6 +267,7 @@ public class Gui extends Application {
 		});
 		this.armMenuBar.getNewLedGame().setOnAction(actionEvent -> {
 			LedView moreLedView = new LedView(this.simulator);
+			this.ledViews.add(moreLedView);
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
 		});
 		this.armMenuBar.getPreferences().setOnAction(actionEvent -> new Preferences(simulator));
@@ -267,6 +278,7 @@ public class Gui extends Application {
 				executionMode = !executionMode;
 				if (executionMode) {
 					try {
+						simulator.resetState();
 						simulator.setProgram(codeEditor.getProgramAsString());
 						this.updateUI();
 					} catch (Exception e) {
@@ -436,6 +448,10 @@ public class Gui extends Application {
 				ramView.refresh();
 			}
 			
+			for (LedView ledView : this.ledViews) {
+				ledView.refresh();
+			}
+			
 			if (!this.isInterpreterMode)
 				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 		});
@@ -445,7 +461,7 @@ public class Gui extends Application {
 		new Thread(() -> {
 			while (true) {
 				try {
-					Thread.sleep(250);
+					Thread.sleep(750);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}

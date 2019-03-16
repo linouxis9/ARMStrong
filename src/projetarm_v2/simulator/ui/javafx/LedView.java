@@ -124,19 +124,12 @@ public class LedView {
     }
     
     public void refresh() {
-    	for (Node _pane : ledContainer.getChildren()) {
-    		AnchorPane pane = (AnchorPane)_pane;
-    		
-    		ImageView ledImage = (ImageView)pane.getChildren().get(0);
-    		
-    		for (int i = 0; i < ledArray.size(); i++)	{
-    			if (ledArray.get(i).isOn()) {
-    				imageArrayList.get(i).setImage(ledOn);
-                }else {
-                	imageArrayList.get(i).setImage(ledOff);
-                }
-    		}
-           
+    	for (int i = 0; i < ledArray.size(); i++)	{
+    		if (ledArray.get(i).isOn()) {
+    			imageArrayList.get(i).setImage(ledOn);
+            } else {
+               	imageArrayList.get(i).setImage(ledOff);
+            }
     	}
     }
     

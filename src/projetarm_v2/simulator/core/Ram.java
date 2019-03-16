@@ -22,7 +22,7 @@ public class Ram {
 	public static final int DEFAULT_RAM_SIZE = 2 * 1024 * 1024; // 2 MB
 	public final Map<Long, RamChunk> memory;
 
-	public byte randomPattern = 0;
+	private byte randomPattern = 0;
 	
 	public Ram() {
 		this.memory = new HashMap<>();
@@ -164,7 +164,7 @@ public class Ram {
 
 		public void hook(Unicorn u, long address, int size, long value, Object user_data) {
 			for (int i = 0; i < size; i++) {
-				this.ram.setByte(address+i, (byte)((value >> i*2) & 0xFF));
+				this.ram.setByte(address+i, (byte)((value >> 8*i) & 0xFF));
 			}
 		}
 	}
