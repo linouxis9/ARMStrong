@@ -16,6 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.reflections.Reflections;
 
 import projetarm_v2.simulator.core.routines.CpuRoutine;
+import projetarm_v2.simulator.core.syscalls.SVCHandler;
 import unicorn.*;
 
 public class Cpu {
@@ -32,6 +33,8 @@ public class Cpu {
 	private long startingAddress;
 	private long endAddress;
 	private AtomicLong stepByStepRunning;
+	private SVCHandler svcHandler;
+	
 	
 	private static final byte[] jumpBackInstruction = Assembler.getInstance().assemble("bx lr", 0L);
 
@@ -45,6 +48,8 @@ public class Cpu {
 		this.endAddress = 0;
 		this.stepByStepRunning = new AtomicLong(0);
 		this.running = new AtomicBoolean(false); 
+		this.svcHandler = new SVCHandler(this);
+		
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
 
 		this.registers = new Register[16];
@@ -76,7 +81,9 @@ public class Cpu {
 		u.hook_add(ram.getNewWriteHook(), 1, 0, null);
 
 		u.hook_add(new CPUInstructionHook(this), 1, 0, null);
-
+		
+		u.hook_add(svcHandler.getSVCCallHandler(), null);
+		
 		this.registerCpuRoutines();
 
 		this.synchronizeUnicornRam();
