@@ -198,27 +198,50 @@ public class RamView {
         Button buttonUnsigDec = (Button) mainPane.lookup("#buttonDecUnSig");
         Button buttonAscii = (Button) mainPane.lookup("#buttonAscii");
 
+
+        buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+        buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+        buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+        buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+
         buttonHex.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             alignMemory();
             this.refresh();
+
+            buttonHex.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
+            buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
         });
         buttonDec.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.SIG_DEC);
             alignMemory();
             this.refresh();
+            buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonDec.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
+            buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
         });
 
         buttonUnsigDec.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.UNSIG_DEC);
             alignMemory();
             this.refresh();
+            buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonUnsigDec.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
+            buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
         });
         buttonAscii.setOnAction(ActionEvent -> {
             button8Bit.fire();
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.ASCII);
             alignMemory();
             this.refresh();
+            buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            buttonAscii.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
         });
 
         TextField goToAddressField = (TextField) mainPane.lookup("#goToAddressField");

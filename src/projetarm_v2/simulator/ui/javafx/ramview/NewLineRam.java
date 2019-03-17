@@ -10,14 +10,17 @@ package projetarm_v2.simulator.ui.javafx.ramview;
 
 import projetarm_v2.simulator.core.Ram;
 
-public class NewLineRam {
+import java.text.DecimalFormat;
 
+public class NewLineRam {
 	private Ram ram;
 	private int firstAddress;
 	private ShowType showType;
 	private OutputType type;
 	
 	private String[] cases;
+
+	DecimalFormat format;
 	
 	
 	public NewLineRam(Ram ram, int offset, ShowType showType, OutputType type) {
@@ -27,17 +30,20 @@ public class NewLineRam {
 		this.showType = showType;
 		
 		this.cases = new String[8];
-		
+
+		this.format = new DecimalFormat("+#;-#");
+
 		for (int i = 0; i < this.cases.length; i++) {
 			cases[i] = this.get2(i);
 		}
+
 	}
 	
 	private String asString(int a2) {
 		switch (this.type) {
 			default:
 			case SIG_DEC:
-				return Integer.toString(a2);
+				return format.format(a2);
             case UNSIG_DEC:
                 return Integer.toUnsignedString(a2);
             case ASCII:

@@ -83,6 +83,11 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
     	column--;
 		int address =  offset+row*this.showType.toOffset()*getColumns()+column*showType.toOffset();
 		int newVal = 0;
+		if(Character.isLetter(value.toCharArray()[0])){
+			ram.setByte(address, (byte) value.toCharArray()[0]);
+			System.out.println("[INFO] " + (byte) value.toCharArray()[0] + " was written at address 0x" + Integer.toHexString(address));
+			return;
+		}
 		try {
 			newVal = Gui.parseUserAdress(value);
 		} catch (FormatExeption formatExeption) {}
