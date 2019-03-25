@@ -73,6 +73,8 @@ public class Gui extends Application {
 	
 	private boolean isInterpreterMode;
 	
+	private AtomicBoolean interfaceBeingUpdated;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -82,6 +84,8 @@ public class Gui extends Application {
 		this.simulator = new ArmSimulator();
 		this.executionMode = false;
 		this.running = new AtomicBoolean(false);
+		this.interfaceBeingUpdated = new AtomicBoolean(false);
+
 		this.stage = primaryStage;
 
 		primaryStage.setTitle("#@RMStrong");
@@ -439,7 +443,29 @@ public class Gui extends Application {
 	}
 
 	private void updateUI() {
+		updateUIFast();
+		updateUISlow();
+	}
+	
+	private void updateUIFast() {
 		Platform.runLater(() -> {
+			for (LedView ledView : this.ledViews) {
+				ledView.refresh();
+			}
+
+			if (!this.isInterpreterMode)
+				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
+		});
+	}
+	
+	private void updateUISlow() {
+		Platform.runLater(() -> {
+			if (this.interfaceBeingUpdated.get()) {
+				return;
+			}
+			
+			this.interfaceBeingUpdated.set(true);
+			
 			for (RegistersView registerView : this.registersViews) {
 				registerView.updateRegisters();
 			}
@@ -448,12 +474,7 @@ public class Gui extends Application {
 				ramView.refresh();
 			}
 			
-			for (LedView ledView : this.ledViews) {
-				ledView.refresh();
-			}
-			
-			if (!this.isInterpreterMode)
-				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
+			this.interfaceBeingUpdated.set(false);
 		});
 	}
 	
@@ -470,7 +491,32 @@ public class Gui extends Application {
 					continue;
 				}
 				
-				updateUI();
+				if (!this.interfaceBeingUpdated.get())
+					updateUISlow();
+				else {
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						Thread.currentThread().interrupt();
+					}
+				}
+			}
+		}).start();
+		
+		new Thread(() -> {
+			while (true) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+				
+				if (!runningFlag.get()) {
+					continue;
+				}
+				
+				if (!this.interfaceBeingUpdated.get())
+					updateUIFast();
 			}
 		}).start();
 	}

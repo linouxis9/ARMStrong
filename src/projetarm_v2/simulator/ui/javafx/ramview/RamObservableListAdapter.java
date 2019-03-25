@@ -52,7 +52,7 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
 	
     @Override
     public int size() {
-        return (int) Math.ceil(ramView.getTableView().getHeight() / 27);
+        return (int) Math.floor(ramView.getTableView().getHeight() / 27);
     }
 	
 	public void setOffset(int offset) {

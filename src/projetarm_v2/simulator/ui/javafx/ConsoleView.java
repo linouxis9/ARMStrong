@@ -75,6 +75,9 @@ public class ConsoleView {
 						textFlow.getChildren().add(new Text(currentLine.toString()));
 						this.currentLine.setLength(0);
 						scrollPane.setVvalue(scrollPane.getHmax());
+						if (textFlow.getChildren().size() > 100) {
+							textFlow.getChildren().clear();
+						}
 					});
 				}
 			}

@@ -22,6 +22,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.dockfx.DockNode;
+
+import projetarm_v2.gpl.TextFieldTableCellFixed;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.text.DecimalFormat;
@@ -146,9 +148,9 @@ public class RegistersView {
     	this.nameDecCol.setCellValueFactory(new PropertyValueFactory<>("nameRegister"));
     	this.valueDecCol.setCellValueFactory(new PropertyValueFactory<>("valueRegister"));
     	
-    	this.valueHexCol.setCellFactory(TextFieldTableCell.forTableColumn());
-    	this.valueSigDecCol.setCellFactory(TextFieldTableCell.forTableColumn());
-    	this.valueDecCol.setCellFactory(TextFieldTableCell.forTableColumn());
+    	this.valueHexCol.setCellFactory(TextFieldTableCellFixed.forTableColumn());
+    	this.valueSigDecCol.setCellFactory(TextFieldTableCellFixed.forTableColumn());
+    	this.valueDecCol.setCellFactory(TextFieldTableCellFixed.forTableColumn());
 
     	this.valueHexCol.setOnEditCommit(t -> {
 					String newValue = t.getNewValue();
