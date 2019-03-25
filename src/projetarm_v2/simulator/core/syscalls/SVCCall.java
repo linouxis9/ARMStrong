@@ -8,6 +8,10 @@
 
 package projetarm_v2.simulator.core.syscalls;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.Ram;
 
@@ -26,6 +30,29 @@ public abstract class SVCCall {
 
 	protected Ram getRam() {
 		return this.cpu.getRam();
+	}
+
+	protected String longToString(long address, int length) throws UnsupportedEncodingException
+	{
+	
+		List<Byte> list = new ArrayList<>();
+		byte c = this.getRam().getByte(address++);
+		
+		for (int i = 0; i < length; i++) {
+			list.add(c);
+			c = this.getRam().getByte(address++);
+		}
+		
+		byte[] array = new byte[list.size()];
+		
+		int i= 0;
+		for (Byte current : list) {
+			array[i] = current;
+			i++;
+		}
+		
+		return new String(array, "UTF-8");
+	
 	}
 	
 	protected abstract int getSvcNumber();

@@ -9,20 +9,43 @@
     -fx-font-size: 1.2em;
 }
 
-#button8Bit, #button16Bit, #button32Bit{
-    -fx-background-color: #34495e;
+.button, #button8Bit, #button16Bit, #button32Bit{
     -fx-background-radius: 10px;
     
-    -fx-border-color: #34495e;
     -fx-border-radius: 10px;
-    -fx-border-width: 1.5px;
-    
-    -fx-text-fill: white;
+    -fx-border-width: 1.5px; 
 }
 
-#button8Bit:hover, #button16Bit:hover, #button32Bit:hover{
-    -fx-background-color: white;
-    -fx-text-fill: #34495e;  
+
+.dock-close-button {
+  -fx-graphic: url(cancel.png);
+}
+
+.dock-state-button {
+  -fx-graphic: url(detachedWindow.png);
+}
+
+.text-area {
+  -fx-font-size: 15;
+  -fx-display-caret:true;
+  -fx-text-fill: black;
+}
+
+
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color:transparent;
+}
+
+.tab-header-area{
+    -fx-padding: 0;
+}
+
+.registersTable .table-row-cell {
+  -fx-cell-size: 23px;
+}
+
+.tab{
+  -fx-border-radius: 5px 5px 0px 0px;
 }
 
 .dock-close-button {
@@ -41,93 +64,6 @@
 
 .dock-state-button:hover {
   -fx-background-color: #74b9ff;
-}
-
-.dock-title-label {
-  -fx-text-fill: white;
-}
-
-#goToAddressField, #consoleInput{
-  -fx-background-color: #2C3E50;
-  -fx-text-fill: white;
-  -fx-prompt-text-fill: #bdc3c7;
-}
-
-.text-area {
-  -fx-font-size: 15;
-  -fx-text-fill: white;
-  -fx-display-caret:true;
-  -fx-font-family: "Arial";
-}
-
-#textFlow{
-  -fx-font-family: "Arial";
-}
-
-.dock-title-bar, .text-area:focused .content, #iconConsole, .text-area .content, #goToAddressField:focused, #consoleInput:focused{
-  -fx-background-color: #2C3E50;
-}
-
-.buttonToolBar{
-  -fx-background-radius: 10px;
-  -fx-border-radius: 10px;
-  -fx-border-color: white; 
-  -fx-background-color: white;
-}
-
-.buttonToolBar:hover{
-  -fx-background-color: #95a5a6;
-  -fx-border-color: #95a5a6; 
-}
-
-.scroll-pane{
-  -fx-background: #34495E;
-  -fx-border-color: #2C3E50;
-}
-
-.menu .label{
-  -fx-text-fill: white;
-}
-
-#textConsole > Text, .contentTabPane > Text { 
-    -fx-fill: white;
-}
-
-.buttonToolBar:hover, .menu-item:focused,.menu:focused, .context-menu .separator{
-  -fx-background-color: #95a5a6;
-}
-
-.menu-item, .menu, .menu-bar{
-  -fx-background-color: #2C3E50;
-}
-
-.tool-bar{
-	-fx-background-color: #34495E;
-	-fx-border-color: #2C3E50;
-}
-
-.tab-pane > .tab-header-area > .tab-header-background {
-    -fx-background-color:transparent;
-}
-
-.tab-header-area{
-    -fx-padding: 0;
-}
-
-.registersTable .table-row-cell {
-  -fx-cell-size: 23px;
-}
-
-.tab{
-  -fx-background-radius: 5px 5px 0px 0px;
-  -fx-border-radius: 5px 5px 0px 0px;
-  -fx-background-color: white;
-  -fx-text-fill: #34495e;   
-}
-
-.tab-pane, .tab-pane .tab:selected .tab-label, .tab-pane .tab:selected{
-	-fx-background-color: #34495E;
-	-fx-text-fill: white;
 }
 
 .table-row-cell:empty {

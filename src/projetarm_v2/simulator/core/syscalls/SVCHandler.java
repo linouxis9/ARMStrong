@@ -16,6 +16,9 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 import projetarm_v2.simulator.core.Cpu;
+import projetarm_v2.simulator.core.syscalls.io.FileDescriptors;
+import projetarm_v2.simulator.core.syscalls.io.OpenedFile;
+import projetarm_v2.simulator.core.syscalls.io.SVCIOCall;
 import unicorn.InterruptHook;
 import unicorn.Unicorn;
 
@@ -27,11 +30,16 @@ public class SVCHandler {
 	
 	private Map<Integer,SVCCall> interruptVector;
 	
+	private FileDescriptors fileDescriptors;
+
+	
 	public SVCHandler(Cpu cpu) {
 		this.cpu = cpu;
 		this.interruptVector = new HashMap<>();
-		
+		this.fileDescriptors = new FileDescriptors();
+
 		findSyscalls();
+		findIOSyscalls();
 	}
 	
 	public void findSyscalls() {
@@ -42,6 +50,19 @@ public class SVCHandler {
 		for (Class<? extends SVCCall> classCall : calls) {
 			try {
 				SVCCall call = (SVCCall)(classCall.getDeclaredConstructor(Cpu.class).newInstance(this.cpu));
+				this.interruptVector.put(call.getSvcNumber(),call);
+			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {}
+		}
+	}
+	
+	public void findIOSyscalls() {
+		Reflections reflections = new Reflections("projetarm_v2.simulator.core.syscalls.io");
+
+		Set<Class<? extends SVCIOCall>> calls = reflections.getSubTypesOf(SVCIOCall.class);
+		
+		for (Class<? extends SVCIOCall> classCall : calls) {
+			try {
+				SVCCall call = (SVCIOCall)(classCall.getDeclaredConstructor(Cpu.class, FileDescriptors.class).newInstance(this.cpu, this.fileDescriptors));
 				this.interruptVector.put(call.getSvcNumber(),call);
 			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {}
 		}

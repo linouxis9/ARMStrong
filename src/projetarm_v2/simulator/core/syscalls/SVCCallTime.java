@@ -6,28 +6,26 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-package projetarm_v2.simulator.core.routines;
+package projetarm_v2.simulator.core.syscalls;
 
+import java.io.IOException;
 
 import projetarm_v2.simulator.core.Cpu;
 
-public class CpuConsolePutChar extends CpuRoutine {
+public class SVCCallTime extends SVCCall {
 
-	public static final long ROUTINE_ADDRESS = 0xFF00L;
-	
-	public CpuConsolePutChar(Cpu cpu) {
+	public SVCCallTime(Cpu cpu) {
 		super(cpu);
 	}
-	
-	public long getRoutineAddress() {
-		return ROUTINE_ADDRESS;
+
+	@Override
+	protected int getSvcNumber() {
+		return 0x11;
 	}
-	
+
 	@Override
 	protected void primitive() {
-		int r0 = this.getRegister(0).getValue();
-
-		System.out.format("[OUTPUT] %s%n",Character.toString((char) r0));
+		this.getCpu().getRegister(0).setValue((int)java.time.Instant.now().getEpochSecond());
 	}
 
 }
