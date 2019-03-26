@@ -25,7 +25,9 @@ import projetarm_v2.simulator.core.io.IOComponent;
 
 public class Save implements Serializable {
 	private static final long serialVersionUID = -7923487851230607241L;
+	@SuppressWarnings("unused")
 	private double version = 1.0;
+	@SuppressWarnings("unused")
 	private String copyright = "(C) 2019 Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Hugo Chemarin, Nicolas Gervasi";
 	private String program;
 	private List<IOComponent> components;

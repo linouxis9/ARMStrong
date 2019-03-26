@@ -97,3 +97,17 @@
     -fx-padding: 0;
     -fx-shape: null;
 }
+
+
+.disableButton{
+	-fx-background-color: white;
+	-fx-text-fill: #2C3E50;
+}
+
+
+.enableButton{
+	-fx-background-color: #2C3E50;
+	-fx-text-fill: white;
+}
+
+

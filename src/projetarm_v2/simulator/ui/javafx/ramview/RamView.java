@@ -9,6 +9,7 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -30,6 +31,8 @@ import projetarm_v2.simulator.ui.javafx.Gui;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RamView {
 
@@ -45,6 +48,12 @@ public class RamView {
     private int firstDisplayedAddress = 0x1000;
     
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
+    
+    private ArrayList<Button> buttonBits;
+    
+    private ArrayList<Button> buttonFormat;
+    
+    private boolean state = false;
     
     public RamView(ArmSimulator simulator) {
 
@@ -138,7 +147,7 @@ public class RamView {
         memoryScrollBar.setMin(0);
         memoryScrollBar.setValue(this.firstDisplayedAddress);
         memoryScrollBar.setUnitIncrement(1);
-        memoryScrollBar.setMax(2 *1024*1024); //TODO: set proper value
+        memoryScrollBar.setMax(this.simulator.getRamSize());
         
         memoryScrollBar.valueProperty().addListener((ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
             this.firstDisplayedAddress = new_val.intValue();
@@ -161,25 +170,31 @@ public class RamView {
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
+    	Button buttonAscii = (Button) mainPane.lookup("#buttonAscii");
 
+    	this.buttonBits = new ArrayList<Button>(){{
+            add(button8Bit);
+            add(button16Bit);
+            add(button32Bit);
+            add(buttonAscii);
+        }};
+        
+        changeStyleState(buttonBits, button8Bit);    
+    	
     	button8Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(1);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
             this.refresh();
 
-            button8Bit.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
-            button16Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            button32Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            this.state = false;
     	});
     	button16Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(2);
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.HALFWORD);
             alignMemory();
             this.refresh();
-
-            button16Bit.setStyle("-fx-background-color: white; -fx-text-fill: #2C3E50;");
-            button8Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            button32Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            
+            changeStyleState(buttonBits, button16Bit);
     	});
     	button32Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(4);
@@ -187,61 +202,53 @@ public class RamView {
             alignMemory();
             this.refresh();
 
-            button32Bit.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
-            button16Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            button8Bit.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            changeStyleState(buttonBits, button32Bit);
     	});
 
     	
         Button buttonHex = (Button) mainPane.lookup("#buttonHex");
         Button buttonDec = (Button) mainPane.lookup("#buttonDec");
         Button buttonUnsigDec = (Button) mainPane.lookup("#buttonDecUnSig");
-        Button buttonAscii = (Button) mainPane.lookup("#buttonAscii");
-
-
-        buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-        buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-        buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-        buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+   
+        this.buttonFormat = new ArrayList<Button>(){{
+            add(buttonHex);
+            add(buttonDec);
+            add(buttonUnsigDec);
+        }};
+        
+        changeStyleState(buttonFormat, buttonDec);      
 
         buttonHex.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
             alignMemory();
             this.refresh();
 
-            buttonHex.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
-            buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            changeStyleState(buttonFormat, buttonHex);
         });
         buttonDec.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.SIG_DEC);
             alignMemory();
             this.refresh();
-            buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonDec.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
-            buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            
+            changeStyleState(buttonFormat, buttonDec);
+
         });
 
         buttonUnsigDec.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.UNSIG_DEC);
             alignMemory();
             this.refresh();
-            buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonUnsigDec.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
-            buttonAscii.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
+            
+            changeStyleState(buttonFormat, buttonUnsigDec);
         });
         buttonAscii.setOnAction(ActionEvent -> {
             button8Bit.fire();
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.ASCII);
             alignMemory();
-            this.refresh();
-            buttonHex.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonUnsigDec.setStyle("-fx-background-color: #2C3E50;-fx-text-fill: white;");
-            buttonAscii.setStyle("-fx-background-color: white;-fx-text-fill: #2C3E50;");
+            this.refresh();   
+            changeStyleState(buttonBits, buttonAscii); 
+            changeStyleState(buttonFormat, null);
+            this.state = true;
         });
 
         TextField goToAddressField = (TextField) mainPane.lookup("#goToAddressField");
@@ -280,5 +287,18 @@ public class RamView {
     private void alignMemory(){
         this.firstDisplayedAddress -= this.firstDisplayedAddress % this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         memoryScrollBar.setValue(this.firstDisplayedAddress);
+    }
+    
+    private void changeStyleState(List<Button> list, Button buttonChangeStyle){
+    	for (Button button: list) {
+    		if(button == buttonChangeStyle) {
+    			button.getStyleClass().add("enableButton");
+        		button.getStyleClass().remove("disableButton");
+    		}else {
+    			button.getStyleClass().add("disableButton");
+        		button.getStyleClass().remove("enableButton");
+    		}	
+    	} 	
+    	
     }
 }
