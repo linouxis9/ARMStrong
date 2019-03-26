@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
-import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
+import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 
 import java.io.IOException;
 import java.io.OutputStream;

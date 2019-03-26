@@ -16,6 +16,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
+
 import org.dockfx.DockNode;
 
 import java.io.IOException;
@@ -32,13 +34,17 @@ public class CodeEditor {
     private TextFlow textFlow;
     private List<Text> instructionsAsText;
 
-    public CodeEditor() {
+    private ArmSimulator armSimulator;
+    
+    public CodeEditor(ArmSimulator armSimulator) {
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/EditorView.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        this.armSimulator = armSimulator;
+        
         dockNode = new DockNode(mainPane, "Editor", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
         dockNode.setClosable(false);
@@ -71,7 +77,11 @@ public class CodeEditor {
             this.instructionsAsText = new ArrayList<>();
             this.textFlow.getChildren().clear();
             for (int lineNumber = 1; lineNumber <= instructionsAsStrings.length; lineNumber++) {
-                String line = lineNumber + "\t" + instructionsAsStrings[lineNumber-1] + '\n';
+            	String address = "";
+            	if (armSimulator.getAddressFromLine(lineNumber) != 0) {
+            		address = "0x" + Integer.toHexString(armSimulator.getAddressFromLine(lineNumber));
+            	}
+                String line = lineNumber + ":" + address + " \t" + instructionsAsStrings[lineNumber-1] + '\n';
                 this.instructionsAsText.add(new Text(line));
                 this.textFlow.getChildren().add(this.instructionsAsText.get(lineNumber-1));
             }

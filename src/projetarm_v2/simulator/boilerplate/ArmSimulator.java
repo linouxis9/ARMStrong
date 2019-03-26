@@ -15,6 +15,9 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import projetarm_v2.simulator.core.Assembler;
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
@@ -27,8 +30,10 @@ import projetarm_v2.simulator.core.io.IOLed;
 import projetarm_v2.simulator.core.io.IOSegment;
 import projetarm_v2.simulator.core.io.IOSwitch;
 import projetarm_v2.simulator.core.io.PORTManager;
+import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 import projetarm_v2.simulator.core.save.Save;
+import projetarm_v2.simulator.ui.javafx.ConsoleView;
 import projetarm_v2.simulator.utils.NativeJarGetter;
 import unicorn.UnicornException;
 
@@ -56,7 +61,7 @@ public class ArmSimulator {
 
 	private PORTManager portManager;
 	
-	private Map<Integer, Integer> asmToLine;
+	private BiMap<Integer, Integer> asmToLine;
 
 	private static final Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
 
@@ -66,9 +71,12 @@ public class ArmSimulator {
 	
 	private CpuConsoleGetString guiConsoleToCpu;
 
+	private ConsoleView consoleView;
+	
 	private Save save;
 	
 	private Random random;
+	private CpuConsoleClear guiClear;
 	
 	/**
 	 * Creates a arm simulator ready to use, with all the needed components (cpu,
@@ -80,7 +88,7 @@ public class ArmSimulator {
 		this.ram = new Ram();
 		
 		this.assembler = Assembler.getInstance();
-		this.asmToLine = new HashMap<>();
+		this.asmToLine = HashBiMap.create();
 		
 		this.random = new Random();
 		
@@ -107,6 +115,10 @@ public class ArmSimulator {
 		this.save.saveToFile(path);
 	}
 	
+	public int getAddressFromLine(int line) {
+		return this.asmToLine.inverse().getOrDefault(line,0);
+	}
+	
 	public void setProgram(String assembly) {
 		this.save.setProgram(assembly);
 		assembly = Preprocessor.pass1(assembly);
@@ -121,6 +133,11 @@ public class ArmSimulator {
 		this.guiConsoleToCpu.add(input);
 	}
 
+	public void setConsoleView(ConsoleView consoleView){
+		this.consoleView = consoleView;
+		this.guiClear.setConsoleView(consoleView);
+	}
+	
 	private String fillRamWithAssembly(String assembly) {
 		this.asmToLine.clear();
 
@@ -290,6 +307,9 @@ public class ArmSimulator {
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
 		this.guiConsoleToCpu = new CpuConsoleGetString(cpu);
 		this.cpu.registerCpuRoutine(guiConsoleToCpu);
+		this.guiClear = new CpuConsoleClear(cpu);
+		this.guiClear.setConsoleView(consoleView);
+		this.cpu.registerCpuRoutine(guiClear);
 		this.portManager = new PORTManager(this.ram);
 	}
 

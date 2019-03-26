@@ -85,6 +85,13 @@ public class ConsoleView {
 		
 	}
 
+	
+	public void clear() {
+		Platform.runLater(() -> {
+			textFlow.getChildren().clear();
+		});
+	}
+	
 	public void redirectToConsole() {
 		System.setOut(new PrintStream(output));
 	}

@@ -193,7 +193,7 @@ public class Cpu {
 		}
 
 		public void hook(Unicorn u, long address, int size, Object user_data) {
-			this.cpu.pc.setValue((int)address + 8);
+			this.cpu.pc.setValue((int)address + 4);
 			this.cpu.currentAddress.setValue((int)address);
 			
 			//System.out.format(">>> Instruction @ 0x%x is being executed\n", this.cpu.pc.getValue());

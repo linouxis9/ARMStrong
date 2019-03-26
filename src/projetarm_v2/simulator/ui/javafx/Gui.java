@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
-import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
+import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 public class Gui extends Application {
@@ -103,7 +103,7 @@ public class Gui extends Application {
 		this.ramViews = new ArrayList<>();
 		this.ledViews = new ArrayList<>();
 		
-		this.codeEditor = new CodeEditor();
+		this.codeEditor = new CodeEditor(simulator);
 		this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
 
 		this.registersViews.add(new RegistersView(this.simulator));
@@ -116,6 +116,8 @@ public class Gui extends Application {
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 
 		this.consoleView.redirectToConsole();
+		
+		this.simulator.setConsoleView(this.consoleView);
 		
 		this.interpreter = new Interpreter(this.simulator);
 		this.isInterpreterMode = false;
@@ -346,7 +348,7 @@ public class Gui extends Application {
 					System.out.println("[INFO] Input [" + this.consoleView.getTextField().getText() + "] added to Input queue");
 				} else {
 					System.out.println("[INFO] Input discarded (The CPU was not waiting for INPUT and you aren't in Interpreter mode)");
-					System.out.println("[INFO] Maybe you wanted to use CpuRoutineGetStringFromConsole @ 0x" + Long.toHexString(CpuConsoleGetString.ROUTINE_ADDRESS) + " in your assembly?");
+					System.out.println("[INFO] Maybe you wanted to use CpuRoutineGetStringFromConsole @ 0x" + Long.toHexString(CpuConsoleClear.ROUTINE_ADDRESS) + " in your assembly?");
 				}
 				this.consoleView.getTextField().clear();
 			}
