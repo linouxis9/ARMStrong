@@ -53,8 +53,6 @@ public class RamView {
     
     private ArrayList<Button> buttonFormat;
     
-    private boolean state = false;
-    
     public RamView(ArmSimulator simulator) {
 
         this.simulator=simulator;
@@ -186,7 +184,7 @@ public class RamView {
             this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
             this.refresh();
 
-            this.state = false;
+            changeStyleState(buttonBits, button8Bit);
     	});
     	button16Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(2);
@@ -242,13 +240,14 @@ public class RamView {
             changeStyleState(buttonFormat, buttonUnsigDec);
         });
         buttonAscii.setOnAction(ActionEvent -> {
-            button8Bit.fire();
+            memoryScrollBar.setUnitIncrement(1);
+            this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.ASCII);
             alignMemory();
-            this.refresh();   
+            this.refresh(); 
+            
             changeStyleState(buttonBits, buttonAscii); 
             changeStyleState(buttonFormat, null);
-            this.state = true;
         });
 
         TextField goToAddressField = (TextField) mainPane.lookup("#goToAddressField");
