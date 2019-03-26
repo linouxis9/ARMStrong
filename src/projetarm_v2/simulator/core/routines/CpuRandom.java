@@ -8,31 +8,28 @@
 
 package projetarm_v2.simulator.core.routines;
 
+import java.util.Random;
+
 import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.ui.javafx.ConsoleView;
 
-public class CpuConsoleClear extends CpuRoutine {
+public class CpuRandom extends CpuRoutine {
 	
-	public static final long ROUTINE_ADDRESS = 0xFF1CL;
-	private ConsoleView consoleView;
+	public static final long ROUTINE_ADDRESS = 0xFF20L;
+	private Random random;
 	
-	public CpuConsoleClear(Cpu cpu) {
+	
+	public CpuRandom(Cpu cpu) {
 		super(cpu);
-	}
-	
-	public void setConsoleView(ConsoleView consoleView) {
-		this.consoleView = consoleView;
+		this.random = new Random();
 	}
 	
 	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
-	
-	public static boolean shouldBeManuallyAdded() {	return true; }
+
 	
 	@Override
 	protected void primitive()
 	{
-		if (consoleView != null) {
-			this.consoleView.clear();
-		}
+		this.getCpu().getRegister(0).setValue(this.random.nextInt());
 	}
 }

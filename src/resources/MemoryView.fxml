@@ -16,9 +16,9 @@
       <Text fx:id="viewModeLabel" layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.leftAnchor="13.294647216796875" AnchorPane.topAnchor="54.0" />
       <ScrollBar fx:id="memoryScrollBar" layoutX="246.0" layoutY="126.0" orientation="VERTICAL" prefHeight="481.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="126.0" />
       <TableView fx:id="tableView" editable="true" layoutX="15.0" layoutY="126.0" prefHeight="481.0" prefWidth="313.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="126.0" />
-      <Button fx:id="buttonHex" layoutX="257.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Hexadecimal" AnchorPane.leftAnchor="257.0" AnchorPane.topAnchor="84.0" />
-      <Button fx:id="buttonDec" layoutX="14.0" layoutY="84.0" mnemonicParsing="false" text="Sig Decimal" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="84.0" />
-      <Button fx:id="buttonDecUnSig" layoutX="127.0" layoutY="84.0" mnemonicParsing="false" text="Unsig Decimal" AnchorPane.leftAnchor="127.0" AnchorPane.topAnchor="84.0" />
+      <Button fx:id="buttonDecUnSig" layoutX="257.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Decimal" AnchorPane.leftAnchor="257.0" AnchorPane.topAnchor="84.0" />
+      <Button fx:id="buttonHex" layoutX="14.0" layoutY="84.0" mnemonicParsing="false" text="Hexadecimal" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="84.0" />
+      <Button fx:id="buttonDec" layoutX="127.0" layoutY="84.0" mnemonicParsing="false" text="Sig Decimal" AnchorPane.leftAnchor="127.0" AnchorPane.topAnchor="84.0" />
       <Button fx:id="buttonAscii" layoutX="304.0" layoutY="49.0" mnemonicParsing="false" text="ASCII" AnchorPane.leftAnchor="304.0" AnchorPane.topAnchor="49.0" />
    </children>
 </AnchorPane>
