@@ -12,19 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dockfx.DockNode;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.io.IOLed;
+import javafx.scene.control.Button;
 
 public class LedView {
 
@@ -32,9 +31,9 @@ public class LedView {
     DockNode dockNode;
     Image dockImage;
     TextFlow textArea;
-    AnchorPane anchorPane;
+    AnchorPane anchorPane;    
     VBox ledContainer;
-    
+    HBox gameContainer;
     Image ledOff;
     Image ledOn;
     
@@ -44,80 +43,61 @@ public class LedView {
     private ArmSimulator simulator;
     
     public LedView(ArmSimulator simulator){
-       // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
-        
-        
+       
         this.mainPane = new ScrollPane();
         
         ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
         ledOn = new Image(getClass().getResource("/resources/ledOn.png").toExternalForm());
         
+        gameContainer = new HBox();
+        ledContainer = new VBox();
+        AnchorPane buttonContainer = new AnchorPane();
         
-        
-        /* The first element in the VBox is one anchorPane containing 2 buttons : more led and less led */
-        Button moreLedButton = new Button();
-        moreLedButton.setText("More Led");
-        
-        moreLedButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-            	
-            	IOLed led = simulator.newIOLed();
-            	
-                AnchorPane newLedAddress = new AnchorPane();
-                ImageView newLedImage = new ImageView();
-                
-                ledArray.add(led);
-            	imageArrayList.add(newLedImage);
-            	
-                if(led.isOn()) {
-                	newLedImage.setImage(ledOn);
-                }else {
-                	newLedImage.setImage(ledOff);
-                }
-                
-                newLedImage.setLayoutX(0);
-                newLedImage.setLayoutY(0);
-                Text newAddress = new Text();
-                newAddress.setText("Address : 0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
-                newAddress.setLayoutX(150);
-                newAddress.setLayoutY(55);
-                System.out.println(ledArray.size());
-                newLedAddress.getChildren().addAll(newLedImage, newAddress);
-                ledContainer.getChildren().add(newLedAddress);
+        for(int i=0 ; i < 8 ; i++) {
+        	IOLed led = simulator.newIOLed();
+        	
+        	AnchorPane newLedAddress = new AnchorPane();
+            ImageView newLedImage = new ImageView();
+            
+            ledArray.add(led);
+        	imageArrayList.add(newLedImage);
+        	
+        	if(led.isOn()) {
+            	newLedImage.setImage(ledOn);
+            }else {
+            	newLedImage.setImage(ledOff);
             }
-        });
-        
-        Button lessLedButton = new Button();
-        lessLedButton.setText("Less Led");
-        lessLedButton.setOnAction((ActionEvent event) -> {
-            	if(ledContainer.getChildren().size()-1 > 0) {
-            		
-            		IOLed led = ledArray.remove(ledArray.size()-1);
-            		//imageArrayList.remove(imageArrayList.size()-1);
-            		simulator.removeIOComponent(led);
-            		System.out.println(ledArray.size());
-            		ledContainer.getChildren().remove(ledContainer.getChildren().size()-1);	
-            	}
-        });
-          
-        AnchorPane buttonAnchor = new AnchorPane();
-        
-        moreLedButton.setLayoutX(20);
-        moreLedButton.setLayoutY(20);
-        
-        lessLedButton.setLayoutX(100);
-        lessLedButton.setLayoutY(20);
-        
-        buttonAnchor.getChildren().addAll(moreLedButton, lessLedButton);
-        
+        	
 
-        ledContainer = new VBox(buttonAnchor);
+            newLedImage.setLayoutX(0);
+            newLedImage.setLayoutY(0);
+            Text newAddress = new Text();
+            newAddress.setText("Address : 0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
+            newAddress.setLayoutX(150);
+            newAddress.setLayoutY(55);
+            
+            newLedAddress.getChildren().addAll(newLedImage, newAddress);
+            ledContainer.getChildren().add(newLedAddress);
+        }       
+        
+        ToggleButton leverButton =  new ToggleButton("", new ImageView(new Image(getClass().getResource("/resources/leverButton.png").toExternalForm())));
+        Button pushingButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/pushingButton.png").toExternalForm())));
+        
+        pushingButton.setLayoutX(20);
+        pushingButton.setLayoutY(20);
+        
+        leverButton.setLayoutX(100);
+        leverButton.setLayoutY(20);
+        
+        buttonContainer.getChildren().addAll(pushingButton, leverButton);
+        
+        gameContainer.getChildren().addAll(ledContainer, buttonContainer);
         
         this.dockNode = new DockNode(mainPane, "Led Game", new ImageView(dockImage));
         
         dockNode.setPrefSize(460,666);
         
-        this.mainPane.setContent(ledContainer);  
+        this.mainPane.setContent(gameContainer);  
         this.mainPane.setFitToWidth(true);
         this.mainPane.setFitToHeight(true);  
         this.mainPane.setHmin(dockNode.getHeight());
