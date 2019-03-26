@@ -16,6 +16,8 @@ import projetarm_v2.simulator.core.RamRegister;
 
 public class IOx {
 
+	public static final int NUMBER_OF_SEGMENTS = 8;
+
 	private final static int REGISTER_SIZE = 8;
 	
 	private RamRegister portX;
@@ -59,8 +61,8 @@ public class IOx {
 		return newIOSwitch(getNextAvailableBit());
 	}
 	
-	public IO7Segment newIO7Segment() {
-		return newIO7Segment(getNextAvailableBit());
+	public IO8Segment newIO8Segment() {
+		return newIO8Segment(getNextAvailableBit());
 	}
 	
 	public IOLed newIOLed(int bit) {
@@ -99,18 +101,18 @@ public class IOx {
 		return ioSwitch;
 	}
 	
-	public IO7Segment newIO7Segment(int bit) {
-		if (!hasNAvailableSlot(7)) {
+	public IO8Segment newIO8Segment(int bit) {
+		if (!hasNAvailableSlot(NUMBER_OF_SEGMENTS)) {
 			throw new RuntimeException("Too many IOComponents attached to that port already");
 		}
 		
-		IOSegment[] segments = new IOSegment[7];
+		IOSegment[] segments = new IOSegment[NUMBER_OF_SEGMENTS];
 		
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < NUMBER_OF_SEGMENTS; i++) {
 			segments[i] = newIOSegment(bit + i);
 		}
 		
-		return new IO7Segment(segments);
+		return new IO8Segment(segments);
 	}
 	
 	private IOSegment newIOSegment(int bit) {
@@ -138,10 +140,10 @@ public class IOx {
 	}
 	
 	public boolean hasNAvailableSlot(int n) {
-		return noComponent + n < REGISTER_SIZE;
+		return noComponent + n <= REGISTER_SIZE;
 	}
 	
 	public boolean hasAnAvailableSlot() {
-		return noComponent < REGISTER_SIZE-1;
+		return noComponent < REGISTER_SIZE;
 	}
 }

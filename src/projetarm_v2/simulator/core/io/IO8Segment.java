@@ -8,11 +8,11 @@
 
 package projetarm_v2.simulator.core.io;
 
-public class IO7Segment {
+public class IO8Segment {
 
 	private final IOSegment[] segments;
 	
-	protected IO7Segment(IOSegment[] segments) {
+	protected IO8Segment(IOSegment[] segments) {
 		this.segments = segments;
 	}
 

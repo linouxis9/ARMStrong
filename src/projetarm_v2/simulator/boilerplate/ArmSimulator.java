@@ -23,12 +23,13 @@ import projetarm_v2.simulator.core.Cpu;
 import projetarm_v2.simulator.core.InvalidAssemblyException;
 import projetarm_v2.simulator.core.Preprocessor;
 import projetarm_v2.simulator.core.Ram;
-import projetarm_v2.simulator.core.io.IO7Segment;
+import projetarm_v2.simulator.core.io.IO8Segment;
 import projetarm_v2.simulator.core.io.IOButton;
 import projetarm_v2.simulator.core.io.IOComponent;
 import projetarm_v2.simulator.core.io.IOLed;
 import projetarm_v2.simulator.core.io.IOSegment;
 import projetarm_v2.simulator.core.io.IOSwitch;
+import projetarm_v2.simulator.core.io.IOx;
 import projetarm_v2.simulator.core.io.PORTManager;
 import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
@@ -404,10 +405,10 @@ public class ArmSimulator {
 		return component;
 	}
 	
-	public IO7Segment newIO7Segment() {
-		IO7Segment segments = this.portManager.newIO7Segment();
+	public IO8Segment newIO7Segment() {
+		IO8Segment segments = this.portManager.newIO8Segment();
 		
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < IOx.NUMBER_OF_SEGMENTS; i++) {
 			this.save.addComponent(segments.getSegment(i));
 		}
 		
@@ -419,7 +420,7 @@ public class ArmSimulator {
 		this.save.removeComponent(component);
 	}
 	
-	public void removeIOComponent(IO7Segment segments) {
+	public void removeIOComponent(IO8Segment segments) {
 		for (int i = 0; i < 7; i++) {
 			IOSegment segment = segments.getSegment(i);
 			this.save.removeComponent(segment);

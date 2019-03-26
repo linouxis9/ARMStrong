@@ -61,10 +61,10 @@ public class PORTManager {
 	}
 	
 	
-	public boolean remove(IO7Segment component) {
+	public boolean remove(IO8Segment component) {
 		boolean flag;
 		
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < IOx.NUMBER_OF_SEGMENTS; i++) {
 			flag = this.removeIOComponent(component.getSegment(i));
 			if (flag) {
 				return true;
@@ -86,8 +86,8 @@ public class PORTManager {
 		return this.getNextAvailablePort().newIOSwitch();
 	}
 	
-	public IO7Segment newIO7Segment() {
-		return this.getNextAvailablePort(7).newIO7Segment();
+	public IO8Segment newIO8Segment() {
+		return this.getNextAvailablePort(IOx.NUMBER_OF_SEGMENTS).newIO8Segment();
 	}
 
 	public void generateIOComponents(List<IOComponent> components) {
@@ -105,8 +105,8 @@ public class PORTManager {
 			} else if (component instanceof IOSegment) {
 				segments++;
 				if (segments == 1) {
-					port.newIO7Segment(component.shift);
-				} else if (segments == 7) {
+					port.newIO8Segment(component.shift);
+				} else if (segments == IOx.NUMBER_OF_SEGMENTS) {
 					segments = 0;
 				}
 			}
