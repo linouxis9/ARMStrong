@@ -405,7 +405,7 @@ public class ArmSimulator {
 		return component;
 	}
 	
-	public IO8Segment newIO7Segment() {
+	public IO8Segment newIO8Segment() {
 		IO8Segment segments = this.portManager.newIO8Segment();
 		
 		for (int i = 0; i < IOx.NUMBER_OF_SEGMENTS; i++) {

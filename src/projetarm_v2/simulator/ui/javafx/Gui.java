@@ -52,6 +52,7 @@ public class Gui extends Application {
 	private ArrayList<RegistersView> registersViews;
 	private ArrayList<RamView> ramViews;
 	private ArrayList<LedView> ledViews;
+	private ArrayList<EightSegmentDisplay> eightSegmentDisplays;
 
 	private CodeEditor codeEditor;
 	private ConsoleView consoleView;
@@ -74,7 +75,7 @@ public class Gui extends Application {
 	private boolean isInterpreterMode;
 	
 	private AtomicBoolean interfaceBeingUpdated;
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -102,6 +103,7 @@ public class Gui extends Application {
 		this.registersViews = new ArrayList<>();
 		this.ramViews = new ArrayList<>();
 		this.ledViews = new ArrayList<>();
+		this.eightSegmentDisplays = new ArrayList<>();
 		
 		this.codeEditor = new CodeEditor(simulator);
 		this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
@@ -276,6 +278,13 @@ public class Gui extends Application {
 			this.ledViews.add(moreLedView);
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
 		});
+		this.armMenuBar.getNewEightSegmentDisplayWindow().setOnAction(actionEvent -> {
+			EightSegmentDisplay moreSegment = new EightSegmentDisplay(this.simulator);
+			this.eightSegmentDisplays.add(moreSegment);
+			moreSegment.getNode().dock(dockPane, DockPos.RIGHT);
+		});
+
+
 		this.armMenuBar.getPreferences().setOnAction(actionEvent -> new Preferences(simulator));
 
 		//Run
@@ -457,6 +466,10 @@ public class Gui extends Application {
 
 			if (!this.isInterpreterMode)
 				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
+
+			for (EightSegmentDisplay eightSeg : this.eightSegmentDisplays){
+				eightSeg.refresh();
+			}
 		});
 	}
 	
@@ -475,7 +488,7 @@ public class Gui extends Application {
 			for (RamView ramView : this.ramViews) {
 				ramView.refresh();
 			}
-			
+
 			this.interfaceBeingUpdated.set(false);
 		});
 	}
@@ -508,17 +521,16 @@ public class Gui extends Application {
 		new Thread(() -> {
 			while (true) {
 				try {
-					Thread.sleep(10);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
-				
-				if (!runningFlag.get()) {
+
+				if (!executionMode) {
 					continue;
 				}
-				
-				if (!this.interfaceBeingUpdated.get())
-					updateUIFast();
+
+				updateUIFast();
 			}
 		}).start();
 	}

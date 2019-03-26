@@ -35,6 +35,7 @@ public class ArmMenuBar {
     private MenuItem newMemoryWindow;
     private MenuItem newRegistersWindow;
     private MenuItem newLedGameWindow;
+    private MenuItem newEightSegmentDisplayWindow;
 
     private MenuItem switchMode;
     private MenuItem reloadMenuItem;
@@ -84,7 +85,8 @@ public class ArmMenuBar {
         this.newMemoryWindow = new MenuItem("new Memory");
         this.newRegistersWindow = new MenuItem("new Registers");
         this.newLedGameWindow = new MenuItem("new Led Game");
-        windowMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow);
+        this.newEightSegmentDisplayWindow = new MenuItem("EightSegment");
+        windowMenu.getItems().addAll(this.newMemoryWindow, this.newRegistersWindow, this.newLedGameWindow, this.newEightSegmentDisplayWindow);
 
         //RUN
         this.switchMode = new MenuItem("Switch Mode");
@@ -161,6 +163,10 @@ public class ArmMenuBar {
     
     public MenuItem getNewLedGame() {
         return newLedGameWindow;
+    }
+
+    public MenuItem getNewEightSegmentDisplayWindow() {
+        return newEightSegmentDisplayWindow;
     }
 
     public MenuItem getOpenFile() {
