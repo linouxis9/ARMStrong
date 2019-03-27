@@ -9,6 +9,7 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +29,7 @@ import java.util.List;
 public class CodeEditor {
 
     private Pane mainPane;
+    private ScrollPane scrollPane;
     private DockNode dockNode;
     private Image dockImage;
 
@@ -48,8 +50,21 @@ public class CodeEditor {
         dockNode.setClosable(false);
 
         this.textArea = new TextArea();
+        
+        AnchorPane.setBottomAnchor(this.textArea, 0D);
+        AnchorPane.setLeftAnchor(this.textArea, 0D);
+        AnchorPane.setRightAnchor(this.textArea, 0D);
+        AnchorPane.setTopAnchor(this.textArea, 0D);
+        this.mainPane.setMinSize(300, 300);
+        
         this.textFlow = new TextFlow();
-        this.mainPane.getChildren().addAll(this.textArea, this.textFlow);
+        this.scrollPane = new ScrollPane(this.textFlow);
+        AnchorPane.setBottomAnchor(this.scrollPane, 0D);
+        AnchorPane.setLeftAnchor(this.scrollPane, 0D);
+        AnchorPane.setRightAnchor(this.scrollPane, 0D);
+        AnchorPane.setTopAnchor(this.scrollPane, 0D);
+        
+        this.mainPane.getChildren().addAll(this.scrollPane, this.textFlow, this.textArea);
         this.dockNode.getStylesheets().add("/resources/style.css");
         mainPane.setMaxHeight(Double.MAX_VALUE);
         mainPane.setMaxWidth(Double.MAX_VALUE);
