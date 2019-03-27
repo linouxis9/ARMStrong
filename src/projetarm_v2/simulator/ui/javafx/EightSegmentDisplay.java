@@ -28,10 +28,13 @@ public class EightSegmentDisplay {
      */
     public EightSegmentDisplay(ArmSimulator simulator){
 
+        this.simulator = simulator;
         this.mainPane = new HBox();
         images = new ArrayList<>();
         segments = new ArrayList<>();
 
+
+        
         for(int j = 0; j<15; j++) {
             VBox currentVBox = new VBox();
             this.mainPane.getChildren().add(currentVBox);

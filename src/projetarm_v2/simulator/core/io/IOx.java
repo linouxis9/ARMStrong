@@ -38,7 +38,7 @@ public class IOx {
 	public boolean removeComponent(IOComponent component) {
 		int index = getComponentBit(component);
 		
-		if (components[index] == null) {
+		if (index == -1 || components[index] == null) {
 			return false;
 		}
 		
