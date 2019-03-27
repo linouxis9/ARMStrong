@@ -73,4 +73,14 @@ public class EightSegmentDisplay {
         return dockNode;
     }
 
+    /**
+     * called when user pushes the close button on the dockfx node
+     * closes the node and removes the components
+     */
+    public void close() {
+        this.dockNode.close();
+        for(IO8Segment segment : segments){
+            this.simulator.removeIOComponent(segment);
+        }
+    }
 }

@@ -272,6 +272,8 @@ public class Gui extends Application {
 				this.armToolBar.getSwitchButton().setDisable(true);
 			}
 		});
+
+		//WINDOWS
 		this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent -> {
 			RegistersView moreRegistersView = new RegistersView(simulator);
 			this.registersViews.add(moreRegistersView);
@@ -281,11 +283,13 @@ public class Gui extends Application {
 			LedView moreLedView = new LedView(this.simulator);
 			this.ledViews.add(moreLedView);
 			moreLedView.getNode().dock(dockPane, DockPos.RIGHT);
+			moreLedView.getNode().getDockTitleBar().getCloseButton().setOnAction(actionEvent1 -> moreLedView.close());
 		});
 		this.armMenuBar.getNewEightSegmentDisplayWindow().setOnAction(actionEvent -> {
 			EightSegmentDisplay moreSegment = new EightSegmentDisplay(this.simulator);
 			this.eightSegmentDisplays.add(moreSegment);
 			moreSegment.getNode().dock(dockPane, DockPos.TOP);
+			moreSegment.getNode().getDockTitleBar().getCloseButton().setOnAction(actionEvent1 -> moreSegment.close());
 		});
 
 

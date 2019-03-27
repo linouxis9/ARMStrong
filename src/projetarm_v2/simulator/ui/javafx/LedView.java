@@ -129,7 +129,17 @@ public class LedView {
     public DockNode getNode(){
         return dockNode;
     }
-   
+
+    /**
+     * called when user pushes the close button on the dockfx node
+     * closes the node and removes the components
+     */
+    public void close() {
+        this.dockNode.close();
+        for(IOLed led : ledArray){
+            this.simulator.removeIOComponent(led);
+        }
+    }
 }
 
 
