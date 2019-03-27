@@ -8,7 +8,12 @@
 
 package projetarm_v2.simulator.ui.javafx;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -35,6 +40,7 @@ public class CodeEditor {
 
     private TextArea textArea;
     private TextFlow textFlow;
+    private ObservableList<Node> visibleNodes;
     private List<Text> instructionsAsText;
 
     private ArmSimulator armSimulator;
@@ -44,12 +50,15 @@ public class CodeEditor {
         mainPane = new AnchorPane();
 
         this.armSimulator = armSimulator;
+        this.textArea = new TextArea();
+        this.textFlow = new TextFlow();
+        this.scrollPane = new ScrollPane(this.textFlow);
+        
+        visibleNodes = FXCollections.observableArrayList();
         
         dockNode = new DockNode(mainPane, "Editor", new ImageView(dockImage));
         dockNode.setPrefSize(300, 100);
         dockNode.setClosable(false);
-
-        this.textArea = new TextArea();
         
         AnchorPane.setBottomAnchor(this.textArea, 0D);
         AnchorPane.setLeftAnchor(this.textArea, 0D);
@@ -57,8 +66,6 @@ public class CodeEditor {
         AnchorPane.setTopAnchor(this.textArea, 0D);
         this.mainPane.setMinSize(300, 300);
         
-        this.textFlow = new TextFlow();
-        this.scrollPane = new ScrollPane(this.textFlow);
         AnchorPane.setBottomAnchor(this.scrollPane, 0D);
         AnchorPane.setLeftAnchor(this.scrollPane, 0D);
         AnchorPane.setRightAnchor(this.scrollPane, 0D);
@@ -68,8 +75,33 @@ public class CodeEditor {
         this.dockNode.getStylesheets().add("/resources/style.css");
         mainPane.setMaxHeight(Double.MAX_VALUE);
         mainPane.setMaxWidth(Double.MAX_VALUE);
+        
+        scrollPane.vvalueProperty().addListener((obs) -> {
+			checkVisible(scrollPane);
+		});
+        scrollPane.hvalueProperty().addListener((obs) -> {
+			checkVisible(scrollPane);
+		});
     }
-
+    
+    private void checkVisible(ScrollPane pane) {
+		visibleNodes.setAll(getVisibleElements(pane));
+	}
+    
+    private List<Node> getVisibleElements(ScrollPane pane) {
+		List<Node> visibleNodes = new ArrayList<Node>();
+		Bounds paneBounds = pane.localToScene(pane.getBoundsInParent());
+		if (pane.getContent() instanceof Parent) {
+			for (Node n : ((Parent) pane.getContent()).getChildrenUnmodifiable()) {
+				Bounds nodeBounds = n.localToScene(n.getBoundsInLocal());
+				if (paneBounds.intersects(nodeBounds)) {
+					visibleNodes.add(n);
+				}
+			}
+		}
+		return visibleNodes;
+	}
+    
     public void highlightLine(int line) {
     	// Prends bien en compte le cas où on est à line = 0 (quand on est dans une routine ou une instruction modifiée par quelqu'un)
 
