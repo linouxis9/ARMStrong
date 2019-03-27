@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -37,11 +38,8 @@ public class CodeEditor {
     private ArmSimulator armSimulator;
     
     public CodeEditor(ArmSimulator armSimulator) {
-        try {
-            mainPane = FXMLLoader.load(getClass().getResource("/resources/EditorView.fxml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        mainPane = new AnchorPane();
 
         this.armSimulator = armSimulator;
         
@@ -49,8 +47,9 @@ public class CodeEditor {
         dockNode.setPrefSize(300, 100);
         dockNode.setClosable(false);
 
-        this.textArea = (TextArea) mainPane.lookup("#codeArea");
-        this.textFlow = (TextFlow) mainPane.lookup("#textFlow");
+        this.textArea = new TextArea();
+        this.textFlow = new TextFlow();
+        this.mainPane.getChildren().addAll(this.textArea, this.textFlow);
         this.dockNode.getStylesheets().add("/resources/style.css");
         mainPane.setMaxHeight(Double.MAX_VALUE);
         mainPane.setMaxWidth(Double.MAX_VALUE);
