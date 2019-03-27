@@ -25,7 +25,7 @@ public class Preferences {
 	
 	private Stage preferencesStage;
 	
-    public Preferences(ArmSimulator simulator){
+    public Preferences(ArmSimulator simulator, Gui gui){
     	preferencesStage = new Stage();
     	
         preferencesStage.setTitle("Preferences");
@@ -40,13 +40,20 @@ public class Preferences {
             TextField programAt = (TextField) main.lookup("#programAt");
             programAt.setText(String.format("0x%x",simulator.getStartingAddress()));
             
-            TextField randomRam = (TextField) main.lookup("#randomRam");
-            randomRam.setText(String.format("0x%x",simulator.getRandomPattern()));
+            Button cleanRdm = (Button) main.lookup("#cleanRdm");
+            cleanRdm.setOnAction(ActionEvent -> {
+                simulator.removeRandomPattern();
+                System.out.println("[INFO] Random RAM pattern removed !");
+                gui.getArmMenuBar().getReloadMenuItem().fire();
+            });
 
+            
             Button buttonRdm = (Button) main.lookup("#buttonRdm");
             buttonRdm.setOnAction(ActionEvent -> {
                 simulator.setRandomPattern();
-                randomRam.setText(String.format("0x%x",simulator.getRandomPattern()));
+                System.out.println("[INFO] Random RAM pattern set !");
+                simulator.setProgram(simulator.getProgramFromSave());
+                gui.getArmMenuBar().getReloadMenuItem().fire();
             });
 
             Button applyAndCloseButton = (Button) main.lookup("#applyAndCloseButton");
@@ -57,15 +64,6 @@ public class Preferences {
 	            		Gui.warningPopup("The startingAddress should be aligned on a word bound.", (_e) -> {});
 	            		return;
 	            	}
-	                simulator.setStartingAddress(startingAddress);
-	                
-	            	int bytePattern = Gui.parseUserAdress(randomRam.getText());
-	            	if (bytePattern > 0xFF) {
-	            		Gui.warningPopup("A byte should be less than 0x100.", (_e) -> {});
-	            		return;
-	            	}
-	                simulator.setStartingAddress(startingAddress);
-	                simulator.setRandomPattern((byte)bytePattern);
 	                preferencesStage.close();
             	} catch (FormatExeption exception) {}
             });

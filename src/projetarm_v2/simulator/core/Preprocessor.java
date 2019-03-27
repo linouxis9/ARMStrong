@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import projetarm_v2.simulator.core.routines.CpuBreakpoint;
+import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 
 public class Preprocessor {
 
@@ -28,6 +29,7 @@ public class Preprocessor {
 		
 		assembly = assembly
 				.replaceAll(".breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
+				.replaceAll(".clear", "blx #" + CpuConsoleClear.ROUTINE_ADDRESS)
 				.replaceAll("@.*", "")
 				.replaceAll(".stop", ".word 0")
 				.replaceAll(".equ +.*", "");

@@ -294,7 +294,7 @@ public class Gui extends Application {
 		});
 
 
-		this.armMenuBar.getPreferences().setOnAction(actionEvent -> new Preferences(simulator));
+		this.armMenuBar.getPreferences().setOnAction(actionEvent -> new Preferences(simulator, this));
 
 		//Run
 		this.armMenuBar.getSwitchMode().setOnAction(actionEvent -> {
@@ -408,6 +408,10 @@ public class Gui extends Application {
 		});
 	}
 
+	public ArmMenuBar getArmMenuBar() {
+		return this.armMenuBar;
+	}
+	
 	private void openProgram() {
 		FileChooser fileChooser = new FileChooser();
 		if(this.currentProgramPath != null){
@@ -480,7 +484,7 @@ public class Gui extends Application {
 				ledView.refresh();
 			}
 
-			if (!this.isInterpreterMode)
+			if (this.executionMode && !this.isInterpreterMode)
 				this.codeEditor.highlightLine(this.simulator.getCurrentLine());
 
 			for (EightSegmentDisplay eightSeg : this.eightSegmentDisplays){

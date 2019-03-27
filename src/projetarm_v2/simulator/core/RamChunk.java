@@ -14,6 +14,13 @@ public class RamChunk {
 	public final long startingAddress;
 	private byte[] bytes;
 	
+	public RamChunk(long startingAddress, RamChunk ramChunk) {
+		this.startingAddress = startingAddress;
+		byte[] pattern = ramChunk.getChunk(); 
+		this.bytes = new byte[pattern.length];
+		System.arraycopy(pattern, 0, this.bytes, 0, this.bytes.length);
+	}
+	
 	public RamChunk(long startingAddress, int size) {
 		this.startingAddress = startingAddress;
 		this.bytes = new byte[size];

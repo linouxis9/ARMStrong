@@ -33,6 +33,7 @@ public class Assembler {
 				Assembler.assembler = new Assembler();
 			} catch (IOException e) {
 				e.printStackTrace();
+				System.exit(-1);
 			}
 		}
 		return Assembler.assembler;

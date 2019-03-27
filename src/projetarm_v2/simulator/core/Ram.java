@@ -18,25 +18,26 @@ import unicorn.WriteHook;
 
 public class Ram {
 
-	public static final int CHUNK_SIZE = 32;
+	public static final int CHUNK_SIZE = 29;
 	public static final int DEFAULT_RAM_SIZE = 2 * 1024 * 1024; // 2 MB
 	public final Map<Long, RamChunk> memory;
 
-	private byte randomPattern = 0;
+	private RamChunk randomPattern;
 	
 	public Ram() {
 		this.memory = new HashMap<>();
+		this.randomPattern = new RamChunk(0,CHUNK_SIZE);
 	}
 
 	public void clear() {
 		this.memory.clear();
 	}
 	
-	public void setRandomPattern(byte pattern) {
+	public void setRandomPattern(RamChunk pattern) {
 		this.randomPattern = pattern;
 	}
 	
-	public byte getRandomPattern() {
+	public RamChunk getRandomPattern() {
 		return this.randomPattern;
 	}
 	
@@ -45,7 +46,7 @@ public class Ram {
 		RamChunk chunk = this.memory.get(block);
 
 		if (chunk == null || myAddress < 0) {
-			return randomPattern;
+			chunk = this.randomPattern;
 		}
 
 		return chunk.getByte((int) (myAddress % CHUNK_SIZE));
@@ -56,7 +57,7 @@ public class Ram {
 		RamChunk chunk = this.memory.get(block);
 
 		if (chunk == null) {
-			chunk = new RamChunk(myAddress - myAddress % CHUNK_SIZE, CHUNK_SIZE);
+			chunk = new RamChunk(myAddress - myAddress % CHUNK_SIZE, randomPattern);
 			this.memory.put(myAddress / CHUNK_SIZE, chunk);
 		}
 
