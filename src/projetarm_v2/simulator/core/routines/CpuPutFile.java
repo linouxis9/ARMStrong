@@ -14,7 +14,7 @@ import java.io.*;
 
 public class CpuPutFile extends CpuRoutine
 {
-	public static final long ROUTINE_ADDRESS = 0xFF0CL;
+	public static final long ROUTINE_ADDRESS = 0x1F001CL;
 	
 	public CpuPutFile(Cpu cpu) { super(cpu); }
 	

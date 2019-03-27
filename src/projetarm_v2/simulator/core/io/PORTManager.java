@@ -14,7 +14,7 @@ import java.util.List;
 import projetarm_v2.simulator.core.Ram;
 
 public class PORTManager {
-	public static final long DEFAULT_PORT_ADDRESS = 0xE000;
+	public static final long DEFAULT_PORT_ADDRESS = 0x1F1000;
 	public static final long DEFAULT_DIR_ADDRESS = 0xF000;
 	
 	private final List<IOx> ports = new ArrayList<>();

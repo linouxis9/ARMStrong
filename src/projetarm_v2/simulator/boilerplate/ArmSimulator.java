@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,6 +35,7 @@ import projetarm_v2.simulator.core.io.IOSwitch;
 import projetarm_v2.simulator.core.io.IOx;
 import projetarm_v2.simulator.core.io.PORTManager;
 import projetarm_v2.simulator.core.routines.CpuConsoleClear;
+import projetarm_v2.simulator.core.routines.CpuConsoleGetChar;
 import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 import projetarm_v2.simulator.core.save.Save;
 import projetarm_v2.simulator.ui.javafx.ConsoleView;
@@ -93,12 +96,6 @@ public class ArmSimulator {
      * The Ram's size in bytes
      */
 	private int ramSize = Ram.DEFAULT_RAM_SIZE;
-	
-    /**
-     * CpuRoutine's to submit String to the processor from an UI
-     */
-	private CpuConsoleGetString guiConsoleToCpu;
-
 
     /**
      * Save every data related to the current simulation (assembly, I/O components)
@@ -106,7 +103,12 @@ public class ArmSimulator {
 	private Save save;
 
 	private ConsoleView consoleView;
-	private CpuConsoleClear guiClear;
+	
+	private ConcurrentLinkedQueue<Character> consoleBuffer;
+	
+	private AtomicBoolean waitingForInput;
+	
+	private CpuConsoleClear guiConsole;
 	
 	private Random random;
 	
@@ -122,7 +124,10 @@ public class ArmSimulator {
 		this.assembler = Assembler.getInstance();
 		this.asmToLine = HashBiMap.create();
 		this.random = new Random();
-
+		
+		this.consoleBuffer = new ConcurrentLinkedQueue<>();
+		this.waitingForInput = new AtomicBoolean(false);
+		
 		this.resetState();
 	}
 
@@ -192,12 +197,14 @@ public class ArmSimulator {
 	 * @param input Add input to the CpuRoutine buffer
 	 */
 	public void setConsoleInput(String input){
-		this.guiConsoleToCpu.add(input);
+		for (Character ch : input.toCharArray()) {
+			this.consoleBuffer.add(ch);
+		}
 	}
 
 	public void setConsoleView(ConsoleView consoleView){
 		this.consoleView = consoleView;
-		this.guiClear.setConsoleView(consoleView);
+		this.guiConsole.setConsoleView(consoleView);
 	}
 	
 	/**
@@ -418,11 +425,11 @@ public class ArmSimulator {
 	public void resetState() {
 		this.ram.clear();
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
-		this.guiConsoleToCpu = new CpuConsoleGetString(cpu);
-		this.cpu.registerCpuRoutine(guiConsoleToCpu);
-		this.guiClear = new CpuConsoleClear(cpu);
-		this.guiClear.setConsoleView(consoleView);
-		this.cpu.registerCpuRoutine(guiClear);
+		this.cpu.registerCpuRoutine(new CpuConsoleGetString(cpu, consoleBuffer, waitingForInput));
+		this.cpu.registerCpuRoutine(new CpuConsoleGetChar(cpu, consoleBuffer, waitingForInput));
+		this.guiConsole = new CpuConsoleClear(cpu);
+		this.guiConsole.setConsoleView(consoleView);
+		this.cpu.registerCpuRoutine(guiConsole);
 		this.portManager = new PORTManager(this.ram);
 	}
 
@@ -567,7 +574,7 @@ public class ArmSimulator {
 	}
 	
 	public boolean isWaitingForInput() {
-		return this.guiConsoleToCpu.isWaitingForInput();
+		return this.waitingForInput.get();
 	}
 	
 	/**

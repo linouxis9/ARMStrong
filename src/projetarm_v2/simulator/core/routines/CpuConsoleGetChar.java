@@ -13,17 +13,16 @@ import projetarm_v2.simulator.core.Cpu;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CpuConsoleGetString extends CpuRoutine {
+public class CpuConsoleGetChar extends CpuRoutine {
 	
-	public static final long ROUTINE_ADDRESS = 0x1F000CL;
+	public static final long ROUTINE_ADDRESS = 0x1F0004L;
 	private ConcurrentLinkedQueue<Character> consoleBuffer;
-	
 	private AtomicBoolean waitingForInput;
-	
-	public CpuConsoleGetString(Cpu cpu, ConcurrentLinkedQueue<Character> consoleBuffer, AtomicBoolean waitingForInput) {
+
+	public CpuConsoleGetChar(Cpu cpu, ConcurrentLinkedQueue<Character> consoleBuffer, AtomicBoolean waitingForInput) {
 		super(cpu);
-		this.waitingForInput = waitingForInput;
 		this.consoleBuffer = consoleBuffer;
+		this.waitingForInput = waitingForInput;
 	}
 	
 	public long getRoutineAddress() { return ROUTINE_ADDRESS; }
@@ -34,6 +33,7 @@ public class CpuConsoleGetString extends CpuRoutine {
 	protected void primitive()
 	{
 		System.out.println("[INPUT] Waiting for input");
+		
 		this.waitingForInput.set(true);
 		while (this.consoleBuffer.peek() == null) {
 			try {
@@ -44,17 +44,6 @@ public class CpuConsoleGetString extends CpuRoutine {
 		}
 		this.waitingForInput.set(false);
 		
-		long address = (long) this.getRegister(0).getValue();
-		
-		for(Character ch : this.consoleBuffer)
-		{
-			this.getRam().setByte(address,(byte)(char)ch);
-			address++;
-		}
-		this.consoleBuffer.clear();
-	}
-	
-	public boolean isWaitingForInput() {
-		return this.waitingForInput.get();
+		this.getRegister(0).setValue(this.consoleBuffer.poll());
 	}
 }

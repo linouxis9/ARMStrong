@@ -13,7 +13,7 @@ import projetarm_v2.simulator.core.Cpu;
 
 public class CpuSleep extends CpuRoutine {
 
-	public static final long ROUTINE_ADDRESS = 0xFF14L;
+	public static final long ROUTINE_ADDRESS = 0x1F0010L;
 	
 	public CpuSleep(Cpu cpu) {
 		super(cpu);

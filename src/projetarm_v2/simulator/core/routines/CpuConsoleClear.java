@@ -13,7 +13,7 @@ import projetarm_v2.simulator.ui.javafx.ConsoleView;
 
 public class CpuConsoleClear extends CpuRoutine {
 	
-	public static final long ROUTINE_ADDRESS = 0xFF1CL;
+	public static final long ROUTINE_ADDRESS = 0x1F0024L;
 	private ConsoleView consoleView;
 	
 	public CpuConsoleClear(Cpu cpu) {

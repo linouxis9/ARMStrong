@@ -15,7 +15,7 @@ import projetarm_v2.simulator.ui.javafx.ConsoleView;
 
 public class CpuRandom extends CpuRoutine {
 	
-	public static final long ROUTINE_ADDRESS = 0xFF20L;
+	public static final long ROUTINE_ADDRESS = 0x1F0014L;
 	private Random random;
 	
 	

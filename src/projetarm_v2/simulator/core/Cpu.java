@@ -72,8 +72,7 @@ public class Cpu {
 
 		this.currentAddress = new SimpleRegister((int)startingAddress); // I use a SimpleRegister instead of a simple field because SimpleRegister is Thread-Safe thanks to the AtomicInteger inside it
 
-		
-		u.mem_map(0, ramSize, Unicorn.UC_PROT_ALL);
+		u.mem_map(0, 2*1024*1024L, Unicorn.UC_PROT_ALL);
 
 		this.cpsr = new Cpsr(u);
 

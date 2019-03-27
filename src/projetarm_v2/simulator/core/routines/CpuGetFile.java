@@ -15,7 +15,7 @@ import java.nio.file.Path;
 
 public class CpuGetFile extends CpuRoutine
 {
-	public static final long ROUTINE_ADDRESS = 0xFF10L;
+	public static final long ROUTINE_ADDRESS = 0x1F0020L;
 	
 	public CpuGetFile(Cpu cpu) {
 		super(cpu);

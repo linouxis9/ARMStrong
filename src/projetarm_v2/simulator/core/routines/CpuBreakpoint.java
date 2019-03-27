@@ -13,7 +13,7 @@ import projetarm_v2.simulator.core.Cpu;
 
 public class CpuBreakpoint extends CpuRoutine {
 
-	public static final long ROUTINE_ADDRESS = 0xFF18L;
+	public static final long ROUTINE_ADDRESS = 0x1F0018L;
 	
 	public CpuBreakpoint(Cpu cpu) {
 		super(cpu);

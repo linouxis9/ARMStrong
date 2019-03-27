@@ -14,7 +14,7 @@ import projetarm_v2.simulator.core.Cpu;
 
 public class CpuConsolePutString extends CpuRoutine {
 
-	public static final long ROUTINE_ADDRESS = 0xFF04L;
+	public static final long ROUTINE_ADDRESS = 0x1F0008L;
 	
 	public CpuConsolePutString(Cpu cpu) { super(cpu); }
 	
