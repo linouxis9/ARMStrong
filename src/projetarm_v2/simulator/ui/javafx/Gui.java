@@ -150,7 +150,7 @@ public class Gui extends Application {
 		
 		primaryStage.show();
 		
-		primaryStage.setOnCloseRequest((WindowEvent event) -> Platform.exit());
+		primaryStage.setOnCloseRequest((WindowEvent event) -> System.exit(0));
 
 
 		// initialize the default styles for the dock pane and undocked nodes using the
