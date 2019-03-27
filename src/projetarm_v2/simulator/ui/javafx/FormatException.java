@@ -8,5 +8,8 @@
 
 package projetarm_v2.simulator.ui.javafx;
 
-public class FormatExeption extends RuntimeException {
+/**
+ * thrown when the representation of numbers typed by user is not recognized
+ */
+public class FormatException extends RuntimeException {
 }

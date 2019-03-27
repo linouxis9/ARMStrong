@@ -13,21 +13,17 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.io.IOException;
 import java.util.HashSet;
 
-
+/**
+ * The menu bar of the software
+ */
 public class ArmMenuBar {
 
     private MenuBar menuBar;
@@ -56,15 +52,15 @@ public class ArmMenuBar {
     private HashSet<MenuItem> disableInExecution;
     private HashSet<MenuItem> disableInEdition;
 
-    private Stage primaryStage;
-
     private HostServices services;
 
 	private MenuItem newInterpreterWindow;
 
-    public ArmMenuBar(ArmSimulator simulator, CodeEditor codeEditor, Stage stage, HostServices services){
-    	
-    	this.primaryStage = stage;
+    /**
+     * creates all the graphical elements in the menu bar
+     * @param services the host services to use http clickable links
+     */
+    public ArmMenuBar(HostServices services){
     	this.services = services;
     	
          Menu fileMenu = new Menu("File");
@@ -126,7 +122,6 @@ public class ArmMenuBar {
                 aboutPopUp.setTitle("#@RMStrong");
                 Image applicationIcon = new Image("file:logo.png");
                 aboutPopUp.getIcons().add(applicationIcon);
-                aboutPopUp.initOwner(primaryStage);
                 aboutPopUp.getIcons().add(applicationIcon);
                 aboutPopUp.setTitle("About - #@RMStrong");
                 

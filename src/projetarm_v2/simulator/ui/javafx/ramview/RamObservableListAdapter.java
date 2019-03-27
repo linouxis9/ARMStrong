@@ -10,7 +10,7 @@ package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.collections.ObservableListBase;
 import projetarm_v2.simulator.core.Ram;
-import projetarm_v2.simulator.ui.javafx.FormatExeption;
+import projetarm_v2.simulator.ui.javafx.FormatException;
 import projetarm_v2.simulator.ui.javafx.Gui;
 
 public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
@@ -90,7 +90,7 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
 		}
 		try {
 			newVal = Gui.parseUserAdress(value);
-		} catch (FormatExeption formatExeption) {}
+		} catch (FormatException formatException) {}
 		switch (showType){
 			case BYTE:
 				if (newVal>256){

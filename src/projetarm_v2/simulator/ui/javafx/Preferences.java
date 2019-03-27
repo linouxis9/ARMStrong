@@ -18,13 +18,18 @@ import javafx.stage.Stage;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The preferences window
+ */
 public class Preferences {
 	
 	private Stage preferencesStage;
-	
+
+    /**
+     * Creates a new instance of a preferences window
+     * @param simulator
+     */
     public Preferences(ArmSimulator simulator){
     	preferencesStage = new Stage();
     	
@@ -67,7 +72,7 @@ public class Preferences {
 	                simulator.setStartingAddress(startingAddress);
 	                simulator.setRandomPattern((byte)bytePattern);
 	                preferencesStage.close();
-            	} catch (FormatExeption exception) {}
+            	} catch (FormatException exception) {}
             });
             preferencesStage.show();
         } catch (IOException e) {

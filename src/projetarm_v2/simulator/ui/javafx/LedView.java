@@ -8,22 +8,22 @@
 
 package projetarm_v2.simulator.ui.javafx;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.dockfx.DockNode;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.io.IOLed;
-import javafx.scene.control.Button;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LedView {
 
@@ -41,9 +41,15 @@ public class LedView {
     List<ImageView> imageArrayList = new ArrayList<ImageView>();
     
     private ArmSimulator simulator;
-    
+
+    /**
+     * Creates a new instance of Node
+     * @param simulator the arm simulator
+     */
     public LedView(ArmSimulator simulator){
-       
+
+        this.simulator = simulator;
+
         this.mainPane = new ScrollPane();
         
         ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
@@ -102,7 +108,10 @@ public class LedView {
         this.mainPane.setFitToHeight(true);  
         this.mainPane.setHmin(dockNode.getHeight());
     }
-    
+
+    /**
+     * gets and display the new leds state
+     */
     public void refresh() {
     	for (int i = 0; i < ledArray.size(); i++)	{
     		if (ledArray.get(i).isOn()) {
@@ -112,7 +121,11 @@ public class LedView {
             }
     	}
     }
-    
+
+    /**
+     * get the dock node
+     * @return dockNode
+     */
     public DockNode getNode(){
         return dockNode;
     }

@@ -9,27 +9,22 @@
 package projetarm_v2.simulator.ui.javafx.ramview;
 
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-
 import org.dockfx.DockNode;
-
 import projetarm_v2.gpl.TextFieldTableCellFixed;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.Ram;
-import projetarm_v2.simulator.ui.javafx.FormatExeption;
+import projetarm_v2.simulator.ui.javafx.FormatException;
 import projetarm_v2.simulator.ui.javafx.Gui;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +33,6 @@ public class RamView {
 
     private AnchorPane mainPane;
     private DockNode dockNode;
-    private Image dockImage;
 
     private ArmSimulator simulator;
 
@@ -54,11 +48,13 @@ public class RamView {
     private ArrayList<Button> buttonFormat;
     
     private boolean changeAscii = false;
-    
-    public RamView(ArmSimulator simulator) {
 
+    /**
+     * Creates a new instance of a ram view
+     * @param simulator the simulator
+     */
+    public RamView(ArmSimulator simulator) {
         this.simulator=simulator;
-        //dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/MemoryView.fxml"));
         } catch (IOException e) {
@@ -118,6 +114,9 @@ public class RamView {
         this.refresh();
     }
 
+    /**
+     * refresh the ram values displayed
+     */
     public void refresh() {
     	for (int i = this.tableView.getColumns().size()+1; i> UneSuperImplemFournieParValentinLeBg.getColumns()+2; i--) {
 	        this.tableView.getColumns().remove(i-2);
@@ -138,10 +137,17 @@ public class RamView {
     	this.tableView.refresh();
     }
 
+    /**
+     * set the ram view in editable mode
+     * @param editable
+     */
     public void setEditable(boolean editable) {
     	this.tableView.setEditable(editable);
     }
-    
+
+    /**
+     * load the buttons events to control how the ram is displayed
+     */
     private void loadButonsEvents() {
         memoryScrollBar = (ScrollBar) mainPane.lookup("#memoryScrollBar");
         memoryScrollBar.setMin(0);
@@ -269,7 +275,7 @@ public class RamView {
                 int newAddress = 0;
                 try {
                     newAddress = Gui.parseUserAdress(addressTyped);
-                } catch (FormatExeption formatExeption) {
+                } catch (FormatException formatException) {
                     return;
                 }
 
@@ -286,19 +292,36 @@ public class RamView {
         });
     }
 
+    /**
+     * get the tableView containing the ram values
+     * @return
+     */
     public TableView<NewLineRam> getTableView() {
     	return this.tableView;
     }
-    
+
+    /**
+     * get the dock node
+     * @return dockNode
+     */
     public DockNode getNode() {
         return dockNode;
     }
 
+    /**
+     * align the memory in 16 and 32bits mode
+     * addressed have always be a multiple of 2 in 16bits mode and multiple of 4 in 32bits mode
+     */
     private void alignMemory(){
         this.firstDisplayedAddress -= this.firstDisplayedAddress % this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         memoryScrollBar.setValue(this.firstDisplayedAddress);
     }
-    
+
+    /**
+     * updates the style on the buttons to indicate the selected mode/type
+     * @param list the list of the button group
+     * @param buttonChangeStyle the button to change
+     */
     private void changeStyleState(List<Button> list, Button buttonChangeStyle){
     	for (Button button: list) {
     		button.getStyleClass().clear();

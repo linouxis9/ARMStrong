@@ -10,12 +10,14 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.beans.property.SimpleStringProperty;
 
+//TODO: didi je te laisse faire la javadoc ce truc wtf xD
 public class RegisterObjectView {
 		 
 	private final SimpleStringProperty nameRegister;
 	private final SimpleStringProperty valueRegister; 
 	private int myRegisterNumber;
- 
+
+
     RegisterObjectView(int register, String fName, String fValue) {
     	this.nameRegister = new SimpleStringProperty(fName);
     	this.valueRegister = new SimpleStringProperty(fValue);
