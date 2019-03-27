@@ -110,10 +110,12 @@ public class Gui extends Application {
 		this.codeEditor.getNode().dock(dockPane, DockPos.LEFT);
 
 		this.registersViews.add(new RegistersView(this.simulator));
+		this.registersViews.get(0).getNode().setMaxWidth(200);
 		this.registersViews.get(0).getNode().dock(dockPane, DockPos.LEFT);
 
 		this.ramViews.add(new RamView(simulator));
 		this.ramViews.get(0).getNode().dock(dockPane, DockPos.RIGHT);
+
 
 		this.consoleView = new ConsoleView();
 		this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
@@ -277,6 +279,7 @@ public class Gui extends Application {
 		this.armMenuBar.getNewRegistersWindow().setOnAction(actionEvent -> {
 			RegistersView moreRegistersView = new RegistersView(simulator);
 			this.registersViews.add(moreRegistersView);
+			moreRegistersView.getNode().setMaxWidth(200);
 			moreRegistersView.getNode().dock(dockPane, DockPos.LEFT);
 		});
 		this.armMenuBar.getNewLedGame().setOnAction(actionEvent -> {
