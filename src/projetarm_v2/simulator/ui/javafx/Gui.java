@@ -171,18 +171,24 @@ public class Gui extends Application {
 	}
 
 	private void setExecutionMode() {
-		for (RegistersView registerView : this.registersViews) {
-			registerView.setEditable(this.executionMode);
-		}
-		for (RamView ramView : this.ramViews) {
-			ramView.setEditable(this.executionMode);
-		}
+		this.setEditable(this.executionMode);
 		
 		this.codeEditor.setExecutionMode(this.executionMode);
 		this.armMenuBar.setExecutionMode(this.executionMode);
 		this.armToolBar.setExecutionMode(this.executionMode);
 	}
 
+	private void setEditable(boolean editable) {
+		Platform.runLater(() -> {
+			for (RegistersView registerView : this.registersViews) {
+				registerView.setEditable(editable);
+			}
+			for (RamView ramView : this.ramViews) {
+				ramView.setEditable(editable);
+			}
+		});
+	}
+	
 	private void setButtonEvents() {
 		//MENU BAR
 		//file
@@ -309,7 +315,11 @@ public class Gui extends Application {
 			if (executionMode && !(running.get())) {
 				new Thread(() -> {
 					this.running.set(true);
+					
+					this.setEditable(false);
 					this.simulator.run();
+					this.setEditable(true);
+					
 					this.running.set(false);
 
 					updateUI();
@@ -320,9 +330,11 @@ public class Gui extends Application {
 			if (executionMode && !(running.get())) {
 				new Thread(() -> {
 					this.running.set(true);
-
+					
+					this.setEditable(false);
 					this.simulator.runStep();
-
+					this.setEditable(true);
+					
 					this.running.set(false);
 
 					updateUI();
@@ -332,6 +344,7 @@ public class Gui extends Application {
 		this.armMenuBar.getStopMenuItem().setOnAction(actionEvent -> {
 			simulator.interruptExecutionFlow();
 			updateUI();
+			this.setEditable(false);
 			this.running.set(false);
 		});
 		this.armMenuBar.getReloadMenuItem().setOnAction(actionEvent -> {
