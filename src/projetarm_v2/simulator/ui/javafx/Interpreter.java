@@ -13,27 +13,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
-import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import org.dockfx.DockNode;
-
 public class Interpreter {
 
 	private AnchorPane mainPane;
 	private DockNode dockNode;
-	private Image dockImage;
 	private TextFlow textFlow;
 	private TextField textField;
 	
@@ -53,7 +47,7 @@ public class Interpreter {
 
 		this.simulator = simulator;
 		
-		this.dockNode = new DockNode(mainPane, "Interpreter", new ImageView(dockImage));
+		this.dockNode = new DockNode(mainPane, "Interpreter");
 
 		this.mainPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		this.dockNode.getStylesheets().add("/resources/style.css");

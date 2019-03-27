@@ -8,9 +8,21 @@
 
 package projetarm_v2.simulator.ui.javafx.ramview;
 
+/**
+ * represent a type of display
+ */
 public enum ShowType {
+	/**
+	 * word, 32 bits representation of data
+	 */
 	WORD,
+	/**
+	 * halfword, 16 bits representation of data
+	 */
 	HALFWORD,
+	/**
+	 * byte, 8 bits representation of data
+	 */
 	BYTE;
 	
 	public int toOffset() {

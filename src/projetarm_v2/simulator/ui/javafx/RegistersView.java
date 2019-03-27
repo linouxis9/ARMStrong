@@ -17,18 +17,19 @@ import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.dockfx.DockNode;
-
 import projetarm_v2.gpl.TextFieldTableCellFixed;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+/**
+ * The registers view at the left of the gui
+ */
 public class RegistersView {
 
     private TabPane mainPane;
@@ -62,8 +63,11 @@ public class RegistersView {
 
 	
 	private DecimalFormat fmt;
-	
-    @SuppressWarnings("unchecked")
+
+	/**
+	 * Creates a new instance of a register view
+	 * @param simulator the simulator
+	 */
 	public RegistersView(ArmSimulator simulator){
        // dockImage = new Image(Gui.class.getResource("docknode.png").toExternalForm());
     	this.simulator = simulator;
@@ -290,17 +294,25 @@ public class RegistersView {
         this.decTab.setContent(this.decPane);
 
     }
-    
-    public void setEditable(boolean editable) {
+
+	/**
+	 * set the ram view in editable mode
+	 * @param editable
+	 */
+	public void setEditable(boolean editable) {
     	this.tableDec.setEditable(editable);
     	this.tableSigDec.setEditable(editable);
     	this.tableHex.setEditable(editable);
     }
-    
-    private void editFlags(String newValue) {
-		char[] myCaracters = newValue.toCharArray();
+
+	/**
+	 * parse the flags set by the user and report them to the simulator
+	 * @param newValue the string typed in the flag field in the gui
+	 */
+	private void editFlags(String newValue) {
+		char[] myCharacters = newValue.toCharArray();
 		
-		for(char c: myCaracters) {
+		for(char c: myCharacters) {
 			switch(c) {
 				case 'N':
 					this.simulator.setN(true);
@@ -328,8 +340,11 @@ public class RegistersView {
 			}
 		}
 	}
-    
-    public void updateRegisters(){
+
+	/**
+	 * updates the registers in the register view
+	 */
+	public void updateRegisters(){
 
     	for (int i = 0; i < 16; i++) {
     		this.registersHex.get(i).setValueRegister(String.format("0x%08x", simulator.getRegisterValue(i)));
@@ -344,13 +359,21 @@ public class RegistersView {
         refreshColumnData();
     }
 
-    public void refreshColumnData() {
+	/**
+	 * refresh the display
+	 */
+	public void refreshColumnData() {
     	this.tableDec.refresh();
     	this.tableHex.refresh();
     	this.tableSigDec.refresh();
     }
-    
-    private boolean isNumeric(String str) { 
+
+	/**
+	 * test if a string is numeric
+	 * @param str string to parse
+	 * @return true if the string is numeric
+	 */
+	private boolean isNumeric(String str) {
 	  try {  
 	    Integer.parseInt(str);  
 	    return true;
@@ -358,7 +381,11 @@ public class RegistersView {
 	    return false;  
 	  }  
 	}
-    
+
+	/**
+	 * get the dock node
+	 * @return dockNode
+	 */
     DockNode getNode(){
         return dockNode;
     }

@@ -4,7 +4,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.dockfx.DockNode;
@@ -23,6 +22,10 @@ public class EightSegmentDisplay {
 
     private ArmSimulator simulator;
 
+    /**
+     * creates a 8segment window
+     * @param simulator the simulator
+     */
     public EightSegmentDisplay(ArmSimulator simulator){
 
         this.mainPane = new HBox();
@@ -51,6 +54,9 @@ public class EightSegmentDisplay {
 
     }
 
+    /**
+     * gets and display the new 8segments state
+     */
     public void refresh() {
         for (int j=0; j<15; j++){
             for (int i=0; i<8; i++){
@@ -59,6 +65,10 @@ public class EightSegmentDisplay {
         }
     }
 
+    /**
+     * get the dock node
+     * @return dockNode
+     */
     public DockNode getNode() {
         return dockNode;
     }

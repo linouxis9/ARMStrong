@@ -18,13 +18,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.dockfx.DockNode;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import org.dockfx.DockNode;
-
+/**
+ * the console shown at the bottom of the gui
+ */
 public class ConsoleView {
 
 	private AnchorPane mainPane;
@@ -34,7 +36,10 @@ public class ConsoleView {
 	private TextField textField;
 
 	OutputStream output;
-	
+
+	/**
+	 * Creates a new instance of a console and redirect the java output to it
+	 */
 	public ConsoleView() {
 		try {
 			mainPane = FXMLLoader.load(getClass().getResource("/resources/ConsoleView.fxml"));
@@ -85,21 +90,34 @@ public class ConsoleView {
 		
 	}
 
-	
+	/**
+	 * clear the text displayed in console
+	 */
 	public void clear() {
 		Platform.runLater(() -> {
 			textFlow.getChildren().clear();
 		});
 	}
-	
+
+	/**
+	 * redirect the program output to the console
+	 */
 	public void redirectToConsole() {
 		System.setOut(new PrintStream(output));
 	}
-	
+
+	/**
+	 * get the dock node
+	 * @return dockNode
+	 */
 	public DockNode getNode() {
 		return dockNode;
 	}
 
+	/**
+	 * get the console text field
+	 * @return the console text field
+	 */
 	public TextField getTextField() {
 		return (this.textField);
 	}

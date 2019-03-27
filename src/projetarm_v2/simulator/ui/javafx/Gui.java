@@ -29,9 +29,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
 import org.dockfx.DockPane;
 import org.dockfx.DockPos;
+import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
+import projetarm_v2.simulator.core.routines.CpuConsoleClear;
+import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,11 +43,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import projetarm_v2.simulator.boilerplate.ArmSimulator;
-import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
-import projetarm_v2.simulator.core.routines.CpuConsoleClear;
-import projetarm_v2.simulator.ui.javafx.ramview.RamView;
-
+/**
+ * The main gui class
+ */
 public class Gui extends Application {
 
 	private Scene scene;
@@ -124,14 +125,12 @@ public class Gui extends Application {
 		this.interpreter = new Interpreter(this.simulator);
 		this.isInterpreterMode = false;
 		
-		this.armMenuBar = new ArmMenuBar(simulator, codeEditor, primaryStage, this.getHostServices());
-		this.armToolBar = new ArmToolBar(simulator, codeEditor);
+		this.armMenuBar = new ArmMenuBar(this.getHostServices());
+		this.armToolBar = new ArmToolBar();
 
 		VBox vbox = new VBox();
 		vbox.getChildren().addAll(this.armMenuBar.getNode(), this.armToolBar.getNode(), dockPane);
 		VBox.setVgrow(dockPane, Priority.ALWAYS);
-
-		//primaryStage.show(); // render to avoid node.lookup() to fail
 
 		this.scene = new Scene(vbox, 1000, 1000);
 		this.stage.setMaximized(true);
@@ -143,24 +142,12 @@ public class Gui extends Application {
 		setButtonEvents();
 		setExecutionMode();
 
-		// test the look and feel with both Caspian and Modena
 		Application.setUserAgentStylesheet(Application.STYLESHEET_MODENA);
 
 		newUpdateThread(this.running);
 		
 		primaryStage.show();
-		
 		primaryStage.setOnCloseRequest((WindowEvent event) -> System.exit(0));
-
-
-		// initialize the default styles for the dock pane and undocked nodes using the
-		// DockFX
-		// library's internal Default.css stylesheet
-		// unlike other custom control libraries this allows the user to override them
-		// globally
-		// using the style manager just as they can with internal JavaFX controls
-		// this must be called after the primary stage is shown
-		// https://bugs.openjdk.java.net/browse/JDK-8132900
 		DockPane.initializeDefaultUserAgentStylesheet();
 		
 		vbox.getStylesheets().add("/resources/style.css");
@@ -170,6 +157,9 @@ public class Gui extends Application {
 		System.out.println("Copyright (c) 2018-2019 Valentin D'Emmanuele, Gilles Mertens, Dylan Fraisse, Hugo Chemarin, Nicolas Gervasi");
 	}
 
+	/**
+	 * set the simulator in simulation mode
+	 */
 	private void setExecutionMode() {
 		this.setEditable(this.executionMode);
 		
@@ -178,6 +168,10 @@ public class Gui extends Application {
 		this.armToolBar.setExecutionMode(this.executionMode);
 	}
 
+	/**
+	 * control the editions of ram and resisters by the user
+	 * @param editable sets ram and resisters to editable state
+	 */
 	private void setEditable(boolean editable) {
 		Platform.runLater(() -> {
 			for (RegistersView registerView : this.registersViews) {
@@ -188,7 +182,10 @@ public class Gui extends Application {
 			}
 		});
 	}
-	
+
+	/**
+	 * defining the events of the buttons in the menu bar, tool bar and the keyboard shortcuts
+	 */
 	private void setButtonEvents() {
 		//MENU BAR
 		//file
@@ -288,9 +285,7 @@ public class Gui extends Application {
 		this.armMenuBar.getNewEightSegmentDisplayWindow().setOnAction(actionEvent -> {
 			EightSegmentDisplay moreSegment = new EightSegmentDisplay(this.simulator);
 			this.eightSegmentDisplays.add(moreSegment);
-			moreSegment.getNode().setFloating(true);
-					//dock(dockPane, DockPos.RIGHT);
-
+			moreSegment.getNode().dock(dockPane, DockPos.TOP);
 		});
 
 
@@ -412,6 +407,9 @@ public class Gui extends Application {
 		return this.armMenuBar;
 	}
 	
+	/**
+	 * opens a program in .S or .ARMS format
+	 */
 	private void openProgram() {
 		FileChooser fileChooser = new FileChooser();
 		if(this.currentProgramPath != null){
@@ -442,6 +440,11 @@ public class Gui extends Application {
 		}
 	}
 
+	/**
+	 * display a warning popup
+	 * @param message the message to display
+	 * @param okEvent an event fired when the user presses the ok button
+	 */
 	public static void warningPopup(String message, EventHandler<ActionEvent> okEvent) {
 		final Stage warningStage = new Stage();
 		warningStage.setTitle("Warning");
@@ -473,11 +476,17 @@ public class Gui extends Application {
 		warningStage.show();
 	}
 
+	/**
+	 * update all the ui
+	 */
 	private void updateUI() {
 		updateUIFast();
 		updateUISlow();
 	}
-	
+
+	/**
+	 * updates the leds, the 8segments and the selected line in simulation mode
+	 */
 	private void updateUIFast() {
 		Platform.runLater(() -> {
 			for (LedView ledView : this.ledViews) {
@@ -492,7 +501,10 @@ public class Gui extends Application {
 			}
 		});
 	}
-	
+
+	/**
+	 * updates the ram and registers
+	 */
 	private void updateUISlow() {
 		Platform.runLater(() -> {
 			if (this.interfaceBeingUpdated.get()) {
@@ -512,7 +524,8 @@ public class Gui extends Application {
 			this.interfaceBeingUpdated.set(false);
 		});
 	}
-	
+
+
 	private void newUpdateThread(AtomicBoolean runningFlag) {
 		new Thread(() -> {
 			while (true) {
@@ -555,6 +568,11 @@ public class Gui extends Application {
 		}).start();
 	}
 
+	/**
+	 * saves the file in .arms or .S
+	 * @param content the code as text
+	 * @param theFile the path to the file to save
+	 */
 	private void saveFile(String content, File theFile) {
 		if (theFile.getAbsolutePath().endsWith(".ARMS")){
 			try {
@@ -579,7 +597,13 @@ public class Gui extends Application {
 
 	}
 
-	public static int parseUserAdress(String input) throws FormatExeption {
+	/**
+	 * parses a int in hexadecimal, decimal or binary
+	 * @param input the string to parse
+	 * @return the parsed int
+	 * @throws FormatException the sring is not parsable
+	 */
+	public static int parseUserAdress(String input) throws FormatException {
 		int address = 0;
 
 		try {
@@ -596,7 +620,7 @@ public class Gui extends Application {
 			}
 		} catch (NumberFormatException exeption) {
 			Gui.warningPopup("Error in the number format\ntry with 0x1a35, 0b100101 or 0d300", ActionEvent -> {});
-			throw new FormatExeption();
+			throw new FormatException();
 		}
 		return address;
 	}

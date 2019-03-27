@@ -8,9 +8,24 @@
 
 package projetarm_v2.simulator.ui.javafx.ramview;
 
+/**
+ * represent a output mode
+ */
 public enum OutputType {
+	/**
+	 * the hexadecimal representation of ram content
+	 */
 	HEX,
+	/**
+	 * the signed decimal representation of ram content
+	 */
 	SIG_DEC,
+	/**
+	 * the unsigned decimal representation of ram content
+	 */
 	UNSIG_DEC,
+	/**
+	 * the ascii representation of ram content
+	 */
 	ASCII;
 }

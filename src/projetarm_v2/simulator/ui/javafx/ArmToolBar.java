@@ -9,19 +9,18 @@
 package projetarm_v2.simulator.ui.javafx;
 
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Separator;
+import javafx.scene.control.ToolBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
 import java.util.HashSet;
 
 public class ArmToolBar {
 
     private ToolBar toolBar;
-
-    private ArmSimulator simulator;
-    private CodeEditor codeEditor;
 
     private Button switchButton;
     private Button runButton;
@@ -31,10 +30,11 @@ public class ArmToolBar {
 
     private HashSet<Button> disableInEdition;
 
-    public ArmToolBar(ArmSimulator armSimulator, CodeEditor codeEditor){
-        this.codeEditor = codeEditor;
-        this.simulator = armSimulator;
+    /**
+     * creates all the graphical elements in the tool bar
+     */
 
+    public ArmToolBar(){
         this.switchButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/switch.png").toExternalForm())));
         this.switchButton.setTooltip(new Tooltip("Switch between editor and simulation mode [CTRL-E]"));
         

@@ -12,6 +12,9 @@ import projetarm_v2.simulator.core.Ram;
 
 import java.text.DecimalFormat;
 
+/**
+ * represents a line in the ram view
+ */
 public class NewLineRam {
 	private Ram ram;
 	private int firstAddress;
@@ -21,8 +24,14 @@ public class NewLineRam {
 	private String[] cases;
 
 	DecimalFormat format;
-	
-	
+
+	/**
+	 * Creates a new instance of a ram line
+	 * @param ram the ram
+	 * @param offset first address in the line
+	 * @param showType the display type (8, 16, 32bits)
+	 * @param type the display mode (hex, dec, sig dec)
+	 */
 	public NewLineRam(Ram ram, int offset, ShowType showType, OutputType type) {
 		this.ram = ram;
 		this.firstAddress = offset;
@@ -38,7 +47,12 @@ public class NewLineRam {
 		}
 
 	}
-	
+
+	/**
+	 * returns the parameter as string in the right mode/type
+	 * @param a2
+	 * @return the formatted string
+	 */
 	private String asString(int a2) {
 		switch (this.type) {
 			default:
@@ -67,6 +81,11 @@ public class NewLineRam {
 		}
 	}
 
+	/**
+	 * get the content of a column
+	 * @param index the index of the column
+	 * @return the value contained
+	 */
 	public String get(int index) {
 		return this.cases[index];
 	}

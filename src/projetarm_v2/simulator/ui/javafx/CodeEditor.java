@@ -10,24 +10,19 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 
-import org.dockfx.DockNode;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +31,6 @@ public class CodeEditor {
     private Pane mainPane;
     private ScrollPane scrollPane;
     private DockNode dockNode;
-    private Image dockImage;
 
     private TextArea textArea;
     private TextFlow textFlow;
@@ -44,7 +38,11 @@ public class CodeEditor {
     private List<Text> instructionsAsText;
 
     private ArmSimulator armSimulator;
-    
+
+    /**
+     * Creates a new instance of a code editor
+     * @param armSimulator the simulator
+     */
     public CodeEditor(ArmSimulator armSimulator) {
 
         mainPane = new AnchorPane();
@@ -56,7 +54,7 @@ public class CodeEditor {
         
         visibleNodes = FXCollections.observableArrayList();
         
-        dockNode = new DockNode(mainPane, "Editor", new ImageView(dockImage));
+        dockNode = new DockNode(mainPane, "Editor");
         dockNode.setPrefSize(300, 100);
         dockNode.setClosable(false);
         
@@ -101,10 +99,12 @@ public class CodeEditor {
 		}
 		return visibleNodes;
 	}
-    
-    public void highlightLine(int line) {
-    	// Prends bien en compte le cas où on est à line = 0 (quand on est dans une routine ou une instruction modifiée par quelqu'un)
 
+    /**
+     * highlight a line in the simulation mode
+     * @param line the line to highlight
+     */
+    public void highlightLine(int line) {
         for (Text anInstructionsAsText : instructionsAsText) {
             anInstructionsAsText.setFill(Color.BLACK);
         }
@@ -113,7 +113,12 @@ public class CodeEditor {
             instructionsAsText.get(line - 1).setFill(Color.RED);
         }
     }
-    
+
+
+    /**
+     * set the code editor in execution or edition mode
+     * @param executionMode
+     */
     public void setExecutionMode(boolean executionMode){
         this.textArea.setEditable(!executionMode);
         this.textArea.setVisible(!executionMode);
@@ -139,14 +144,27 @@ public class CodeEditor {
         }
     }
 
+    /**
+     * get the dock node of the code editor
+     * @return
+     */
     public DockNode getNode() {
         return this.dockNode;
     }
 
+    /**
+     * get the program contained in the editor
+     * @return the program as text
+     */
     public String getProgramAsString() {
     	this.textArea.setText(this.textArea.getText().replaceAll(";", System.lineSeparator()));
         return textArea.getText();
     }
+
+    /**
+     * set a program in the editor
+     * @param program
+     */
     public void setProgramAsString(String program){
         this.textArea.setText(program);
     }
