@@ -1,4 +1,4 @@
-ldr r0,=0x1f1001
+ldr r0,=0x1f1000
 mov r2,#0x7D
 mov r1,#0
 

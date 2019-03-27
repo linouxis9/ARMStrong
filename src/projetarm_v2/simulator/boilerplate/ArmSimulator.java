@@ -127,6 +127,7 @@ public class ArmSimulator {
 		
 		this.consoleBuffer = new ConcurrentLinkedQueue<>();
 		this.waitingForInput = new AtomicBoolean(false);
+		this.portManager = new PORTManager(this.ram);
 		
 		this.resetState();
 	}
@@ -139,6 +140,8 @@ public class ArmSimulator {
 	 * @throws IOException
 	 */
 	public void loadSaveFromFile(String path) throws IOException {
+		this.portManager = new PORTManager(this.ram);
+		
 		this.save = Save.fromPath(path);
 		
 		this.portManager.generateIOComponents(this.save.getComponentsAndReset());
@@ -430,7 +433,6 @@ public class ArmSimulator {
 		this.guiConsole = new CpuConsoleClear(cpu);
 		this.guiConsole.setConsoleView(consoleView);
 		this.cpu.registerCpuRoutine(guiConsole);
-		this.portManager = new PORTManager(this.ram);
 	}
 
 	/**
