@@ -161,7 +161,11 @@ public class RamView {
             this.refresh();
         });
         
-        tableView.setOnScroll((ScrollEvent event) -> {
+        tableView.setOnScroll((ScrollEvent event) -> {        	
+        	if (event.getDeltaY() == 0) {
+        		return;
+        	}
+        	
         	if (event.getDeltaY() < 0) {
         		this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         	} else {
