@@ -21,6 +21,9 @@ import javafx.scene.text.TextFlow;
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.core.io.IOLed;
+import projetarm_v2.simulator.core.io.IOSwitch;
+import projetarm_v2.simulator.core.io.IOButton;
+import projetarm_v2.simulator.ui.javafx.ramview.ShowType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +37,17 @@ public class LedView {
     AnchorPane anchorPane;    
     VBox ledContainer;
     HBox gameContainer;
+    VBox buttonContainer;
     Image ledOff;
     Image ledOn;
+    Image leverOff;
+    Image leverOn;
     
     List<IOLed> ledArray = new ArrayList<IOLed>();
-    List<ImageView> imageArrayList = new ArrayList<ImageView>();
+    List<ImageView> ledImageArrayList = new ArrayList<ImageView>();
+    List<ImageView> leverImageArrayList = new ArrayList<ImageView>();
+    List<IOSwitch> leverButtonArray = new ArrayList<IOSwitch>();    
+    List<IOButton> pressButtonArray = new ArrayList<IOButton>();   
     
     private ArmSimulator simulator;
 
@@ -54,48 +63,81 @@ public class LedView {
         
         ledOff = new Image(getClass().getResource("/resources/ledOff.png").toExternalForm());
         ledOn = new Image(getClass().getResource("/resources/ledOn.png").toExternalForm());
-        
+        leverOff = new Image(getClass().getResource("/resources/leverOff.png").toExternalForm());
+        leverOn = new Image(getClass().getResource("/resources/leverOn.png").toExternalForm()); 
+          
         gameContainer = new HBox();
         ledContainer = new VBox();
-        AnchorPane buttonContainer = new AnchorPane();
+        buttonContainer = new VBox();
         
-        for(int i=0 ; i < 8 ; i++) {
+        
+        for(int i=0 ; i < 8 ; i++) { //creating 8 leds at the start of the view
         	IOLed led = simulator.newIOLed();
         	
         	AnchorPane newLedAddress = new AnchorPane();
             ImageView newLedImage = new ImageView();
             
             ledArray.add(led);
-        	imageArrayList.add(newLedImage);
+        	ledImageArrayList.add(newLedImage);
         	
         	if(led.isOn()) {
             	newLedImage.setImage(ledOn);
             }else {
             	newLedImage.setImage(ledOff);
-            }
-        	
+            }       	
 
             newLedImage.setLayoutX(0);
             newLedImage.setLayoutY(0);
             Text newAddress = new Text();
             newAddress.setText("Address : 0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
-            newAddress.setLayoutX(150);
+            newAddress.setLayoutX(95);
             newAddress.setLayoutY(55);
             
             newLedAddress.getChildren().addAll(newLedImage, newAddress);
             ledContainer.getChildren().add(newLedAddress);
-        }       
+        }
         
-        ToggleButton leverButton =  new ToggleButton("", new ImageView(new Image(getClass().getResource("/resources/leverButton.png").toExternalForm())));
-        Button pushingButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/pushingButton.png").toExternalForm())));
-        
-        pushingButton.setLayoutX(20);
-        pushingButton.setLayoutY(20);
-        
-        leverButton.setLayoutX(100);
-        leverButton.setLayoutY(20);
-        
-        buttonContainer.getChildren().addAll(pushingButton, leverButton);
+        for(int i=0 ; i < 2 ; i++) { //creating 3 buttons at the start of the view
+        	IOButton IOpressButton = simulator.newIOButton();
+        	IOSwitch IOleverButton = simulator.newIOSwitch();
+        	AnchorPane buttonAndTextAndLeverAndTextAnchorPane = new AnchorPane();
+        	       	
+        	Text leverText = new Text();
+        	leverText.setText("0x" + Long.toHexString(IOpressButton.getPortAddress()) + " Bit " + IOpressButton.shift);
+        	leverText.setLayoutX(30);
+            leverText.setLayoutY(100);
+
+            Text pushingText = new Text();
+            pushingText.setText("0x" + Long.toHexString(IOleverButton.getPortAddress()) + " Bit " + IOleverButton.shift);
+            pushingText.setLayoutX(30);
+            pushingText.setLayoutY(190);
+            
+            ImageView lever = new ImageView(leverOff);            
+        	ToggleButton leverButton =  new ToggleButton("", lever);
+        	Button pushingButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/pushingButton.png").toExternalForm())));
+        	
+        	leverButton.setOnAction(ActionEvent -> {
+        		IOleverButton.flip();       
+        		refresh();
+            });
+        	
+        	pushingButton.setOnAction(ActionEvent -> {
+        		IOpressButton.push();     
+        		refresh();
+            });
+        	
+        	leverButton.setLayoutX(70);
+            leverButton.setLayoutY(25);
+        	pushingButton.setLayoutX(70);
+            pushingButton.setLayoutY(115);        
+            
+        	leverButtonArray.add(IOleverButton);
+        	pressButtonArray.add(IOpressButton);
+        	leverImageArrayList.add(lever);
+        	
+        	buttonAndTextAndLeverAndTextAnchorPane.getChildren().addAll(leverButton, leverText, pushingButton, pushingText);
+        	buttonContainer.getChildren().add(buttonAndTextAndLeverAndTextAnchorPane);
+        }
         
         gameContainer.getChildren().addAll(ledContainer, buttonContainer);
         
@@ -112,12 +154,20 @@ public class LedView {
     /**
      * gets and display the new leds state
      */
-    public void refresh() {
+    public void refresh() {    
+    	for (int i = 0; i < leverButtonArray.size(); i++)	{
+    		if (leverButtonArray.get(i).isOn()) {
+    			leverImageArrayList.get(i).setImage(leverOn);
+    		} else {
+    			leverImageArrayList.get(i).setImage(leverOff);
+    		}
+    	}
+    	
     	for (int i = 0; i < ledArray.size(); i++)	{
     		if (ledArray.get(i).isOn()) {
-    			imageArrayList.get(i).setImage(ledOn);
+    			ledImageArrayList.get(i).setImage(ledOn);
             } else {
-               	imageArrayList.get(i).setImage(ledOff);
+               	ledImageArrayList.get(i).setImage(ledOff);
             }
     	}
     }
