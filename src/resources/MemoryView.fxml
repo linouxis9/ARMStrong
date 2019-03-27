@@ -9,16 +9,16 @@
 <AnchorPane fx:id="memoryViewPane" prefHeight="623.0" prefWidth="375.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text fx:id="goToAddressLabel" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Go to address:" AnchorPane.leftAnchor="13.874992370605469" AnchorPane.topAnchor="14.0" />
-      <TextField fx:id="goToAddressField" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="132.0" promptText="dec, hex or bin" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="10.0" />
-      <Button fx:id="button8Bit" layoutX="99.0" layoutY="50.0" mnemonicParsing="false" text="8bit" AnchorPane.leftAnchor="99.0" AnchorPane.topAnchor="50.0" />
-      <Button fx:id="button32Bit" layoutX="234.0" layoutY="50.0" mnemonicParsing="false" text="32bit" AnchorPane.leftAnchor="234.0" AnchorPane.topAnchor="50.0" />
-      <Button fx:id="button16Bit" layoutX="163.0" layoutY="50.0" mnemonicParsing="false" text="16bit" AnchorPane.leftAnchor="163.0" AnchorPane.topAnchor="50.0" />
+      <TextField fx:id="goToAddressField" layoutX="130.0" layoutY="10.0" prefHeight="25.0" prefWidth="132.0" promptText="dec, hex or bin" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+      <Button fx:id="button8Bit" layoutX="99.0" layoutY="50.0" mnemonicParsing="false" text="8 bits" AnchorPane.leftAnchor="99.0" AnchorPane.topAnchor="50.0" />
+      <Button fx:id="button32Bit" layoutX="234.0" layoutY="50.0" mnemonicParsing="false" text="32 bits" AnchorPane.leftAnchor="274.0" AnchorPane.topAnchor="50.0" />
+      <Button fx:id="button16Bit" layoutX="163.0" layoutY="50.0" mnemonicParsing="false" text="16 bits" AnchorPane.leftAnchor="183.0" AnchorPane.topAnchor="50.0" />
       <Text fx:id="viewModeLabel" layoutX="13.5146484375" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View mode:" AnchorPane.leftAnchor="13.294647216796875" AnchorPane.topAnchor="54.0" />
       <ScrollBar fx:id="memoryScrollBar" layoutX="246.0" layoutY="126.0" orientation="VERTICAL" prefHeight="481.0" prefWidth="17.0" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="126.0" />
       <TableView fx:id="tableView" editable="true" layoutX="15.0" layoutY="126.0" prefHeight="481.0" prefWidth="313.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="47.0" AnchorPane.topAnchor="126.0" />
-      <Button fx:id="buttonDecUnSig" layoutX="257.0" layoutY="84.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="112.0" text="Decimal" AnchorPane.leftAnchor="257.0" AnchorPane.topAnchor="84.0" />
+      <Button fx:id="buttonDecUnSig" layoutX="257.0" layoutY="84.0" mnemonicParsing="false" text="Decimal" AnchorPane.leftAnchor="260.0" AnchorPane.topAnchor="84.0" />
       <Button fx:id="buttonHex" layoutX="14.0" layoutY="84.0" mnemonicParsing="false" text="Hexadecimal" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="84.0" />
-      <Button fx:id="buttonDec" layoutX="127.0" layoutY="84.0" mnemonicParsing="false" text="Sig Decimal" AnchorPane.leftAnchor="127.0" AnchorPane.topAnchor="84.0" />
-      <Button fx:id="buttonAscii" layoutX="304.0" layoutY="49.0" mnemonicParsing="false" text="ASCII" AnchorPane.leftAnchor="304.0" AnchorPane.topAnchor="49.0" />
+      <Button fx:id="buttonDec" layoutX="127.0" layoutY="84.0" mnemonicParsing="false" text="Sig Decimal" AnchorPane.leftAnchor="137.0" AnchorPane.topAnchor="84.0" />
+      <Button fx:id="buttonAscii" layoutX="304.0" layoutY="84.0" mnemonicParsing="false" text="ASCII" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="84.0" />
    </children>
 </AnchorPane>

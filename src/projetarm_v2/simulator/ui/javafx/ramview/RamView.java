@@ -53,6 +53,8 @@ public class RamView {
     
     private ArrayList<Button> buttonFormat;
     
+    private boolean changeAscii = false;
+    
     public RamView(ArmSimulator simulator) {
 
         this.simulator=simulator;
@@ -168,16 +170,28 @@ public class RamView {
         Button button8Bit = (Button) mainPane.lookup("#button8Bit");
     	Button button16Bit = (Button) mainPane.lookup("#button16Bit");
     	Button button32Bit = (Button) mainPane.lookup("#button32Bit");
-    	Button buttonAscii = (Button) mainPane.lookup("#buttonAscii");
 
     	this.buttonBits = new ArrayList<Button>(){{
             add(button8Bit);
             add(button16Bit);
             add(button32Bit);
-            add(buttonAscii);
         }};
         
         changeStyleState(buttonBits, button8Bit);    
+        
+        Button buttonHex = (Button) mainPane.lookup("#buttonHex");
+        Button buttonDec = (Button) mainPane.lookup("#buttonDec");
+        Button buttonUnsigDec = (Button) mainPane.lookup("#buttonDecUnSig");
+        Button buttonAscii = (Button) mainPane.lookup("#buttonAscii");
+   
+        this.buttonFormat = new ArrayList<Button>(){{
+            add(buttonHex);
+            add(buttonDec);
+            add(buttonUnsigDec);
+            add(buttonAscii);
+        }};
+        
+        changeStyleState(buttonFormat, buttonHex);      
     	
     	button8Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(1);
@@ -193,6 +207,11 @@ public class RamView {
             this.refresh();
             
             changeStyleState(buttonBits, button16Bit);
+            
+            if(this.changeAscii) {
+            	changeStyleState(buttonFormat, buttonHex);
+            	this.changeAscii = false;
+            }
     	});
     	button32Bit.setOnAction(ActionEvent -> {
             memoryScrollBar.setUnitIncrement(4);
@@ -201,20 +220,12 @@ public class RamView {
             this.refresh();
 
             changeStyleState(buttonBits, button32Bit);
+            
+            if(this.changeAscii) {
+            	changeStyleState(buttonFormat, buttonHex);
+            	this.changeAscii = false;
+            }
     	});
-
-    	
-        Button buttonHex = (Button) mainPane.lookup("#buttonHex");
-        Button buttonDec = (Button) mainPane.lookup("#buttonDec");
-        Button buttonUnsigDec = (Button) mainPane.lookup("#buttonDecUnSig");
-   
-        this.buttonFormat = new ArrayList<Button>(){{
-            add(buttonHex);
-            add(buttonDec);
-            add(buttonUnsigDec);
-        }};
-        
-        changeStyleState(buttonFormat, buttonHex);      
 
         buttonHex.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);
@@ -240,14 +251,14 @@ public class RamView {
             changeStyleState(buttonFormat, buttonUnsigDec);
         });
         buttonAscii.setOnAction(ActionEvent -> {
-            memoryScrollBar.setUnitIncrement(1);
-            this.UneSuperImplemFournieParValentinLeBg.setShowType(ShowType.BYTE);
+        	button8Bit.fire();
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.ASCII);
             alignMemory();
             this.refresh(); 
             
-            changeStyleState(buttonBits, buttonAscii); 
-            changeStyleState(buttonFormat, null);
+            changeStyleState(buttonFormat, buttonAscii); 
+            
+            this.changeAscii = true;
         });
 
         TextField goToAddressField = (TextField) mainPane.lookup("#goToAddressField");
@@ -290,13 +301,14 @@ public class RamView {
     
     private void changeStyleState(List<Button> list, Button buttonChangeStyle){
     	for (Button button: list) {
+    		button.getStyleClass().clear();
+    		button.getStyleClass().add("button");
+    		
     		if(button == buttonChangeStyle) {
     			button.getStyleClass().add("enableButton");
-        		button.getStyleClass().remove("disableButton");
     		}else {
-    			button.getStyleClass().add("disableButton");
-        		button.getStyleClass().remove("enableButton");
-    		}	
+    			button.getStyleClass().add("disableButton");   
+    		}		
     	} 	
     	
     }
