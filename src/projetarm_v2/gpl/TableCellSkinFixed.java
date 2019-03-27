@@ -56,12 +56,14 @@ public class TableCellSkinFixed<S,T> extends TableCellSkin<S, T> {
 
     /** {@inheritDoc} */
     @Override public void dispose() {
-        return;
-    }
 
+    }
+    
     /** {@inheritDoc} */
     @Override public ReadOnlyObjectProperty<TableColumn<S,T>> tableColumnProperty() {
-        return null;
+    	if (getSkinnable() != null)  	 
+    		return getSkinnable().tableColumnProperty();
+    	return null;
     }
 }
 

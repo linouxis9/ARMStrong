@@ -228,6 +228,7 @@ public class Gui extends Application {
 			moreRamView.getNode().dock(dockPane, DockPos.RIGHT);
 		});
 		this.armMenuBar.getNewInterpreterWindow().setOnAction(actionEvent -> {
+			armMenuBar.getStopMenuItem().fire();
 			if (!this.isInterpreterMode) {
 				this.isInterpreterMode = true;
 				this.interpreter.getNode().dock(dockPane, DockPos.BOTTOM);
@@ -497,7 +498,7 @@ public class Gui extends Application {
 		new Thread(() -> {
 			while (true) {
 				try {
-					Thread.sleep(750);
+					Thread.sleep(250);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}
@@ -521,7 +522,7 @@ public class Gui extends Application {
 		new Thread(() -> {
 			while (true) {
 				try {
-					Thread.sleep(100);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 				}

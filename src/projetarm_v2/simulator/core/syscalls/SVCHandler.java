@@ -93,7 +93,7 @@ public class SVCHandler {
 				
 				call.run();
 			} else {
-				System.out.println("[ERROR] Unknown CPU exception n°" + intno);
+				System.out.println("[ERROR] Unknown CPU exception no" + intno);
 				System.out.println("[ERROR] EMULATION ABORTED!");
 				this.cpu.interruptMe();
 			}

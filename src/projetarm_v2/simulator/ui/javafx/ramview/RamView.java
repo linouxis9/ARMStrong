@@ -214,7 +214,7 @@ public class RamView {
             add(buttonUnsigDec);
         }};
         
-        changeStyleState(buttonFormat, buttonDec);      
+        changeStyleState(buttonFormat, buttonHex);      
 
         buttonHex.setOnAction(ActionEvent -> {
             this.UneSuperImplemFournieParValentinLeBg.setOutputType(OutputType.HEX);

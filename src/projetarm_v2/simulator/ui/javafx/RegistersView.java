@@ -345,13 +345,9 @@ public class RegistersView {
     }
 
     public void refreshColumnData() {
-    	this.tableHex.getColumns().get(1).setVisible(false);
-        this.tableSigDec.getColumns().get(1).setVisible(false);
-        this.tableDec.getColumns().get(1).setVisible(false);
-        
-        this.tableHex.getColumns().get(1).setVisible(true);
-        this.tableSigDec.getColumns().get(1).setVisible(true);
-        this.tableDec.getColumns().get(1).setVisible(true);  
+    	this.tableDec.refresh();
+    	this.tableHex.refresh();
+    	this.tableSigDec.refresh();
     }
     
     private boolean isNumeric(String str) { 

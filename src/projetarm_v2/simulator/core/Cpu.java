@@ -29,7 +29,7 @@ public class Cpu {
 	private Cpsr cpsr;
 	private Register pc;
 	private Register currentAddress;
-	private boolean hasFinished = false;
+	private AtomicBoolean hasFinished;
 	private long startingAddress;
 	private long endAddress;
 	private AtomicLong stepByStepRunning;
@@ -48,6 +48,7 @@ public class Cpu {
 		this.endAddress = 0;
 		this.stepByStepRunning = new AtomicLong(0);
 		this.running = new AtomicBoolean(false); 
+		this.hasFinished = new AtomicBoolean(false); 
 		this.svcHandler = new SVCHandler(this);
 		
 		u = new Unicorn(Unicorn.UC_ARCH_ARM, Unicorn.UC_MODE_ARM);
@@ -131,16 +132,17 @@ public class Cpu {
 		this.synchronizeUnicornRam();
 
 		running.set(true);
-		hasFinished = false;
-
+		hasFinished.set(false);
+		this.stepByStepRunning.set(0);
+		
 		u.emu_start(this.currentAddress.getValue(), this.endAddress+4, 0, 0);
 
-		if (!hasFinished) {
+		if (!hasFinished.get()) {
 			this.currentAddress.setValue(this.currentAddress.getValue() + 4);
 		}
 		
 		running.set(false);
-		hasFinished = true;
+		hasFinished.set(true);
 	}
 
 	public Register getRegister(int registerNumber) {
@@ -156,7 +158,7 @@ public class Cpu {
 	}
 
 	public boolean hasFinished() {
-		return this.hasFinished;
+		return this.hasFinished.get();
 	}
 
 	public long getStartingAddress() {
@@ -171,14 +173,14 @@ public class Cpu {
 		this.synchronizeUnicornRam();
 
 		running.set(true);
-		hasFinished = false;
+		hasFinished.set(false);
 		this.stepByStepRunning.set(1);
 		
 		int startAddress = this.currentAddress.getValue();
 		
 		u.emu_start(startAddress, (long)startAddress+4, 0, 0);
 		
-		if (startAddress == this.currentAddress.getValue() && !hasFinished) {
+		if (startAddress == this.currentAddress.getValue() && !hasFinished.get()) {
 			this.currentAddress.setValue(this.currentAddress.getValue() + 4);
 		}
 
@@ -208,7 +210,7 @@ public class Cpu {
 			if (this.cpu.ram.getValue(address) == 0) {
 				System.out.format(">>> Instruction @ 0x%x skipped%n", this.cpu.currentAddress.getValue());
 				u.emu_stop();
-				this.cpu.hasFinished = true;
+				this.cpu.hasFinished.set(true);
 				running.set(false);
 			}
 		}
@@ -218,6 +220,7 @@ public class Cpu {
 	public void interruptMe() {
 		this.u.emu_stop();
 		running.set(false);
+		hasFinished.set(false);
 	}
 
 	public Cpsr getCPSR() {

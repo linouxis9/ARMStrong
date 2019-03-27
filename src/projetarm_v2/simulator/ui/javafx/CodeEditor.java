@@ -78,10 +78,11 @@ public class CodeEditor {
             this.textFlow.getChildren().clear();
             for (int lineNumber = 1; lineNumber <= instructionsAsStrings.length; lineNumber++) {
             	String address = "";
-            	if (armSimulator.getAddressFromLine(lineNumber) != 0) {
-            		address = "0x" + Integer.toHexString(armSimulator.getAddressFromLine(lineNumber));
+            	int longAddress = armSimulator.getAddressFromLine(lineNumber);
+            	if (longAddress != 0) {
+            		address = String.format("%08x:%08x", longAddress, armSimulator.getRamWord(longAddress));
             	}
-                String line = lineNumber + ":" + address + " \t" + instructionsAsStrings[lineNumber-1] + '\n';
+                String line = lineNumber + "\t" + address + "\t\t" + instructionsAsStrings[lineNumber-1] + '\n';
                 this.instructionsAsText.add(new Text(line));
                 this.textFlow.getChildren().add(this.instructionsAsText.get(lineNumber-1));
             }

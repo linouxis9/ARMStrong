@@ -28,7 +28,6 @@ package projetarm_v2.gpl;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.TableCellSkin;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.util.converter.DefaultStringConverter;
@@ -92,7 +91,7 @@ public class TextFieldTableCellFixed<S,T> extends TableCell<S,T> {
 
     /** {@inheritDoc} */
     @Override protected Skin<?> createDefaultSkin() {
-        return new TableCellSkin<S,T>(this);
+        return new TableCellSkinFixed<S,T>(this);
     }
     
 
