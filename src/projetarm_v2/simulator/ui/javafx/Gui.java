@@ -288,7 +288,9 @@ public class Gui extends Application {
 		this.armMenuBar.getNewEightSegmentDisplayWindow().setOnAction(actionEvent -> {
 			EightSegmentDisplay moreSegment = new EightSegmentDisplay(this.simulator);
 			this.eightSegmentDisplays.add(moreSegment);
-			moreSegment.getNode().dock(dockPane, DockPos.RIGHT);
+			moreSegment.getNode().setFloating(true);
+					//dock(dockPane, DockPos.RIGHT);
+
 		});
 
 

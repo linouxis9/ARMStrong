@@ -133,6 +133,9 @@ public class CodeEditor {
                 this.textFlow.getChildren().add(this.instructionsAsText.get(lineNumber-1));
             }
             highlightLine(1);
+            this.dockNode.setTitle("Simulator");
+        }else{
+            this.dockNode.setTitle("Editor");
         }
     }
 
