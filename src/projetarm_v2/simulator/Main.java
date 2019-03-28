@@ -21,7 +21,7 @@ public class Main {
 				"kek: .asciz \"test\";" + 
 				".align;" + 
 				"start: ldr r0,=kek;" + 
-				"mov r1,#0xFF04;" +
+				"ldr r1,=0x1F0008;" +
 				"blx r1");
 
 		simulator.run();

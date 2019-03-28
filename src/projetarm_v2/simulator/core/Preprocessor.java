@@ -25,6 +25,7 @@ public class Preprocessor {
 		
 		while (matcher.find()) {
 			assembly = assembly.replaceAll("#"+ matcher.group(1), "#"+matcher.group(2));
+			assembly = assembly.replaceAll("="+ matcher.group(1), "="+matcher.group(2));
 		}
 		
 		assembly = assembly
