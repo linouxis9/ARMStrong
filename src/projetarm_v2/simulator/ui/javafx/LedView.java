@@ -10,7 +10,6 @@ package projetarm_v2.simulator.ui.javafx;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,10 +19,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.dockfx.DockNode;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
+import projetarm_v2.simulator.core.io.IOButton;
 import projetarm_v2.simulator.core.io.IOLed;
 import projetarm_v2.simulator.core.io.IOSwitch;
-import projetarm_v2.simulator.core.io.IOButton;
-import projetarm_v2.simulator.ui.javafx.ramview.ShowType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +112,7 @@ public class LedView {
             ImageView lever = new ImageView(leverOff);            
         	Button leverButton =  new Button("", lever);
         	Button pushingButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/pushingButton.png").toExternalForm())));
-        	
+
         	leverButton.setOnAction(ActionEvent -> {
         		IOleverButton.flip();       
         		refresh();
@@ -124,7 +122,8 @@ public class LedView {
         		IOpressButton.push();     
         		refresh();
             });
-        	
+
+
         	leverButton.setLayoutX(70);
             leverButton.setLayoutY(25);
         	pushingButton.setLayoutX(70);
@@ -156,6 +155,7 @@ public class LedView {
     public void refresh() {    
     	for (int i = 0; i < leverButtonArray.size(); i++)	{
     		if (leverButtonArray.get(i).isOn()) {
+
     			leverImageArrayList.get(i).setImage(leverOn);
     		} else {
     			leverImageArrayList.get(i).setImage(leverOff);
