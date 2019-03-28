@@ -47,7 +47,7 @@ public class LedView {
     List<ImageView> ledImageArrayList = new ArrayList<ImageView>();
     List<ImageView> leverImageArrayList = new ArrayList<ImageView>();
     List<IOSwitch> leverButtonArray = new ArrayList<IOSwitch>();    
-    List<IOButton> pressButtonArray = new ArrayList<IOButton>();   
+    List<IOButton> pressButtonArray = new ArrayList<IOButton>();
     
     private ArmSimulator simulator;
 
@@ -69,8 +69,7 @@ public class LedView {
         gameContainer = new HBox();
         ledContainer = new VBox();
         buttonContainer = new VBox();
-        
-        
+                
         for(int i=0 ; i < 8 ; i++) { //creating 8 leds at the start of the view
         	IOLed led = simulator.newIOLed();
         	
@@ -89,7 +88,7 @@ public class LedView {
             newLedImage.setLayoutX(0);
             newLedImage.setLayoutY(0);
             Text newAddress = new Text();
-            newAddress.setText("Address : 0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
+            newAddress.setText("0x" + Long.toHexString(led.getPortAddress()) + " Bit N°" + led.shift);
             newAddress.setLayoutX(95);
             newAddress.setLayoutY(55);
             
@@ -103,17 +102,17 @@ public class LedView {
         	AnchorPane buttonAndTextAndLeverAndTextAnchorPane = new AnchorPane();
         	       	
         	Text leverText = new Text();
-        	leverText.setText("0x" + Long.toHexString(IOpressButton.getPortAddress()) + " Bit " + IOpressButton.shift);
+        	leverText.setText("0x" + Long.toHexString(IOpressButton.getPortAddress()) + " Bit N°" + IOpressButton.shift);
         	leverText.setLayoutX(30);
             leverText.setLayoutY(100);
 
             Text pushingText = new Text();
-            pushingText.setText("0x" + Long.toHexString(IOleverButton.getPortAddress()) + " Bit " + IOleverButton.shift);
+            pushingText.setText("0x" + Long.toHexString(IOleverButton.getPortAddress()) + " Bit N°" + IOleverButton.shift);
             pushingText.setLayoutX(30);
             pushingText.setLayoutY(190);
             
             ImageView lever = new ImageView(leverOff);            
-        	ToggleButton leverButton =  new ToggleButton("", lever);
+        	Button leverButton =  new Button("", lever);
         	Button pushingButton = new Button("", new ImageView(new Image(getClass().getResource("/resources/pushingButton.png").toExternalForm())));
         	
         	leverButton.setOnAction(ActionEvent -> {
@@ -143,7 +142,7 @@ public class LedView {
         
         this.dockNode = new DockNode(mainPane, "Led Game", new ImageView(dockImage));
         
-        dockNode.setPrefSize(460,666);
+        dockNode.setPrefSize(300,666);
         
         this.mainPane.setContent(gameContainer);  
         this.mainPane.setFitToWidth(true);
@@ -162,7 +161,6 @@ public class LedView {
     			leverImageArrayList.get(i).setImage(leverOff);
     		}
     	}
-    	
     	for (int i = 0; i < ledArray.size(); i++)	{
     		if (ledArray.get(i).isOn()) {
     			ledImageArrayList.get(i).setImage(ledOn);
@@ -188,6 +186,12 @@ public class LedView {
         this.dockNode.close();
         for(IOLed led : ledArray){
             this.simulator.removeIOComponent(led);
+        }
+        for(IOSwitch lever : leverButtonArray){
+            this.simulator.removeIOComponent(lever);
+        }
+        for(IOButton button : pressButtonArray){
+            this.simulator.removeIOComponent(button);
         }
     }
 }
