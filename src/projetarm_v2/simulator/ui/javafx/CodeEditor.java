@@ -128,7 +128,7 @@ public class CodeEditor {
             this.instructionsAsText = new ArrayList<>();
             this.textFlow.getChildren().clear();
             for (int lineNumber = 1; lineNumber <= instructionsAsStrings.length; lineNumber++) {
-            	String address = "";
+            	String address = "\t";
             	int longAddress = armSimulator.getAddressFromLine(lineNumber);
             	if (longAddress != 0) {
             		address = String.format("%08x:%08x", longAddress, armSimulator.getRamWord(longAddress));
