@@ -1,25 +1,37 @@
 # ![#@armsim](small_logo.png)
-
 ## A fast and simple ARM Simulator made for education
 
-[The Javadoc is available here](http://projectarm.devling.net/api/)
+## Installation
 
-### The first version of our project has been released!
-You can now try the JAR of our project!
+Download the [latest project-armstrong.jar](https://github.com/linouxis9/ARMStrong/releases/download/v1.0.0/project-armstrong.jar) and enjoy!
 
-[ProjectARM.jar](https://github.com/linouxis9/ProjectARM/releases/download/v1.0.0/ProjectARM.jar)
+## Graphical User Interface
+![gui_s1](images/gui_s1.png)
+![gui_s2](images/gui_s2.png)
+```bash
+java -jar project-armstrong.jar
+```
 
-> Outdated Screenshots:
+## Command-line Interface
+![cli_s1](images/cli_s1.png)
+![cli_s2](images/cli_s2.png)
+```
+java -jar project-armstrong.jar cli
+```
 
-> ![gui_s1](images/gui_s1.png)
-> ![gui_s2](images/gui_s2.png)
-> ![cli_s1](images/cli_s1.png)
-> ![cli_s2](images/cli_s2.png)
+## Information
 
+### Requirements
+- Java 11
+- Windows x86/x64 or Linux x64
 
-***
+### Libraries used
+- Unicorn
+- Keystone
+- JavaFX
+- DockFX
 
-### Diagramme de classes
+### Class diagram
 > ![classes](diagram.png)
 
 > Made with :heart: by the #@RMStrong Team
