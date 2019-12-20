@@ -165,7 +165,7 @@ public class RegistersView {
 					} else {
 						try {
 							String[] hex = newValue.split("x");
-							int value = Integer.parseInt(hex[hex.length-1], 16);
+							int value = Integer.parseUnsignedInt(hex[hex.length-1], 16);
 							if (registerValue < 16) {
 								simulator.setRegisterValue(registerValue, value);
 								if (registerValue == 15) {

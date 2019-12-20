@@ -616,13 +616,13 @@ public class Gui extends Application {
 
 		try {
 			if (input.startsWith("0x") || input.startsWith("0X")) {
-				address = Integer.parseInt(input.substring(2), 16); // parsing a int in base 16, the 2
+				address = Integer.parseUnsignedInt(input.substring(2), 16); // parsing a int in base 16, the 2
 				// first chars of the string are
 				// removed (0x)
 			} else if (input.startsWith("0b") || input.startsWith("0B")) {
-				address = Integer.parseInt(input.substring(2), 2);
+				address = Integer.parseUnsignedInt(input.substring(2), 2);
 			} else if (input.startsWith("0d") || input.startsWith("0D")) {
-				address = Integer.parseInt(input.substring(2));
+				address = Integer.parseUnsignedInt(input.substring(2));
 			} else {
 				address = Integer.parseInt(input);
 			}
