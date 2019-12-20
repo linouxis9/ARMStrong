@@ -64,10 +64,15 @@ public class Preferences {
             applyAndCloseButton.setOnAction(e -> {
             	try {
 	            	int startingAddress = Gui.parseUserAdress(programAt.getText());
+                    if (Integer.compareUnsigned(startingAddress, simulator.getRamSize()) >= 0) {
+                        Gui.warningPopup("This starting address is invalid.", (_e) -> {});
+                        return;
+                    }
 	            	if ((startingAddress % 4) != 0) {
 	            		Gui.warningPopup("The startingAddress should be aligned on a word bound.", (_e) -> {});
 	            		return;
 	            	}
+	            	simulator.setStartingAddress(startingAddress);
 	                preferencesStage.close();
             	} catch (FormatException exception) {}
             });
