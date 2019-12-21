@@ -83,11 +83,6 @@ public class ArmSimulator {
 	private BiMap<Integer, Integer> asmToLine;
 
     /**
-     * Regexp to recognize labels
-     */
-	private static final Pattern labelPattern = Pattern.compile("([a-zA-Z]+:)");
-
-    /**
      * The CPU starts executing binary in Ram at this address
      */
 	private int startingAddress = Cpu.DEFAULT_STARTING_ADDRESS;
@@ -235,14 +230,14 @@ public class ArmSimulator {
 		int currentLine = 1;
 		int currentAddress = (int)this.cpu.getStartingAddress();
 
-		Matcher matcher = labelPattern.matcher(assembly);
+		Matcher matcher = Preprocessor.labelPattern.matcher(assembly.replaceAll(";", "\n"));
 
 		StringBuilder labelsBuilder = new StringBuilder();
 		while (matcher.find()) {
 			labelsBuilder.append(matcher.group());
 		}
 		String labels = labelsBuilder.toString();
-		
+
 		for (String line : assembly.split(";")) {
 			if (Preprocessor.labelPattern.matcher(line).find()) {
 				continue;
@@ -250,10 +245,9 @@ public class ArmSimulator {
 			if (line != "") {
 				byte[] lineBytes;
 				try {
-					lineBytes = (this.assembler.assemble(labels + line.substring(Math.abs(line.indexOf(':') + 1)),
-						currentAddress));
+					lineBytes = (this.assembler.assemble(labels + line, currentAddress));
 				} catch (InvalidAssemblyException e) {
-					throw new InvalidInstructionException("[ERROR] Line " + currentLine + "\" " + line + "\": " + e.getMessage(), currentLine);
+					throw new InvalidInstructionException("[ERROR] Line " + currentLine + " \" " + line + "\": " + e.getMessage(), currentLine);
 				}
 				asmToLine.put(currentAddress, currentLine);
 				currentAddress += lineBytes.length - (line.contains("=") ? 1 : 0) * 4;

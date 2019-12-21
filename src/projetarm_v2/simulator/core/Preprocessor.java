@@ -43,7 +43,6 @@ public class Preprocessor {
 				.replaceAll(startOfLine+"\\.equ +.*", "")
 				.replaceAll("@.*", "");
 
-		System.err.println(assembly);
 		return assembly.replaceAll("\\R",";");
 	}
 
