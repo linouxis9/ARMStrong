@@ -8,6 +8,7 @@
 
 package projetarm_v2.simulator.ui.javafx;
 
+import com.google.common.primitives.Bytes;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -23,6 +24,9 @@ import org.dockfx.DockNode;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * the console shown at the bottom of the gui
@@ -71,14 +75,19 @@ public class ConsoleView {
 		scrollPane.setContent(this.textFlow);
 
 		output = new OutputStream() {
-			private StringBuffer currentLine = new StringBuffer();
+			private ConcurrentLinkedQueue<Character> consoleBuffer = new ConcurrentLinkedQueue<>();
 			@Override
 			public void write(int b) throws IOException {
-				this.currentLine.append((char)b);
+				this.consoleBuffer.add((char)b);
 				if (b == '\n') {
+					ArrayList<Byte> list = new ArrayList<>();
+					while (!this.consoleBuffer.peek().equals('\n')) {
+						list.add((byte) (char) this.consoleBuffer.poll());
+					}
+					this.consoleBuffer.poll();
+					String currentLine = new String(Bytes.toArray(list), "ASCII");
 					Platform.runLater(() -> {
-						textFlow.getChildren().add(new Text(currentLine.toString()));
-						this.currentLine.setLength(0);
+						textFlow.getChildren().add(new Text(currentLine));
 						scrollPane.setVvalue(scrollPane.getHmax());
 						if (textFlow.getChildren().size() > 100) {
 							textFlow.getChildren().clear();

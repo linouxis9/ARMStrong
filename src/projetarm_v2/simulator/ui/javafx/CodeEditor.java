@@ -110,7 +110,7 @@ public class CodeEditor {
         }
 
         if(line > 0) {
-            instructionsAsText.get(line - 1).setFill(Color.RED);
+            instructionsAsText.get(line - 1).setFill(Color.BLUE);
         }
     }
 

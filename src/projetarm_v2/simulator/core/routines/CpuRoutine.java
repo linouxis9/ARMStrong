@@ -55,7 +55,7 @@ public abstract class CpuRoutine {
 		int i= 0;
 		List<Byte> list = new ArrayList<>();
 		byte c = this.getRam().getByte(address++);
-		
+
 		while (c != 0) {
 			list.add(c);
 			c = this.getRam().getByte(address++);
@@ -67,9 +67,8 @@ public abstract class CpuRoutine {
 			array[i] = current;
 			i++;
 		}
-	
-		return new String(array, "UTF-8");
-	
+
+		return new String(array, "ASCII");
 	}
 	
 	private class RoutineHook implements CodeHook {

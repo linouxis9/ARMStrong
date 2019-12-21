@@ -32,8 +32,6 @@ public class CpuConsolePutString extends CpuRoutine {
 		{
 			e.printStackTrace();
 		}
-		
-		System.out.flush();
 	}
 
 }

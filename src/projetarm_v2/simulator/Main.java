@@ -17,7 +17,7 @@ public class Main {
 		System.out.print(">>> Launching Test sequence\n");
 
 		ArmSimulator simulator = new ArmSimulator(); // PC is set @ 0x1000, 2 MB of RAM by default
-		simulator.setProgram("b start;" + 
+		simulator.setProgram("b start;" +
 				"kek: .asciz \"test\";" + 
 				".align;" + 
 				"start: ldr r0,=kek;" + 

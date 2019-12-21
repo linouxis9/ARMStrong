@@ -16,9 +16,9 @@ import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 
 public class Preprocessor {
 
-	private static String maybeLabel = "^((([a-zA-Z]|[0-9])*):)?";
-	private static final Pattern labelPattern = Pattern.compile("(([a-zA-Z]|[0-9])*):");
-	private static final Pattern equPattern = Pattern.compile(".equ +(.*),(.*)");
+	private static final String startOfLine = "(?m)^\\s*";
+	public static final Pattern labelPattern = Pattern.compile(startOfLine + "(([a-zA-Z]|[0-9])*):");
+	private static final Pattern equPattern = Pattern.compile(startOfLine + "\\.equ +(.*),(.*)");
 	
 	public static String pass1(String assembly) {
 		Matcher matcher = equPattern.matcher(assembly);
@@ -27,22 +27,24 @@ public class Preprocessor {
 			assembly = assembly.replaceAll("#"+ matcher.group(1), "#"+matcher.group(2));
 			assembly = assembly.replaceAll("="+ matcher.group(1), "="+matcher.group(2));
 		}
-		
-		assembly = assembly
-				.replaceAll(".breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
-				.replaceAll(".clear", "blx #" + CpuConsoleClear.ROUTINE_ADDRESS)
-				.replaceAll("@.*", "")
-				.replaceAll(".stop", ".word 0")
-				.replaceAll(".equ +.*", "");
 
-		
 		matcher = labelPattern.matcher(assembly);
-		
+
 		while (matcher.find()) {
-			assembly = assembly.replaceAll(matcher.group(1), escapeDigit(matcher.group(1)));
+			assembly = assembly.replaceAll(startOfLine + matcher.group(1) + ":", escapeDigit(matcher.group(1)) + ":\n");
+			assembly = assembly.replaceAll("=" + matcher.group(1), "=" + escapeDigit(matcher.group(1)));
 		}
 
-		return assembly.replaceAll("\r?\n",";");
+		assembly = assembly
+				.replaceAll(startOfLine + "\\.breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
+				.replaceAll(startOfLine + "\\.clear", "blx #" + CpuConsoleClear.ROUTINE_ADDRESS)
+				.replaceAll(startOfLine + "\\.stop", ".word 0")
+				.replaceAll(startOfLine + "\\.end", ".word 0")
+				.replaceAll(startOfLine+"\\.equ +.*", "")
+				.replaceAll("@.*", "");
+
+		System.err.println(assembly);
+		return assembly.replaceAll("\\R",";");
 	}
 
 

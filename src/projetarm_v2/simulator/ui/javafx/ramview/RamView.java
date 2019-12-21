@@ -39,7 +39,7 @@ public class RamView {
     private ScrollBar memoryScrollBar;
     private TableView<NewLineRam> tableView;
     
-    private int firstDisplayedAddress = 0x1000;
+    private int firstDisplayedAddress = 0;
     
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
     
@@ -170,6 +170,9 @@ public class RamView {
         		this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
         	} else {
                 this.firstDisplayedAddress -= this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
+                if (this.firstDisplayedAddress < 0) {
+                    this.firstDisplayedAddress = 0;
+                }
         	}
 
         	memoryScrollBar.setValue(this.firstDisplayedAddress);

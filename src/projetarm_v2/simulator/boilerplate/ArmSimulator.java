@@ -244,13 +244,16 @@ public class ArmSimulator {
 		String labels = labelsBuilder.toString();
 		
 		for (String line : assembly.split(";")) {
+			if (Preprocessor.labelPattern.matcher(line).find()) {
+				continue;
+			}
 			if (line != "") {
 				byte[] lineBytes;
 				try {
 					lineBytes = (this.assembler.assemble(labels + line.substring(Math.abs(line.indexOf(':') + 1)),
 						currentAddress));
 				} catch (InvalidAssemblyException e) {
-					throw new InvalidInstructionException("[ERROR] " + e.getMessage() + " @ Line " + currentLine, currentLine);
+					throw new InvalidInstructionException("[ERROR] Line " + currentLine + "\" " + line + "\": " + e.getMessage(), currentLine);
 				}
 				asmToLine.put(currentAddress, currentLine);
 				currentAddress += lineBytes.length - (line.contains("=") ? 1 : 0) * 4;

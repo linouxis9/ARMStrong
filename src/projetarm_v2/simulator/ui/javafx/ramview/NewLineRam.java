@@ -104,7 +104,7 @@ public class NewLineRam {
 	}
 	
 	public String getLine() {
-		return "0x"+Integer.toHexString(firstAddress);
+		return "[0x"+Integer.toHexString(firstAddress)+"]";
 	}
 	
 	public String getA() {

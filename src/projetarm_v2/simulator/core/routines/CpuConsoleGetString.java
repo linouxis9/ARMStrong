@@ -51,6 +51,7 @@ public class CpuConsoleGetString extends CpuRoutine {
 			this.getRam().setByte(address,(byte)(char)ch);
 			address++;
 		}
+		this.getRam().setByte(address,(byte)0);
 		this.consoleBuffer.clear();
 	}
 	
