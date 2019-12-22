@@ -39,7 +39,7 @@ public class RamView {
     private ScrollBar memoryScrollBar;
     private TableView<NewLineRam> tableView;
     
-    private int firstDisplayedAddress;
+    private int firstDisplayedAddress = 0;
     
     private RamObservableListAdapter UneSuperImplemFournieParValentinLeBg;
     
@@ -54,8 +54,7 @@ public class RamView {
      * @param simulator the simulator
      */
     public RamView(ArmSimulator simulator) {
-        this.simulator = simulator;
-        this.firstDisplayedAddress = simulator.getStartingAddress();
+        this.simulator=simulator;
         try {
             mainPane = FXMLLoader.load(getClass().getResource("/resources/MemoryView.fxml"));
         } catch (IOException e) {

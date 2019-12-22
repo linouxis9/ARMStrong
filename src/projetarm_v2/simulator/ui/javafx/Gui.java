@@ -85,6 +85,7 @@ public class Gui extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.simulator = new ArmSimulator();
+		this.simulator.setRandomPattern();
 		this.executionMode = false;
 		this.running = new AtomicBoolean(false);
 		this.interfaceBeingUpdated = new AtomicBoolean(false);
