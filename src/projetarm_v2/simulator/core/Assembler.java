@@ -51,10 +51,9 @@ public class Assembler {
 			
 			Process p = new ProcessBuilder(executable.getAbsolutePath(), "arm", assembly, Long.toHexString(startingAddress))
 					.start();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-			String result = reader.readLine();
-			
+			String result = new String(p.getInputStream().readAllBytes(), "ASCII");
+
 			Matcher matcher = pattern.matcher(result);
 
 			if (!matcher.find()) {
@@ -64,7 +63,7 @@ public class Assembler {
 				}
 				throw new InvalidAssemblyException (errorMatcher.group(1));
 			}
-			
+
 			String[] output = matcher.group(1).split(" ");
 			
 			byte[] bytes = new byte[output.length];

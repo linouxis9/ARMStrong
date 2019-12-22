@@ -239,7 +239,8 @@ public class ArmSimulator {
 		String labels = labelsBuilder.toString();
 
 		for (String line : assembly.split(";")) {
-			if (Preprocessor.labelPattern.matcher(line).find()) {
+			matcher = Preprocessor.labelPattern.matcher(line);
+			if (matcher.find()) {
 				continue;
 			}
 			if (line != "") {
@@ -247,7 +248,7 @@ public class ArmSimulator {
 				try {
 					lineBytes = (this.assembler.assemble(labels + line, currentAddress));
 				} catch (InvalidAssemblyException e) {
-					throw new InvalidInstructionException("[ERROR] Line " + currentLine + " \" " + line + "\": " + e.getMessage(), currentLine);
+					throw new InvalidInstructionException("[ERROR] Line " + currentLine + " \"" + line + "\": " + e.getMessage(), currentLine);
 				}
 				asmToLine.put(currentAddress, currentLine);
 				currentAddress += lineBytes.length - (line.contains("=") ? 1 : 0) * 4;

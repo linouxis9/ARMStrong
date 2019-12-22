@@ -42,7 +42,6 @@ public class Preprocessor {
 				.replaceAll(startOfLine + "\\.end", ".word 0")
 				.replaceAll(startOfLine+"\\.equ +.*", "")
 				.replaceAll("@.*", "");
-
 		return assembly.replaceAll("\\R",";");
 	}
 
