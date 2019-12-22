@@ -227,7 +227,7 @@ public class ArmSimulator {
 	 */
 	private void fillAddressLineMap(String assembly) {
 		
-		int currentLine = 1;
+		int currentLine = 0;
 		int currentAddress = (int)this.cpu.getStartingAddress();
 
 		Matcher matcher = Preprocessor.labelPattern.matcher(assembly.replaceAll(";", "\n"));
@@ -239,20 +239,26 @@ public class ArmSimulator {
 		String labels = labelsBuilder.toString();
 
 		for (String line : assembly.split(";")) {
-			matcher = Preprocessor.labelPattern.matcher(line);
+			currentLine++;
+
+			matcher = Preprocessor.emptyLabelPattern.matcher(line);
 			if (matcher.find()) {
 				continue;
 			}
-			if (line != "") {
+			line = line.replaceAll(Preprocessor.LABEL_PATTERN, "");
+			if (!line.trim().isEmpty()) {
+				System.err.println(line);
 				byte[] lineBytes;
 				try {
 					lineBytes = (this.assembler.assemble(labels + line, currentAddress));
 				} catch (InvalidAssemblyException e) {
-					throw new InvalidInstructionException("[ERROR] Line " + currentLine + " \"" + line + "\": " + e.getMessage(), currentLine);
+					throw new InvalidInstructionException("[ERROR] Line " + currentLine + " \"" + line.trim() + "\": " + e.getMessage(), currentLine);
+				}
+				if (lineBytes.length == 1 && lineBytes[0] == 0 || line.trim().equals(".word 0")) {
+					continue;
 				}
 				asmToLine.put(currentAddress, currentLine);
 				currentAddress += lineBytes.length - (line.contains("=") ? 1 : 0) * 4;
-				currentLine += 1;
 			}
 		}
 	}

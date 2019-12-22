@@ -16,9 +16,11 @@ import projetarm_v2.simulator.core.routines.CpuConsoleClear;
 
 public class Preprocessor {
 
-	private static final String startOfLine = "(?m)^\\s*";
-	public static final Pattern labelPattern = Pattern.compile(startOfLine + "(([a-zA-Z]|[0-9])*):");
-	private static final Pattern equPattern = Pattern.compile(startOfLine + "\\.equ +(.*),(.*)");
+	private static final String START_OF_LINE = "(?m)^\\s*";
+	public static final String LABEL_PATTERN = START_OF_LINE + "(([a-zA-Z]|[0-9])*):";
+	public static final Pattern labelPattern = Pattern.compile(LABEL_PATTERN);
+	public static final Pattern emptyLabelPattern = Pattern.compile(LABEL_PATTERN + "\\s*$");
+	private static final Pattern equPattern = Pattern.compile(START_OF_LINE + "\\.equ +(.*),(.*)");
 	
 	public static String pass1(String assembly) {
 		Matcher matcher = equPattern.matcher(assembly);
@@ -31,17 +33,18 @@ public class Preprocessor {
 		matcher = labelPattern.matcher(assembly);
 
 		while (matcher.find()) {
-			assembly = assembly.replaceAll(startOfLine + matcher.group(1) + ":", escapeDigit(matcher.group(1)) + ":\n");
+			assembly = assembly.replaceAll(START_OF_LINE + matcher.group(1), escapeDigit(matcher.group(1)));
 			assembly = assembly.replaceAll("=" + matcher.group(1), "=" + escapeDigit(matcher.group(1)));
 		}
 
 		assembly = assembly
-				.replaceAll(startOfLine + "\\.breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
-				.replaceAll(startOfLine + "\\.clear", "blx #" + CpuConsoleClear.ROUTINE_ADDRESS)
-				.replaceAll(startOfLine + "\\.stop", ".word 0")
-				.replaceAll(startOfLine + "\\.end", ".word 0")
-				.replaceAll(startOfLine+"\\.equ +.*", "")
+				.replaceAll(START_OF_LINE + "\\.breakpoint", "blx #" + CpuBreakpoint.ROUTINE_ADDRESS)
+				.replaceAll(START_OF_LINE + "\\.clear", "blx #" + CpuConsoleClear.ROUTINE_ADDRESS)
+				.replaceAll(START_OF_LINE + "\\.stop", ".word 0")
+				.replaceAll(START_OF_LINE + "\\.end", ".word 0")
+				.replaceAll(START_OF_LINE +"\\.equ +.*", "")
 				.replaceAll("@.*", "");
+
 		return assembly.replaceAll("\\R",";");
 	}
 
