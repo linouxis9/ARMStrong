@@ -3,7 +3,7 @@
 
 ## Installation
 
-Download the [latest project-armstrong.jar](https://github.com/linouxis9/ARMStrong/releases/download/v1.0.0/project-armstrong.jar) and enjoy!
+Download the [latest project-armstrong.jar](https://github.com/linouxis9/ARMStrong/releases/latest) and enjoy!
 
 ## Graphical User Interface
 ![gui_s1](images/gui_s1.png)
@@ -30,8 +30,5 @@ java -jar project-armstrong.jar cli
 - Keystone
 - JavaFX
 - DockFX
-
-### Class diagram
-> ![classes](diagram.png)
 
 > Made with :heart: by the #@RMStrong Team

@@ -247,7 +247,6 @@ public class ArmSimulator {
 			}
 			line = line.replaceAll(Preprocessor.LABEL_PATTERN, "");
 			if (!line.trim().isEmpty()) {
-				System.err.println(line);
 				byte[] lineBytes;
 				try {
 					lineBytes = (this.assembler.assemble(labels + line, currentAddress));

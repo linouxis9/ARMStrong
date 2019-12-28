@@ -34,6 +34,7 @@ import org.dockfx.DockPos;
 import projetarm_v2.simulator.boilerplate.ArmSimulator;
 import projetarm_v2.simulator.boilerplate.InvalidInstructionException;
 import projetarm_v2.simulator.core.routines.CpuConsoleClear;
+import projetarm_v2.simulator.core.routines.CpuConsoleGetString;
 import projetarm_v2.simulator.ui.javafx.ramview.RamView;
 
 import java.io.File;
@@ -376,7 +377,7 @@ public class Gui extends Application {
 					System.out.println("[INFO] Input [" + this.consoleView.getTextField().getText() + "] added to Input queue");
 				} else {
 					System.out.println("[INFO] Input discarded (The CPU was not waiting for INPUT and you aren't in Interpreter mode)");
-					System.out.println("[INFO] Maybe you wanted to use CpuRoutineGetStringFromConsole @ 0x" + Long.toHexString(CpuConsoleClear.ROUTINE_ADDRESS) + " in your assembly?");
+					System.out.println("[INFO] Maybe you wanted to use CpuConsoleGetString @ 0x" + Long.toHexString(CpuConsoleGetString.ROUTINE_ADDRESS) + " in your assembly?");
 				}
 				this.consoleView.getTextField().clear();
 			}
