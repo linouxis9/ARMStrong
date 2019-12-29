@@ -157,7 +157,7 @@ public class RegistersView {
     	this.valueDecCol.setCellFactory(TextFieldTableCellFixed.forTableColumn());
 
     	this.valueHexCol.setOnEditCommit(t -> {
-					String newValue = t.getNewValue();
+					String newValue = t.getNewValue().trim();
 					int registerValue = t.getTableView().getItems().get(t.getTablePosition().getRow()).getRegister();
 
 					if(registerValue == 17) {
@@ -183,7 +183,7 @@ public class RegistersView {
 		);
     	
     	this.valueSigDecCol.setOnEditCommit(t -> {
-					String newValue = t.getNewValue();
+					String newValue = t.getNewValue().trim();
 					int registerValue = t.getTableView().getItems().get(t.getTablePosition().getRow()).getRegister();
 
 					if(registerValue == 17) {
@@ -208,7 +208,7 @@ public class RegistersView {
 		);
 
     	this.valueDecCol.setOnEditCommit(t -> {
-					String newValue = t.getNewValue();
+					String newValue = t.getNewValue().trim();
 					int registerValue = t.getTableView().getItems().get(t.getTablePosition().getRow()).getRegister();
 
 					if(registerValue == 17) {
@@ -375,7 +375,7 @@ public class RegistersView {
 	 */
 	private boolean isNumeric(String str) {
 	  try {  
-	    Integer.parseInt(str);  
+	    Integer.parseUnsignedInt(str);
 	    return true;
 	  } catch(NumberFormatException e){  
 	    return false;  

@@ -252,6 +252,7 @@ public class Gui extends Application {
 					this.consoleView.getNode().dock(dockPane, DockPos.BOTTOM);
 					this.interpreter.stopInterpreter();
 					this.consoleView.redirectToConsole();
+					this.setEditable(executionMode);
 					this.armMenuBar.setExecutionMode(executionMode);
 					this.armToolBar.setExecutionMode(executionMode);
 					this.armMenuBar.getSwitchMode().setDisable(false);
@@ -612,9 +613,9 @@ public class Gui extends Application {
 	 * @return the parsed int
 	 * @throws FormatException the sring is not parsable
 	 */
-	public static int parseUserAdress(String input) throws FormatException {
+	public static int parseUserAdress(String input) {
 		int address = 0;
-
+		input = input.trim();
 		try {
 			if (input.startsWith("0x") || input.startsWith("0X")) {
 				address = Integer.parseUnsignedInt(input.substring(2), 16); // parsing a int in base 16, the 2
@@ -627,9 +628,8 @@ public class Gui extends Application {
 			} else {
 				address = Integer.parseInt(input);
 			}
-		} catch (NumberFormatException exeption) {
-			Gui.warningPopup("Error in the number format\ntry with 0x1a35, 0b100101 or 0d300", ActionEvent -> {});
-			throw new FormatException();
+		} catch (NumberFormatException e) {
+			Gui.warningPopup(e.getMessage(), ActionEvent -> {});
 		}
 		return address;
 	}

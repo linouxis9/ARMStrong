@@ -81,16 +81,28 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
 
 	public void setValue(int column, int row, String value) {
     	column--;
-		int address =  offset+row*this.showType.toOffset()*getColumns()+column*showType.toOffset();
+		int address = offset+row*this.showType.toOffset()*getColumns()+column*showType.toOffset();
 		int newVal = 0;
-		if(Character.isLetter(value.toCharArray()[0])){
-			ram.setByte(address, (byte) value.toCharArray()[0]);
-			System.out.println("[INFO] " + (byte) value.toCharArray()[0] + " was written at address 0x" + Integer.toHexString(address));
-			return;
-		}
+		value = value.trim();
 		try {
-			newVal = Gui.parseUserAdress(value);
-		} catch (FormatException formatException) {}
+			switch (outputType) {
+				case HEX:
+					newVal = Integer.parseUnsignedInt(value.startsWith("0x") ? value.substring(2) : value, 16);
+					break;
+				case SIG_DEC:
+					newVal = Integer.parseInt(value);
+					break;
+				case UNSIG_DEC:
+					newVal = Integer.parseUnsignedInt(value);
+					break;
+				case ASCII:
+					char[] charArray = value.toCharArray();
+					newVal = charArray.length == 0 ? 0 : charArray[0];
+					break;
+			}
+		} catch (NumberFormatException e) {
+			Gui.warningPopup(e.getMessage(), (_e)->{});
+		}
 		switch (showType){
 			case BYTE:
 				if (newVal>256){
@@ -106,6 +118,7 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
 				break;
 			case WORD:
 				ram.setValue(address, newVal);
+				break;
 		}
 		System.out.println("[INFO] " + newVal + " was written at address 0x" + Integer.toHexString(address));
     }
