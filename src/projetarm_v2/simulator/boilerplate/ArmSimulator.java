@@ -431,6 +431,7 @@ public class ArmSimulator {
 	public void resetState() {
 		this.ram.clear();
 		this.cpu = new Cpu(ram, this.startingAddress, this.ramSize);
+		this.setRegisterValue(13, 0x1F0000);
 		this.cpu.registerCpuRoutine(new CpuConsoleGetString(cpu, consoleBuffer, waitingForInput));
 		this.cpu.registerCpuRoutine(new CpuConsoleGetChar(cpu, consoleBuffer, waitingForInput));
 		this.guiConsole = new CpuConsoleClear(cpu);

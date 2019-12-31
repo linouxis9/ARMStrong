@@ -168,7 +168,11 @@ public class RamView {
         	}
         	
         	if (event.getDeltaY() < 0) {
-        		this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
+				this.firstDisplayedAddress += this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
+				int offset = this.simulator.getRamSize() - this.UneSuperImplemFournieParValentinLeBg.size()*this.UneSuperImplemFournieParValentinLeBg.getColumns();
+				if (this.firstDisplayedAddress > offset) {
+					this.firstDisplayedAddress = offset;
+				}
         	} else {
                 this.firstDisplayedAddress -= this.UneSuperImplemFournieParValentinLeBg.getShowType().toOffset();
                 if (this.firstDisplayedAddress < 0) {
