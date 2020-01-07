@@ -57,14 +57,24 @@ public class NewLineRam {
 		switch (this.type) {
 			default:
 			case SIG_DEC:
-				return format.format(a2);
+				switch (this.showType){
+					case BYTE: return ((Byte)((byte)a2)).toString();
+					case HALFWORD: return ((Short)((short)a2)).toString();
+					case WORD:;
+					default:
+						return format.format(a2);
+				}
             case UNSIG_DEC:
                 return Integer.toUnsignedString(a2);
             case ASCII:
                 if(this.showType == ShowType.BYTE){
                     try {
-                        return String.format("%c", (byte) a2);
-                    }catch (Exception e){
+                    	if (a2 == 0) {
+                    		return "NULL";
+	                    } else {
+		                    return String.format("%c", (byte) a2);
+	                    }
+                    } catch (Exception e){
                         return "";
                     }
                 }
@@ -73,9 +83,9 @@ public class NewLineRam {
                 }
             case HEX:
 				switch (this.showType){
-					default:
 					case BYTE: return String.format("0x%02x",a2);
 					case HALFWORD: return String.format("0x%04x",a2);
+					default:
 					case WORD: return String.format("0x%08x",a2);
 				}
 		}

@@ -375,9 +375,9 @@ public class RegistersView {
 	 */
 	private boolean isNumeric(String str) {
 	  try {  
-	    Integer.parseUnsignedInt(str);
+	    Integer.parseUnsignedInt(str.replace("-", ""));
 	    return true;
-	  } catch(NumberFormatException e){  
+	  } catch(NumberFormatException e){
 	    return false;  
 	  }  
 	}

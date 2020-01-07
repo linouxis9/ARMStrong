@@ -105,16 +105,16 @@ public class RamObservableListAdapter extends ObservableListBase<NewLineRam> {
 		}
 		switch (showType){
 			case BYTE:
-				if (newVal>256){
+				if (newVal > Byte.MAX_VALUE){
 					Gui.warningPopup("Maximum byte value exceeded", a -> {});
 				}
-				ram.setByte(address, (byte) newVal);
+				ram.setByte(address, (byte)newVal);
 				break;
 			case HALFWORD:
-				if (newVal>65536){
+				if (newVal > Short.MAX_VALUE){
 					Gui.warningPopup("Maximum halfword value exceeded", a -> {});
 				}
-				ram.setHWord(address, (short) newVal);
+				ram.setHWord(address, (short)newVal);
 				break;
 			case WORD:
 				ram.setValue(address, newVal);
