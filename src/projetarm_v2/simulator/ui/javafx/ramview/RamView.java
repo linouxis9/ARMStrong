@@ -295,7 +295,8 @@ public class RamView {
                     return;
                 }
                 this.firstDisplayedAddress = newAddress;
-                alignMemory();
+	            this.firstDisplayedAddress -= this.firstDisplayedAddress % 16; // IUT: Students are lazy :-)
+	            alignMemory();
                 memoryScrollBar.setValue(this.firstDisplayedAddress);
                 this.UneSuperImplemFournieParValentinLeBg.setOffset(firstDisplayedAddress);
                 this.refresh();
