@@ -84,7 +84,7 @@ public class ConsoleView {
 					while (!this.consoleBuffer.peek().equals('\n')) {
 						list.add((byte) (char) this.consoleBuffer.poll());
 					}
-					this.consoleBuffer.poll();
+					list.add((byte) (char) this.consoleBuffer.poll());
 					String currentLine = new String(Bytes.toArray(list), "ASCII");
 					Platform.runLater(() -> {
 						textFlow.getChildren().add(new Text(currentLine));
@@ -96,7 +96,6 @@ public class ConsoleView {
 				}
 			}
 		};
-		
 	}
 
 	/**
